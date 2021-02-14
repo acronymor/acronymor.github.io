@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HBase on acronymor&#39;s blog</title>
+    <link>http://acronymor:80/tags/hbase/</link>
+    <description>Recent content in HBase on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Feb 2021 11:01:00 +0800</lastBuildDate><atom:link href="http://acronymor:80/tags/hbase/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HBase Cache 介绍</title>
+      <link>http://acronymor:80/posts/hbase/chapter1/cache/</link>
+      <pubDate>Sun, 14 Feb 2021 11:01:00 +0800</pubDate>
+      
+      <guid>http://acronymor:80/posts/hbase/chapter1/cache/</guid>
+      <description>HBase Cache 介绍    HBase在实现中提供了两种缓存结构：MemStore和BlockCache。
+MemStore称为写缓存，HBase执行写操作首先会将数据写入MemStore，并顺序写入HLog，等满足一定条件后统一将MemStore中数据刷新到磁盘，这种设计可以极大地提升HBase的写性能。不仅如此，MemStore对于读性能也至关重要，假如没有MemStore，读取刚写入的数据就需要从文件中通过IO查找，这种代价显然是昂贵的。
+BlockCache称为读缓存，HBase会将一次文件查找的Block块缓存到Cache中，以便后续同一请求或者邻近数据查找请求，可以直接从内存中获取，避免昂贵的IO操作。
+MemStore    HBase是基于LSM-Tree模型的，所有的数据更新插入操作都首先写入MemStore中（同时会顺序写到日志HLog中），达到指定大小之后再将这些修改操作批量写入磁盘，生成一个新的HFile文件，这种设计可以极大地提升HBase的写入性能；另外，HBase为了方便按照RowKey进行检索，要求HFile中数据都按照RowKey进行排序，MemStore数据在flush成为HFile之前会进行一次排序，将数据有序化；还有，根据局部性原理，新写入的数据会更大概率被读取，因此HBase在读取数据的时候首先检查请求的数据是否在MemStore，写缓存未命中的话再到读缓存中查找，读缓存还未命中才会到HFile文件中查找，最终返回merged的一个结果给用户。可见，MemStore无论是对HBase的写入性能还是读取性能都至关重要。在MemStore相关的数据操作中，flush操作是MemStore最核心的操作。
+MemStore Flush触发条件    HBase会在如下几种情况下触发flush操作，这里需要注意的是MemStore的最小flush单元是HRegion而不是单个MemStore。因此如果一个HRegion中MemStore过多，每次flush的开销必然会很大，故建议进行表设计的时候尽可能的减少ColumnFamily的个数。
+MemStore级别限制    当Region中任意一个MemStore的大小达到了上限（hbase.hregion.memstore.flush.size，默认128MB），会触发MemStore刷新。
+Region级别限制    当Region中所有MemStore的大小总和达到了上限（hbase.hregion.memstore.block.multiplier * hbase.hregion.memstore.flush.size，默认 2* 128M = 256M），会触发memstore刷新。
+Region Server级别限制    当一个Region Server中所有MemStore的大小总和达到了上限（hbase.regionserver.global.memstore.upperLimit * hbase_heapsize，默认 40%的JVM内存使用量），会触发部分MemStore刷新。
+Flush顺序是按照MemStore由大到小执行，先Flush MemStore最大的Region，再执行次大的，直至总体MemStore内存使用量低于阈值（hbase.regionserver.global.memstore.lowerLimit * hbase_heapsize，默认 38%的JVM内存使用量）。
+HLog数量达到上限    当一个Region Server中HLog数量达到上限（可通过参数hbase.regionserver.maxlogs配置）时，系统会选取最早的一个 HLog对应的一个或多个Region进行flush。
+HBase定期刷新MemStore    默认周期为1小时，确保MemStore不会长时间没有持久化。为避免所有的MemStore在同一时间都进行flush导致的问题，定期的flush操作有20000左右的随机延时。
+手动执行flush    用户可以通过命令 flush &#39;tablename&#39; 或者flush &#39;region name&#39;分别对一张表或者一个Region进行flush操作。</description>
+    </item>
+    
+    <item>
+      <title>HBase Catalog Tables 原理说明</title>
+      <link>http://acronymor:80/posts/hbase/chapter1/catalog-table/</link>
+      <pubDate>Sun, 14 Feb 2021 10:44:56 +0800</pubDate>
+      
+      <guid>http://acronymor:80/posts/hbase/chapter1/catalog-table/</guid>
+      <description>HBase Catalog Tables介绍    HBase Catalog Tables即hbase:meta表，之前的版本中也称为.META.，它存储了在系统中所有的region信息，而该表的位置信息被保存在zookeeper的/hbase-unsecure/meta-region-server中。
+hbase:meta 表结构       名称 说明      Key [table],[region start key],[region id]    Values info:regioninfo Region Info，和.regioninfo内容相同    info:server Region Server 地址和端口，如slave1:16020    info:serverstartcode Region Server启动Code，实质上就是Region Server启动的时间戳    info:sn Region Server Node，由 server和serverstartcode组成，如slave1,16020,1557998852385    info:state Region状态    info:seqnumDuringOpen 表示Region在线时长的一个二进制串    </description>
+    </item>
+    
+  </channel>
+</rss>

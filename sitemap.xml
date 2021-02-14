@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://acronymor:80/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/categories/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/tags/hbase/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/posts/hbase/chapter1/cache/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/categories/hbase%E5%9F%BA%E7%A1%80/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/posts/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/tags/</loc>
+    <lastmod>2021-02-14T11:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/posts/hbase/chapter1/catalog-table/</loc>
+    <lastmod>2021-02-14T10:44:56+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/about/</loc>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/authors/</loc>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/contact/</loc>
+  </url>
+  
+  <url>
+    <loc>http://acronymor:80/series/</loc>
+  </url>
+  
+</urlset>
