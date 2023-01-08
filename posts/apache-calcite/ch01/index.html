@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Calcite 介绍" />
+<meta property="og:description" content="Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-calcite/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-01T00:00:00+08:00" />
+<title>Ch01-Calcite 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Calcite 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-calcite-是什么">1. Calcite 是什么</a></li>
+    <li><a href="#2-关系代数">2. 关系代数</a></li>
+    <li><a href="#3-查询优化">3. 查询优化</a></li>
+    <li><a href="#4-calcite-概念">4. Calcite 概念</a></li>
+    <li><a href="#5-calcite-架构">5. Calcite 架构</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-calcite/ch01/">Ch01-Calcite 介绍</a>
+  </h1>
+  
+  <h5>June 1, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/calcite/">calcite</a>
+  </div>
+  
+
+
+
+<p>Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。</p>
+<h1 id="1-calcite-是什么">
+  1. Calcite 是什么
+  <a class="anchor" href="#1-calcite-%e6%98%af%e4%bb%80%e4%b9%88">#</a>
+</h1>
+<p>Calcite 之前的名称叫做 optiq，optiq 起初在 Hive 项目中，为 Hive 提供基于成本模型的优化，即 CBO（Cost Based Optimizatio）。2014 年 5 月 optiq 独立出来，成为 Apache 社区的孵化项目，2014 年 9 月正式更名为 Calcite。Calcite 项目的创建者是 Julian Hyde，他在数据平台上有非常多的工作经历，曾经是 Oracle、Broadbase 公司 SQL 引擎的主要开发者、SQLStream 公司的创始人和主架构师、Pentaho BI 套件中 OLAP 部分的架构师和主要开发者。现在他在 Hortonworks 公司负责 Calcite 项目，其工作经历对 Calcite 项目有很大的帮助。除了 Hortonworks，该项目的代码提交者还有 MapR、Salesforce 等公司，并且还在不断壮大。</p>
+<p>Calcite 的目标是<code>one size fits all</code>，希望能为不同计算平台和数据源提供统一的查询引擎，并以类似传统数据库的访问方式（SQL 和高级查询优化）来访问 Hadoop 上的数据。Calcite 的架构有三个特点：flexible, embeddable, and extensible，就是灵活性、组件可插拔、可扩展，它的 SQL Parser 层、Optimizer 层等都可以单独使用，这也是 Calcite 受总多开源框架欢迎的原因之一。</p>
+<h1 id="2-关系代数">
+  2. 关系代数
+  <a class="anchor" href="#2-%e5%85%b3%e7%b3%bb%e4%bb%a3%e6%95%b0">#</a>
+</h1>
+<p>关系代数是关系型数据库操作的理论基础，关系代数支持并、差、笛卡尔积、投影和选择等基本运算。关系代数也是 Calcite 的核心，任何一个查询都可以表示成由关系运算符组成的树。在 Calcite 中，它会先将 SQL 转换成关系表达式（relational expression），然后通过规则匹配（rules match）进行相应的优化，优化会有一个成本（cost）模型为参考。</p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>英文</strong></th>
+<th><strong>符号</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>select</td>
+<td>σ</td>
+<td>类似于 SQL 中的 where</td>
+</tr>
+<tr>
+<td>投影</td>
+<td>project</td>
+<td>Π</td>
+<td>类似于 SQL 中的 select</td>
+</tr>
+<tr>
+<td>并</td>
+<td>union</td>
+<td>∪</td>
+<td>类似于 SQL 中的 union</td>
+</tr>
+<tr>
+<td>集合差</td>
+<td>set-difference</td>
+<td>-</td>
+<td>SQL 中没有对应的操作符</td>
+</tr>
+<tr>
+<td>笛卡儿积</td>
+<td>Cartesian-product</td>
+<td>×</td>
+<td>类似于 SQL 中不带 on 条件的 inner join</td>
+</tr>
+<tr>
+<td>重命名</td>
+<td>rename</td>
+<td>ρ</td>
+<td>类似于 SQL 中的 as</td>
+</tr>
+<tr>
+<td>集合交</td>
+<td>intersection</td>
+<td>∩</td>
+<td>SQL 中没有对应的操作符</td>
+</tr>
+<tr>
+<td>自然连接</td>
+<td>natural join</td>
+<td>⋈</td>
+<td>类似于 SQL 中的 inner join</td>
+</tr>
+<tr>
+<td>赋值</td>
+<td>assignment</td>
+<td>←</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-查询优化">
+  3. 查询优化
+  <a class="anchor" href="#3-%e6%9f%a5%e8%af%a2%e4%bc%98%e5%8c%96">#</a>
+</h1>
+<p>查询优化主要是围绕着 等价交换 的原则做相应的转换，这部分可以参考<a href="http://ccftp.scu.edu.cn/Download/20180303170332742.pdf">数据库系统概念（中文第六版）</a>第 13 章——查询优化。这里举个简单的例子说明下</p>
+<p><img src="query-optmize.png" alt="query-optmize" /></p>
+<p>左图表示完整的一个原始的表达式树，如果将过滤条件 (SELECT) 下推，同时裁减相应的列 (PROJECT) 便可以的到右图所示的表达式树。在实际执行的时候，会极大的减少 IO 消耗以及中间结果产生的数据量。因此会有更高效的查询速度。</p>
+<h1 id="4-calcite-概念">
+  4. Calcite 概念
+  <a class="anchor" href="#4-calcite-%e6%a6%82%e5%bf%b5">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>特点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RelOptRule</td>
+<td>transforms an expression into another。对 expression 做等价转换</td>
+<td>根据传递给它的 RelOptRuleOperand 来对目标 RelNode 树进行规则匹配，匹配成功后，会再次调用 matches() 方法（默认返回真）进行进一步检查。如果 mathes() 结果为真，则调用 onMatch() 进行转换。</td>
+</tr>
+<tr>
+<td>ConverterRule</td>
+<td>Abstract base class for a rule which converts from one calling convention to another without changing semantics.</td>
+<td>它是 RelOptRule 的子类，专门用来做数据源之间的转换（Calling convention），ConverterRule 一般会调用对应的 Converter 来完成工作，比如说：JdbcToSparkConverterRule 调用 JdbcToSparkConverter 来完成对 JDBC Table 到 Spark RDD 的转换。</td>
+</tr>
+<tr>
+<td>RelNode</td>
+<td>relational expression，RelNode 会标识其 input RelNode 信息，这样就构成了一棵 RelNode 树</td>
+<td>代表了对数据的一个处理操作，常见的操作有 Sort、Join、Project、Filter、Scan 等。它蕴含的是对整个 Relation 的操作，而不是对具体数据的处理逻辑。</td>
+</tr>
+<tr>
+<td>Converter</td>
+<td>A relational expression implements the interface Converter to indicate that it converts a physical attribute, or RelTrait of a relational expression from one value to another.</td>
+<td>用来把一种 RelTrait 转换为另一种 RelTrait 的 RelNode。如 JdbcToSparkConverter 可以把 JDBC 里的 table 转换为 Spark RDD。如果需要在一个 RelNode 中处理来源于异构系统的逻辑表，Calcite 要求先用 Converter 把异构系统的逻辑表转换为同一种 Convention。</td>
+</tr>
+<tr>
+<td>RexNode</td>
+<td>Row-level expression</td>
+<td>行表达式（标量表达式），蕴含的是对一行数据的处理逻辑。每个行表达式都有数据的类型。这是因为在 Valdiation 的过程中，编译器会推导出表达式的结果类型。常见的行表达式包括字面量 RexLiteral，变量 RexVariable，函数或操作符调用 RexCall 等。RexNode 通过 RexBuilder 进行构建。</td>
+</tr>
+<tr>
+<td>RelTrait</td>
+<td>RelTrait represents the manifestation of a relational expression trait within a trait definition.</td>
+<td>用来定义逻辑表的物理相关属性（physical property），三种主要的 trait 类型是：Convention、RelCollation、RelDistribution；</td>
+</tr>
+<tr>
+<td>Convention</td>
+<td>Calling convention used to repressent a single data source, inputs must be in the same convention</td>
+<td>继承自 RelTrait，类型很少，代表一个单一的数据源，一个 relational expression 必须在同一个 convention 中；</td>
+</tr>
+<tr>
+<td>RelTraitDef</td>
+<td></td>
+<td>主要有三种：ConventionTraitDef：用来代表数据源 RelCollationTraitDef：用来定义参与排序的字段；RelDistributionTraitDef：用来定义数据在物理存储上的分布方式（比如：single、hash、range、random 等）；</td>
+</tr>
+<tr>
+<td>RelOptCluster</td>
+<td>An environment for related relational expressions during the optimization of a query.</td>
+<td>palnner 运行时的环境，保存上下文信息；</td>
+</tr>
+<tr>
+<td>RelOptPlanner</td>
+<td>A RelOptPlanner is a query optimizer: it transforms a relational expression into a semantically equivalent relational expression, according to a given set of rules and a cost model.</td>
+<td>也就是优化器，Calcite 支持RBO（Rule-Based Optimizer） 和 CBO（Cost-Based Optimizer）。Calcite 的 RBO （HepPlanner）称为启发式优化器（heuristic implementation ），它简单地按 AST 树结构匹配所有已知规则，直到没有规则能够匹配为止；Calcite 的 CBO 称为火山式优化器（VolcanoPlanner）成本优化器也会匹配并应用规则，当整棵树的成本降低趋于稳定后，优化完成，成本优化器依赖于比较准确的成本估算。RelOptCost 和 Statistic 与成本估算相关；</td>
+</tr>
+<tr>
+<td>RelOptCost</td>
+<td>defines an interface for optimizer cost in terms of number of rows processed, CPU cost, and I/O cost.</td>
+<td>优化器成本模型会依赖；</td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-calcite-架构">
+  5. Calcite 架构
+  <a class="anchor" href="#5-calcite-%e6%9e%b6%e6%9e%84">#</a>
+</h1>
+<p><img src="calcite-arch.png" alt="calcite-arch" /></p>
+<p>Calcite 与传统数据库管理系统有一些相似之处，相比而言，它将数据存储、数据处理算法和元数据存储这些部分忽略掉了，这样设计带来的好处是：对于涉及多种数据源和多种计算引擎的应用而言，Calcite 因为可以兼容多种存储和计算引擎，使得 Calcite 可以提供统一查询服务，Calcite 将会是这些应用的最佳选择。</p>
+<p>在 Calcite 架构中，最核心地方就是 Optimizer，也就是优化器，一个 Optimization Engine 包含三个组成部分：</p>
+<ul>
+<li>rules：也就是匹配规则，Calcite 内置上百种 Rules 来优化 relational expression，当然也支持自定义 rules；</li>
+<li>metadata providers：主要是向优化器提供信息，这些信息会有助于指导优化器向着目标（减少整体 cost）进行优化，信息可以包括行数、table 哪一列是唯一列等，也包括计算 RelNode 树中执行 subexpression cost 的函数；</li>
+<li>planner engines：它的主要目标是进行触发 rules 来达到指定目标，比如 RBO，CBO</li>
+</ul>
+<h1 id="参考文献">
+  参考文献
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.infoq.cn/article/new-big-data-hadoop-query-engine-apache-calcite">Apache Calcite：Hadoop 中新型大数据查询引擎</a></li>
+<li><a href="https://blog.csdn.net/QuinnNorris/article/details/70739094">SQL 形式化语言——关系代数</a></li>
+<li><a href="https://www.cnblogs.com/nightbreeze/p/14486935.html">calcite 概念和架构</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-calcite-是什么">1. Calcite 是什么</a></li>
+    <li><a href="#2-关系代数">2. 关系代数</a></li>
+    <li><a href="#3-查询优化">3. 查询优化</a></li>
+    <li><a href="#4-calcite-概念">4. Calcite 概念</a></li>
+    <li><a href="#5-calcite-架构">5. Calcite 架构</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

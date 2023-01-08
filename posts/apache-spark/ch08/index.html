@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch08-Spark 之 Checkpoint" />
+<meta property="og:description" content="checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-spark/ch08/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-06-03T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-06-03T00:00:00+08:00" />
+<title>Ch08-Spark 之 Checkpoint | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch08-Spark 之 Checkpoint</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-checkpoint-介绍">1. Checkpoint 介绍</a></li>
+    <li><a href="#2-spark-core-checkpoint">2. Spark Core Checkpoint</a>
+      <ul>
+        <li><a href="#21-使用方法">2.1 使用方法</a></li>
+        <li><a href="#22-写入流程">2.2 写入流程</a></li>
+        <li><a href="#23-读取流程">2.3 读取流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-spark-streaming-checkpoint">3. Spark Streaming Checkpoint</a>
+      <ul>
+        <li><a href="#31-使用方法">3.1 使用方法</a></li>
+        <li><a href="#32-写入流程">3.2 写入流程</a></li>
+        <li><a href="#33-读取流程">3.3 读取流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-checkpoint-vs-persist">4. Checkpoint VS Persist</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-spark/ch08/">Ch08-Spark 之 Checkpoint</a>
+  </h1>
+  
+  <h5>June 3, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Spark/">Apache Spark</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/spark/">spark</a>
+  </div>
+  
+
+
+
+<p>checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。</p>
+<h1 id="1-checkpoint-介绍">
+  1. Checkpoint 介绍
+  <a class="anchor" href="#1-checkpoint-%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>checkpoint 在 spark 中主要有两处应用：</p>
+<ul>
+<li>在 spark core 中对 RDD 做 checkpoint，可以切断做 checkpoint RDD 的依赖关系，将 RDD 数据保存到可靠存储（如 HDFS）以便数据恢复；</li>
+<li>spark streaming 中使用 checkpoint 用来保存 DStreamGraph 以及相关配置信息，以便在 Driver 崩溃重启的时候能够接着之前进度继续进行处理（如之前 waiting batch 的 job 会在重启后继续处理）。</li>
+</ul>
+<h1 id="2-spark-core-checkpoint">
+  2. Spark Core Checkpoint
+  <a class="anchor" href="#2-spark-core-checkpoint">#</a>
+</h1>
+<h2 id="21-使用方法">
+  2.1 使用方法
+  <a class="anchor" href="#21-%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-scala" data-lang="scala"><span style="display:flex;"><span>sc<span style="color:#f92672">.</span>setCheckpointDir<span style="color:#f92672">(</span>checkpointDir<span style="color:#f92672">.</span>toString<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">val</span> rdd <span style="color:#66d9ef">=</span> sc<span style="color:#f92672">.</span>makeRDD<span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> to <span style="color:#ae81ff">20</span><span style="color:#f92672">,</span> numSlices <span style="color:#66d9ef">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>rdd<span style="color:#f92672">.</span>checkpoint<span style="color:#f92672">()</span>
+</span></span></code></pre></div><h2 id="22-写入流程">
+  2.2 写入流程
+  <a class="anchor" href="#22-%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p><img src="spark-checkpoint.png" alt="spark-checkpoint" /></p>
+<ol>
+<li>对 RDD 调用了 checkpoint() 方法之后，它就接受 RDDCheckpointData 对象的管理。</li>
+<li>RDDCheckpointData 对象会负责将调用了 checkpoint() 方法的 RDD 的状态，设置为 MarkedForCheckpoint。</li>
+<li>在 RDD 所在的那个 job 运行结束之后，会调用 job 中，最后一个 RDD 的 doCheckPoint() 方法，该方法沿着 finalRDD 的 lineage 向上查找，将标记为 MarkedForCheckpoint 的 RDD 的标记改为 CheckpointingInProgress。</li>
+<li>然后启动一个单独的 job，来将 lineage 中，标记为 CheckpointingInProgress 的 RDD，进行 checkpoint 的操作，也就是将这个 RDD 中每个 parition 的数据依次写入到 checkpoint 目录（writePartitionToCheckpointFile），此外如果该 RDD 中的 partitioner 如果不为空，则也会将该对象序列化后存储到 Sparkcontext.setCheckpointDir() 方法设置的文件系统中。</li>
+</ol>
+<h2 id="23-读取流程">
+  2.3 读取流程
+  <a class="anchor" href="#23-%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>在做完 checkpoint 后，获取原来 RDD 的依赖以及 partitions 数据都将从 CheckpointRDD 中获取。也就是说获取原来 rdd 中每个 partition 数据以及 partitioner 等对象，都将转移到 CheckPointRDD 中。</p>
+<p>在 CheckPointRDD 的一个具体实现 ReliableRDDCheckpintRDD 中的 compute 方法中可以看到，将会从 hdfs 的 checkpoint 目录中恢复之前写入的 partition 数据。而 partitioner 对象（如果有）也会从之前写入 hdfs 的 paritioner 对象恢复。</p>
+<h1 id="3-spark-streaming-checkpoint">
+  3. Spark Streaming Checkpoint
+  <a class="anchor" href="#3-spark-streaming-checkpoint">#</a>
+</h1>
+<h2 id="31-使用方法">
+  3.1 使用方法
+  <a class="anchor" href="#31-%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-scala" data-lang="scala"><span style="display:flex;"><span><span style="color:#75715e">// Function to create and setup a new StreamingContext
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">def</span> functionToCreateContext<span style="color:#f92672">()</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">StreamingContext</span> <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">val</span> ssc <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">StreamingContext</span><span style="color:#f92672">(...)</span>   <span style="color:#75715e">// new context
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">val</span> lines <span style="color:#66d9ef">=</span> ssc<span style="color:#f92672">.</span>socketTextStream<span style="color:#f92672">(...)</span> <span style="color:#75715e">// create DStreams
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  ssc<span style="color:#f92672">.</span>checkpoint<span style="color:#f92672">(</span>checkpointDirectory<span style="color:#f92672">)</span>   <span style="color:#75715e">// set checkpoint directory
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ssc
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Get StreamingContext from checkpoint data or create a new one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> context <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">StreamingContext</span><span style="color:#f92672">.</span>getOrCreate<span style="color:#f92672">(</span>checkpointDirectory<span style="color:#f92672">,</span> functionToCreateContext <span style="color:#66d9ef">_</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><h2 id="32-写入流程">
+  3.2 写入流程
+  <a class="anchor" href="#32-%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>在 spark streaming 中，jobGenerator 会定期生成任务（jobGenerator#generateJobs)。在任务生成后将会调用 doCheckpoint 方法对系统做 checkpoint。此外，在当前批次任务结束，清理 metadata 时，也会调用 doCheckpoint 方法。</p>
+<p>checkpoint 的主要逻辑基本都在 JobGenerator#doCheckpoint 中，首先更新当前时间段需要做 checkpoint RDD 的相关信息（如 DirectKafkaInputDStream，将已经生成的 RDD 信息的时间，topic，partition，offset 等相关信息进行更新。）接着会通过 checkpointWriter 将 Checkpoint 对象写入到 checkpoint 目录中（CheckPoint#write -&gt; CheckpointWriteHandle），这样就完成了 checkpoint 的写入。</p>
+<h2 id="33-读取流程">
+  3.3 读取流程
+  <a class="anchor" href="#33-%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>在 spark streaming 任务从 checkpoint 恢复 streamingContext 时，将会触发对之前保存的 checkpoint 对象的读取动作。在 StreamingContext 的 getOrCreate 方法中，通过 checkpoint#read 方法从 checkpoint 目录中恢复之前保存的 Checkpoint 对象。一旦该对象存在，将使用 Checkpoint 创建 streamingContext。于此同时，在 StreamingContext 中 DStreamGraph 的恢复借助之前保存的对象，并且调用 restoreCheckpointData 恢复之前生成而未计算的 RDD，从而接着之前的进度进行数据处理。</p>
+<h1 id="4-checkpoint-vs-persist">
+  4. Checkpoint VS Persist
+  <a class="anchor" href="#4-checkpoint-vs-persist">#</a>
+</h1>
+<p>persist 只是将数据保存在 BlockManager 中，但是 RDD 的 lineage(血缘关系，依赖关系) 是不变的。checkpoint 执行完之后，rdd 已经没有之前所谓的依赖 rdd 了，而只有一个强行为其设置的 checkpointRDD，checkpoint 之后 rdd 的 lineage 就改变了。</p>
+<p>persist 的数据丢失的可能性更大，因为节点的故障会导致磁盘、内存的数据丢失。但是 checkpoint 的数据通常是保存在高可用的文件系统中，比如 HDFS 中，所以数据丢失可能性比较低。</p>
+<h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="http://t.zoukankan.com/zourui4271-p-9499803.html">spark checkpoint 详解</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-checkpoint-介绍">1. Checkpoint 介绍</a></li>
+    <li><a href="#2-spark-core-checkpoint">2. Spark Core Checkpoint</a>
+      <ul>
+        <li><a href="#21-使用方法">2.1 使用方法</a></li>
+        <li><a href="#22-写入流程">2.2 写入流程</a></li>
+        <li><a href="#23-读取流程">2.3 读取流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-spark-streaming-checkpoint">3. Spark Streaming Checkpoint</a>
+      <ul>
+        <li><a href="#31-使用方法">3.1 使用方法</a></li>
+        <li><a href="#32-写入流程">3.2 写入流程</a></li>
+        <li><a href="#33-读取流程">3.3 读取流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-checkpoint-vs-persist">4. Checkpoint VS Persist</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-MySQL 之 InnoDB 内存结构和存储结构" />
+<meta property="og:description" content="InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/mysql/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-03-15T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-03-15T00:00:00+08:00" />
+<title>Ch02-MySQL 之 InnoDB 内存结构和存储结构 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-MySQL 之 InnoDB 内存结构和存储结构</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-innodb-内存结构">1. InnoDB 内存结构</a></li>
+    <li><a href="#2-innodb-存储结构">2. InnoDB 存储结构</a>
+      <ul>
+        <li><a href="#21-tablespaces">2.1 Tablespaces</a></li>
+        <li><a href="#22-segment">2.2 Segment</a></li>
+        <li><a href="#23-extent">2.3 Extent</a></li>
+        <li><a href="#24-page">2.4 Page</a></li>
+        <li><a href="#25-row">2.5 Row</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/mysql/ch02/">Ch02-MySQL 之 InnoDB 内存结构和存储结构</a>
+  </h1>
+  
+  <h5>March 15, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/MySQL/">MySQL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/mysql/">mysql</a>
+  </div>
+  
+
+
+
+<p>InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。</p>
+<p><img src="innodb-architecture.png" alt="innodb-architecture" /></p>
+<h1 id="1-innodb-内存结构">
+  1. InnoDB 内存结构
+  <a class="anchor" href="#1-innodb-%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buffer Pool</td>
+<td>也称为<code>读缓存</code>，以 page 为单位缓存数据，使用改进过的 LRU 算法进行淘汰</td>
+</tr>
+<tr>
+<td>Change Buffer</td>
+<td>也称为<code>写缓存</code>，对 page 进行了修改，先缓存到这里，后续 merge 后统一写入到磁盘</td>
+</tr>
+<tr>
+<td>Adaptive Hash Index</td>
+<td>简写为<code>AHI</code>，它可以简单理解为定制版索引，当访问某些 Page 非常频繁的时候，则为该 Page 建立索引</td>
+</tr>
+<tr>
+<td>Log Buffer</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-innodb-存储结构">
+  2. InnoDB 存储结构
+  <a class="anchor" href="#2-innodb-%e5%ad%98%e5%82%a8%e7%bb%93%e6%9e%84">#</a>
+</h1>
+<p><img src="innodb-tablespace.png" alt="innodb-tablespace" /></p>
+<blockquote>
+<p>上图描述的是 General Tablespaces 和 File-Per-Table Tablespaces 的内部组织形式。</p>
+</blockquote>
+<h2 id="21-tablespaces">
+  2.1 Tablespaces
+  <a class="anchor" href="#21-tablespaces">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System Tablespaces</td>
+<td>包含 innodb 相关对象的元数据，doublewrite buffer, change buffer, undo logs 等</td>
+</tr>
+<tr>
+<td>File-Per-Table Tablespaces</td>
+<td>.idb 文件，是一个单表表空间，该表创建于自己的数据文件中，而非创建于系统表空间中</td>
+</tr>
+<tr>
+<td>Undo Tablespaces</td>
+<td>.ibu 文件，由一个或多个包含 undo 日志的文件组成</td>
+</tr>
+<tr>
+<td>General Tablespaces</td>
+<td>.idb 文件，通过 create tablespace 语法创建的共享表空间</td>
+</tr>
+<tr>
+<td>Temporary Tablespaces</td>
+<td>.ibt 文件，用户创建的临时表和磁盘内部临时表创建于共享临时表空间中</td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-segment">
+  2.2 Segment
+  <a class="anchor" href="#22-segment">#</a>
+</h2>
+<p>是一个逻辑概念，并不对应任何一个连续的空间物理区域，它主要被用来区分不同功能的 Extent，和碎片区中的 Page。常见的有“叶子节点段 (non-leaf node segment)，“非叶子节点段 (leaf node segment)”等。</p>
+<blockquote>
+<p>备注：
+非叶子节点段 和 叶子节点段 对应 B+ 树中的非叶子节点和叶子节点。</p>
+<ul>
+<li>非叶子节点段：存储和管理索引树</li>
+<li>叶子节点段：存储和管理实际数据</li>
+</ul>
+</blockquote>
+<h2 id="23-extent">
+  2.3 Extent
+  <a class="anchor" href="#23-extent">#</a>
+</h2>
+<p>固定大小，为 1MB，存放 64 个地址连续的 Page。</p>
+<p>这里有个小细节，在初次创建的表的时候，仅仅会创建包含 7 个 Page 的 Extent，而不是 64 个 Page 的完整 Extent，这些 Page 会被保存在碎片区中。随着数据的增加，则会申请包含 64 个 Page 的 新的 Extent。</p>
+<p>256 个 Extent 组成一个 Extent Group，其大小为 256MB。</p>
+<h2 id="24-page">
+  2.4 Page
+  <a class="anchor" href="#24-page">#</a>
+</h2>
+<p>Page 是 InnoDB 存储引擎磁盘管理的最小单位，固定大小，为 16 KB。页有很多不同的分类，常见的大概有如下几种。</p>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FIL_PAGE_TYPE_ALLOCATED</td>
+<td>最新分配，还未使用</td>
+</tr>
+<tr>
+<td>FIL_PAGE_UNDO_LOG</td>
+<td>undo 日志页</td>
+</tr>
+<tr>
+<td>FIL_PAGE_INODE</td>
+<td>存储 Segment 的信息</td>
+</tr>
+<tr>
+<td>FIL_PAGE_IBUF_FREE_LIST</td>
+<td>Change Buffer 空闲列表</td>
+</tr>
+<tr>
+<td>FIL_PAGE_IBUF_FREE_BITMAP</td>
+<td>Change Buffer 的一些属性</td>
+</tr>
+<tr>
+<td>FIL_PAGE_TYPE_SYS</td>
+<td>存储一些系统属性</td>
+</tr>
+<tr>
+<td>FIL_PAGE_TYPE_XDES</td>
+<td>存储 Extent 的信息</td>
+</tr>
+<tr>
+<td>FIL_PAGE_TYPE_TRX_SYS</td>
+<td>存储事务相关的系统数据</td>
+</tr>
+<tr>
+<td>FIL_PAGE_TYPE_FSP_HDR</td>
+<td>表空间头部信息</td>
+</tr>
+<tr>
+<td>FIL_PAGE_INDEX</td>
+<td>索引页，或者常说的数据页</td>
+</tr>
+</tbody>
+</table>
+<h2 id="25-row">
+  2.5 Row
+  <a class="anchor" href="#25-row">#</a>
+</h2>
+<p>Row 支持 4 种格式，不定大小，最大长度为 8KB，</p>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REDUNDANT</td>
+<td></td>
+</tr>
+<tr>
+<td>COMPACT</td>
+<td></td>
+</tr>
+<tr>
+<td>DYNAMIC</td>
+<td>默认类型，</td>
+</tr>
+<tr>
+<td>COMPRESSED</td>
+<td></td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-innodb-内存结构">1. InnoDB 内存结构</a></li>
+    <li><a href="#2-innodb-存储结构">2. InnoDB 存储结构</a>
+      <ul>
+        <li><a href="#21-tablespaces">2.1 Tablespaces</a></li>
+        <li><a href="#22-segment">2.2 Segment</a></li>
+        <li><a href="#23-extent">2.3 Extent</a></li>
+        <li><a href="#24-page">2.4 Page</a></li>
+        <li><a href="#25-row">2.5 Row</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

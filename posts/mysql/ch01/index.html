@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-MySQL 介绍" />
+<meta property="og:description" content="MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/mysql/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-02-25T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-02-25T00:00:00+08:00" />
+<title>Ch01-MySQL 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-MySQL 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构组成">2. 架构组成</a>
+      <ul>
+        <li><a href="#21-网络连接层">2.1 网络连接层</a></li>
+        <li><a href="#22-数据库服务层">2.2 数据库服务层</a></li>
+        <li><a href="#23-存储引擎层">2.3 存储引擎层</a></li>
+        <li><a href="#24-系统文件层">2.4 系统文件层</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/mysql/ch01/">Ch01-MySQL 介绍</a>
+  </h1>
+  
+  <h5>February 25, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/MySQL/">MySQL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/mysql/">mysql</a>
+  </div>
+  
+
+
+
+<p>MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://www.mysql.com/">https://www.mysql.com/</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-架构组成">
+  2. 架构组成
+  <a class="anchor" href="#2-%e6%9e%b6%e6%9e%84%e7%bb%84%e6%88%90">#</a>
+</h1>
+<p>下图展示了 MySQL 的架构图，我们可以看出 MySQL 的架构自顶向下大致可以分为<code>网络连接层</code>、<code>数据库服务层</code>、<code>存储引擎层</code>和<code>系统文件层</code>四大部分。</p>
+<p><img src="mysql-arch.png" alt="mysql-arch" /></p>
+<h2 id="21-网络连接层">
+  2.1 网络连接层
+  <a class="anchor" href="#21-%e7%bd%91%e7%bb%9c%e8%bf%9e%e6%8e%a5%e5%b1%82">#</a>
+</h2>
+<p>网络连接层位于整个 MySQL 体系架构的最上层，主要担任客户端连接器的角色。提供与 MySQL 服务器建立连接的能力，几乎支持所有主流的服务端语言，例如：Java、C、C++、Python 等，各语言都是通过各自的 API 接口与 MySQL 建立连接。</p>
+<h2 id="22-数据库服务层">
+  2.2 数据库服务层
+  <a class="anchor" href="#22-%e6%95%b0%e6%8d%ae%e5%ba%93%e6%9c%8d%e5%8a%a1%e5%b1%82">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统管理和控制工具</td>
+<td>提供数据库系统的管理和控制功能，例如对数据库中的数据进行备份和恢复，保证整个数据库的安全性，提供安全管理，对整个数据库的集群进行协调和管理等。</td>
+</tr>
+<tr>
+<td>连接池</td>
+<td>主要负责存储和管理客户端与数据库的连接信息，连接池里的一个线程负责管理一个客户端到数据库的连接信息。</td>
+</tr>
+<tr>
+<td>SQL 接口</td>
+<td>主要负责接收客户端发送过来的各种 SQL 命令，并将 SQL 命令发送到其他部分，并接收其他部分返回的结果数据，将结果数据返回给客户端。</td>
+</tr>
+<tr>
+<td>解析器</td>
+<td>主要负责对请求的 SQL 解析成一棵“语法树”，然后根据 MySQL 中的一些规则对“语法树”做进一步的语法验证，确认其是否合法。</td>
+</tr>
+<tr>
+<td>查询优化器</td>
+<td>在 MySQL 中，如果“语法树”通过了解析器的语法检查，此时就会由优化器将其转化为执行计划，然后与存储引擎进行交互，通过存储引擎与底层的数据文件进行交互。</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>MySQL 的缓存是由一系列的小缓存组成的。例如：MySQL 的表缓存，记录缓存，MySQL 中的权限缓存，引擎缓存等。MySQL 中的缓存能够提高数据的查询性能，如果查询的结果能够命中缓存，则 MySQL 会直接返回缓存中的结果信息。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-存储引擎层">
+  2.3 存储引擎层
+  <a class="anchor" href="#23-%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e%e5%b1%82">#</a>
+</h2>
+<p>MySQL 中的存储引擎层主要负责数据的写入和读取，与底层的文件进行交互。值得一提的是，MySQL 中的存储引擎是插件式的，服务器中的查询执行引擎通过相关的接口与存储引擎进行通信，同时，接口屏蔽了不同存储引擎之间的差异。MySQL 中，最常用的存储引擎就是 InnoDB 和 MyISAM。</p>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>InnoDB</strong></th>
+<th><strong>MyISAM</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事务支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>存储结构</td>
+<td>所有的表都保存在系统表空间，或者每张表各自的表空间</td>
+<td>每张表在磁盘上存储成三个文件</td>
+</tr>
+<tr>
+<td>存储空间</td>
+<td>需要更多的内存和存储，在主内存中建立其专用的缓冲池用于高速缓冲数据和索引</td>
+<td>可被压缩，存储空间较小</td>
+</tr>
+<tr>
+<td>表锁差异</td>
+<td>支持事务和行级锁</td>
+<td>只支持表级锁</td>
+</tr>
+<tr>
+<td>全文索引</td>
+<td>不支持 (FULLTEXT 类型的) 全文索引，但是 innodb 可以使用 sphinx 插件支持全文索引，并且效果更好</td>
+<td>支持 (FULLTEXT 类型的) 全文索引</td>
+</tr>
+<tr>
+<td>主键</td>
+<td>如果没有设定主键或者非空唯一索引，就会自动生成一个 6 字节的主键 (用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值</td>
+<td>允许没有任何索引和主键的表存在，索引都是保存行的地址</td>
+</tr>
+<tr>
+<td>外键</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
+<h2 id="24-系统文件层">
+  2.4 系统文件层
+  <a class="anchor" href="#24-%e7%b3%bb%e7%bb%9f%e6%96%87%e4%bb%b6%e5%b1%82">#</a>
+</h2>
+<p>系统文件层主要包括 MySQL 中存储数据的底层文件，与上层的存储引擎进行交互，是文件的物理存储层。其存储的文件主要有：日志文件、数据文件、配置文件、MySQL 的进行 pid 文件和 socke</p>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>日志文件</td>
+<td>包括错误日志、通用查询日志、二进制日志、慢查询日志等</td>
+</tr>
+<tr>
+<td>数据文件</td>
+<td>db.opt 文件、frm 文件 (MySQL 8.0 无此文件)、MYD 文件、MYI 文件、ibd 文件、ibdata 文件、ibdata1 文件、ib_logfile0 和 ib_logfile1 文件等。</td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>在Unix/Linux环境中是<code>my.cnf</code>文件，在 Windows 环境中是<code>my.ini</code>文件。</td>
+</tr>
+<tr>
+<td>pid 文件</td>
+<td>pid 文件是存放 MySQL 进程运行时的进程号的文件</td>
+</tr>
+<tr>
+<td>socket 文件</td>
+<td>socket 文件和 pid 文件一样，都是 MySQL 在 Unix/Linux 环境中运行才会有的文件。</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构组成">2. 架构组成</a>
+      <ul>
+        <li><a href="#21-网络连接层">2.1 网络连接层</a></li>
+        <li><a href="#22-数据库服务层">2.2 数据库服务层</a></li>
+        <li><a href="#23-存储引擎层">2.3 存储引擎层</a></li>
+        <li><a href="#24-系统文件层">2.4 系统文件层</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

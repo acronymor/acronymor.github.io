@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Kylin 介绍" />
+<meta property="og:description" content="Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-20T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-05-20T00:00:00+08:00" />
+<title>Ch01-Kylin 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Kylin 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-apache-kylin-介绍">2. Apache Kylin 介绍</a></li>
+    <li><a href="#3-模型">3. 模型</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kylin/ch01/">Ch01-Kylin 介绍</a>
+  </h1>
+  
+  <h5>May 20, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">kylin</a>
+  </div>
+  
+
+
+
+<p>Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://kylin.apache.org/">https://kylin.apache.org/</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://kylin.apache.org/download/">https://kylin.apache.org/download/</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-apache-kylin-介绍">
+  2. Apache Kylin 介绍
+  <a class="anchor" href="#2-apache-kylin-%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>Kylin 对于解决的问题有以下假设：</p>
+<ul>
+<li>大数据查询要的一般是统计结果，是多条记录经过聚合函数计算后的统计值</li>
+<li>原始的记录不是必需的，或者访问频率和概率都极低</li>
+<li>聚合是按维度进行的，有意义的维度聚合组合也是相对有限的，一般不会随着数据的膨胀而膨胀</li>
+</ul>
+<p>基于以上两点，可以得到一个新的思路—预计算，应尽量多地预先计算聚合结果，在查询时应该尽量利用预计算的结果得出查询结果，从而避免直接扫描可能无限增大的原始记录。</p>
+<p><img src="kylin-arch.png" alt="kylin-arch" /></p>
+<blockquote>
+<p>自 Kylin 4.0.0 开始，不再默认使用 HBase，而是使用 Parquet 直接存储到 HDFS 上面。同时计算引擎也不再默认为 MapReduce，而是 Spark
+本系列 Blog 全部基于 HBase 4.0.0 讲解</p>
+</blockquote>
+<p>如上图所示，Kylin 在架构设计上，可大体分为四个部分：<code>数据源</code>，<code>构建 Cube 的计算引擎</code>，<code>存储引擎</code>，<code>对外查询接口</code>。其中数据源主要是 Hive、Kafka；计算框架默认为 Spark；结果存储在 HDFS 中；对外查询接口支持 REST API、JDBC、ODBC。</p>
+<table>
+<thead>
+<tr>
+<th><strong>组件</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REST Server</td>
+<td>REST Server 是一套面向应用程序开发的入口点，旨在实现针对 Kylin 平台的应用开发工作。此类应用程序可以提供查询、获取结果、触发 cube 构建任务、获取元数据以及获取用户权限等等。另外可以通过 Restful 接口实现 SQL 查询。</td>
+</tr>
+<tr>
+<td>Query Engine</td>
+<td>当 cube 准备就绪后，查询引擎就能够获取并解析用户查询。它随后会与系统中的其他组件进行交互，从而向用户返回对应的结果。</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>负责将解析的 SQL 生成的执行计划转换成 cube 缓存的查询，cube 是通过预计算缓存在 HDFS 中，这部分查询可以在秒级甚至毫秒级完成，还有一些操作使用过的原始数据 (存储在 Hadoop 的 hdfs 中通过 hive 查询)，这部分查询延迟较高。</td>
+</tr>
+<tr>
+<td>Metadata Manager</td>
+<td>Kylin 是一款元数据驱动型应用程序。元数据管理工具是一大关键性组件，用于对保存在 Kylin 当中的所有元数据进行管理，其中包括最为重要的 cube 元数据，其它全部组建的正常运作都需以元数据管理工具为基础，包括 cube 的定义、星状模型的定义、job 的信息、job 的输出信息、维度的 directory 信息等等，Kylin 的元数据和 cube 都存储在 HDFS 中。</td>
+</tr>
+<tr>
+<td>Cube Build Engine</td>
+<td>这套引擎的设计目的在于处理所有离线任务，其中包括 shell 脚本、Java API 以及 MapReduce 任务等等。任务引擎对 Kylin 当中的全部任务加以管理与协调，从而确保每一项任务都能得到切实执行并解决期间出现的障碍。</td>
+</tr>
+<tr>
+<td>Storage Engine</td>
+<td>这套引擎负责管理底层存储，特别是 cuboid，其以键值对的形式进行保存。存储引擎使用的是 HDFS，这是目前 Hadoop 生态系统当中最理想的键值系统使用方案。Kylin 还能够通过扩展实现对其它键值系统的支持，例如 Redis。</td>
+</tr>
+<tr>
+<td>Cube Build Engine</td>
+<td><a href="https://kylin.apache.org/download/">https://kylin.apache.org/download/</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-模型">
+  3. 模型
+  <a class="anchor" href="#3-%e6%a8%a1%e5%9e%8b">#</a>
+</h1>
+<p>数据仓库理论中存在多种方式来建立数据模型，比如星型模型、雪花模型等。</p>
+<table>
+<thead>
+<tr>
+<th><strong>模型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>星型模型</td>
+<td>有一张事实表、以及零个或多个维度表；事实表与维度表通过 主键/外键 相关联，维度表之间没有关联，就像很多星星围绕在一个恒星周围，顾命名为星型模型。</td>
+</tr>
+<tr>
+<td>雪花模型</td>
+<td>如果将星型模型中某些维度的表再做规范，抽取成更细的维度表，然后让维度表之间也进行关联，那么这种模型成为雪花模型（雪花模型可以通过一定的转换，变为星型模型）。</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-apache-kylin-介绍">2. Apache Kylin 介绍</a></li>
+    <li><a href="#3-模型">3. 模型</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

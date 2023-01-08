@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HBase Region Split 整个过程可以分为如下几步，触发 Region Split，寻找 SplitPoint，拆分 Region，等待 major compaction 删除旧的 Region">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch12-HBase 之 Region Split" />
+<meta property="og:description" content="HBase Region Split 整个过程可以分为如下几步，触发 Region Split，寻找 SplitPoint，拆分 Region，等待 major compaction 删除旧的 Region" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch12/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-24T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-03-24T00:00:00+08:00" />
+<title>Ch12-HBase 之 Region Split | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch12-HBase 之 Region Split</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-触发-region-split">1. 触发 Region Split</a>
+      <ul>
+        <li><a href="#11-constantsizeregionsplitpolicy">1.1 ConstantSizeRegionSplitPolicy</a></li>
+        <li><a href="#12-increasingtoupperboundregionsplitpolicy">1.2 IncreasingToUpperBoundRegionSplitPolicy</a></li>
+        <li><a href="#13-steppingsplitpolicy">1.3 SteppingSplitPolicy</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-寻找-splitpoint">2. 寻找 SplitPoint</a></li>
+    <li><a href="#3-拆分-region">3. 拆分 Region</a></li>
+    <li><a href="#4-其他问题">4. 其他问题</a>
+      <ul>
+        <li><a href="#41-reference-文件查找流程">4.1 reference 文件查找流程</a></li>
+        <li><a href="#42-父-region-的数据什么时候会迁移到子-region-目录">4.2 父 region 的数据什么时候会迁移到子 region 目录？</a></li>
+        <li><a href="#43-父-region-什么时候会被删除">4.3 父 region 什么时候会被删除？</a></li>
+        <li><a href="#44-region-切分事务性如何保证">4.4 Region 切分事务性如何保证？</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch12/">Ch12-HBase 之 Region Split</a>
+  </h1>
+  
+  <h5>March 24, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HBase Region Split 整个过程可以分为如下几步，<code>触发 Region Split</code>，<code>寻找 SplitPoint</code>，<code>拆分 Region</code>，<code>等待 major compaction 删除旧的 Region</code></p>
+<h1 id="1-触发-region-split">
+  1. 触发 Region Split
+  <a class="anchor" href="#1-%e8%a7%a6%e5%8f%91-region-split">#</a>
+</h1>
+<p>触发 Region Split 有好几种策略，比如除了 3 种默认过的策略，还有 <code>DelimitedKeyPrefixRegionSplitPolicy</code>、<code>KeyPrefixRegionSplitPolicy</code>、<code>DisableSplitPolicy</code> 等策略，这里只介绍 3 种默认的策略。分别是 <code>ConstantSizeRegionSplitPolicy</code> 策略、<code>IncreasingToUpperBoundRegionSplitPolicy</code> 策略和 <code>SteppingSplitPolicy</code> 策略。</p>
+<h2 id="11-constantsizeregionsplitpolicy">
+  1.1 ConstantSizeRegionSplitPolicy
+  <a class="anchor" href="#11-constantsizeregionsplitpolicy">#</a>
+</h2>
+<p>ConstantSizeRegionSplitPolicy 策略是 0.94 版本之前的默认拆分策略，这个策略的拆分规则是：当 region 大小达到 hbase.hregion.max.filesize（默认 10G）后拆分。
+这种拆分策略对于小表不太友好，按照默认的设置，如果 1 个表的 Hfile 小于 10G 就一直不会拆分。注意 10G 是压缩后的大小，如果使用了压缩的话。</p>
+<p>如果 1 个表一直不拆分，访问量小也不会有问题，但是如果这个表访问量比较大的话，就比较容易出现性能问题。这个时候只能手工进行拆分。还是很不方便。</p>
+<h2 id="12-increasingtoupperboundregionsplitpolicy">
+  1.2 IncreasingToUpperBoundRegionSplitPolicy
+  <a class="anchor" href="#12-increasingtoupperboundregionsplitpolicy">#</a>
+</h2>
+<p>这种切分策略微微有些复杂，总体来看和 ConstantSizeRegionSplitPolicy 思路相同，一个 region 中最大 store 大小大于设置阈值就会触发切分。但是这个阈值并不像 ConstantSizeRegionSplitPolicy 是一个固定的值，而是会在一定条件下不断调整，调整规则和 region 所属表在当前 regionserver 上的 region 个数有关系：(#regions) * (#regions) * (#regions) * flush size * 2，当然阈值并不会无限增大，最大值为用户设置的 MaxRegionFileSize。</p>
+<p>从这个算是我们可以得出 flushsize 为 128M、maxFileSize 为 10G 的情况下，可以计算出 Region 的分裂情况如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>第一次拆分大小为：min(10G，11128M)=128M
+</span></span><span style="display:flex;"><span>第二次拆分大小为：min(10G，33128M)=1152M
+</span></span><span style="display:flex;"><span>第三次拆分大小为：min(10G，55128M)=3200M
+</span></span><span style="display:flex;"><span>第四次拆分大小为：min(10G，77128M)=6272M
+</span></span><span style="display:flex;"><span>第五次拆分大小为：min(10G，99128M)=10G
+</span></span><span style="display:flex;"><span>第五次拆分大小为：min(10G，1111128M)=10G
+</span></span></code></pre></div><h2 id="13-steppingsplitpolicy">
+  1.3 SteppingSplitPolicy
+  <a class="anchor" href="#13-steppingsplitpolicy">#</a>
+</h2>
+<p>SteppingSplitPolicy 是在 Hbase 2.0 版本后的默认策略，，拆分规则为：<code>If region=1 then: flush size * 2 else: MaxRegionFileSize</code>。</p>
+<p>还是以 flushsize 为 128M、maxFileSize 为 10 场景为列，计算出 Region 的分裂情况如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>第一次拆分大小为：2*128M=256M
+</span></span><span style="display:flex;"><span>第二次拆分大小为：10G
+</span></span></code></pre></div><p>从上面的计算我们可以看出，这种策略兼顾了 <code>ConstantSizeRegionSplitPolicy</code> 策略和 <code>IncreasingToUpperBoundRegionSplitPolicy</code> 策略，对于小表也肯呢个比较好的适配。</p>
+<p>从上面的计算我们可以看到这种策略能够自适应大表和小表，但是这种策略会导致小表产生比较多的小 region，对于小表还是不是很完美。</p>
+<h1 id="2-寻找-splitpoint">
+  2. 寻找 SplitPoint
+  <a class="anchor" href="#2-%e5%af%bb%e6%89%be-splitpoint">#</a>
+</h1>
+<p>SplitPoint 规定为整个 region 中最大 store 中的最大文件中最中心的一个 block 的首个 rowkey。如果定位到的 rowkey 是整个文件的首个 rowkey 或者最后一个 rowkey 的话，就认为没有切分点。</p>
+<h1 id="3-拆分-region">
+  3. 拆分 Region
+  <a class="anchor" href="#3-%e6%8b%86%e5%88%86-region">#</a>
+</h1>
+<p><img src="hbase-split.png" alt="hbase-split" /></p>
+<p>从上图我们可以看出 Region 切分的详细流程如下：</p>
+<ol>
+<li>会 ZK 的 /hbase/region-in-transition/region-name 下创建一个 znode，并设置状态为 SPLITTING</li>
+<li>master 通过 watch 节点检测到 Region 状态的变化，并修改内存中 Region 状态的变化</li>
+<li>RegionServer 在父 Region 的目录下创建一个名称为 .splits 的子目录</li>
+<li>RegionServer 关闭父 Region，强制将数据刷新到磁盘，并这个 Region 标记为 offline 的状态。此时，落到这个 Region 的请求都会返回 NotServingRegionException 这个错误</li>
+<li>RegionServer 在 .splits 创建 daughterA 和 daughterB，并在文件夹中创建对应的 reference 文件，指向父 Region 的 Region 文件</li>
+<li>RegionServer 在 HDFS 中创建 daughterA 和 daughterB 的 Region 目录，并将 reference 文件移动到对应的 Region 目录中</li>
+<li>在 hbase:meta 表中设置父 Region 为 offline 状态，不再提供服务，并将父 Region 的 daughterA 和 daughterB 的 Region 添加到 hbase:meta 表中，已表名父 Region 被拆分成了 daughterA 和 daughterB 两个 Region</li>
+<li>RegionServer 并行开启两个子 Region，并正式提供对外写服务</li>
+<li>RegionSever 将 daughterA 和 daughterB 添加到 hbase:meta 表中，这样就可以从 hbase:meta 找到子 Region，并可以对子 Region 进行访问了</li>
+<li>RegionServr 修改 /hbase/region-in-transition/region-name 的 znode 的状态为 SPLIT</li>
+</ol>
+<blockquote>
+<p>备注：</p>
+<p>为了减少对业务的影响，Region 的拆分并不涉及到数据迁移的操作，而只是创建了对父 Region 的指向。只有在做大合并的时候，才会将数据进行迁移。</p>
+</blockquote>
+<h1 id="4-其他问题">
+  4. 其他问题
+  <a class="anchor" href="#4-%e5%85%b6%e4%bb%96%e9%97%ae%e9%a2%98">#</a>
+</h1>
+<h2 id="41-reference-文件查找流程">
+  4.1 reference 文件查找流程
+  <a class="anchor" href="#41-reference-%e6%96%87%e4%bb%b6%e6%9f%a5%e6%89%be%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p><img src="hbase-split-reference.png" alt="hbase-split-reference" /></p>
+<ol>
+<li>根据文件名来判断是否是 reference 文件</li>
+<li>由于 reference 文件的命名规则为前半部分为父 Region 对应的 File 的文件名，后半部分是父 Region 的名称，因此读取的时候也根据前半部分和后半部分来识别</li>
+<li>根据 reference 文件的内容来确定扫描的范围，reference 的内容包含两部分，一部分是切分点 splitkey，另一部分是 boolean 类型的变量（true 或者 false）。如果为 true 则扫描文件的上半部分，false 则扫描文件的下半部分</li>
+<li>接下来确定了扫描的文件，以及文件的扫描范围，那就按照正常的文件检索了</li>
+</ol>
+<h2 id="42-父-region-的数据什么时候会迁移到子-region-目录">
+  4.2 父 region 的数据什么时候会迁移到子 region 目录？
+  <a class="anchor" href="#42-%e7%88%b6-region-%e7%9a%84%e6%95%b0%e6%8d%ae%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bc%9a%e8%bf%81%e7%a7%bb%e5%88%b0%e5%ad%90-region-%e7%9b%ae%e5%bd%95">#</a>
+</h2>
+<p>子 region 发生 major_compaction 时。我们知道 compaction 的执行实际上是将 store 中所有小文件一个 KV 一个 KV 从小到大读出来之后再顺序写入一个大文件，完成之后再将小文件删掉，因此 compaction 本身就需要读取并写入大量数据。子 region 执行 major_compaction 后会将父目录中属于该子 region 的所有数据读出来并写入子 region 目录数据文件中。可见将数据迁移放到 compaction 这个阶段来做，是一件顺便的事。</p>
+<h2 id="43-父-region-什么时候会被删除">
+  4.3 父 region 什么时候会被删除？
+  <a class="anchor" href="#43-%e7%88%b6-region-%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bc%9a%e8%a2%ab%e5%88%a0%e9%99%a4">#</a>
+</h2>
+<p>实际上 HMaster 会启动一个线程定期遍历检查所有处于 splitting 状态的父 region，确定检查父 region 是否可以被清理。检测线程首先会在 meta 表中揪出所有 split 列为 true 的 region，并加载出其分裂后生成的两个子 region（meta 表中 splitA 列和 splitB 列），只需要检查此两个子 region 是否还存在引用文件，如果都不存在引用文件就可以认为该父 region 对应的文件可以被删除。</p>
+<h2 id="44-region-切分事务性如何保证">
+  4.4 Region 切分事务性如何保证？
+  <a class="anchor" href="#44-region-%e5%88%87%e5%88%86%e4%ba%8b%e5%8a%a1%e6%80%a7%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81">#</a>
+</h2>
+<p>HBase 2.0 之前基于状态机保证（未完全保证，仍可能会存在大量 RIT），HBase 2.0 之后基于内部分布式事务框架 Procedure V2(HBASE-12439) 保证。</p>
+<p><img src="region-meta.png" alt="region-meta" /></p>
+<h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="http://hbasefly.com/2017/08/27/hbase-split/">HBase 原理 – 所有 Region 切分的细节都在这里了</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-触发-region-split">1. 触发 Region Split</a>
+      <ul>
+        <li><a href="#11-constantsizeregionsplitpolicy">1.1 ConstantSizeRegionSplitPolicy</a></li>
+        <li><a href="#12-increasingtoupperboundregionsplitpolicy">1.2 IncreasingToUpperBoundRegionSplitPolicy</a></li>
+        <li><a href="#13-steppingsplitpolicy">1.3 SteppingSplitPolicy</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-寻找-splitpoint">2. 寻找 SplitPoint</a></li>
+    <li><a href="#3-拆分-region">3. 拆分 Region</a></li>
+    <li><a href="#4-其他问题">4. 其他问题</a>
+      <ul>
+        <li><a href="#41-reference-文件查找流程">4.1 reference 文件查找流程</a></li>
+        <li><a href="#42-父-region-的数据什么时候会迁移到子-region-目录">4.2 父 region 的数据什么时候会迁移到子 region 目录？</a></li>
+        <li><a href="#43-父-region-什么时候会被删除">4.3 父 region 什么时候会被删除？</a></li>
+        <li><a href="#44-region-切分事务性如何保证">4.4 Region 切分事务性如何保证？</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

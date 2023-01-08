@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Spark 应用执行模式" />
+<meta property="og:description" content="Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-spark/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-07-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-07-10T00:00:00+08:00" />
+<title>Ch02-Spark 应用执行模式 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Spark 应用执行模式</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-cluster-mananger">1. Cluster Mananger</a></li>
+    <li><a href="#2-yarn-部署模式">2. Yarn 部署模式</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-spark/ch02/">Ch02-Spark 应用执行模式</a>
+  </h1>
+  
+  <h5>July 10, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Spark/">Apache Spark</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/spark/">spark</a>
+  </div>
+  
+
+
+
+<p>Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。</p>
+<h1 id="1-cluster-mananger">
+  1. Cluster Mananger
+  <a class="anchor" href="#1-cluster-mananger">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standalone</td>
+<td>a simple cluster manager included with Spark that makes it easy to set up a cluster.</td>
+</tr>
+<tr>
+<td>Hadoop YARN</td>
+<td>the resource manager in Hadoop 2.</td>
+</tr>
+<tr>
+<td>Apache Mesos</td>
+<td>a general cluster manager that can also run Hadoop MapReduce and service applications. (Deprecated)</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>an open-source system for automating deployment, scaling, and management of containerized applications.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-yarn-部署模式">
+  2. Yarn 部署模式
+  <a class="anchor" href="#2-yarn-%e9%83%a8%e7%bd%b2%e6%a8%a1%e5%bc%8f">#</a>
+</h1>
+<p>Cluster Mananger 选择 Yarn 的时候存在两种部署模式，一种是 client，一种是 cluster。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>bin/spark-submit --master yarn --deploy-mode client
+</span></span><span style="display:flex;"><span>bin/spark-submit --master yarn --deploy-mode cluster
+</span></span></code></pre></div><p>client 和 Cluster 唯一的不同点是 Spark Context 运行在哪里。如果运行在 Spark Yarn Client 中，那便是 Client 模式，如下图左所示；如果运行在 Application Master 中，那便是 Cluster 模式，如下图右所示。</p>
+<p><img src="spark-deploy.jpg" alt="spark-deploy" /></p>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.jianshu.com/p/3d47d58dd48e">spark 四种运行模式</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-cluster-mananger">1. Cluster Mananger</a></li>
+    <li><a href="#2-yarn-部署模式">2. Yarn 部署模式</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

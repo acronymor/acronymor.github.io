@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 persist() 和 cache() 函数来缓存 RDD）。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch09-Spark 之 BlockMananger" />
+<meta property="og:description" content="Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 persist() 和 cache() 函数来缓存 RDD）。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-spark/ch09/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-06-15T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-06-15T00:00:00+08:00" />
+<title>Ch09-Spark 之 BlockMananger | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch09-Spark 之 BlockMananger</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原理介绍">1. 原理介绍</a>
+      <ul>
+        <li><a href="#11-基本架构">1.1 基本架构</a></li>
+        <li><a href="#12-工作流程">1.2 工作流程</a></li>
+        <li><a href="#13-空间申请策略">1.3 空间申请策略</a></li>
+        <li><a href="#14-空间淘汰策略">1.4 空间淘汰策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-blockmanager-与-rdd-之间的关系">2. BlockManager 与 RDD 之间的关系</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-spark/ch09/">Ch09-Spark 之 BlockMananger</a>
+  </h1>
+  
+  <h5>June 15, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Spark/">Apache Spark</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/spark/">spark</a>
+  </div>
+  
+
+
+
+<p>Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 <code>persist()</code> 和 <code>cache()</code> 函数来缓存 RDD）。</p>
+<h1 id="1-原理介绍">
+  1. 原理介绍
+  <a class="anchor" href="#1-%e5%8e%9f%e7%90%86%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<h2 id="11-基本架构">
+  1.1 基本架构
+  <a class="anchor" href="#11-%e5%9f%ba%e6%9c%ac%e6%9e%b6%e6%9e%84">#</a>
+</h2>
+<p>BlockManager，运行在每个节点（driver 和 executors）上，提供接口用于读写本地和远程各种存储设备 (内存、磁盘和 off-heap)，是 Spark 存储体系中的核心组件。
+Driver 端的 BlockManagerMaster 和 Executor 端的 BlockManager 组成了 Master-Slave 架构，其中 BlockManagerMaster 负责整个 Spark 应用程序的 Block 的元数据信息的管理和维护，而 BlockManager 负责将 Block 的更新等状态上报到 BlockManagerMaster 以及 接收 BlockManagerMaster 的命令。</p>
+<p><img src="spark-blockmanager.jpg" alt="spark-blockmanager" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>组件</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MemoryStore</td>
+<td>负责对内存中的数据进行操作</td>
+</tr>
+<tr>
+<td>DiskStore</td>
+<td>负责对磁盘上的数据进行处理</td>
+</tr>
+<tr>
+<td>BlockTransferService</td>
+<td>负责对远程节点上的数据进行读写操作。当执行 ShuffleRead 时，如数据在远程节点，则会通过该服务拉取所需数据。</td>
+</tr>
+<tr>
+<td>ConnectionManager</td>
+<td>创建当前节点 BlockManager 到远程其他节点的网络连接</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-工作流程">
+  1.2 工作流程
+  <a class="anchor" href="#12-%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<ol>
+<li>当 BlockManager 创建之后，首先向 Driver 所在的 BlockManagerMaster 注册，此时 BlockManagerMaster 会为该 BlockManager 创建对应的 BlockManagerInfo。BlockManagerInfo 管理集群中每个 Executor 中的 BlockManager 元数据信息，并存储到 BlockStatus 对象中。</li>
+<li>当使用 BlockManager 执行写操作时，例如持久化 RDD 计算过程中的中间数据，此时会优先将数据写入内存中，如果内存不足且支持磁盘存储则会将数据写入磁盘。如果指定 Replica 主备模式，则会将数据通过 BlockTransferService 同步到其他节点。</li>
+<li>当使用 BlockManager 执行了数据变更操作，则需要将 BlockStatus 信息同步到 BlockManagerMaster 节点上，并在对应的 BlockManagerInfo 更新 BlockStatus 对象，实现全局元数据的维护。</li>
+</ol>
+<h2 id="13-空间申请策略">
+  1.3 空间申请策略
+  <a class="anchor" href="#13-%e7%a9%ba%e9%97%b4%e7%94%b3%e8%af%b7%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<p>因为不能保证存储空间可以一次容纳 Iterator 中的所有数据，当前的计算任务在 Unroll 时要向 MemoryManager 申请足够的 Unroll 空间来临时占位，空间不足则 Unroll 失败。如果最终 Unroll 成功，当前 Partition 所占用的 Unroll 空间被转换为正常的缓存 RDD 的存储空间。</p>
+<blockquote>
+<p><strong>Unroll 概念</strong></p>
+<p>RDD 在缓存到内存之前，partition 中 record 对象实例在堆内 other 内存区域中的不连续空间中存储。RDD 的缓存过程中，不连续存储空间内的 partition 被转换为连续存储空间的 Block 对象，并在 Storage 内存区域存储，此过程被称作为 Unroll(展开)。</p>
+</blockquote>
+<ul>
+<li>对于非序列化的 Partition 则要在遍历 Record 的过程中依次申请，即每读取一条 Record，采样估算其所需的 Unroll 空间并进行申请，空间不足时可以中断，释放已占用的 Unroll 空间。</li>
+<li>对于序列化的 Partition，其所需的 Unroll 空间可以直接累加计算，一次申请。</li>
+</ul>
+<blockquote>
+<p>Block 有序列化和非序列化两种存储格式，具体以哪种方式取决于该 RDD 的存储级别。</p>
+<ul>
+<li>非序列化的 Block 以一种 DeserializedMemoryEntry 的数据结构定义，用 ArrayList 进行管理；</li>
+<li>序列化的 Block 则以 SerializedMemoryEntry 的数据结构定义，用字节缓冲区（ByteBuffer）来存储二进制数据，这些数据使用 LinkedHashMap 进行管理。</li>
+</ul>
+</blockquote>
+<h2 id="14-空间淘汰策略">
+  1.4 空间淘汰策略
+  <a class="anchor" href="#14-%e7%a9%ba%e9%97%b4%e6%b7%98%e6%b1%b0%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<p>由于同一个 Executor 的所有的计算任务共享有限的存储内存空间，当有新的 Block 需要缓存但是剩余空间不足且无法动态占用时，就要对 LinkedHashMap 中的旧 Block 进行淘汰（Eviction），而被淘汰的 Block 如果其存储级别中同时包含存储到磁盘的要求，则要对其进行落盘（Drop），否则直接删除该 Block。其淘汰规则为：</p>
+<ul>
+<li>被淘汰的旧 Block 要与新 Block 的 MemoryMode 相同，即同属于堆外或堆内内存；</li>
+<li>新旧 Block 不能属于同一个 RDD，避免循环淘汰；</li>
+<li>旧 Block 所属 RDD 不能处于被读状态，避免引发一致性问题；</li>
+<li>遍历 LinkedHashMap 中的 Block，按照最近最少使用（LRU）的顺序淘汰，直到满足新 Block 所需的空间。</li>
+</ul>
+<h1 id="2-blockmanager-与-rdd-之间的关系">
+  2. BlockManager 与 RDD 之间的关系
+  <a class="anchor" href="#2-blockmanager-%e4%b8%8e-rdd-%e4%b9%8b%e9%97%b4%e7%9a%84%e5%85%b3%e7%b3%bb">#</a>
+</h1>
+<p>RDD 的每个 Partition 经过处理后唯一对应一个 Block（BlockId 的格式为 rdd_RDD-ID_PARTITION-ID）。</p>
+<p><img src="spark-blockmanager-rdd.png" alt="spark-blockmanager-rdd" /></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原理介绍">1. 原理介绍</a>
+      <ul>
+        <li><a href="#11-基本架构">1.1 基本架构</a></li>
+        <li><a href="#12-工作流程">1.2 工作流程</a></li>
+        <li><a href="#13-空间申请策略">1.3 空间申请策略</a></li>
+        <li><a href="#14-空间淘汰策略">1.4 空间淘汰策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-blockmanager-与-rdd-之间的关系">2. BlockManager 与 RDD 之间的关系</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

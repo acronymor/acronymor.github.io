@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kylin on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/kylin/</link>
+    <description>Recent content in kylin on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 10 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/kylin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch08-Kylin 之 部分细节</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch08/</link>
+      <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch08/</guid>
+      <description>&lt;p&gt;Kylin 部分细节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Kylin 之 DISTINCT COUNT</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch07/</link>
+      <pubDate>Sun, 04 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch07/</guid>
+      <description>&lt;p&gt;distinct count&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Kylin 之 剪枝优化</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch06/</link>
+      <pubDate>Tue, 29 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch06/</guid>
+      <description>&lt;p&gt;Kylin 剪枝优化&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Kylin 之 Cube 构建算法</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch05/</link>
+      <pubDate>Sat, 19 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch05/</guid>
+      <description>&lt;p&gt;Kylin Cube 构建算法&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Kylin 之 Cube 构建流程</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch04/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch04/</guid>
+      <description>&lt;p&gt;Kylin Cube 执行流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Kylin 之 Query</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch03/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Kylin 之 Cube</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch02/</link>
+      <pubDate>Fri, 21 May 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch02/</guid>
+      <description>&lt;p&gt;Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Kylin 介绍</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch01/</link>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch01/</guid>
+      <description>&lt;p&gt;Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

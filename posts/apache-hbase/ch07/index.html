@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HBase 相关的 Cache">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-HBase 之 Cache" />
+<meta property="og:description" content="HBase 相关的 Cache" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-15T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-11-15T00:00:00+08:00" />
+<title>Ch07-HBase 之 Cache | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch07-HBase 之 Cache</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-hbase-cache-介绍">1. HBase Cache 介绍</a></li>
+    <li><a href="#2-memstore">2. MemStore</a>
+      <ul>
+        <li><a href="#21-memstore-flush-触发条件">2.1 MemStore Flush 触发条件</a>
+          <ul>
+            <li><a href="#211-memstore-级别限制">2.1.1 MemStore 级别限制</a></li>
+            <li><a href="#212-region-级别限制">2.1.2 Region 级别限制</a></li>
+            <li><a href="#213-region-server-级别限制">2.1.3 Region Server 级别限制</a></li>
+            <li><a href="#214-hlog-数量达到上限">2.1.4 HLog 数量达到上限</a></li>
+            <li><a href="#215-hbase-定期刷新-memstore">2.1.5 HBase 定期刷新 MemStore</a></li>
+            <li><a href="#216-手动执行-flush">2.1.6 手动执行 flush</a></li>
+          </ul>
+        </li>
+        <li><a href="#31-memstore-flush-流程">3.1 MemStore Flush 流程</a>
+          <ul>
+            <li><a href="#311-prepare-阶段">3.1.1 prepare 阶段</a></li>
+            <li><a href="#312-flush-阶段">3.1.2 flush 阶段</a></li>
+            <li><a href="#313-commit-阶段">3.1.3 commit 阶段</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-blockcache">4. BlockCache</a>
+      <ul>
+        <li><a href="#41-lrublockcache">4.1 LRUBlockCache</a>
+          <ul>
+            <li><a href="#411-缓存分层策略">4.1.1 缓存分层策略</a></li>
+            <li><a href="#412-lru-淘汰算法实现">4.1.2 LRU 淘汰算法实现</a></li>
+            <li><a href="#413-lru-方案优缺点">4.1.3 LRU 方案优缺点</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-bucketcache">4.2 BucketCache</a>
+          <ul>
+            <li><a href="#421-内存组织形式">4.2.1 内存组织形式</a></li>
+            <li><a href="#422-block-缓存写入读取流程">4.2.2 Block 缓存写入、读取流程</a>
+              <ul>
+                <li><a href="#4221-block-缓存写入流程">4.2.2.1 Block 缓存写入流程</a></li>
+                <li><a href="#4222-block-缓存读取流程">4.2.2.2 Block 缓存读取流程</a></li>
+              </ul>
+            </li>
+            <li><a href="#423-bucketcache-工作模式">4.2.3 BucketCache 工作模式</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-slabcache">4.3 SlabCache</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-压缩-blockcache">5. 压缩 BlockCache</a></li>
+    <li><a href="#6-其他注意事项">6. 其他注意事项</a></li>
+    <li><a href="#7-参考文献">7. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch07/">Ch07-HBase 之 Cache</a>
+  </h1>
+  
+  <h5>November 15, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HBase 相关的 Cache</p>
+<h1 id="1-hbase-cache-介绍">
+  1. HBase Cache 介绍
+  <a class="anchor" href="#1-hbase-cache-%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>HBase 在实现中提供了两种缓存结构：<strong>MemStore</strong>和<strong>BlockCache</strong>。</p>
+<p>MemStore 称为写缓存，HBase 执行写操作首先会将数据写入 MemStore，并顺序写入 HLog，等满足一定条件后统一将 MemStore 中数据刷新到磁盘，这种设计可以极大地提升 HBase 的写性能。不仅如此，MemStore 对于读性能也至关重要，假如没有 MemStore，读取刚写入的数据就需要从文件中通过 IO 查找，这种代价显然是昂贵的。</p>
+<p>BlockCache 称为读缓存，HBase 会将一次文件查找的 Block 块缓存到 Cache 中，以便后续同一请求或者邻近数据查找请求，可以直接从内存中获取，避免昂贵的 IO 操作。</p>
+<h1 id="2-memstore">
+  2. MemStore
+  <a class="anchor" href="#2-memstore">#</a>
+</h1>
+<p>HBase 是基于 LSM-Tree 模型的，所有的数据更新插入操作都首先写入 MemStore 中（同时会顺序写到日志 HLog 中），达到指定大小之后再将这些修改操作批量写入磁盘，生成一个新的 HFile 文件，这种设计可以极大地提升 HBase 的写入性能；另外，HBase 为了方便按照 RowKey 进行检索，要求 HFile 中数据都按照 RowKey 进行排序，MemStore 数据在 flush 成为 HFile 之前会进行一次排序，将数据有序化；还有，根据局部性原理，新写入的数据会更大概率被读取，因此 HBase 在读取数据的时候首先检查请求的数据是否在 MemStore，写缓存未命中的话再到读缓存中查找，读缓存还未命中才会到 HFile 文件中查找，最终返回 merged 的一个结果给用户。可见，MemStore 无论是对 HBase 的写入性能还是读取性能都至关重要。在 MemStore 相关的数据操作中，flush 操作是 MemStore 最核心的操作。</p>
+<h2 id="21-memstore-flush-触发条件">
+  2.1 MemStore Flush 触发条件
+  <a class="anchor" href="#21-memstore-flush-%e8%a7%a6%e5%8f%91%e6%9d%a1%e4%bb%b6">#</a>
+</h2>
+<p>HBase 会在如下几种情况下触发 flush 操作，这里需要注意的是 MemStore 的最小 flush 单元是 HRegion 而不是单个 MemStore。因此如果一个 HRegion 中 MemStore 过多，每次 flush 的开销必然会很大，故建议进行表设计的时候尽可能的减少 ColumnFamily 的个数。</p>
+<h3 id="211-memstore-级别限制">
+  2.1.1 MemStore 级别限制
+  <a class="anchor" href="#211-memstore-%e7%ba%a7%e5%88%ab%e9%99%90%e5%88%b6">#</a>
+</h3>
+<p>当 Region 中任意一个 MemStore 的大小达到了上限（<code>hbase.hregion.memstore.flush.size</code>，默认 128MB），会触发 MemStore 刷新。</p>
+<h3 id="212-region-级别限制">
+  2.1.2 Region 级别限制
+  <a class="anchor" href="#212-region-%e7%ba%a7%e5%88%ab%e9%99%90%e5%88%b6">#</a>
+</h3>
+<p>当 Region 中所有 MemStore 的大小总和达到了上限（<code>hbase.hregion.memstore.block.multiplier * hbase.hregion.memstore.flush.size</code>，默认 <code>2* 128M = 256M</code>），会触发 memstore 刷新。</p>
+<h3 id="213-region-server-级别限制">
+  2.1.3 Region Server 级别限制
+  <a class="anchor" href="#213-region-server-%e7%ba%a7%e5%88%ab%e9%99%90%e5%88%b6">#</a>
+</h3>
+<p>当一个 Region Server 中所有 MemStore 的大小总和达到了上限（<code>hbase.regionserver.global.memstore.upperLimit * hbase_heapsize</code>，默认 40% 的 JVM 内存使用量），会触发部分 MemStore 刷新。</p>
+<p>Flush 顺序是按照 MemStore 由大到小执行，先 Flush MemStore 最大的 Region，再执行次大的，直至总体 MemStore 内存使用量低于阈值（<code>hbase.regionserver.global.memstore.lowerLimit * hbase_heapsize</code>，默认 38% 的 JVM 内存使用量）。</p>
+<h3 id="214-hlog-数量达到上限">
+  2.1.4 HLog 数量达到上限
+  <a class="anchor" href="#214-hlog-%e6%95%b0%e9%87%8f%e8%be%be%e5%88%b0%e4%b8%8a%e9%99%90">#</a>
+</h3>
+<p>当一个 Region Server 中 HLog 数量达到上限（可通过参数<code>hbase.regionserver.maxlogs</code>配置）时，系统会选取最早的一个 HLog 对应的一个或多个 Region 进行 flush。</p>
+<h3 id="215-hbase-定期刷新-memstore">
+  2.1.5 HBase 定期刷新 MemStore
+  <a class="anchor" href="#215-hbase-%e5%ae%9a%e6%9c%9f%e5%88%b7%e6%96%b0-memstore">#</a>
+</h3>
+<p>默认周期为 1 小时，确保 MemStore 不会长时间没有持久化。为避免所有的 MemStore 在同一时间都进行 flush 导致的问题，定期的 flush 操作有 20000 左右的随机延时。</p>
+<h3 id="216-手动执行-flush">
+  2.1.6 手动执行 flush
+  <a class="anchor" href="#216-%e6%89%8b%e5%8a%a8%e6%89%a7%e8%a1%8c-flush">#</a>
+</h3>
+<p>用户可以通过命令 <code>flush 'tablename'</code> 或者<code>flush 'region name'</code>分别对一张表或者一个 Region 进行 flush 操作。</p>
+<h2 id="31-memstore-flush-流程">
+  3.1 MemStore Flush 流程
+  <a class="anchor" href="#31-memstore-flush-%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>为了减少 flush 过程对读写的影响，HBase 采用了类似于两阶段提交的方式，将整个 flush 过程分为三个阶段：</p>
+<h3 id="311-prepare-阶段">
+  3.1.1 prepare 阶段
+  <a class="anchor" href="#311-prepare-%e9%98%b6%e6%ae%b5">#</a>
+</h3>
+<p>遍历当前 Region 中的所有 MemStore，将 MemStore 中当前数据集 kvset 做一个快照 snapshot，然后再新建一个新的 kvset。后期的所有写入操作都会写入新的 kvset 中，而整个 flush 阶段读操作会首先分别遍历 kvset 和 snapshot，如果查找不到再会到 HFile 中查找。prepare 阶段需要加一把 updateLock 对写请求阻塞，结束之后会释放该锁。因为此阶段没有任何费时操作，因此持锁时间很短。</p>
+<h3 id="312-flush-阶段">
+  3.1.2 flush 阶段
+  <a class="anchor" href="#312-flush-%e9%98%b6%e6%ae%b5">#</a>
+</h3>
+<p>遍历所有 MemStore，将 prepare 阶段生成的 snapshot 持久化为临时文件，临时文件会统一放到目录.tmp 下。这个过程因为涉及到磁盘 IO 操作，因此相对比较耗时。</p>
+<h3 id="313-commit-阶段">
+  3.1.3 commit 阶段
+  <a class="anchor" href="#313-commit-%e9%98%b6%e6%ae%b5">#</a>
+</h3>
+<p>遍历所有的 MemStore，将 flush 阶段生成的临时文件移到指定的 ColumnFamily 目录下，针对 HFile 生成对应的 StoreFile 和 Reader，把 StoreFile 添加到 HStore 的 StoreFiles 列表中，最后再清空 prepare 阶段生成的 snapshot。</p>
+<h1 id="4-blockcache">
+  4. BlockCache
+  <a class="anchor" href="#4-blockcache">#</a>
+</h1>
+<p>BlockCache 是 Region Server 级别的，一个 Region Server 只有一个 Block Cache，在 Region Server 启动的时候完成 Block Cache 的初始化工作。到目前为止，HBase 先后实现了 3 种 Block Cache 方案，LRUBlockCache 是最初的实现方案，也是默认的实现方案；HBase 0.92 版本实现了第二种方案 SlabCache，见 HBASE-4027；HBase 0.96 之后官方提供了另一种可选方案 BucketCache，见 HBASE-7404。
+这三种方案的不同之处在于对内存的管理模式，其中 LRUBlockCache 是将所有数据都放入 JVM Heap 中，交给 JVM 进行管理。而后两者采用了不同机制将部分数据存储在堆外，交给 HBase 自己管理。这种演变过程是因为 LRUBlockCache 方案中 JVM 垃圾回收机制经常会导致程序长时间暂停，而采用堆外内存对数据进行管理可以有效避免这种情况发生。</p>
+<h2 id="41-lrublockcache">
+  4.1 LRUBlockCache
+  <a class="anchor" href="#41-lrublockcache">#</a>
+</h2>
+<p>LRUBlockCache 是 HBase 目前默认的 BlockCache 机制，实现机制比较简单。它使用一个 ConcurrentHashMap 管理 BlockKey 到 Block 的映射关系，缓存 Block 只需要将 BlockKey 和对应的 Block 放入该 HashMap 中，查询缓存就根据 BlockKey 从 HashMap 中获取即可。同时该方案采用严格的 LRU 淘汰算法，当 Block Cache 总量达到一定阈值之后就会启动淘汰机制，最近最少使用的 Block 会被置换出来。在 HBase 中，计算可以用来做 cache 的容量可以通过计算 number of region servers * heap size * hfile.block.cache.size * 0.99 得到。具体的实现细节方面，需要关注三点：</p>
+<h3 id="411-缓存分层策略">
+  4.1.1 缓存分层策略
+  <a class="anchor" href="#411-%e7%bc%93%e5%ad%98%e5%88%86%e5%b1%82%e7%ad%96%e7%95%a5">#</a>
+</h3>
+<p>HBase 在 LRU 缓存基础上，采用了缓存分层设计，将整个 BlockCache 分为三个部分：single-access、mutil-access 和 inMemory，其中每部分分别占到整个 BlockCache 大小的 25%、50%、25%。
+一次随机读中，一个 Block 块从 HDFS 中加载出来之后首先放入 single 区，后续如果有多次请求访问到这块数据的话，就会将这块数据移到 mutil-access 区。而 in-memory 区表示数据可以常驻内存，一般用来存放访问频繁、数据量小的数据，比如元数据，用户也可以在建表的时候通过设置列族属性 IN-MEMORY= true 将此列族放入 in-memory 区（设置的时候应特别注意，确保此列族数据量很小且访问频繁，否则有可能会将 hbase:meta 元数据挤出内存，严重影响所有业务性能）。
+无论哪个区，系统都会采用严格的 Least-Recently-Used 算法，当 BlockCache 总量达到一定阈值之后就会启动淘汰机制，最少使用的 Block 会被置换出来，为新加载的 Block 预留空间。</p>
+<h3 id="412-lru-淘汰算法实现">
+  4.1.2 LRU 淘汰算法实现
+  <a class="anchor" href="#412-lru-%e6%b7%98%e6%b1%b0%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">#</a>
+</h3>
+<p>系统在每次 cache block 时将 BlockKey 和 Block 放入 HashMap 后都会检查 BlockCache 总量是否达到阈值，如果达到阈值，就会唤醒淘汰线程对 Map 中的 Block 进行淘汰。系统设置三个 MinMaxPriorityQueue 队列，分别对应上述三个分层，每个队列中的元素按照最近最少被使用排列，系统会优先 poll 出最近最少使用的元素，将其对应的内存释放。可见，三个分层中的 Block 会分别执行 LRU 淘汰算法进行淘汰。</p>
+<h3 id="413-lru-方案优缺点">
+  4.1.3 LRU 方案优缺点
+  <a class="anchor" href="#413-lru-%e6%96%b9%e6%a1%88%e4%bc%98%e7%bc%ba%e7%82%b9">#</a>
+</h3>
+<p>LRU 方案使用 JVM 提供的 HashMap 管理缓存，简单有效。但随着数据从 single-access 区晋升到 mutil-access 区，基本就伴随着对应的内存对象从 young 区到 old 区，晋升到 old 区的 Block 被淘汰后会变为内存垃圾，最终由 CMS 回收掉（Conccurent Mark Sweep，一种标记清除算法），然而这种算法会带来大量的内存碎片，碎片空间一直累计就会产生臭名昭著的 Full GC。尤其在大内存条件下，一次 Full GC 很可能会持续较长时间，甚至达到分钟级别。大家知道 Full GC 是会将整个进程暂停的（称为 stop-the-wold 暂停），因此长时间 Full GC 必然会极大影响业务的正常读写请求。也正因为这样的弊端，SlabCache 方案和 BucketCache 方案才会横空出世。</p>
+<h2 id="42-bucketcache">
+  4.2 BucketCache
+  <a class="anchor" href="#42-bucketcache">#</a>
+</h2>
+<p>相比 LRUBlockCache 而言，BucketCache 实现相对比较复杂。它没有使用 JVM 内存管理算法来管理缓存，而是自己对内存进行管理，因此不会因为出现大量碎片导致 Full GC 的情况发生。本小节主要介绍 BucketCache 的具体实现方式（包括 BucketCache 的内存组织形式、缓存写入读取流程等）以及如何配置使用 BucketCache。</p>
+<h3 id="421-内存组织形式">
+  4.2.1 内存组织形式
+  <a class="anchor" href="#421-%e5%86%85%e5%ad%98%e7%bb%84%e7%bb%87%e5%bd%a2%e5%bc%8f">#</a>
+</h3>
+<p>下图是 BucketCache 的内存组织形式图，其中上面部分是逻辑组织结构，下面部分是对应的物理组织结构。</p>
+<p><img src="bucket-directory.png" alt="bucket 组织逻辑结构" /></p>
+<p>HBase 启动之后会在内存中申请大量的 bucket，如上图中黄色矩形所示，每个 bucket 的大小默认都为 2MB。每个 bucket 会有一个 baseoffset 变量和一个 size 标签，其中 baseoffset 变量表示这个 bucket 在实际物理空间中的起始地址，因此 block 的物理地址就可以通过 baseoffset 和该 block 在 bucket 的偏移量唯一确定；而 size 标签表示这个 bucket 可以存放的 block 块的大小，比如图中左侧 bucket 的 size 标签为 65KB，表示可以存放 64KB 的 block，右侧 bucket 的 size 标签为 129KB，表示可以存放 128KB 的 block。</p>
+<p><img src="bucket-allocation.png" alt="bucket 分配方式" /></p>
+<p>HBase 中使用 BucketAllocator 类实现对 Bucket 的组织管理：</p>
+<ol>
+<li>HBase 会根据每个 bucket 的 size 标签对 bucket 进行分类，相同 size 标签的 bucket 由同一个 BucketSizeInfo 管理，如上图，左侧存放 64KB block 的 bucket 由 65KB BucketSizeInfo 管理，右侧存放 128KB block 的 bucket 由 129KB BucketSizeInfo 管理。</li>
+<li>HBase 在启动的时候就决定了 size 标签的分类，默认标签有 (4+1)K、(8+1)K、(16+1)K … (48+1)K、(56+1)K、(64+1)K、(96+1)K … (512+1)K。而且系统会首先从小到大遍历一次所有 size 标签，为每种 size 标签分配一个 bucket，最后所有剩余的 bucket 都分配最大的 size 标签，默认分配 (512+1)K，如上图所示。</li>
+<li>Bucket 的 size 标签可以动态调整，比如 64K 的 block 数目比较多，65K 的 bucket 被用完了以后，其他 size 标签的完全空闲的 bucket 可以转换成为 65K 的 bucket，但是至少保留一个该 size 的 bucket。</li>
+</ol>
+<h3 id="422-block-缓存写入读取流程">
+  4.2.2 Block 缓存写入、读取流程
+  <a class="anchor" href="#422-block-%e7%bc%93%e5%ad%98%e5%86%99%e5%85%a5%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h3>
+<p>下图是 block 写入缓存以及从缓存中读取 block 的流程示意图，图中主要包括 5 个模块，其中</p>
+<ul>
+<li>RAMCache 是一个存储 blockkey 和 block 对应关系的 HashMap；</li>
+<li>WriteThead 是整个 block 写入的中心枢纽，主要负责异步的写入 block 到内存空间；</li>
+<li>BucketAllocator 在上一节详细介绍过，主要实现对 bucket 的组织管理，为 block 分配内存空间；</li>
+<li>IOEngine 是具体的内存管理模块，主要实现将 block 数据写入对应地址的内存空间；</li>
+<li>BackingMap 也是一个 HashMap，用来存储 blockKey 与对应物理内存偏移量的映射关系，用来根据 blockkey 定位具体的 block；其中紫线表示 cache block 流程，绿线表示 get block 流程。</li>
+</ul>
+<p><img src="bucket-put-get-process.png" alt="bucket put 和 get 流程" /></p>
+<h4 id="4221-block-缓存写入流程">
+  4.2.2.1 Block 缓存写入流程
+  <a class="anchor" href="#4221-block-%e7%bc%93%e5%ad%98%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b">#</a>
+</h4>
+<ol>
+<li>将 block 写入 RAMCache。实际实现中，HBase 设置了多个 RAMCache，系统首先会根据 blockkey 进行 hash，根据 hash 结果将 block 分配到对应的 RAMCache 中；</li>
+<li>WriteThead 从 RAMCache 中取出所有的 block。和 RAMCache 相同，HBase 会同时启动多个 WriteThead 并发的执行异步写入，每个 WriteThead 对应一个 RAMCache；</li>
+<li>每个 WriteThead 会将遍历 RAMCache 中所有 block 数据，分别调用 bucketAllocator 为这些 block 分配内存空间；</li>
+<li>BucketAllocator 会选择与 block 大小对应的 bucket 进行存放（具体细节可以参考上节‘内存组织形式’所述），并且返回对应的物理地址偏移量 offset；</li>
+<li>WriteThead 将 block 以及分配好的物理地址偏移量传给 IOEngine 模块，执行具体的内存写入操作；</li>
+<li>写入成功后，将类似&lt;blockkey,offset&gt;这样的映射关系写入 BackingMap 中，方便后续查找时根据 blockkey 可以直接定位；</li>
+</ol>
+<h4 id="4222-block-缓存读取流程">
+  4.2.2.2 Block 缓存读取流程
+  <a class="anchor" href="#4222-block-%e7%bc%93%e5%ad%98%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h4>
+<ol>
+<li>首先从 RAMCache 中查找。对于还没有来得及写入到 bucket 的缓存 block，一定存储在 RAMCache 中；</li>
+<li>如果在 RAMCache 中没有找到，再在 BackingMap 中根据 blockKey 找到对应物理偏移地址 offset；</li>
+<li>根据物理偏移地址 offset 可以直接从内存中查找对应的 block 数据；</li>
+</ol>
+<h3 id="423-bucketcache-工作模式">
+  4.2.3 BucketCache 工作模式
+  <a class="anchor" href="#423-bucketcache-%e5%b7%a5%e4%bd%9c%e6%a8%a1%e5%bc%8f">#</a>
+</h3>
+<p>BucketCache 默认有三种工作模式：<strong>heap</strong>、<strong>offheap</strong>和<strong>file</strong>；这三种工作模式在内存逻辑组织形式以及缓存流程上都是相同的，不同的是三者对应的最终存储介质有所不同，即上述所讲的 IOEngine 有所不同。</p>
+<p>heap 模式和 offheap 模式都使用内存作为最终存储介质，内存分配查询也都使用 Java NIO ByteBuffer 技术，不同的是，heap 模式分配内存会调用 byteBuffer.allocate 方法，从 JVM 提供的 heap 区分配，而后者会调用 byteBuffer.allocateDirect 方法，直接从操作系统分配。这两种内存分配模式会对 HBase 实际工作性能产生一定的影响。影响最大的无疑是 GC，相比 heap 模式，offheap 模式因为内存属于操作系统，所以基本不会产生 CMS GC，也就在任何情况下都不会因为内存碎片导致触发 Full GC。除此之外，在内存分配以及读取方面，两者性能也有不同，比如，内存分配时 heap 模式需要首先从操作系统分配内存再拷贝到 JVM heap，相比 offheap 直接从操作系统分配内存更耗时；但是反过来，读取缓存时 heap 模式可以从 JVM heap 中直接读取，而 offheap 模式则需要首先从操作系统拷贝到 JVM heap 再读取，显得后者更费时。</p>
+<p>file 模式和前面两者不同，它使用 Fussion-IO 或者 SSD 等作为存储介质，相比昂贵的内存，这样可以提供更大的存储容量，因此可以极大地提升缓存命中率。</p>
+<h2 id="43-slabcache">
+  4.3 SlabCache
+  <a class="anchor" href="#43-slabcache">#</a>
+</h2>
+<p>为了解决 LRUBlockCache 方案中因为 JVM 垃圾回收导致的服务中断，SlabCache 方案使用 Java NIO DirectByteBuffer 技术实现了堆外内存存储，不再由 JVM 管理数据内存。默认情况下，系统在初始化的时候会分配两个缓存区，分别占整个 BlockCache 大小的 80% 和 20%，每个缓存区分别存储固定大小的 Block 块，其中前者主要存储小于等于 64K 大小的 Block，后者存储小于等于 128K Block，如果一个 Block 太大就会导致两个区都无法缓存。和 LRUBlockCache 相同，SlabCache 也使用 Least-Recently-Used 算法对过期 Block 进行淘汰。和 LRUBlockCache 不同的是，SlabCache 淘汰 Block 的时候只需要将对应的 bufferbyte 标记为空闲，后续 cache 对其上的内存直接进行覆盖即可。</p>
+<p>线上集群环境中，不同表不同列族设置的 BlockSize 都可能不同，很显然，默认只能存储两种固定大小 Block 的 SlabCache 方案不能满足部分用户场景，比如用户设置 BlockSize = 256K，简单使用 SlabCache 方案就不能达到这部分 Block 缓存的目的。因此 HBase 实际实现中将 SlabCache 和 LRUBlockCache 搭配使用，称为 DoubleBlockCache。一次随机读中，一个 Block 块从 HDFS 中加载出来之后会在两个 Cache 中分别存储一份；缓存读时首先在 LRUBlockCache 中查找，如果 Cache Miss 再在 SlabCache 中查找，此时如果命中再将该 Block 放入 LRUBlockCache 中。</p>
+<p>经过实际测试，DoubleBlockCache 方案有很多弊端。比如 SlabCache 设计中固定大小内存设置会导致实际内存使用率比较低，而且使用 LRUBlockCache 缓存 Block 依然会因为 JVM GC 产生大量内存碎片。因此在 HBase 0.98 版本之后，该方案已经被不建议使用。</p>
+<h1 id="5-压缩-blockcache">
+  5. 压缩 BlockCache
+  <a class="anchor" href="#5-%e5%8e%8b%e7%bc%a9-blockcache">#</a>
+</h1>
+<p>HBASE-11331 引入了延迟解压缩 BlockCache 的功能，即压缩 BlockCache，当该功能启用的时候，data block 和 encoded data block 会被以存储在磁盘的文件格式存储在 BlockCache 中，简单来说，就是此时的 BlockCache 中的 block 会被压缩。</p>
+<p>这么做的好处是，RegionServer 可以将更多的数据存储在 cache 中，经过测试得出，如果使用 SNAPPY 压缩，其吞吐量会增加 50%，平均延迟性能提升 30%，于此同时，GC 增加 80%，CPU 负载增加 2%。因此是否启用该功能还是要根据应用取舍，如果应用是资源敏感性应用，那么便不是非常适合启用该功能。</p>
+<p>启用方式通过在 hbase-site.xml 中设置 hbase.block.data.cachecompressed=true 便可。</p>
+<h1 id="6-其他注意事项">
+  6. 其他注意事项
+  <a class="anchor" href="#6-%e5%85%b6%e4%bb%96%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9">#</a>
+</h1>
+<p>在实际 BlockCache 部署中会采用混合部署方式，这种方式中 LRUBlockCache 和 BucketCache 一起部署，采用分级策略。简单来说 INDEX 和 BLOOM 是存在 LRUBlockCache 这一层面的 (L1)，DATA blocks 会被保存在 BucketCache 这一次层 (L2)。在 HBase2.0.0 之前可以通过设置 hbase.bucketcache.combinedcache.enabled=false 关闭这种模式，即从 LRUBlockCache 淘汰出来的 block 会存储到 BucketCache 中，但现在这种方式已经不可用了。</p>
+<h1 id="7-参考文献">
+  7. 参考文献
+  <a class="anchor" href="#7-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://hbase.apache.org/book.html#regionserver.arch">HBase Book</a></li>
+<li><a href="http://hbasefly.com/2016/03/23/hbase-memstore-flush/">HBase – Memstore Flush 深度解析</a></li>
+<li><a href="http://hbasefly.com/2016/04/08/hbase-blockcache-1/">HBase BlockCache 系列 – 走进 BlockCache</a></li>
+<li><a href="http://hbasefly.com/2016/04/26/hbase-blockcache-2/">HBase BlockCache 系列 － 探求 BlockCache 实现机制</a></li>
+<li><a href="http://hbasefly.com/2016/05/06/hbase-blockcache-3/">HBase BlockCache 系列 － 性能对比测试报告</a></li>
+<li><a href="https://bbs.huaweicloud.com/blogs/109143">一条数据的 HBase 之旅，简明 HBase 入门教程 11：In-Memory Flush</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-hbase-cache-介绍">1. HBase Cache 介绍</a></li>
+    <li><a href="#2-memstore">2. MemStore</a>
+      <ul>
+        <li><a href="#21-memstore-flush-触发条件">2.1 MemStore Flush 触发条件</a>
+          <ul>
+            <li><a href="#211-memstore-级别限制">2.1.1 MemStore 级别限制</a></li>
+            <li><a href="#212-region-级别限制">2.1.2 Region 级别限制</a></li>
+            <li><a href="#213-region-server-级别限制">2.1.3 Region Server 级别限制</a></li>
+            <li><a href="#214-hlog-数量达到上限">2.1.4 HLog 数量达到上限</a></li>
+            <li><a href="#215-hbase-定期刷新-memstore">2.1.5 HBase 定期刷新 MemStore</a></li>
+            <li><a href="#216-手动执行-flush">2.1.6 手动执行 flush</a></li>
+          </ul>
+        </li>
+        <li><a href="#31-memstore-flush-流程">3.1 MemStore Flush 流程</a>
+          <ul>
+            <li><a href="#311-prepare-阶段">3.1.1 prepare 阶段</a></li>
+            <li><a href="#312-flush-阶段">3.1.2 flush 阶段</a></li>
+            <li><a href="#313-commit-阶段">3.1.3 commit 阶段</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-blockcache">4. BlockCache</a>
+      <ul>
+        <li><a href="#41-lrublockcache">4.1 LRUBlockCache</a>
+          <ul>
+            <li><a href="#411-缓存分层策略">4.1.1 缓存分层策略</a></li>
+            <li><a href="#412-lru-淘汰算法实现">4.1.2 LRU 淘汰算法实现</a></li>
+            <li><a href="#413-lru-方案优缺点">4.1.3 LRU 方案优缺点</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-bucketcache">4.2 BucketCache</a>
+          <ul>
+            <li><a href="#421-内存组织形式">4.2.1 内存组织形式</a></li>
+            <li><a href="#422-block-缓存写入读取流程">4.2.2 Block 缓存写入、读取流程</a>
+              <ul>
+                <li><a href="#4221-block-缓存写入流程">4.2.2.1 Block 缓存写入流程</a></li>
+                <li><a href="#4222-block-缓存读取流程">4.2.2.2 Block 缓存读取流程</a></li>
+              </ul>
+            </li>
+            <li><a href="#423-bucketcache-工作模式">4.2.3 BucketCache 工作模式</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-slabcache">4.3 SlabCache</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-压缩-blockcache">5. 压缩 BlockCache</a></li>
+    <li><a href="#6-其他注意事项">6. 其他注意事项</a></li>
+    <li><a href="#7-参考文献">7. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

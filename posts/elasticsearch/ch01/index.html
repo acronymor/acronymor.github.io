@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Elasticsearch 介绍" />
+<meta property="og:description" content="Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/elasticsearch/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-01T00:00:00+08:00" />
+<title>Ch01-Elasticsearch 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Elasticsearch 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a>
+      <ul>
+        <li><a href="#21-术语介绍">2.1 术语介绍</a></li>
+        <li><a href="#22-节点介绍">2.2 节点介绍</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-倒排索引">3. 倒排索引</a></li>
+    <li><a href="#4-易混概念">4. 易混概念</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/elasticsearch/ch01/">Ch01-Elasticsearch 介绍</a>
+  </h1>
+  
+  <h5>August 1, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+<p>Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://www.elastic.co">https://www.elastic.co</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://hadoop.apache.org/releases.html">https://hadoop.apache.org/releases.html</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-架构介绍">
+  2. 架构介绍
+  <a class="anchor" href="#2-%e6%9e%b6%e6%9e%84%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>ElasticSearch 节点类型分为 Master（主节点）和 DataNode（数据节点）。每个 DataNode 上面包含若干个分片，分片（Shard）分为 Primary Shard（主分片）和 Replica Shard（副分片）。分片（Shard）可以支撑海量数据，解决单机磁盘容量问题，副本（Replica）可以保证数据不丢失。</p>
+<p><img src="es-arch.png" alt="es-arch" /></p>
+<h2 id="21-术语介绍">
+  2.1 术语介绍
+  <a class="anchor" href="#21-%e6%9c%af%e8%af%ad%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cluster</td>
+<td>包含若干个 Node。</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>是一个 Elasticsearch 的实例，本质上是一个 Java 进程。每个节点上面都保存着集群的状态信息，包括所有的节点信息、所有的索引和相关的 Mapping 于 Setting 信息和分片的路由信息等。节点按照角色可以划分为 MasterNode、DataNode、IngestNode 等。</td>
+</tr>
+<tr>
+<td>Shard</td>
+<td>是 Lucene 的一个实例，Shard 分为 Primary Shard 和 Replica Shard，一般情况，一个 Primary Shard 有多个 Replica Shard。Primary Shard 负责处理写入请求和存储数据，Replica Shard 只负责存储数据，是 Primary Shard 的拷贝，Index 会存储在具体的某个 Primary Shard 和 Replica Shard 上。</td>
+</tr>
+<tr>
+<td>Index</td>
+<td>类似于 MySQL 的 Table。</td>
+</tr>
+<tr>
+<td>Document</td>
+<td>类似于 MySQL 的 Row。</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>类似于 MySQL 的 Column。</td>
+</tr>
+<tr>
+<td>Mapping</td>
+<td>类似于 MySQL 的 Schema。</td>
+</tr>
+<tr>
+<td>DSL</td>
+<td>类似于 MySQL 的 SQL。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-节点介绍">
+  2.2 节点介绍
+  <a class="anchor" href="#22-%e8%8a%82%e7%82%b9%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>配置</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MasterNode</td>
+<td>node.master = true</td>
+<td>管理索引（创建/删除/分配）；维护元数据；管理集群节点状态；不负责数据写入和查询。</td>
+</tr>
+<tr>
+<td>DataNode</td>
+<td>node.data = true</td>
+<td>数据写入；数据检索。</td>
+</tr>
+<tr>
+<td>IngestNode</td>
+<td>node.ingest = true</td>
+<td>执行预处理管道，不负责数据和集群相关事宜。</td>
+</tr>
+<tr>
+<td>CoordinatingNode</td>
+<td>all node</td>
+<td>负责接收客户端的请求，将请求路由到到合适的节点，并将结果汇集到一起。事实上所有的节点都是 CoordinatingNode，但是当其他节点类型设置为 false 的时候，该节点才会扮演单纯的 CoordinatingNode。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-倒排索引">
+  3. 倒排索引
+  <a class="anchor" href="#3-%e5%80%92%e6%8e%92%e7%b4%a2%e5%bc%95">#</a>
+</h1>
+<p>正排索引指的是从文档 id 到文档内容、单词的关联关系。例如每本书的目录，通过目录可以很快找到某个标题的具体内容在书中的那一页。而倒排索引指的文档内容或者单词到文档 id 的关联关系。还是以书的例子，倒排索引指的是从具体内容到文章标题的索引。</p>
+<h1 id="4-易混概念">
+  4. 易混概念
+  <a class="anchor" href="#4-%e6%98%93%e6%b7%b7%e6%a6%82%e5%bf%b5">#</a>
+</h1>
+<ul>
+<li><strong>数据分片技术</strong>是指分布式存储系统按照一定的规则将数据存储到对应的存储节点中，或者到对应的存储节点中获取想要的数据。</li>
+<li><strong>数据复制技术</strong>是指将数据进行备份，使得多个节点都存储该数据，提高系统可用性和可靠性。</li>
+</ul>
+<h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://juejin.cn/post/6994789245227368479">ElasticSearch 架构原理入门篇</a></li>
+<li><a href="https://www.cnblogs.com/sgh1023/p/15691061.html">Elasticsearch 核心技术（四）：分布式存储架构与索引原理分析</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a>
+      <ul>
+        <li><a href="#21-术语介绍">2.1 术语介绍</a></li>
+        <li><a href="#22-节点介绍">2.2 节点介绍</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-倒排索引">3. 倒排索引</a></li>
+    <li><a href="#4-易混概念">4. 易混概念</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

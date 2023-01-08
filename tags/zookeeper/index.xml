@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>zookeeper on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/zookeeper/</link>
+    <description>Recent content in zookeeper on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Apr 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/zookeeper/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch02-Zookeeper 之 ZAB 协议</title>
+      <link>https://acronymor.com/posts/apache-zookeeper/ch02/</link>
+      <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-zookeeper/ch02/</guid>
+      <description>&lt;p&gt;Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Zookeeper 介绍</title>
+      <link>https://acronymor.com/posts/apache-zookeeper/ch01/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-zookeeper/ch01/</guid>
+      <description>&lt;p&gt;Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

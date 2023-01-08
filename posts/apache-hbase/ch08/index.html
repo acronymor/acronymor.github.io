@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HBase 事务">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch08-HBase 之 事务" />
+<meta property="og:description" content="HBase 事务" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch08/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-19T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-11-19T00:00:00+08:00" />
+<title>Ch08-HBase 之 事务 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch08-HBase 之 事务</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原子性-atomicity">1. 原子性 (Atomicity)</a></li>
+    <li><a href="#2-一致性-consistency">2. 一致性 (Consistency)</a></li>
+    <li><a href="#3-隔离性-isolation">3. 隔离性 (Isolation)</a>
+      <ul>
+        <li><a href="#31-写写并发控制">3.1 写写并发控制</a></li>
+        <li><a href="#32-读写并发控制">3.2 读写并发控制</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-持久性-durability">4. 持久性 (Durability)</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch08/">Ch08-HBase 之 事务</a>
+  </h1>
+  
+  <h5>November 19, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HBase 事务</p>
+<h1 id="1-原子性-atomicity">
+  1. 原子性 (Atomicity)
+  <a class="anchor" href="#1-%e5%8e%9f%e5%ad%90%e6%80%a7-atomicity">#</a>
+</h1>
+<p>HBase 数据会首先写入 WAL，再写入 Memstore。写入 Memstore 异常很容易可以回滚，因此保证写入/更新原子性只需要保证写入 WAL 的原子性即可。而 WAL 的格式如下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;logseq#-for-entire-txn&gt;:&lt;WALEdit-for-entire-txn&gt;
+</span></span><span style="display:flex;"><span>&lt;logseq#-for-entire-txn&gt;:&lt;-1, 3, &lt;Keyvalue-for-edit-c1&gt;, &lt;KeyValue-for-edit-c2&gt;, &lt;KeyValue-for-edit-c3&gt;&gt;
+</span></span></code></pre></div><p>每个事务操作只会产生一个 WAL 条目，这样就保证了 WAL 的原子性。</p>
+<h1 id="2-一致性-consistency">
+  2. 一致性 (Consistency)
+  <a class="anchor" href="#2-%e4%b8%80%e8%87%b4%e6%80%a7-consistency">#</a>
+</h1>
+<p>由原子性，隔离性，持久性共同保证。</p>
+<h1 id="3-隔离性-isolation">
+  3. 隔离性 (Isolation)
+  <a class="anchor" href="#3-%e9%9a%94%e7%a6%bb%e6%80%a7-isolation">#</a>
+</h1>
+<p>隔离主要体现在多个操作相互影响导致结果不对，比如两个 update 线程同时修改一行数据，最后修改出来的数据结果完全错误；比如一个 write 线程写数据，还没有写完的时候，read 线程就来读取数据，结果读到的数据完全错误。</p>
+<h2 id="31-写写并发控制">
+  3.1 写写并发控制
+  <a class="anchor" href="#31-%e5%86%99%e5%86%99%e5%b9%b6%e5%8f%91%e6%8e%a7%e5%88%b6">#</a>
+</h2>
+<p>在写入（或更新）之前先获取行锁，如果获取不到，说明已经有其他线程拿了该锁，就需要不断重试等待或者自旋等待，直至其他线程释放该锁。拿到锁之后开始写入数据，写入完成之后释放行锁即可。</p>
+<h2 id="32-读写并发控制">
+  3.2 读写并发控制
+  <a class="anchor" href="#32-%e8%af%bb%e5%86%99%e5%b9%b6%e5%8f%91%e6%8e%a7%e5%88%b6">#</a>
+</h2>
+<p>借助 MVCC(Mutil Version Concurrent Control) 机制。每个写（更新）事务分配一个 Region 级别自增的序列号，并且为每一个读请求分配一个已完成的最大写事务序列号。这样就保证了读操作读到的数据一定是写（更新）事务完成后的数据。</p>
+<h1 id="4-持久性-durability">
+  4. 持久性 (Durability)
+  <a class="anchor" href="#4-%e6%8c%81%e4%b9%85%e6%80%a7-durability">#</a>
+</h1>
+<p>HBase 事务持久化可以理解为 WAL 持久化，目前实现了多种持久化策略：<code>SKIP_WAL</code>，<code>ASYNC_WAL</code>，<code>SYNC_WAL</code>，<code>FSYNC_WAL</code>。</p>
+<h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://issues.apache.org/jira/browse/HBASE-12751">HBASE-12751</a></li>
+<li><a href="http://hbasefly.com/2017/07/26/transaction-2/">数据库事务系列－HBase 行级事务模型</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原子性-atomicity">1. 原子性 (Atomicity)</a></li>
+    <li><a href="#2-一致性-consistency">2. 一致性 (Consistency)</a></li>
+    <li><a href="#3-隔离性-isolation">3. 隔离性 (Isolation)</a>
+      <ul>
+        <li><a href="#31-写写并发控制">3.1 写写并发控制</a></li>
+        <li><a href="#32-读写并发控制">3.2 读写并发控制</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-持久性-durability">4. 持久性 (Durability)</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

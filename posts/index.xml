@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/posts/</link>
+    <description>Recent content in Blog on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch09-LevelDB 之 Open</title>
+      <link>https://acronymor.com/posts/leveldb/ch09/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch09/</guid>
+      <description>&lt;p&gt;Open 流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-LevelDB 之 编码</title>
+      <link>https://acronymor.com/posts/leveldb/ch08/</link>
+      <pubDate>Mon, 30 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch08/</guid>
+      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Endian-neutral encoding:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Fixed-length numbers are encoded with least-significant byte first
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* In addition we support variable length &amp;#34;varint&amp;#34; encoding
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Strings are encoded prefixed by their length in varint format
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- util/coding.h
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-LevelDB 之 WAL</title>
+      <link>https://acronymor.com/posts/leveldb/ch07/</link>
+      <pubDate>Wed, 25 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch07/</guid>
+      <description>&lt;p&gt;WAL 一般用于故障恢复，其内容就是内存里 MemTable 内容的持久化，当一个 MemTable 写满后，开启一个新的 MemTable 时，也同时会开启一个新的 WAL，当 MemTable 被 Dump 到磁盘后，相应的 WAL 可以被删除。所以说控制每次 WAL 写入磁盘的方式，便可以控制最多可能丢失的数据量。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-LevelDB 之 SSTable</title>
+      <link>https://acronymor.com/posts/leveldb/ch05/</link>
+      <pubDate>Mon, 16 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch05/</guid>
+      <description>&lt;p&gt;SSTable&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-LevelDB 之 MemTable</title>
+      <link>https://acronymor.com/posts/leveldb/ch04/</link>
+      <pubDate>Thu, 12 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch04/</guid>
+      <description>&lt;p&gt;MemTable&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-LevelDB 之 Arena 内存管理</title>
+      <link>https://acronymor.com/posts/leveldb/ch03/</link>
+      <pubDate>Tue, 10 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch03/</guid>
+      <description>&lt;p&gt;Arena 内存管理&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-LevelDB 架构</title>
+      <link>https://acronymor.com/posts/leveldb/ch02/</link>
+      <pubDate>Thu, 05 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch02/</guid>
+      <description>&lt;p&gt;LevelDB 架构&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-LevelDB 初识</title>
+      <link>https://acronymor.com/posts/leveldb/ch01/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch01/</guid>
+      <description>&lt;p&gt;leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-MySQL 之 复制技术</title>
+      <link>https://acronymor.com/posts/mysql/ch07/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
+      <description>&lt;p&gt;我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-执行模型</title>
+      <link>https://acronymor.com/posts/database/ch04/</link>
+      <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-CBO</title>
+      <link>https://acronymor.com/posts/database/ch03/</link>
+      <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch04-MySQL 之 存储结构</title>
+      <link>https://acronymor.com/posts/mysql/ch04/</link>
+      <pubDate>Sun, 31 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch04/</guid>
+      <description> 参考文献 # MySQL 之 InnoDB 表空间 MySQL 之数据页结构 </description>
+    </item>
+    
+    <item>
+      <title>Ch03-MySQL 之 内存结构</title>
+      <link>https://acronymor.com/posts/mysql/ch03/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch03/</guid>
+      <description>&lt;p&gt;Buffer Pool&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-RBO</title>
+      <link>https://acronymor.com/posts/database/ch02/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch10-Elasticsearch 之 选举</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch10/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch10/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 选举&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Elasticsearch 之 threadpool</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch09/</link>
+      <pubDate>Mon, 30 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch09/</guid>
+      <description>&lt;p&gt;Elasticsearch 之线程池。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Elasticsearch 之 Http</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch08/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch08/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 Http&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Elasticsearch 之 Update</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch06/</link>
+      <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch06/</guid>
+      <description>&lt;p&gt;更新操作也是写操作。Elasticsearch 在创建新文档时，Elasticsearch 将为该文档分配一个版本号。对文档的每次更改都会产生一个新的版本号。当执行更新时，旧版本在.del 文件中被标记为已删除，并且新版本在新的分段中编入索引。旧版本可能仍然与搜索查询匹配，但是从结果中将其过滤掉。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Elasticsearch 之 Segment Merge</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch07/</link>
+      <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch07/</guid>
+      <description>&lt;p&gt;在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Elasticsearch 之 Delete</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch05/</link>
+      <pubDate>Fri, 20 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch05/</guid>
+      <description>&lt;p&gt;删除操作是也是写操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Elasticsearch 之 Search</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch04/</link>
+      <pubDate>Sun, 15 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch04/</guid>
+      <description>&lt;p&gt;Elasticsearch 的 Search 操作包含两个阶段，一个是 QueryPhase，另一个是 FetchPhase。QueryPhase 在初始查询阶段，查询会广播到索引中每一个分片副本 (主分片或副分片)。每个分片在本地执行搜索并构建一个匹配文档的优先队列（优先队列是一个存有 topN 匹配文档的有序列表，即 doc id。优先队列大小为分页参数 from + size），注意该队列中并没有取具体的数据。FetchPhase 会根据获取到的 doc id 向对应的节点依次发送 GET 请求，获取结果，然后合并，聚合，排序最终返回结果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Elasticsearch 之 Put</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch03/</link>
+      <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch03/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 Put，不过与其说是 Elasticsearch 的操作流程，倒不如说是单个 Lucene 索引操作流程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Elasticsearch 之 Shard</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch02/</link>
+      <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch02/</guid>
+      <description>&lt;p&gt;Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Elasticsearch 介绍</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch01/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch01/</guid>
+      <description>&lt;p&gt;Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Kylin 之 部分细节</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch08/</link>
+      <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch08/</guid>
+      <description>&lt;p&gt;Kylin 部分细节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Kylin 之 DISTINCT COUNT</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch07/</link>
+      <pubDate>Sun, 04 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch07/</guid>
+      <description>&lt;p&gt;distinct count&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Kylin 之 剪枝优化</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch06/</link>
+      <pubDate>Tue, 29 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch06/</guid>
+      <description>&lt;p&gt;Kylin 剪枝优化&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Kylin 之 Cube 构建算法</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch05/</link>
+      <pubDate>Sat, 19 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch05/</guid>
+      <description>&lt;p&gt;Kylin Cube 构建算法&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Kylin 之 Cube 构建流程</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch04/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch04/</guid>
+      <description>&lt;p&gt;Kylin Cube 执行流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Kylin 之 Query</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch03/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Calcite 执行流程</title>
+      <link>https://acronymor.com/posts/apache-calcite/ch02/</link>
+      <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-calcite/ch02/</guid>
+      <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Calcite 介绍</title>
+      <link>https://acronymor.com/posts/apache-calcite/ch01/</link>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-calcite/ch01/</guid>
+      <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Kylin 之 Cube</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch02/</link>
+      <pubDate>Fri, 21 May 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch02/</guid>
+      <description>&lt;p&gt;Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Kylin 介绍</title>
+      <link>https://acronymor.com/posts/apache-kylin/ch01/</link>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kylin/ch01/</guid>
+      <description>&lt;p&gt;Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch16-HBase 之 Scan</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch16/</link>
+      <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch16/</guid>
+      <description>&lt;p&gt;HBase Scan&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch15-HBase 之 Put</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch15/</link>
+      <pubDate>Thu, 15 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch15/</guid>
+      <description>&lt;p&gt;HBase Put&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-HBase 之 CreateTable</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch14/</link>
+      <pubDate>Fri, 09 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch14/</guid>
+      <description>&lt;p&gt;HBase CreateTable&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch13-HBase 之 RPC</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch13/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch13/</guid>
+      <description>&lt;p&gt;HBase RPC&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-HBase 之 Region Split</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch12/</link>
+      <pubDate>Wed, 24 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch12/</guid>
+      <description>&lt;p&gt;HBase Region Split 整个过程可以分为如下几步，&lt;code&gt;触发 Region Split&lt;/code&gt;，&lt;code&gt;寻找 SplitPoint&lt;/code&gt;，&lt;code&gt;拆分 Region&lt;/code&gt;，&lt;code&gt;等待 major compaction 删除旧的 Region&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-HBase 之 Region Compaction</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch11/</link>
+      <pubDate>Sun, 21 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch11/</guid>
+      <description>&lt;p&gt;HBase Region Compaction&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-HBase 之 Procedure v2</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch10/</link>
+      <pubDate>Wed, 17 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch10/</guid>
+      <description>&lt;p&gt;HBase Procedure V2&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-HBase 之 Procedure v2</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch09/</link>
+      <pubDate>Sun, 07 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch09/</guid>
+      <description>&lt;p&gt;HBase Procedure V2 其主要目标是提供多步执行的事务能力，跨多节点的通知机制，长时间 Procedure 运行的协同机制。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-Flink 之 Exactly-Once 语义</title>
+      <link>https://acronymor.com/posts/apache-flink/ch14/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch14/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch13-Flink 之 细粒度资源管理</title>
+      <link>https://acronymor.com/posts/apache-flink/ch13/</link>
+      <pubDate>Sun, 24 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch13/</guid>
+      <description>&lt;p&gt;Flink 之 细粒度资源管理&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Flink 之 Window</title>
+      <link>https://acronymor.com/posts/apache-flink/ch12/</link>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch12/</guid>
+      <description>&lt;p&gt;Flink 之 Window&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Flink 之 Watermark</title>
+      <link>https://acronymor.com/posts/apache-flink/ch11/</link>
+      <pubDate>Sat, 09 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch11/</guid>
+      <description>&lt;p&gt;Flink 之 watermark&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Flink 之 BackPressure</title>
+      <link>https://acronymor.com/posts/apache-flink/ch10/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch10/</guid>
+      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Flink 之 Savepoint</title>
+      <link>https://acronymor.com/posts/apache-flink/ch09/</link>
+      <pubDate>Thu, 31 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch09/</guid>
+      <description>&lt;p&gt;Savepoint 跟 Checkpoint 的差别在于 Checkpoint 是 Flink 对于一个有状态应用在运行中利用分布式快照持续周期性的产生 Checkpoint，而 Savepoint 则是手动产生的 Checkpoint，Savepoint 记录着流式应用中所有运算元的状态。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Flink 之 Checkpoint</title>
+      <link>https://acronymor.com/posts/apache-flink/ch08/</link>
+      <pubDate>Fri, 25 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch08/</guid>
+      <description>&lt;p&gt;Checkpoint 属于一种机制，&lt;code&gt;State + ABS(Asynchronouse Barrier Snapshot)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Flink 之 State</title>
+      <link>https://acronymor.com/posts/apache-flink/ch07/</link>
+      <pubDate>Sun, 20 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch07/</guid>
+      <description>&lt;p&gt;State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Flink 之 容错机制</title>
+      <link>https://acronymor.com/posts/apache-flink/ch06/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch06/</guid>
+      <description>&lt;p&gt;Flink 容错机制&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Flink 之 内存管理</title>
+      <link>https://acronymor.com/posts/apache-flink/ch05/</link>
+      <pubDate>Sat, 05 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch05/</guid>
+      <description>&lt;p&gt;Flink 内存管理&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Flink 之 图</title>
+      <link>https://acronymor.com/posts/apache-flink/ch04/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch04/</guid>
+      <description>&lt;p&gt;Flink 图的转换概述&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-HBase 之 事务</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch08/</link>
+      <pubDate>Thu, 19 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch08/</guid>
+      <description>&lt;p&gt;HBase 事务&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-HBase 之 Cache</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch07/</link>
+      <pubDate>Sun, 15 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch07/</guid>
+      <description>&lt;p&gt;HBase 相关的 Cache&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-HBase 之 StoreFile</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch06/</link>
+      <pubDate>Tue, 10 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch06/</guid>
+      <description>&lt;p&gt;HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Flink 之 Job 执行流程</title>
+      <link>https://acronymor.com/posts/apache-flink/ch03/</link>
+      <pubDate>Wed, 04 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch03/</guid>
+      <description>&lt;p&gt;Flink Job 执行流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Flink 之 应用执行模式</title>
+      <link>https://acronymor.com/posts/apache-flink/ch02/</link>
+      <pubDate>Tue, 03 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch02/</guid>
+      <description>&lt;p&gt;Flink 应用程序 是从其 main() 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（LocalEnvironment）中进行，或具有多台机器的集群的远程设置（RemoteEnvironment）中进行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Flink 之 介绍</title>
+      <link>https://acronymor.com/posts/apache-flink/ch01/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-flink/ch01/</guid>
+      <description>&lt;p&gt;Apache Flink 是 Apache 基金会旗下的一个开源大数据处理框架。应用于分布式、高性能、高可用的数据流应用程序。可以处理有限数据流和无限数据流，即能够处理有边界和无边界的数据流。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-HBase 之 MemStore</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch05/</link>
+      <pubDate>Fri, 30 Oct 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch05/</guid>
+      <description>&lt;p&gt;HBase memstore 也被称为写缓存，优化大概可以分为三个阶段，其中每一种都是在上一次的基础上进行不断优化得到。memstore 最底层的数据结构都是 &lt;code&gt;skiplist&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Antlr V4 介绍</title>
+      <link>https://acronymor.com/posts/antlr4/ch01/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/antlr4/ch01/</guid>
+      <description>&lt;p&gt;ANTLR（ANother Tool for Language Recognition）是一个强大的解析器生成器，用于读取、处理、执行或翻译结构化文本或二进制文件。它被广泛用于构建语言、工具和框架。ANTLR 根据语法定义生成解析器，解析器可以构建和遍历解析树。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Spark 之内存管理</title>
+      <link>https://acronymor.com/posts/apache-spark/ch10/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch10/</guid>
+      <description>&lt;p&gt;Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Spark 之 BlockMananger</title>
+      <link>https://acronymor.com/posts/apache-spark/ch09/</link>
+      <pubDate>Sat, 15 Jun 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch09/</guid>
+      <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Spark 之 Checkpoint</title>
+      <link>https://acronymor.com/posts/apache-spark/ch08/</link>
+      <pubDate>Mon, 03 Jun 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch08/</guid>
+      <description>&lt;p&gt;checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Spark 之缓存</title>
+      <link>https://acronymor.com/posts/apache-spark/ch07/</link>
+      <pubDate>Fri, 31 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch07/</guid>
+      <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Spark 之容错机制</title>
+      <link>https://acronymor.com/posts/apache-spark/ch06/</link>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch06/</guid>
+      <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Spark 之数据抽象</title>
+      <link>https://acronymor.com/posts/apache-spark/ch05/</link>
+      <pubDate>Mon, 20 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch05/</guid>
+      <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Spark 之 Shuffle</title>
+      <link>https://acronymor.com/posts/apache-spark/ch04/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch04/</guid>
+      <description>&lt;p&gt;Spark Shuffle 经过了若干次优化。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Spark 之 Job 执行流程</title>
+      <link>https://acronymor.com/posts/apache-spark/ch03/</link>
+      <pubDate>Sun, 12 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch03/</guid>
+      <description>&lt;p&gt;Spark Job 执行流程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Kafka 为什么这么快</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch12/</link>
+      <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch12/</guid>
+      <description>&lt;p&gt;Apache Kafka 以牺牲延迟和抖动为代价优化了吞吐量，但并没有牺牲，比如持久性、严格的记录有序性和至少一次的分发语义。当有人说“Kafka 速度很快”，并假设他们至少有一定的能力时，你可以认为他们指的是 Kafka 在短时间内分发大量记录的能力。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-HBase 之 HLog</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch04/</link>
+      <pubDate>Tue, 23 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch04/</guid>
+      <description>&lt;p&gt;Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Kafka 之 Quota</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch11/</link>
+      <pubDate>Mon, 22 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch11/</guid>
+      <description>&lt;p&gt;kafka Quota&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-HBase 之 CatalogTables</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch03/</link>
+      <pubDate>Sat, 20 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch03/</guid>
+      <description>&lt;p&gt;HBase Catalog Table&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Kafka 之事务</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch10/</link>
+      <pubDate>Thu, 18 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch10/</guid>
+      <description>&lt;p&gt;kafka Transaction.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-HBase 之数据模型</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch02/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch02/</guid>
+      <description>&lt;p&gt;逻辑上，HBase 的数据模型同关系型数据库很类似，数据存储在一张表中，有行有列。但从 HBase 的底层物理存储结构 (K-V) 来看，HBase 更像是一个 &lt;code&gt;multi-dimensional map&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-HBase 介绍</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch01/</link>
+      <pubDate>Sat, 13 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch01/</guid>
+      <description>&lt;p&gt;HBase 是一种分布式、可扩展、支持海量数据存储的 NoSQL 数据库。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Kafka 之高可用</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch09/</link>
+      <pubDate>Wed, 20 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch09/</guid>
+      <description>&lt;p&gt;kafka HA&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Kafka 之选举</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch08/</link>
+      <pubDate>Tue, 12 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch08/</guid>
+      <description>&lt;p&gt;Kafka 选举主要体现在两个地方，一个是 Broker 的选举，另一个是 Partition 的选举。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Kafka 之数据可靠性</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch07/</link>
+      <pubDate>Sun, 03 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch07/</guid>
+      <description>&lt;p&gt;数据可靠性值指数据不会轻易丢失，数据一定会被可靠存储。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Kafka 之数据一致性</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch06/</link>
+      <pubDate>Fri, 01 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch06/</guid>
+      <description>&lt;p&gt;数据一致性主要是说不论是老的 Leader 还是新选举的 Leader，Consumer 都能读到一样的数据。那么 Kafka 是如何实现的呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Spark 应用执行模式</title>
+      <link>https://acronymor.com/posts/apache-spark/ch02/</link>
+      <pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch02/</guid>
+      <description>&lt;p&gt;Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Kafka 之 Partition</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch05/</link>
+      <pubDate>Mon, 02 Jul 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch05/</guid>
+      <description>&lt;p&gt;Kafka Partition 相关的机制是比较复杂的，它自身保留了一个 leader 来对外提供消息操作的能力，若干 follower 通过 leader 同步消息保证数据可靠性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Spark 介绍</title>
+      <link>https://acronymor.com/posts/apache-spark/ch01/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-spark/ch01/</guid>
+      <description>&lt;p&gt;Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Kafka 之 ZeroCopy</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch04/</link>
+      <pubDate>Fri, 29 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch04/</guid>
+      <description>&lt;p&gt;Kafka 中存在大量的网络数据持久化到磁盘（Producer 到 Broker）和磁盘文件通过网络发送（Broker 到 Consumer）的过程。这一过程的性能直接影响 Kafka 的整体吞吐量，于是 Kafka 便引入了 ZeroCopy 技术来提升性能。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Kafka 之消息存储</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch03/</link>
+      <pubDate>Mon, 25 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch03/</guid>
+      <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Kafka 生产消费流程</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch02/</link>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch02/</guid>
+      <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Kafka 介绍</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch01/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch01/</guid>
+      <description>&lt;p&gt;Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Hive 之底层数据存储</title>
+      <link>https://acronymor.com/posts/apache-hive/ch03/</link>
+      <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hive/ch03/</guid>
+      <description>&lt;p&gt;Hive 底层数据存储格式&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Hive 之 SQL 执行</title>
+      <link>https://acronymor.com/posts/apache-hive/ch02/</link>
+      <pubDate>Thu, 14 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hive/ch02/</guid>
+      <description>&lt;p&gt;hive sql 执行流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Hive 介绍</title>
+      <link>https://acronymor.com/posts/apache-hive/ch01/</link>
+      <pubDate>Sun, 10 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hive/ch01/</guid>
+      <description>&lt;p&gt;Apache Hive 是基于 Hadoop 的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的 SQL 查询功能，其基本原理是将 SQL 语句转换为 MapReduce 任务进行数据处理功能。所以从代码层面来看，整个 Hive 就是将 SQL 语句转换成 MapReduce 代码的一款软件。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Zookeeper 之 ZAB 协议</title>
+      <link>https://acronymor.com/posts/apache-zookeeper/ch02/</link>
+      <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-zookeeper/ch02/</guid>
+      <description>&lt;p&gt;Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Zookeeper 介绍</title>
+      <link>https://acronymor.com/posts/apache-zookeeper/ch01/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-zookeeper/ch01/</guid>
+      <description>&lt;p&gt;Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-MySQL 之 事务</title>
+      <link>https://acronymor.com/posts/mysql/ch06/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
+      <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-MySQL 之 索引</title>
+      <link>https://acronymor.com/posts/mysql/ch05/</link>
+      <pubDate>Sat, 31 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch05/</guid>
+      <description>&lt;p&gt;InnoDB 索引选择&lt;strong&gt;B+树&lt;/strong&gt;作为其内存数据结构，选择&lt;strong&gt;聚簇索引&lt;/strong&gt;作为数据存储方式。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Hadoop 之 MapReduce</title>
+      <link>https://acronymor.com/posts/apache-hadoop/ch05/</link>
+      <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hadoop/ch05/</guid>
+      <description>&lt;p&gt;Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Hadoop 之 Yarn</title>
+      <link>https://acronymor.com/posts/apache-hadoop/ch04/</link>
+      <pubDate>Wed, 21 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hadoop/ch04/</guid>
+      <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Hadoop 之 HDFS 读写流程</title>
+      <link>https://acronymor.com/posts/apache-hadoop/ch03/</link>
+      <pubDate>Mon, 19 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hadoop/ch03/</guid>
+      <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Hadoop 之 HDFS 架构</title>
+      <link>https://acronymor.com/posts/apache-hadoop/ch02/</link>
+      <pubDate>Sat, 17 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hadoop/ch02/</guid>
+      <description>&lt;p&gt;HDFS 分布式部署场景下最常见的为两种架构，一种是基本的分布式架构，另一种是 HA 架构。在生产环境中一般都会部署 HA 架构。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Hadoop 介绍</title>
+      <link>https://acronymor.com/posts/apache-hadoop/ch01/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hadoop/ch01/</guid>
+      <description>&lt;p&gt;2012 年社区发布了 Hadoop 2.0-alpha，自此 Hadoop 开启了 2.0 时代，相比较与 1.0 引入了 Yarn，NameNode HA 等重要组件和功能。随后数年 Hadoop 1.0 也慢慢的退出了历史舞台，所以这里也仅仅讲述 Hadoop 2.0 相关。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-MySQL 之 InnoDB 内存结构和存储结构</title>
+      <link>https://acronymor.com/posts/mysql/ch02/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch02/</guid>
+      <description>&lt;p&gt;InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-MySQL 介绍</title>
+      <link>https://acronymor.com/posts/mysql/ch01/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch01/</guid>
+      <description>&lt;p&gt;MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-事务</title>
+      <link>https://acronymor.com/posts/database/ch01/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch01/</guid>
+      <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

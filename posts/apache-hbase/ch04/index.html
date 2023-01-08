@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch04-HBase 之 HLog" />
+<meta property="og:description" content="Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch04/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-04-23T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-04-23T00:00:00+08:00" />
+<title>Ch04-HBase 之 HLog | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch04-HBase 之 HLog</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-切分策略">1. 切分策略</a>
+      <ul>
+        <li><a href="#11-split-wal-based-on-zk-coordination">1.1 Split WAL based on ZK Coordination</a></li>
+        <li><a href="#12-split-wal-based-on-procedure-v2">1.2 Split WAL based on Procedure v2</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-文件结构">2. 文件结构</a></li>
+    <li><a href="#3-写入流程">3. 写入流程</a></li>
+    <li><a href="#4-hlog-的生命周期">4. Hlog 的生命周期</a></li>
+    <li><a href="#5-持久化等级">5. 持久化等级</a></li>
+    <li><a href="#6-参考文献">6. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch04/">Ch04-HBase 之 HLog</a>
+  </h1>
+  
+  <h5>April 23, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。</p>
+<p>在 HBase 2.0 之前，WAL 切分用的是 <strong>Split WAL based on ZK Coordination</strong>(常见的策略有 <code>LogSpliting</code>，<code>Distributed Log Spliting</code>，<code>Distributed Log Replay</code>，但是现在这些策略已经全部废除)。目前使用的是 <strong>WAL Splitting Based on Procedure V2</strong>。</p>
+<h1 id="1-切分策略">
+  1. 切分策略
+  <a class="anchor" href="#1-%e5%88%87%e5%88%86%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<h2 id="11-split-wal-based-on-zk-coordination">
+  1.1 Split WAL based on ZK Coordination
+  <a class="anchor" href="#11-split-wal-based-on-zk-coordination">#</a>
+</h2>
+<p><img src="split-wal-zk.png" alt="split-wal-zk" /></p>
+<ul>
+<li>LogSpliting 这种算法是 HMaser 读取 HLog 文件，然后将其拆分到不同的 Region 目录下面，当 RegionServer 启动的时候，回放这些 HLog 文件，这样就完成了 HLog 的数据恢复工作，缺点也很明显严重依赖 HMaster，效率比较低。</li>
+<li>Distributed Log Spliting 这种算法则是 HMaster 将 HLog 包装成任务发布到 Zookeeper 的 /hbase/splitWAL 节点上，RegionServer 启动的时候通过竞争的方式去获取任务，然后将 HLog 复制到不同的 Region 目录下面进行回放。</li>
+<li>Distributed Log Replay 这种算法与 Distributed Log Spliting 类似，只是少了将 HLog 复制到 Region 目录的过程，RegionServer 启动的时候直接回放。</li>
+</ul>
+<h2 id="12-split-wal-based-on-procedure-v2">
+  1.2 Split WAL based on Procedure v2
+  <a class="anchor" href="#12-split-wal-based-on-procedure-v2">#</a>
+</h2>
+<p><img src="split-wal-procedurev2.png" alt="split-wal-procedurev2" /></p>
+<h1 id="2-文件结构">
+  2. 文件结构
+  <a class="anchor" href="#2-%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84">#</a>
+</h1>
+<p>WAL 的实现类为 HLog，每个 Region Server 拥有一个 HLog 日志，所有 region 的写入都是写到同一个 HLog。下图表示同一个 Region Server 中的 3 个 region 共享一个 HLog。当数据写入时，是将数据对&lt;HLogKey,WALEdit&gt;按照顺序追加到 HLog 中，以获取最好的写入性能。</p>
+<p><img src="hlog-sturcture.png" alt="hlog-sturcture" /></p>
+<p>HLogKey 主要存储了 log sequence number，更新时间 write time，region name，table name 以及 cluster ids。其中 log sequncece number 作为 HFile 中一个重要的元数据，和 HLog 的生命周期息息相关；region name 和 table name 分别表征该段日志属于哪个 region 以及哪张表；cluster ids 用于将日志复制到集群中其他机器上。</p>
+<p>WALEdit 用来表示一个事务中的更新集合，在之前的版本，如果一个事务中对一行 row R 中三列 c1，c2，c3 分别做了修改，那么 hlog 中会有 3 个对应的日志片段如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;logseq1-for-edit1&gt;:&lt;keyvalue-for-edit-c1&gt;
+</span></span><span style="display:flex;"><span>&lt;logseq2-for-edit2&gt;:&lt;keyvalue-for-edit-c2&gt;
+</span></span><span style="display:flex;"><span>&lt;logseq3-for-edit3&gt;:&lt;keyvalue-for-edit-c3&gt;
+</span></span></code></pre></div><p>然而，这种日志结构无法保证行级事务的原子性，假如刚好更新到 c2 之后发生宕机，那么就会产生只有部分日志写入成功的现象。为此，hbase 将所有对同一行的更新操作都表示为一个记录，如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;logseq#-for-entire-txn&gt;:&lt;WALEdit-for-entire-txn&gt;
+</span></span></code></pre></div><p>其中 WALEdit 会被序列化为格式<code>&lt;-1, # of edits, &lt;KeyValue&gt;, &lt;KeyValue&gt;, &lt;KeyValue&gt;&gt;</code>，比如<code>&lt;-1, 3, &lt;keyvalue-for-edit-c1&gt;, &lt;keyvalue-for-edit-c2&gt;, &lt;keyvalue-for-edit-c3&gt;&gt;</code>，其中 -1 作为标示符表征这种新的日志结构。</p>
+<h1 id="3-写入流程">
+  3. 写入流程
+  <a class="anchor" href="#3-%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<p>下图主要描述了 HRegion 中调用 append 和 sync 后，hbase 的 wal 线程流转模型。最左边是有多个 client 提交到 HRegion 的 append 和 sync 操作。</p>
+<p><img src="hlog-write.jpg" alt="hlog-write" /></p>
+<p>当调用 append 后 WALEdit 和 WALKey 会被封装成 FSWALEntry 类进而再封装成 RinbBufferTruck 类放入一个线程安全的 Buffer(LMAX Disruptor RingBuffer) 中。
+当调用 sync 后会生成一个 SyncFuture 进而封装成 RinbBufferTruck 类同样放入这个 Buffer 中，然后工作线程此时会被阻塞等待被 notify() 唤醒。</p>
+<p>在每个 Buffer 的最右边会有一个且只有一个线程专门去处理这些 RinbBufferTruck，如果是 FSWALEntry 则写入 HLog 文件。因为文件缓存的存在，这时候很可能 client 数据并没有落盘。所以进一步如果是 SyncFuture 会被批量的放到一个线程池中，异步的批量去刷盘，刷盘成功后唤醒工作线程完成 wal。</p>
+<h1 id="4-hlog-的生命周期">
+  4. Hlog 的生命周期
+  <a class="anchor" href="#4-hlog-%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f">#</a>
+</h1>
+<p>Hlog 从产生到最后删除需要经历如下几个过程：</p>
+<ul>
+<li>
+<p><strong>产生</strong> 所有涉及到数据的变更都会先写 Hlog，除非是你关闭了 Hlog。</p>
+</li>
+<li>
+<p><strong>滚动</strong> Hlog 的大小通过参数 hbase.regionserver.logroll.period 控制，默认是 1 个小时，时间达到 hbase.regionserver.logroll.period 设置的时间，Hbase 会创建一个新的 Hlog 文件。这就实现了 Hlog 滚动的目的。Hbase 通过 hbase.regionserver.maxlogs 参数控制 Hlog 的个数。滚动的目的，为了控制单个 Hlog 文件过大的情况，方便后续的过期和删除。</p>
+</li>
+<li>
+<p><strong>过期</strong> 前面我们有讲到 sequenceid 这个东东，Hlog 的过期依赖于对 sequenceid 的判断。Hbase 会将 Hlog 的 sequenceid 和 Hfile 最大的 sequenceid（刷新到的最新位置）进行比较，如果该 Hlog 文件中的 sequenceid 比刷新的最新位置的 sequenceid 都要小，那么这个 Hlog 就过期了，过期了以后，对应 Hlog 会被移动到.oldlogs 目录。</p>
+<p>这里有个问题，为什么要将过期的 Hlog 移动到.oldlogs 目录，而不是直接删除呢？
+答案是因为 Hbase 还有一个主从同步的功能，这个依赖 Hlog 来同步 Hbase 的变更，有一种情况不能删除 Hlog，那就是 Hlog 虽然过期，但是对应的 Hlog 并没有同步完成，因此比较好的做好是移动到别的目录。再增加对应的检查和保留时间。</p>
+</li>
+<li>
+<p><strong>删除</strong> 如果 Hbase 开启了 replication，当 replication 执行完一个 Hlog 的时候，会删除 Zoopkeeper 上的对应 Hlog 节点。在 Hlog 被移动到.oldlogs 目录后，Hbase 每隔 <code>hbase.master.cleaner.interval</code>（默认 60 秒）时间会去检查.oldlogs 目录下的所有 Hlog，确认对应的 Zookeeper 的 Hlog 节点是否被删除，如果 Zookeeper 上不存在对应的 Hlog 节点，那么就直接删除对应的 Hlog。<code>hbase.master.logcleaner.ttl</code>（默认 10 分钟）这个参数设置 Hlog 在.oldlogs 目录保留的最长时间。</p>
+</li>
+</ul>
+<h1 id="5-持久化等级">
+  5. 持久化等级
+  <a class="anchor" href="#5-%e6%8c%81%e4%b9%85%e5%8c%96%e7%ad%89%e7%ba%a7">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>持久化等级</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKIP_WAL</td>
+<td>只写缓存，不写 HLog 日志。可以极大的提升写入性能，但是数据有丢失的风险。</td>
+</tr>
+<tr>
+<td>ASYNC_WAL</td>
+<td>异步将数据写入 HLog 日志中。</td>
+</tr>
+<tr>
+<td>SYNC_WAL</td>
+<td>同步将数据写入日志文件中，需要注意的是数据只是被写入文件系统中，并没有真正落盘。</td>
+</tr>
+<tr>
+<td>FSYNC_WAL</td>
+<td>同步将数据写入日志文件并强制落盘。最严格的日志写入等级，可以保证数据不会丢失，但是性能相对比较差。</td>
+</tr>
+<tr>
+<td>USER_DEFAULT</td>
+<td>默认如果用户没有指定持久化等级，HBase 使用 SYNC_WAL 等级持久化数据。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="6-参考文献">
+  6. 参考文献
+  <a class="anchor" href="#6-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.slidestalk.com/MiCloudTech/The_Procedure_v2_Implementation_of_WAL_Splitting_and_ACL">WAL Splitting Based on Procedure V2</a></li>
+<li><a href="http://hbasefly.com/2016/03/23/hbase_writer/">HBase － 数据写入流程解析</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1006044">Hbase 技术细节笔记（下）</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-切分策略">1. 切分策略</a>
+      <ul>
+        <li><a href="#11-split-wal-based-on-zk-coordination">1.1 Split WAL based on ZK Coordination</a></li>
+        <li><a href="#12-split-wal-based-on-procedure-v2">1.2 Split WAL based on Procedure v2</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-文件结构">2. 文件结构</a></li>
+    <li><a href="#3-写入流程">3. 写入流程</a></li>
+    <li><a href="#4-hlog-的生命周期">4. Hlog 的生命周期</a></li>
+    <li><a href="#5-持久化等级">5. 持久化等级</a></li>
+    <li><a href="#6-参考文献">6. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

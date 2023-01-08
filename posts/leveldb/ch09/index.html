@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Open 流程">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch09-LevelDB 之 Open" />
+<meta property="og:description" content="Open 流程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/leveldb/ch09/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-06-10T00:00:00+08:00" />
+<title>Ch09-LevelDB 之 Open | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch09-LevelDB 之 Open</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-接口定义">1. 接口定义</a></li>
+    <li><a href="#2-env-初始化">2. Env 初始化</a></li>
+    <li><a href="#3-db-初始化">3. DB 初始化</a></li>
+    <li><a href="#4-db-recover">4. DB Recover</a></li>
+    <li><a href="#5-db-初始化结束">5. DB 初始化结束</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/leveldb/ch09/">Ch09-LevelDB 之 Open</a>
+  </h1>
+  
+  <h5>June 10, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+<p>Open 流程</p>
+<h1 id="1-接口定义">
+  1. 接口定义
+  <a class="anchor" href="#1-%e6%8e%a5%e5%8f%a3%e5%ae%9a%e4%b9%89">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// include/leveldb/db.h
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LEVELDB_EXPORT</span> DB {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">static</span> Status <span style="color:#a6e22e">Open</span>(<span style="color:#66d9ef">const</span> Options<span style="color:#f92672">&amp;</span> options, <span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;</span> name, DB<span style="color:#f92672">**</span> dbptr);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// db/db_impl.h
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status DB<span style="color:#f92672">::</span>Open(<span style="color:#66d9ef">const</span> Options<span style="color:#f92672">&amp;</span> options, <span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;</span> dbname, DB<span style="color:#f92672">**</span> dbptr) {}
+</span></span></code></pre></div><h1 id="2-env-初始化">
+  2. Env 初始化
+  <a class="anchor" href="#2-env-%e5%88%9d%e5%a7%8b%e5%8c%96">#</a>
+</h1>
+<p><img src="env-structure.jpg" alt="env-structur" /></p>
+<p>这里会根据操作系统选择初始化哪种 Env，不过应该注意点的是，代码中并没有这样的判断逻辑，这里的选择逻辑实际上实在 CMakeLists.txt  中完成的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-cmake" data-lang="cmake"><span style="display:flex;"><span>if (<span style="color:#e6db74">WIN32</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  target_sources(<span style="color:#e6db74">leveldb</span> <span style="color:#e6db74">PRIVATE</span> <span style="color:#e6db74">&#34;util/env_windows.cc&#34;</span> <span style="color:#e6db74">&#34;util/windows_logger.h&#34;</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>else (<span style="color:#e6db74">WIN32</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  target_sources(<span style="color:#e6db74">leveldb</span> <span style="color:#e6db74">PRIVATE</span> <span style="color:#e6db74">&#34;util/env_posix.cc&#34;</span> <span style="color:#e6db74">&#34;util/posix_logger.h&#34;</span> )<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>endif (<span style="color:#e6db74">WIN32</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h1 id="3-db-初始化">
+  3. DB 初始化
+  <a class="anchor" href="#3-db-%e5%88%9d%e5%a7%8b%e5%8c%96">#</a>
+</h1>
+<ol>
+<li>初始化 DB 的各种属性，比如 Comparator，Memtable, ImMemtable 等；</li>
+<li>加数据库锁，锁住整个数据库。</li>
+</ol>
+<h1 id="4-db-recover">
+  4. DB Recover
+  <a class="anchor" href="#4-db-recover">#</a>
+</h1>
+<ol>
+<li>如果数据库目录不存在，创建目录；</li>
+<li>加文件锁，锁住整个数据库，因为 LevelDB 是单进程多线程的，必须保证只有一个进程打开数据库。</li>
+<li>读取 MANIFEST 文件，恢复系统关闭时的元数据，也就是版本信息，或者新建 MAINFEST 文件；</li>
+<li>根据版本信息，搜索数据库目录，找到关闭时没有写入到 SSTable 的日志，按日志写入顺序逐个恢复日志数据。<code>DBImpl::RecoverLogFile</code> 会创建一个 MemTable，开始读取日志信息，将日志的数据插入到 MemTable，并根据需要调用 <code>DBImpl::WriteLevel0Table</code> 将 MemTable 写入到 SSTable 中</li>
+<li>创建数据库相关的内存数据结构，如 Version、VersionSet 等。</li>
+</ol>
+<h1 id="5-db-初始化结束">
+  5. DB 初始化结束
+  <a class="anchor" href="#5-db-%e5%88%9d%e5%a7%8b%e5%8c%96%e7%bb%93%e6%9d%9f">#</a>
+</h1>
+<ol>
+<li>释放数据库锁</li>
+<li>返回指向新建的 DB 的指针（这里是通过参数的形式返回的）</li>
+</ol></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-接口定义">1. 接口定义</a></li>
+    <li><a href="#2-env-初始化">2. Env 初始化</a></li>
+    <li><a href="#3-db-初始化">3. DB 初始化</a></li>
+    <li><a href="#4-db-recover">4. DB Recover</a></li>
+    <li><a href="#5-db-初始化结束">5. DB 初始化结束</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

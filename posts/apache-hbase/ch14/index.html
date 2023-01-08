@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HBase CreateTable">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch14-HBase 之 CreateTable" />
+<meta property="og:description" content="HBase CreateTable" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch14/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-09T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-04-09T00:00:00+08:00" />
+<title>Ch14-HBase 之 CreateTable | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch14-HBase 之 CreateTable</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-createtable-涉及到的模块说明">1. CreateTable 涉及到的模块说明</a>
+      <ul>
+        <li><a href="#11-创建表的-rpc-消息结构">1.1 创建表的 RPC 消息结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-创建表的流程介绍">2. 创建表的流程介绍</a>
+      <ul>
+        <li><a href="#21-hbase-client-的流程">2.1 HBase Client 的流程</a></li>
+        <li><a href="#22-hbase-master-的流程">2.2 HBase Master 的流程</a></li>
+        <li><a href="#22-hbase-regionserver-的流程">2.2 HBase RegionServer 的流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch14/">Ch14-HBase 之 CreateTable</a>
+  </h1>
+  
+  <h5>April 9, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HBase CreateTable</p>
+<h1 id="1-createtable-涉及到的模块说明">
+  1. CreateTable 涉及到的模块说明
+  <a class="anchor" href="#1-createtable-%e6%b6%89%e5%8f%8a%e5%88%b0%e7%9a%84%e6%a8%a1%e5%9d%97%e8%af%b4%e6%98%8e">#</a>
+</h1>
+<p>创建表的整个流程主要分为两大块，一大块是 Client 端，主要用于构造 RPC 请求，另一大块是 Master 端，主要负责实际的建表流程。</p>
+<p><img src="create-table-with-procedure.png" alt="create table with procedure" /></p>
+<p>整个流程借助上图还是比较容易理解的。因为 Procedure v2 框架的引入，客户端根据需要仅仅发送请求便可，然后实际的建表就交给 Procedure v2 进行实际的操作。</p>
+<h2 id="11-创建表的-rpc-消息结构">
+  1.1 创建表的 RPC 消息结构
+  <a class="anchor" href="#11-%e5%88%9b%e5%bb%ba%e8%a1%a8%e7%9a%84-rpc-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">TableSchema</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> TableName table_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> BytesBytesPair attributes <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> ColumnFamilySchema column_families <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> NameStringPair configuration <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CreateTableRequest</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">required</span> TableSchema table_schema <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> split_keys <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint64</span> nonce_group <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint64</span> nonce <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CreateTableResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint64</span> proc_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> MasterService {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">/** Creates a new table asynchronously */</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> CreateTable(CreateTableRequest)  <span style="color:#66d9ef">returns</span>(CreateTableResponse);<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">/** Deletes a table */</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> DeleteTable(DeleteTableRequest)  <span style="color:#66d9ef">returns</span>(DeleteTableResponse);<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h1 id="2-创建表的流程介绍">
+  2. 创建表的流程介绍
+  <a class="anchor" href="#2-%e5%88%9b%e5%bb%ba%e8%a1%a8%e7%9a%84%e6%b5%81%e7%a8%8b%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>TableDescriptor table<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> <span style="color:#f92672">(</span>Admin admin <span style="color:#f92672">=</span> connection<span style="color:#f92672">.</span><span style="color:#a6e22e">getAdmin</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        admin<span style="color:#f92672">.</span><span style="color:#a6e22e">createTable</span><span style="color:#f92672">(</span>table<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>整个建表的代码段大概如上所示，看起来比较简单，但是实际整个流程异常的繁琐。</p>
+<p><img src="create-table-outline.png" alt="create table outline" /></p>
+<h2 id="21-hbase-client-的流程">
+  2.1 HBase Client 的流程
+  <a class="anchor" href="#21-hbase-client-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>当调用 admin.createTable(table) 语句创建表时，会通过层层调用，最后由 MasterService 调用
+BlockingInterface 发送 rpc 请求，请求的报文体则如前面 Protobuf 给出的结构。
+HMaster 接收到该请求后会执行后续逻辑，同时会返回一个 proc Id，该 id 最终会被封装成 HBaseAdmin.CreateTableFuture 类，定时查询 proc Id 对应的 Procedure 执行结果，直到最后建表成功。</p>
+<p><img src="create-table-sequence.png" alt="create table sequence" /></p>
+<p>简易版的如上图所示，完整版的如下图所示：</p>
+<p><img src="create-table-client.png" alt="create table client" /></p>
+<h2 id="22-hbase-master-的流程">
+  2.2 HBase Master 的流程
+  <a class="anchor" href="#22-hbase-master-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>HBase Master 的流程较为繁琐，主要负责执行 Procedure。具体 Procedure 的工作原理，本节不再赘述，可以参考《HBase Procedure v2 原理说明》一节。这里直接开始讲述 Procedure 如何执行。</p>
+<p>Procedure 从 MasterProcedureScheduler 维护的 tableRunQueue 队列中取出 CreateTableProcedure 开始调用执行其中的 executeFromState() 方法。这部分代码即整个建表的核心逻辑。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">protected</span> Flow <span style="color:#a6e22e">executeFromState</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> MasterProcedureEnv env<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> CreateTableState state<span style="color:#f92672">)</span>       <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;{} execute state={}&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> state<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">switch</span> <span style="color:#f92672">(</span>state<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_PRE_OPERATION<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>          preCreate<span style="color:#f92672">(</span>env<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_WRITE_FS_LAYOUT</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_WRITE_FS_LAYOUT<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>          env<span style="color:#f92672">.</span><span style="color:#a6e22e">getMasterServices</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTableDescriptors</span><span style="color:#f92672">().</span><span style="color:#a6e22e">update</span><span style="color:#f92672">(</span>tableDescriptor<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_ADD_TO_META</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ADD_TO_META<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          newRegions <span style="color:#f92672">=</span> addTableToMeta<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> tableDescriptor<span style="color:#f92672">,</span> newRegions<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_ASSIGN_REGIONS</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ASSIGN_REGIONS<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          setEnablingState<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> getTableName<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>          addChildProcedure<span style="color:#f92672">(</span>env<span style="color:#f92672">.</span><span style="color:#a6e22e">getAssignmentManager</span><span style="color:#f92672">().</span><span style="color:#a6e22e">createRoundRobinAssignProcedures</span><span style="color:#f92672">(</span>newRegions<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_UPDATE_DESC_CACHE</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_UPDATE_DESC_CACHE<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          setEnabledState<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> getTableName<span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_POST_OPERATION</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_POST_OPERATION<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          postCreate<span style="color:#f92672">(</span>env<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span> Flow<span style="color:#f92672">.</span><span style="color:#a6e22e">NO_MORE_STATE</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> UnsupportedOperationException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unhandled state=&#34;</span> <span style="color:#f92672">+</span> state<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>isRollbackSupported<span style="color:#f92672">(</span>state<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        setFailure<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;master-create-table&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Retriable error trying to create table=&#34;</span> <span style="color:#f92672">+</span> getTableName<span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; state=&#34;</span> <span style="color:#f92672">+</span> state<span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Flow<span style="color:#f92672">.</span><span style="color:#a6e22e">HAS_MORE_STATE</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>上述代码转换成流程图如下所示，可以看到因为 Procedure v2 的存在，整个建表流程被拆的非常琐碎，如果途中出现了异常，那么会在 Failure 中将本次 Procedure 的状态设置为 FAILED，后续尝试回滚截至该步骤的所有操作所产生的行为。</p>
+<p><img src="create-table-process.png" alt="create table process" /></p>
+<h2 id="22-hbase-regionserver-的流程">
+  2.2 HBase RegionServer 的流程
+  <a class="anchor" href="#22-hbase-regionserver-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>HBase Master 建表流程走到<code>CREATE_TABLE_ASSIGN_REGIONS</code>这一步的时候，会创建出一个 SubProcedure，该 SubProcedure 会调用<strong>CREATE_TABLE_ASSIGN_REGIONS</strong>将 Region 分配到各个 RegionServer 上面。</p>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<p><a href="https://issues.apache.org/jira/browse/HBASE-12439">HBASE-12439</a></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-createtable-涉及到的模块说明">1. CreateTable 涉及到的模块说明</a>
+      <ul>
+        <li><a href="#11-创建表的-rpc-消息结构">1.1 创建表的 RPC 消息结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-创建表的流程介绍">2. 创建表的流程介绍</a>
+      <ul>
+        <li><a href="#21-hbase-client-的流程">2.1 HBase Client 的流程</a></li>
+        <li><a href="#22-hbase-master-的流程">2.2 HBase Master 的流程</a></li>
+        <li><a href="#22-hbase-regionserver-的流程">2.2 HBase RegionServer 的流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

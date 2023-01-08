@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HBase Scan">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch16-HBase 之 Scan" />
+<meta property="og:description" content="HBase Scan" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch16/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-27T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-04-27T00:00:00+08:00" />
+<title>Ch16-HBase 之 Scan | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch16-HBase 之 Scan</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-scan-涉及到的模块说明">1. Scan 涉及到的模块说明</a>
+      <ul>
+        <li><a href="#11-scan-操作的-rpc-消息结构">1.1 Scan 操作的 RPC 消息结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-scan-操作的流程介绍">2. Scan 操作的流程介绍</a>
+      <ul>
+        <li><a href="#21-hbase-client-的流程">2.1 HBase Client 的流程</a></li>
+        <li><a href="#22-hbase-regionserver-的流程">2.2 HBase RegionServer 的流程</a>
+          <ul>
+            <li><a href="#221-regionscanner">2.2.1 RegionScanner</a></li>
+            <li><a href="#222-storescanner">2.2.2 StoreScanner</a></li>
+            <li><a href="#223-storefilescanner">2.2.3 StoreFileScanner</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch16/">Ch16-HBase 之 Scan</a>
+  </h1>
+  
+  <h5>April 27, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HBase Scan</p>
+<h1 id="1-scan-涉及到的模块说明">
+  1. Scan 涉及到的模块说明
+  <a class="anchor" href="#1-scan-%e6%b6%89%e5%8f%8a%e5%88%b0%e7%9a%84%e6%a8%a1%e5%9d%97%e8%af%b4%e6%98%8e">#</a>
+</h1>
+<h2 id="11-scan-操作的-rpc-消息结构">
+  1.1 Scan 操作的 RPC 消息结构
+  <a class="anchor" href="#11-scan-%e6%93%8d%e4%bd%9c%e7%9a%84-rpc-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Scan</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> Column column <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> NameBytesPair attribute <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> start_row <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> stop_row <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> Filter filter <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> TimeRange time_range <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> max_versions <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> cache_blocks <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint64</span> max_result_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> store_limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> store_offset <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> load_column_families_on_demand <span style="color:#f92672">=</span> <span style="color:#ae81ff">13</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> small <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span> [deprecated <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> reversed <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> Consistency consistency <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> STRONG];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> caching <span style="color:#f92672">=</span> <span style="color:#ae81ff">17</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> allow_partial_results <span style="color:#f92672">=</span> <span style="color:#ae81ff">18</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> ColumnFamilyTimeRange cf_time_range <span style="color:#f92672">=</span> <span style="color:#ae81ff">19</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint64</span> mvcc_read_point <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> include_start_row <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> include_stop_row <span style="color:#f92672">=</span> <span style="color:#ae81ff">22</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">enum</span> ReadType {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    DEFAULT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    STREAM <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    PREAD <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> ReadType readType <span style="color:#f92672">=</span> <span style="color:#ae81ff">23</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> DEFAULT];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> need_cursor_result <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span> [<span style="color:#66d9ef">default</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>];<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h1 id="2-scan-操作的流程介绍">
+  2. Scan 操作的流程介绍
+  <a class="anchor" href="#2-scan-%e6%93%8d%e4%bd%9c%e7%9a%84%e6%b5%81%e7%a8%8b%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p><img src="scan-arch.png" alt="scan arch" /></p>
+<p>scan 过程总体上是分层处理的，与存储上的组织方式一致，脉络比较清晰；
+具体来说，就是<code>region -&gt; store -&gt; hfile/memstore</code>，分别都有对应的 scanner 实现进行数据读取；</p>
+<p>scan 请求本身设置的条件，以及 server 和 table 层面的一些参数限制，会根据需要分布在不同层次的 scanner 中进行处理；</p>
+<h2 id="21-hbase-client-的流程">
+  2.1 HBase Client 的流程
+  <a class="anchor" href="#21-hbase-client-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p><img src="scan-client.png" alt="scan client" /></p>
+<ul>
+<li>客户端首先会根据配置文件中 zookeeper 地址连接 zookeeper，并读取<code>/&lt;hbase-rootdir&gt;/meta-region-server</code>节点信息，该节点信息存储 HBase 元数据（hbase:meta）表所在的 RegionServer 地址以及访问端口等信息。用户可以通过 zookeeper 命令 (<code>get /&lt;hbase-rootdir&gt;/meta-region-server</code>) 查看该节点信息。</li>
+<li>根据 hbase:meta 所在 RegionServer 的访问信息，客户端会将该元数据表加载到本地并进行缓存。然后在表中确定待检索 rowkey 所在的 RegionServer 信息。</li>
+<li>根据数据所在 RegionServer 的访问信息，客户端会向该 RegionServer 发送真正的数据读取请求。</li>
+</ul>
+<h2 id="22-hbase-regionserver-的流程">
+  2.2 HBase RegionServer 的流程
+  <a class="anchor" href="#22-hbase-regionserver-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<h3 id="221-regionscanner">
+  2.2.1 RegionScanner
+  <a class="anchor" href="#221-regionscanner">#</a>
+</h3>
+<p><img src="scan-regionserver-regionscanner.png" alt="scan regionserver regionscanner" /></p>
+<ul>
+<li>创建指定的各个列族对应的 storeScanner，如果未指定则是全部列族；</li>
+<li>storeScanner 创建过程中，会根据 startrow 参数，seek 到对应 cell；</li>
+<li>将这些 storeScanner 放入一个 heap 中，heap 为优先级队列，比较器的 compare 方法中比较的是 KeyValueScanner 所 peek 到的 cell 大小；</li>
+<li>全部放入到 heap（因为 heap 是小根堆，所以一定有序），poll 方法得到最小的 storeScanner，并将其赋值给 current</li>
+<li>然后调用 current 的 next 方法，获取一行的全部 cell，获取完成后 seek 到下一行；</li>
+<li>再将 current 放入到 heap 中，形成新的顺序；</li>
+<li>再不断重复 poll，add 方法，直到新的行大于或等于 r3。</li>
+</ul>
+<h3 id="222-storescanner">
+  2.2.2 StoreScanner
+  <a class="anchor" href="#222-storescanner">#</a>
+</h3>
+<p><img src="scan-regionserver-storescanner.png" alt="scan regionserver storescanner" /></p>
+<ul>
+<li>StoreScanner 的数据驱动方式与 RegionScanner 类似，也是使用 heap 和 current 去进行控制；</li>
+<li>除了数据获取之外，该类比较重要的 1 个部分是数据的检查，相关逻辑封装在 ScanQueryMatcher 中；</li>
+<li>ScanQueryMatcher 中主要包含 2 个组件：DeleteTracker 和 ColumnTracker，前者负责处理 delete 逻辑，后者负责检查当前 cell 的 column、version 及 value 等是否符合要求；</li>
+<li>另外，在 getScanners 的过程中会根据 keyRange、timeRange、bloomBlock 等对 storeFile 进行过滤，以减少数据的读取；</li>
+</ul>
+<h3 id="223-storefilescanner">
+  2.2.3 StoreFileScanner
+  <a class="anchor" href="#223-storefilescanner">#</a>
+</h3>
+<p><img src="scan-regionserver-storefilescanner.png" alt="scan regionserver storefilecanner" /></p>
+<ul>
+<li>storeFileScanner 是真正涉及到 hfile 数据读取的地方，会根据 rowKey，基于内存中 indexBlock 的数据定位到具体的 dataBlock 位置，以 block 为单位进行读取；</li>
+<li>读取后的 block 数据在内存中以 ByteBuffer 的形式存在，而 blockSeek 方法会将这个 ByteBuffer 的 position 推动到合适位置的过程；</li>
+<li>接下来，会读取一个 cell 的数据作为返回，使上层的 storeScanner 能够据此对各个 storeFileScanner 进行排序；</li>
+<li>值得一提的是，实际实现中，还存在 lazySeek 的优化，大致原理是根据 hfile 中存储的最小 time，返回一个假的 cell，如果该 cell 都不能排在前面，那就不需要关心真实的 cell 是什么了，等到该 cell 能够排在最前面的时候，再进行 realSeek，这个机制对于各个 hfile 按时间存在明显分界并且主要读取近期数据的场景，可以有效减少实际的数据读取量；</li>
+</ul>
+<blockquote>
+<p>注意：</p>
+<p>很多博客说 <code>StoreFileScanner</code> 和 <code>MemStoreScanner</code>，实际上自 HBase2.0.0 开始<a href="https://issues.apache.org/jira/browse/HBASE-17655">HBASE-17655</a>，<code>MemStoreScanner</code> 和 <code>SnapshotScanner </code>均被移除了。目前实际意义上的 <code>MemStoreScanner</code> 是由 <code>DefaultMemStore</code> 和 <code>CompositeImmutableSegment</code> 共同实现的。</p>
+</blockquote>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="http://hbasefly.com/2016/12/21/hbase-getorscan/">HBase 原理－数据读取流程解析</a></li>
+<li><a href="http://hbasefly.com/2017/06/11/hbase-scan-2/?tanopg=9nyni3&amp;uijutq=6dmoi3">HBase 原理－迟到的‘数据读取流程’部分细节</a></li>
+<li><a href="https://developer.aliyun.com/article/753195">HBase scan 过程简析</a></li>
+<li><a href="https://developer.aliyun.com/article/752817">HBase 加载 Hfile 时的读取过程</a></li>
+<li><a href="https://forum.huawei.com/enterprise/zh/thread-327647-1-1.html">【HBase】HBase Scan &amp; Filter原理/流程详解（1）</a></li>
+<li><a href="https://forum.huawei.com/enterprise/zh/thread-327661-1-1.html">【HBase】HBase Scan &amp; Filter原理/流程详解（2）</a></li>
+<li><a href="https://forum.huawei.com/enterprise/zh/thread-327673.html">【HBase】HBase Scan &amp; Filter原理/流程详解（3）</a></li>
+<li><a href="https://forum.huawei.com/enterprise/zh/thread-327687.html">【HBase】HBase Scan &amp; Filter原理/流程详解（4）</a></li>
+<li><a href="http://www.nosqlnotes.com/technotes/hbase/hbase-read/">Read 全流程</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-scan-涉及到的模块说明">1. Scan 涉及到的模块说明</a>
+      <ul>
+        <li><a href="#11-scan-操作的-rpc-消息结构">1.1 Scan 操作的 RPC 消息结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-scan-操作的流程介绍">2. Scan 操作的流程介绍</a>
+      <ul>
+        <li><a href="#21-hbase-client-的流程">2.1 HBase Client 的流程</a></li>
+        <li><a href="#22-hbase-regionserver-的流程">2.2 HBase RegionServer 的流程</a>
+          <ul>
+            <li><a href="#221-regionscanner">2.2.1 RegionScanner</a></li>
+            <li><a href="#222-storescanner">2.2.2 StoreScanner</a></li>
+            <li><a href="#223-storefilescanner">2.2.3 StoreFileScanner</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

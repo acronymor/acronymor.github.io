@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Arena 内存管理">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-LevelDB 之 Arena 内存管理" />
+<meta property="og:description" content="Arena 内存管理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/leveldb/ch03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-05-10T00:00:00+08:00" />
+<title>Ch03-LevelDB 之 Arena 内存管理 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch03-LevelDB 之 Arena 内存管理</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-内存管理">1. 内存管理</a></li>
+    <li><a href="#2-分配策略">2. 分配策略</a></li>
+    <li><a href="#3-释放策略">3. 释放策略</a></li>
+    <li><a href="#4-提供的接口">4. 提供的接口</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/leveldb/ch03/">Ch03-LevelDB 之 Arena 内存管理</a>
+  </h1>
+  
+  <h5>May 10, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+<p>Arena 内存管理</p>
+<h1 id="1-内存管理">
+  1. 内存管理
+  <a class="anchor" href="#1-%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86">#</a>
+</h1>
+<p><img src="arena.jpg" alt="arena" /></p>
+<p>整个内存空间实际上借由 <code>std::vector&lt;char*&gt; blocks</code> 进行管理，其中每个元素都保存了一个指向堆内存（默认 4KB）的指针。如果剩余的内存不足的时候，那么重新分配一段新的空间，并将指向该空间的指针存入到 blocks 这个 vector 中。</p>
+<h1 id="2-分配策略">
+  2. 分配策略
+  <a class="anchor" href="#2-%e5%88%86%e9%85%8d%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<ol>
+<li>当 block 有足够剩余的内存时，直接用剩余的内存分配</li>
+<li>当 block 没有足够的剩余内存时：
+<ul>
+<li>当需求内存大于 1KB 时 4096/4，则单独分配需要的内存</li>
+<li>当需求内存小于 1KB 时，重新申请一块默认大小的内存块，再分配需要的内存</li>
+</ul>
+</li>
+</ol>
+<h1 id="3-释放策略">
+  3. 释放策略
+  <a class="anchor" href="#3-%e9%87%8a%e6%94%be%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<p>Arena 不支持释放部分内存，只能一次性释放所有分配的内存。</p>
+<h1 id="4-提供的接口">
+  4. 提供的接口
+  <a class="anchor" href="#4-%e6%8f%90%e4%be%9b%e7%9a%84%e6%8e%a5%e5%8f%a3">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>接口</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>char* Allocate(size_t bytes);</td>
+<td></td>
+</tr>
+<tr>
+<td>char* AllocateAligned(size_t bytes);</td>
+<td>内存对齐</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-内存管理">1. 内存管理</a></li>
+    <li><a href="#2-分配策略">2. 分配策略</a></li>
+    <li><a href="#3-释放策略">3. 释放策略</a></li>
+    <li><a href="#4-提供的接口">4. 提供的接口</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

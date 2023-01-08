@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>calcite on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/calcite/</link>
+    <description>Recent content in calcite on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Jun 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/calcite/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch02-Calcite 执行流程</title>
+      <link>https://acronymor.com/posts/apache-calcite/ch02/</link>
+      <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-calcite/ch02/</guid>
+      <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Calcite 介绍</title>
+      <link>https://acronymor.com/posts/apache-calcite/ch01/</link>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-calcite/ch01/</guid>
+      <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

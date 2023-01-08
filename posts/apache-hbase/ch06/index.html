@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-HBase 之 StoreFile" />
+<meta property="og:description" content="HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch06/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-11-10T00:00:00+08:00" />
+<title>Ch06-HBase 之 StoreFile | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch06-HBase 之 StoreFile</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-hfile-v2-逻辑结构">1. HFile V2 逻辑结构</a></li>
+    <li><a href="#2-hfile-v2-物理结构">2. HFile V2 物理结构</a></li>
+    <li><a href="#3-hfileblock-介绍">3. HFileBlock 介绍</a>
+      <ul>
+        <li><a href="#31-data">3.1 DATA</a></li>
+        <li><a href="#32-root_index--leaf_index--intermediate_index">3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX</a>
+          <ul>
+            <li><a href="#321-root_index">3.2.1 ROOT_INDEX</a></li>
+            <li><a href="#322-leaf_index--intermediate_index">3.2.2 LEAF_INDEX | INTERMEDIATE_INDEX</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-bloom_chunk">3.3 BLOOM_CHUNK</a></li>
+        <li><a href="#34-trailer">3.4 TRAILER</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-reference">4. Reference</a></li>
+    <li><a href="#5-附件">5. 附件</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hbase/ch06/">Ch06-HBase 之 StoreFile</a>
+  </h1>
+  
+  <h5>November 10, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+<p>HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。</p>
+<h1 id="1-hfile-v2-逻辑结构">
+  1. HFile V2 逻辑结构
+  <a class="anchor" href="#1-hfile-v2-%e9%80%bb%e8%be%91%e7%bb%93%e6%9e%84">#</a>
+</h1>
+<p>文件主要分为四个部分：<code>Scanned block section</code>，<code>Non-scanned block section</code>，<code>Opening-time data section</code>和<code>Trailer</code>。如下图所示：</p>
+<p><img src="hfilev2-logic.png" alt="hfilev2" /></p>
+<p>其中每个部分的作用如下</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Scanned block section</td>
+<td style="text-align:left">表示顺序扫描 HFile 时所有的数据块将会被读取，包括 DataBlock，Leaf Index Block，Bloom Block</td>
+</tr>
+<tr>
+<td style="text-align:left">Non-scanned block section</td>
+<td style="text-align:left">表示在 HFile 顺序扫描的时候数据不会被读取，主要包括 Meta Block(用来兼容 v1，v2 后就不再存储数据了) 和 Intermediate Level Data Index Blocks 两部分</td>
+</tr>
+<tr>
+<td style="text-align:left">Load-on-open-section</td>
+<td style="text-align:left">该部分数据在 HBase 的 region server 启动时，会被加载到内存中。其中包括 FileInfo、Bloom filter block、Data block index 和 Meta block index。</td>
+</tr>
+<tr>
+<td style="text-align:left">Trailer</td>
+<td style="text-align:left">记录了 HFile 的基本信息、各个部分的偏移值和寻址信息。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-hfile-v2-物理结构">
+  2. HFile V2 物理结构
+  <a class="anchor" href="#2-hfile-v2-%e7%89%a9%e7%90%86%e7%bb%93%e6%9e%84">#</a>
+</h1>
+<p><img src="hfilev2-physic.png" alt="hfilev2" /></p>
+<p>如上图所示，HFile 会被切分为多个大小相等的 block 块，每个 block 的大小可以在创建表列簇的时候通过参数<code>blocksize ＝&gt; '65535'</code>进行指定，默认为 64k，大号的 Block 有利于顺序 Scan，小号 Block 利于随机查询，因而需要权衡。</p>
+<p>可以使用下述命令查看实际的一个 HFile，具体内容可以参考附件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>hbase org.apache.hadoop.hbase.io.hfile.HFile -v -p -m -f /hbase/data/default/tmp/bf9e4d84d5b5c58123d2436c0745ac02/cf/d6da722c69a74d75852f87f6c009dacd
+</span></span></code></pre></div><h1 id="3-hfileblock-介绍">
+  3. HFileBlock 介绍
+  <a class="anchor" href="#3-hfileblock-%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>HFileBlock 主要分为 3 部分：Block Header，Block Data 和 Block Tail。其中，Block Header 用来存储元数据，包括<strong>block 类型</strong>，压缩 block 大小，上一个 block 的偏移量等；而 Block Data 主要存储具体的数据；Block Tail 则主要用来存储校验码。</p>
+<p><img src="hfile-block.png" alt="HFileBlock" /></p>
+<p>HFile 中的 BlockType 总共有如下几种，后面会对几种比较重要的 Block 详细说明。</p>
+<p><img src="blocktype.png" alt="blocktype" /></p>
+<p>(图中 META 和 METABLKc 标反了)</p>
+<h2 id="31-data">
+  3.1 DATA
+  <a class="anchor" href="#31-data">#</a>
+</h2>
+<p>DataBlock 是 HBase 中数据存储的最小单元。DataBlock 中主要存储用户的 KeyValue 数据（KeyValue 后面一般会跟一个 timestamp，图中未标出），而 KeyValue 结构是 HBase 存储的核心，每个数据都是以 KeyValue 结构在 HBase 中进行存储。KeyValue 结构在内存和磁盘中可以表示为下图</p>
+<p><img src="data-block.png" alt="DataBlock" /></p>
+<p>每个 KeyValue 都由 4 个部分构成，分别为 key length，value length，key 和 value。其中 key value 和 value length 是两个固定长度的数值，而 key 是一个复杂的结构，首先是 rowkey 的长度，接着是 rowkey，然后是 ColumnFamily 的长度，再是 ColumnFamily，之后是 ColumnQualifier，最后是时间戳和 KeyType（keytype 有四种类型，分别是 Put、Delete、DeleteColumn 和 DeleteFamily），value 就没有那么复杂，就是一串纯粹的二进制数据。</p>
+<h2 id="32-root_index--leaf_index--intermediate_index">
+  3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX
+  <a class="anchor" href="#32-root_index--leaf_index--intermediate_index">#</a>
+</h2>
+<p>HFile 中的<strong>index level</strong>是不固定的，根据不同的数据类型和数据大小有不同的选择，主要有两类，一类是 single-level（单级索引），另一类是 multi-level（多级索引，索引 block 无法在内存中存放，所以采用多级索引）。</p>
+<p>HFile 中的<strong>index chunk</strong>有两大类，分别是 root index chunk、nonRoot index chunk。而 nonRoot index chunk 又分为 interMetadiate index chunk 和 leaf index chunk，但 intermetadiate index chunk 和 leaf index chunk 在内存中的分布是一样的。</p>
+<ul>
+<li>对于 meta block 和 bloom block
+采用的索引是 single-level 形式，只用 root index chunk 来保存指向 block 的索引信息（<code>root_index -&gt; xxx_block</code>）</li>
+<li>对于 data
+<ul>
+<li>当 data block 数量较少时，采用的是 single level，一般情况下是一级索引 (<code>root_index -&gt; data_block</code>)；</li>
+<li>当 data block 数量较多时，采用的是 multi-level，一般情况下是两级索引，使用 root index chunk 和 leaf index chunk 来保存索引信息 (<code>root_index -&gt; leaf_index -&gt; data_block</code>)；</li>
+<li>当 data block 数量很多时，采用的是 multi-level，一般情况下是三级索引，使用 root index chunk、intermetadiate index chunk 和 leaf index chunk 来保存指向数据的索引（<code>root_index -&gt; intermediate_index -&gt; leaf_index-&gt;data_block</code>）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="321-root_index">
+  3.2.1 ROOT_INDEX
+  <a class="anchor" href="#321-root_index">#</a>
+</h3>
+<p>Root Index Block 表示索引树根节点索引块，可以作为 bloom 的直接索引，也可以作为 data 索引的根索引。</p>
+<p><img src="root-index-block.png" alt="root index" /></p>
+<p>其中 Index Entry 表示具体的索引对象，每个索引对象由 3 个字段组成，Block Offset 表示索引指向数据块的偏移量，BlockDataSize 表示索引指向数据块在磁盘上的大小，BlockKey 表示索引指向数据块中的第一个 key。除此之外，还有另外 3 个字段用来记录 MidKey 的相关信息，MidKey 表示 HFile 所有 Data Block 中中间的一个 Data Block，用于在对 HFile 进行 split 操作时，快速定位 HFile 的中间位置。需要注意的是 single-level 索引结构和 mutil-level 结构相比，就只缺少 MidKey 这三个字段。</p>
+<p>Root Index Block 会在 HFile 解析的时候直接加载到内存中，此处需要注意在 Trailer Block 中有一个字段为 dataIndexCount，就表示此处 Index Entry 的个数。因为 Index Entry 并不定长，只有知道 Entry 的个数才能正确的将所有 Index Entry 加载到内存。</p>
+<h3 id="322-leaf_index--intermediate_index">
+  3.2.2 LEAF_INDEX | INTERMEDIATE_INDEX
+  <a class="anchor" href="#322-leaf_index--intermediate_index">#</a>
+</h3>
+<p>当 HFile 中 Data Block 越来越多，single-level 结构的索引已经不足以支撑所有数据都加载到内存，需要分化为 mutil-level 结构。mutil-level 结构中 NonRoot Index Block 作为中间层节点或者叶子节点存在，无论是中间节点还是叶子节点，其都拥有相同的结构，如下图所示</p>
+<p><img src="noroot-index-block.png" alt="noroot index" /></p>
+<p>和 Root Index Block 相同，NonRoot Index Block 中最核心的字段也是 Index Entry，用于指向叶子节点块或者数据块。不同的是，NonRoot Index Block 结构中增加了 block 块的内部索引 entry Offset 字段，entry Offset 表示 index Entry 在该 block 中的相对偏移量（相对于第一个 index Entry)，用于实现 block 内的二分查找。所有非根节点索引块，包括 Intermediate index block 和 leaf index block，在其内部定位一个 key 的具体索引并不是通过遍历实现，而是使用二分查找算法，这样可以更加高效快速地定位到待查找 key。</p>
+<h2 id="33-bloom_chunk">
+  3.3 BLOOM_CHUNK
+  <a class="anchor" href="#33-bloom_chunk">#</a>
+</h2>
+<p>Bloom Index Block 结构中 totalByteSize 表示位数组的 bit 数，numChunks 表示 Bloom Block 的个数，hashCount 表示 hash 函数的个数，hashType 表示 hash 函数的类型，totalKeyCount 表示 bloom filter 当前已经包含的 key 的数目，totalMaxKeys 表示 bloom filter 当前最多包含的 key 的数目，Bloom Index Entry 对应每一个 bloom filter block 的索引条目，作为索引分别指向 scanned block section 部分的 Bloom Block，Bloom Block 中就存储了对应的位数组。</p>
+<p><img src="bloom-chunk.png" alt="bloom chunk" /></p>
+<p>Bloom Index Entry 的结构见上图左边所示，BlockOffset 表示对应 Bloom Block 在 HFile 中的偏移量，FirstKey 表示对应 BloomBlock 的第一个 Key。根据上文所说，一次 get 请求进来，首先会根据 key 在所有的索引条目中进行二分查找，查找到对应的 Bloom Index Entry，就可以定位到该 key 对应的位数组，加载到内存进行过滤判断。</p>
+<h2 id="34-trailer">
+  3.4 TRAILER
+  <a class="anchor" href="#34-trailer">#</a>
+</h2>
+<p>主要记录了 HFile 的基本信息、各个部分的偏移值和寻址信息，下图为 Trailer 内存和磁盘中的数据结构，其中只显示了部分核心字段：</p>
+<p><img src="trailer-block.png" alt="trailer block" /></p>
+<p>HFile 在读取的时候首先会解析 Trailer Block 并加载到内存，然后再进一步加载 LoadOnOpen 区的数据。</p>
+<h1 id="4-reference">
+  4. Reference
+  <a class="anchor" href="#4-reference">#</a>
+</h1>
+<ul>
+<li><a href="https://issues.apache.org/jira/browse/HBASE-11729">Document HFile v3</a></li>
+<li><a href="https://hbase.apache.org/book.html">HBase Book</a></li>
+<li><a href="http://hbasefly.com/2016/03/25/hbase-hfile">HBase – 存储文件 HFile 结构解析</a></li>
+<li><a href="http://hbasefly.com/2016/04/03/hbase_hfile_index">HBase – 探索 HFile 索引机制</a></li>
+<li><a href="https://developer.aliyun.com/article/752817">HBase 加载 Hfile 时的读取过程</a></li>
+<li><a href="http://www.nosqlnotes.com/technotes/hbase/hfile/">HBase 高性能随机查询之道 – HFile 原理解析</a></li>
+<li><a href="https://issues.apache.org/jira/browse/HADOOP-3315">HADOOP-3315</a></li>
+</ul>
+<h1 id="5-附件">
+  5. 附件
+  <a class="anchor" href="#5-%e9%99%84%e4%bb%b6">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>li@li-pc: hbase org.apache.hadoop.hbase.io.hfile.HFile -v -p -m -f /hbase/data/default/tmp/bf9e4d84d5b5c58123d2436c0745ac02/cf/d6da722c69a74d75852f87f6c009dacd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Scanning -&gt; /hbase/data/default/tmp/bf9e4d84d5b5c58123d2436c0745ac02/cf/d6da722c69a74d75852f87f6c009dacd
+</span></span><span style="display:flex;"><span>K: row01/cf:f1/1616850516066/Put/vlen=5/seqid=4 V: value
+</span></span><span style="display:flex;"><span>K: row02/cf:f1/1616855810928/Put/vlen=7/seqid=8 V: value02
+</span></span><span style="display:flex;"><span>K: row03/cf:f1/1616855815901/Put/vlen=7/seqid=9 V: value03
+</span></span><span style="display:flex;"><span>K: row04/cf:f1/1617116267526/Put/vlen=7/seqid=13 V: value04
+</span></span><span style="display:flex;"><span>K: row05/cf:f1/1617206213608/Put/vlen=7/seqid=18 V: value04
+</span></span><span style="display:flex;"><span>K: row06/cf:f1/1617206237852/Put/vlen=7/seqid=19 V: value04
+</span></span><span style="display:flex;"><span>K: row07/cf:f1/1617206337001/Put/vlen=7/seqid=20 V: value04
+</span></span><span style="display:flex;"><span>K: row08/cf:f1/1617439598102/Put/vlen=7/seqid=24 V: value04
+</span></span><span style="display:flex;"><span>K: row09/cf:f1/1617440409630/Put/vlen=7/seqid=25 V: value04
+</span></span><span style="display:flex;"><span>Block index size as per heapsize: 320
+</span></span><span style="display:flex;"><span>reader=/hbase/data/default/tmp/bf9e4d84d5b5c58123d2436c0745ac02/cf/d6da722c69a74d75852f87f6c009dacd,
+</span></span><span style="display:flex;"><span>    compression=none,
+</span></span><span style="display:flex;"><span>    cacheConf=cacheDataOnRead=false,
+</span></span><span style="display:flex;"><span>    cacheDataOnWrite=false,
+</span></span><span style="display:flex;"><span>    cacheIndexesOnWrite=false,
+</span></span><span style="display:flex;"><span>    cacheBloomsOnWrite=false,
+</span></span><span style="display:flex;"><span>    cacheEvictOnClose=false,
+</span></span><span style="display:flex;"><span>    cacheDataCompressed=false,
+</span></span><span style="display:flex;"><span>    prefetchOnOpen=false,
+</span></span><span style="display:flex;"><span>    firstKey=Optional[row01/cf:f1/1616850516066/Put/seqid=0],
+</span></span><span style="display:flex;"><span>    lastKey=Optional[row09/cf:f1/1617440409630/Put/seqid=0],
+</span></span><span style="display:flex;"><span>    avgKeyLen=21,
+</span></span><span style="display:flex;"><span>    avgValueLen=6,
+</span></span><span style="display:flex;"><span>    entries=9,
+</span></span><span style="display:flex;"><span>    length=5286
+</span></span><span style="display:flex;"><span>Trailer:
+</span></span><span style="display:flex;"><span>    fileinfoOffset=529,
+</span></span><span style="display:flex;"><span>    loadOnOpenDataOffset=421,
+</span></span><span style="display:flex;"><span>    dataIndexCount=1,
+</span></span><span style="display:flex;"><span>    metaIndexCount=0,
+</span></span><span style="display:flex;"><span>    totalUncomressedBytes=5195,
+</span></span><span style="display:flex;"><span>    entryCount=9,
+</span></span><span style="display:flex;"><span>    compressionCodec=NONE,
+</span></span><span style="display:flex;"><span>    uncompressedDataIndexSize=34,
+</span></span><span style="display:flex;"><span>    numDataIndexLevels=1,
+</span></span><span style="display:flex;"><span>    firstDataBlockOffset=0,
+</span></span><span style="display:flex;"><span>    lastDataBlockOffset=0,
+</span></span><span style="display:flex;"><span>    comparatorClassName=org.apache.hadoop.hbase.CellComparatorImpl,
+</span></span><span style="display:flex;"><span>    encryptionKey=NONE,
+</span></span><span style="display:flex;"><span>    majorVersion=3,
+</span></span><span style="display:flex;"><span>    minorVersion=3
+</span></span><span style="display:flex;"><span>Fileinfo:
+</span></span><span style="display:flex;"><span>    BLOOM_FILTER_TYPE = ROW
+</span></span><span style="display:flex;"><span>    COMPACTION_EVENT_KEY = PBUF\x0A 574e0cd2f81942f6b4d6bcca5a1de7bd\x0A 9e99e162bcb7463dafe0e2f2b1a7938c\x0A a945bf413e214c1785706d1615c59eb0
+</span></span><span style="display:flex;"><span>    DELETE_FAMILY_COUNT = 0
+</span></span><span style="display:flex;"><span>    EARLIEST_PUT_TS = 1616850516066
+</span></span><span style="display:flex;"><span>    KEY_VALUE_VERSION = 1
+</span></span><span style="display:flex;"><span>    LAST_BLOOM_KEY = row09
+</span></span><span style="display:flex;"><span>    MAJOR_COMPACTION_KEY = true
+</span></span><span style="display:flex;"><span>    MAX_MEMSTORE_TS_KEY = 25
+</span></span><span style="display:flex;"><span>    MAX_SEQ_ID_KEY = 25
+</span></span><span style="display:flex;"><span>    TIMERANGE = 1616850516066....1617440409630
+</span></span><span style="display:flex;"><span>    hfile.AVG_KEY_LEN = 21
+</span></span><span style="display:flex;"><span>    hfile.AVG_VALUE_LEN = 6
+</span></span><span style="display:flex;"><span>    hfile.CREATE_TIME_TS = 1617447255148
+</span></span><span style="display:flex;"><span>    hfile.LASTKEY = row09/cf:f1/1617440409630/Put/vlen=0/mvcc=0
+</span></span><span style="display:flex;"><span>Mid-key: Optional[row01/cf:f1/1616850516066/Put/seqid=0]
+</span></span><span style="display:flex;"><span>Bloom filter:
+</span></span><span style="display:flex;"><span>    BloomSize: 16
+</span></span><span style="display:flex;"><span>    No of Keys in bloom: 9
+</span></span><span style="display:flex;"><span>    Max Keys for bloom: 13
+</span></span><span style="display:flex;"><span>    Percentage filled: 69%
+</span></span><span style="display:flex;"><span>    Number of chunks: 1
+</span></span><span style="display:flex;"><span>    Comparator: ByteArrayComparator
+</span></span><span style="display:flex;"><span>Delete Family Bloom filter:
+</span></span><span style="display:flex;"><span>    Not present
+</span></span><span style="display:flex;"><span>Scanned kv count -&gt; 9
+</span></span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-hfile-v2-逻辑结构">1. HFile V2 逻辑结构</a></li>
+    <li><a href="#2-hfile-v2-物理结构">2. HFile V2 物理结构</a></li>
+    <li><a href="#3-hfileblock-介绍">3. HFileBlock 介绍</a>
+      <ul>
+        <li><a href="#31-data">3.1 DATA</a></li>
+        <li><a href="#32-root_index--leaf_index--intermediate_index">3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX</a>
+          <ul>
+            <li><a href="#321-root_index">3.2.1 ROOT_INDEX</a></li>
+            <li><a href="#322-leaf_index--intermediate_index">3.2.2 LEAF_INDEX | INTERMEDIATE_INDEX</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-bloom_chunk">3.3 BLOOM_CHUNK</a></li>
+        <li><a href="#34-trailer">3.4 TRAILER</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-reference">4. Reference</a></li>
+    <li><a href="#5-附件">5. 附件</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

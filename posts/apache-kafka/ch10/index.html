@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="kafka Transaction.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch10-Kafka 之事务" />
+<meta property="og:description" content="kafka Transaction." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kafka/ch10/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-04-18T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-04-18T00:00:00+08:00" />
+<title>Ch10-Kafka 之事务 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch10-Kafka 之事务</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-幂等性发送">1. 幂等性发送</a></li>
+    <li><a href="#2-事务支持">2. 事务支持</a></li>
+    <li><a href="#3-事务对性能的影响">3. 事务对性能的影响</a>
+      <ul>
+        <li><a href="#31-对-producer-的影响">3.1 对 Producer 的影响</a></li>
+        <li><a href="#32-对-consumer-的影响">3.2 对 Consumer 的影响</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kafka/ch10/">Ch10-Kafka 之事务</a>
+  </h1>
+  
+  <h5>April 18, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kafka/">kafka</a>
+  </div>
+  
+
+
+
+<p>kafka Transaction.</p>
+<h1 id="1-幂等性发送">
+  1. 幂等性发送
+  <a class="anchor" href="#1-%e5%b9%82%e7%ad%89%e6%80%a7%e5%8f%91%e9%80%81">#</a>
+</h1>
+<p>为了实现 Producer 的幂等语义，Kafka 入了 Producer ID（即 PID）和 Sequence Number。每个新的 Producer 在初始化的时候会被分配一个唯一的 PID，该 PID 对用户完全透明而不会暴露给用户。</p>
+<p>对于每个 PID，该 Producer 发送数据的每个<code>&lt;Topic, Partition&gt;都</code>对应一个从 0 开始单调递增的 Sequence Number。类似地，Broker 端也会为每个<code>&lt;PID, Topic, Partition&gt;</code>维护一个序号，并且每次 Commit 一条消息时将其对应序号递增。对于接收的每条消息，如果其序号比 Broker 维护的序号（即最后一次 Commit 的消息的序号）大一，则 Broker 会接受它，否则将其丢弃：</p>
+<ul>
+<li>如果消息序号比 Broker 维护的序号大 1 以上，说明中间有数据尚未写入，也即乱序，此时 Broker 拒绝该消息，Producer 抛出 InvalidSequenceNumber</li>
+<li>如果消息序号小于等于 Broker 维护的序号，说明该消息已被保存，即为重复消息，Broker 直接丢弃该消息，Producer 抛出 DuplicateSequenceNumber</li>
+</ul>
+<p>该幂等设计只能保证单个 Producer 对于同一个<code>&lt;Topic, Partition&gt;</code>的 Exactly Once 语义，它并不能保证写操作的原子性——即多个写操作，要么全部被 Commit 要么全部不被 Commit。</p>
+<h1 id="2-事务支持">
+  2. 事务支持
+  <a class="anchor" href="#2-%e4%ba%8b%e5%8a%a1%e6%94%af%e6%8c%81">#</a>
+</h1>
+<p>为了支持事务，Kafka 引入了两个新的组件：<code>Transaction Coordinator</code> 和 <code>Transaction Log</code>。Transaction Coordinator 并不是一个单独的进程，而是 Broker 内部的一个线程，Transaction Log 则以 <code>__transaction_state</code> 这么个内部 Topic 形式存在。Transaction Log 每个分区都有一个 leader，该 leade 对应哪个 kafka broker，哪个 broker 上的 transaction coordinator 就负责对这些分区的写操作，其可靠性主要有 Kafka 自身的可靠性机制保证。</p>
+<p><img src="transaction.png" alt="transaction" /></p>
+<p>整个事务的执行过程如下所示。</p>
+<ol>
+<li>KAFKA 生产者通过 initTransactions API 将自定义的 transactional.id 注册到 transactional coordinator。此时 coordinator 会关闭所有有相同 transactional.id 且处于 pending 状态的事务，同时也会递增 epoch 来屏蔽僵尸生产者（zombie producers）。该操作对每个 producer session 只执行一次 <code>producer.initTransaction()</code>。</li>
+<li>KAFKA 生产者通过 beginTransaction API 开启事务，并通过 send API 发送消息到目标 topic。此时消息对应的 partition 会首先被注册到 transactional coordinator，然后 producer 按照正常流程发送消息到目标 topic，且在发送消息时内部会通过校验屏蔽掉僵尸生产者 <code>producer.beginTransaction();producer.send()*N;</code>。</li>
+<li>KAFKA 生产者通过 commitTransaction API 提交事务或通过 abortTransaction API 回滚事务。此时会向 transactional coordinator 提交请求，开始两阶段提交协议 <code>producer.commitTransaction();producer.abortTransaction();</code>
+<ul>
+<li>第一阶段，transactional coordinator 更新内存中的事务状态为“prepare_commit”，并将该状态持久化到 transaction log 中</li>
+<li>第二阶段，coordinator 首先写 transaction marker 标记到目标 topic 的目标 partition，在向目标 topic 的目标 partition 写完控制消息后，会更新事务状态为“commited”或“abort”，并将该状态持久化到 transaction log 中。</li>
+</ul>
+</li>
+</ol>
+<h1 id="3-事务对性能的影响">
+  3. 事务对性能的影响
+  <a class="anchor" href="#3-%e4%ba%8b%e5%8a%a1%e5%af%b9%e6%80%a7%e8%83%bd%e7%9a%84%e5%bd%b1%e5%93%8d">#</a>
+</h1>
+<h2 id="31-对-producer-的影响">
+  3.1 对 Producer 的影响
+  <a class="anchor" href="#31-%e5%af%b9-producer-%e7%9a%84%e5%bd%b1%e5%93%8d">#</a>
+</h2>
+<p>开启事务后，producer 有些许写放大，这主要涉及到：</p>
+<ul>
+<li>事务开始前，producer 需要将生产的消息的 partition 注册到 transaction coordinator，这涉及到 rpc 调用；</li>
+<li>事务结束时，transaction coordinator 需要注入 transaction marker 到消息对应的 Partition, 这也涉及到 rpc 调用；</li>
+<li>事务进行过程中，transaction coordinator 需要将事务状态如“prepare_commit” “complete_commit”等持久化到 transaction log，这涉及到磁盘写；但由于以上写操作的时间复杂度，更多是跟消息涉及到的分区个数相关，而不是跟消息的具体条数相关，且 KAFKA 通过 batch 机制尽量减小了 RPC 调用次数，所以对 Producer 的性能影响并不大；</li>
+<li>Confluent 官网有性能测试相关博文，其中讲到“for a producer producing 1KB records at maximum throughput, committing messages every 100ms results in only a 3% degradation in throughput. Smaller messages or shorter transaction commit intervals would result in more severe degradation.“，即在他们的测试场景下，开启事务后性能只有 3% 的下降；</li>
+</ul>
+<h2 id="32-对-consumer-的影响">
+  3.2 对 Consumer 的影响
+  <a class="anchor" href="#32-%e5%af%b9-consumer-%e7%9a%84%e5%bd%b1%e5%93%8d">#</a>
+</h2>
+<p>开启事务后，对 consumer 的性能影响相对对 producer 的性能影响更小，consumer 仍然是轻量级高吞吐的，几乎没有性能影响：</p>
+<ul>
+<li>consumer 在 read_committed 模式下，只需要额外做一些消息的过滤，即过滤掉回滚了的事务的 message，和 open 状态的事务的 message；但过滤这些消息时，因为 topic 中存储的消息包括正常的数据消息和控制消息，这些消息包含了足够的元数据信息来支持消息过滤，所以 Kafka consumer 不需要跟 transactional coordinator 进行 rpc 交互；</li>
+<li>consumer 也需要缓存读取的消息以等待事务的结束，而且由于底层仍然可以使用 zero-copy 机制来读取消息，所以相对于没有开启事务的 consumer，性能几乎没有影响。</li>
+</ul>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="http://www.jasongj.com/kafka/transaction/">Kafka 设计解析（八）- Exactly Once 语义与事务机制原理</a></li>
+<li><a href="https://www.cnblogs.com/xijiu/p/16917741.html">Kafka 事务「原理剖析」</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-幂等性发送">1. 幂等性发送</a></li>
+    <li><a href="#2-事务支持">2. 事务支持</a></li>
+    <li><a href="#3-事务对性能的影响">3. 事务对性能的影响</a>
+      <ul>
+        <li><a href="#31-对-producer-的影响">3.1 对 Producer 的影响</a></li>
+        <li><a href="#32-对-consumer-的影响">3.2 对 Consumer 的影响</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

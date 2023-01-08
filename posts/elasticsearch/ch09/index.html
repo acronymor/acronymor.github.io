@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Elasticsearch 之线程池。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch09-Elasticsearch 之 threadpool" />
+<meta property="og:description" content="Elasticsearch 之线程池。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/elasticsearch/ch09/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-30T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-30T00:00:00+08:00" />
+<title>Ch09-Elasticsearch 之 threadpool | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch09-Elasticsearch 之 threadpool</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-实现原理">1. 实现原理</a></li>
+    <li><a href="#2-分类">2. 分类</a>
+      <ul>
+        <li><a href="#21-按照用途">2.1 按照用途</a></li>
+        <li><a href="#22-按照种类来分">2.2 按照种类来分</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/elasticsearch/ch09/">Ch09-Elasticsearch 之 threadpool</a>
+  </h1>
+  
+  <h5>August 30, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+<p>Elasticsearch 之线程池。</p>
+<h1 id="1-实现原理">
+  1. 实现原理
+  <a class="anchor" href="#1-%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86">#</a>
+</h1>
+<p>线程池的实现还是比较简单的，本质上都是对 Java 各种线程池的再封装，然后再将这些封装后的线程池放入到一个 Map 中维护起来。如果有任务需要的话，那么再从 Map 中取出/创建指定类型的线程池便可。线程池的初始化是在 Node 刚刚启动的时候，就完成的。在 <code>org.elasticsearch.threadpool.ThreadPool</code> 中有个变量 <code>private final Map&lt;String, ExecutorHolder&gt; executors</code>，而 executors 的构建方式如下所示。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadPool</span> <span style="color:#66d9ef">implements</span> ReportingService<span style="color:#f92672">&lt;</span>ThreadPoolInfo<span style="color:#f92672">&gt;,</span> Scheduler <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> ExecutorHolder<span style="color:#f92672">&gt;</span> executors<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> ExecutorBuilder<span style="color:#f92672">&gt;</span> builders<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadPool</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Settings settings<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> ExecutorBuilder<span style="color:#f92672">&lt;?&gt;...</span> customBuilders<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> ExecutorBuilder<span style="color:#f92672">&gt;</span> builders <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    builders<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>Names<span style="color:#f92672">.</span><span style="color:#a6e22e">GET</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> FixedExecutorBuilder<span style="color:#f92672">(</span>settings<span style="color:#f92672">,</span> Names<span style="color:#f92672">.</span><span style="color:#a6e22e">GET</span><span style="color:#f92672">,</span> allocatedProcessors<span style="color:#f92672">,</span> <span style="color:#ae81ff">1000</span><span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>    builders<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>Names<span style="color:#f92672">.</span><span style="color:#a6e22e">FLUSH</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> ScalingExecutorBuilder<span style="color:#f92672">(</span>Names<span style="color:#f92672">.</span><span style="color:#a6e22e">FLUSH</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> halfProcMaxAt5<span style="color:#f92672">,</span> TimeValue<span style="color:#f92672">.</span><span style="color:#a6e22e">timeValueMinutes</span><span style="color:#f92672">(</span><span style="color:#ae81ff">5</span><span style="color:#f92672">)));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">builders</span> <span style="color:#f92672">=</span> Collections<span style="color:#f92672">.</span><span style="color:#a6e22e">unmodifiableMap</span><span style="color:#f92672">(</span>builders<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> ExecutorHolder<span style="color:#f92672">&gt;</span> executors <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> ExecutorBuilder<span style="color:#f92672">&gt;</span> entry <span style="color:#f92672">:</span> builders<span style="color:#f92672">.</span><span style="color:#a6e22e">entrySet</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">final</span> ExecutorBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">ExecutorSettings</span> executorSettings <span style="color:#f92672">=</span> entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getSettings</span><span style="color:#f92672">(</span>settings<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这里会将 ExecutorBuilder 通过 build 方法构建为 ExecutorHolder
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">final</span> ExecutorHolder executorHolder <span style="color:#f92672">=</span> entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">().</span><span style="color:#a6e22e">build</span><span style="color:#f92672">(</span>executorSettings<span style="color:#f92672">,</span> threadContext<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>executors<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>executorHolder<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;duplicate executors with name [&#34;</span> <span style="color:#f92672">+</span> executorHolder<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;] registered&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        logger<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;created thread pool: {}&#34;</span><span style="color:#f92672">,</span> entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">().</span><span style="color:#a6e22e">formatInfo</span><span style="color:#f92672">(</span>executorHolder<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>        executors<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">(),</span> executorHolder<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">executors</span> <span style="color:#f92672">=</span> unmodifiableMap<span style="color:#f92672">(</span>executors<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>比如创建一个 fixed 类型的线程池，其流程如下所示。</p>
+<p><img src="threadpool-process.png" alt="threadpool-process" /></p>
+<h1 id="2-分类">
+  2. 分类
+  <a class="anchor" href="#2-%e5%88%86%e7%b1%bb">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">elasticsearch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">threadpool</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ThreadPool</span>
+</span></span></code></pre></div><h2 id="21-按照用途">
+  2.1 按照用途
+  <a class="anchor" href="#21-%e6%8c%89%e7%85%a7%e7%94%a8%e9%80%94">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index.merge.policy.floor_segment</td>
+<td>默认 2MB，小于这个大小的 segment，优先被归并。</td>
+</tr>
+<tr>
+<td>same</td>
+<td>在调用者线程执行，不转移到新的线程池。</td>
+</tr>
+<tr>
+<td>generic</td>
+<td>用于通用的操作 (例如，节点发现)，线程池类型为 scaling。</td>
+</tr>
+<tr>
+<td>listener</td>
+<td>主要用于 Java 客户端线程监听器被设置为 true 时执行动作。线程池类型为 scaling，最大线程数为 min(10, (处理器数量)/2)。</td>
+</tr>
+<tr>
+<td>get</td>
+<td>用于 get 操作。线程池类型为 fixed, 大小为处理器的数量，队列大小为 1000。</td>
+</tr>
+<tr>
+<td>analyze</td>
+<td></td>
+</tr>
+<tr>
+<td>write</td>
+<td></td>
+</tr>
+<tr>
+<td>search</td>
+<td>用于count/search/suggest操作。线程池类型为fixed, 大小为 int((处理器数量 3)/2)+1，队列大小为 1000。</td>
+</tr>
+<tr>
+<td>snapshot_throttled</td>
+<td></td>
+</tr>
+<tr>
+<td>management</td>
+<td>管理工作的线程池，例如，Node info、Node tats、List tasks 等。</td>
+</tr>
+<tr>
+<td>flush</td>
+<td>用于索引数据的 flush 操作。</td>
+</tr>
+<tr>
+<td>refresh</td>
+<td>用于 refresh 操作。线程池类型为 scaling, 线程空闲保持存活时间为 5min，最大线程数为 min(10, (处理器数量)/2)。</td>
+</tr>
+<tr>
+<td>warme</td>
+<td>用于 segment warm-up 操作。线程池类型为 scaling，线程保持存活时间为 5min，最大线程数为 min(5, (处理器数量)/2)。</td>
+</tr>
+<tr>
+<td>snapshot</td>
+<td>用于 snaphostrestore 操作。线程池类型为 scaling，线程保持存活时间为 5min，最大线程数为 min(5, (处理器数量)/2)。</td>
+</tr>
+<tr>
+<td>force_merge</td>
+<td>顾名思义，用于 Lucene 分段的 force merge。</td>
+</tr>
+<tr>
+<td>fetch_shard_started</td>
+<td>用于 TransportNodesAction.</td>
+</tr>
+<tr>
+<td>fetch_shard_store</td>
+<td>用于 TransportNodesListShardStoreMetaData。</td>
+</tr>
+<tr>
+<td>system_read</td>
+<td></td>
+</tr>
+<tr>
+<td>system_write</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-按照种类来分">
+  2.2 按照种类来分
+  <a class="anchor" href="#22-%e6%8c%89%e7%85%a7%e7%a7%8d%e7%b1%bb%e6%9d%a5%e5%88%86">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>direct</td>
+<td>对用户并不可见，当某个任务不需要在独立的线程执行，又想被线程池管理时，于是诞生了这种特殊类型的线程池：在调用者线程中执行任务</td>
+</tr>
+<tr>
+<td>fixed</td>
+<td>拥有固定数量的线程来处理请求，当线程空闲时不会销毁，当所有线程都繁忙时，请求被添加到队列中</td>
+</tr>
+<tr>
+<td>fixed_auto_queue_size</td>
+<td>fixed 类型的线程池相似，该线程池的线程数量为固定值，但是队列类型不一样。其队列大小根据利特尔法则 ( Little’s Law) 自动调整大小。</td>
+</tr>
+<tr>
+<td>scaling</td>
+<td>线程数量是动态的，介于 core 和 max 参数之间变化。线程池的最小线程数为配置的 core 大小，随着请求的增加，当 core 数量的线程全都繁忙时，线程数逐渐增大到 max 数量。max 是线程池可拥有的线程数。上限。当线程空闲时，线程数从 max 大小逐渐降低到 core 大小。</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-实现原理">1. 实现原理</a></li>
+    <li><a href="#2-分类">2. 分类</a>
+      <ul>
+        <li><a href="#21-按照用途">2.1 按照用途</a></li>
+        <li><a href="#22-按照种类来分">2.2 按照种类来分</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

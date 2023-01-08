@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch05-Hadoop 之 MapReduce" />
+<meta property="og:description" content="Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hadoop/ch05/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-03-23T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-03-23T00:00:00+08:00" />
+<title>Ch05-Hadoop 之 MapReduce | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch05-Hadoop 之 MapReduce</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-mapreduce-架构">1. MapReduce 架构</a></li>
+    <li><a href="#2-mapreduce-处理流程">2. MapReduce 处理流程</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hadoop/ch05/">Ch05-Hadoop 之 MapReduce</a>
+  </h1>
+  
+  <h5>March 23, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hadoop/">hadoop</a>
+  </div>
+  
+
+
+
+<p>Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上</p>
+<h1 id="1-mapreduce-架构">
+  1. MapReduce 架构
+  <a class="anchor" href="#1-mapreduce-%e6%9e%b6%e6%9e%84">#</a>
+</h1>
+<p><img src="mr.png" alt="mapreduce" /></p>
+<ol>
+<li>MapReduce 分为两个阶段：Map 映射、Reduce 归约。</li>
+</ol>
+<ul>
+<li>Map 阶段：对数据进行处理。</li>
+<li>Reduce 阶段：对 Map 结果进行汇总。</li>
+<li>Shuffle 过程：map 方法之后，reducer 方法之前是 Map 阶段和 Reduce 阶段的中间过程</li>
+</ul>
+<ol start="2">
+<li>不同阶段对应的 Task：</li>
+</ol>
+<ul>
+<li>MapTask：负责 Map 阶段的整个数据处理流程。</li>
+<li>ReduceTask：负责 Reduce 阶段的整个数据处理流程</li>
+</ul>
+<ol start="3">
+<li>AppMaster：负责整个 MR 的过程调度及状态协调</li>
+</ol>
+<h1 id="2-mapreduce-处理流程">
+  2. MapReduce 处理流程
+  <a class="anchor" href="#2-mapreduce-%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>              map()       reduce()
+</span></span><span style="display:flex;"><span>   Input ---&gt; Mapper ---&gt; Reducer ---&gt; Output
+</span></span><span style="display:flex;"><span>          |                  |            |
+</span></span><span style="display:flex;"><span>     InputFormat    Shuffle    OutpuFormat
+</span></span><span style="display:flex;"><span>          |                        |
+</span></span><span style="display:flex;"><span>    FileInputFormat          FileOutputFormat
+</span></span><span style="display:flex;"><span>          |                        |
+</span></span><span style="display:flex;"><span>    TextInputFormat          TextOutputFormat
+</span></span><span style="display:flex;"><span>          |          RecordReader       |          RecordReader
+</span></span><span style="display:flex;"><span>          |          |             |          |
+</span></span><span style="display:flex;"><span>         new  LineRecordReader     new  LineRecordReader
+</span></span></code></pre></div><h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<p><a href="https://www.cnblogs.com/yuexiuping/p/14811281.html">Hadoop 之 MapReduce</a></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-mapreduce-架构">1. MapReduce 架构</a></li>
+    <li><a href="#2-mapreduce-处理流程">2. MapReduce 处理流程</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

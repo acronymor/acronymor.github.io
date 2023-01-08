@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Spark 介绍" />
+<meta property="og:description" content="Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-spark/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-07-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-07-01T00:00:00+08:00" />
+<title>Ch01-Spark 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Spark 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a></li>
+    <li><a href="#3-基本概念">3. 基本概念</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-spark/ch01/">Ch01-Spark 介绍</a>
+  </h1>
+  
+  <h5>July 1, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Spark/">Apache Spark</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/spark/">spark</a>
+  </div>
+  
+
+
+
+<p>Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://spark.apache.org/">https://spark.apache.org/</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://spark.apache.org/downloads.html">https://spark.apache.org/downloads.html</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-架构介绍">
+  2. 架构介绍
+  <a class="anchor" href="#2-%e6%9e%b6%e6%9e%84%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>Spark 支持 Standalone、Yarn、Mesos、Kubernetes 等多种部署方案，几种部署方案原理也都一样，只是不同组件角色命名不同，但是核心功能和运行流程都差不多。</p>
+<p><img src="spark-arch.png" alt="spark-arch" /></p>
+<ol>
+<li>Spark 应用程序启动在自己的 JVM 进程里，即 Driver 进程，启动后调用 SparkContext 初始化执行配置和输入数据。SparkContext 启动 DAGScheduler 构造执行的 DAG 图，切分成最小的执行单位也就是计算任务。</li>
+<li>Driver 向 Cluster Manager 请求计算资源用于 DAG 的分布式计算。Cluster Manager 收到请求以后，将 Driver 的主机地址等信息通知给集群的所有计算节点 Worker。</li>
+<li>Worker 收到信息以后，根据 Driver 的主机地址，跟 Driver 通信并注册，然后根据自己的空闲资源向 Driver 通报自己可以领用的任务数。Driver 根据 DAG 图开始向注册的 Worker 分配任务。</li>
+<li>Worker 收到任务后，启动 Executor 进程开始执行任务。Executor 先检查自己是否有 Driver 的执行代码，如果没有，从 Driver 下载执行代码，通过 Java 反射加载后开始执行。</li>
+</ol>
+<h1 id="3-基本概念">
+  3. 基本概念
+  <a class="anchor" href="#3-%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>术语</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Driver Program</td>
+<td>运行 Application 的 main() 函数并创建 SparkContext</td>
+</tr>
+<tr>
+<td>Cluster Mananger</td>
+<td>集群资源管理中心，负责分配计算资源，目前支持 Standalone，Apache Mesos，Kubernetes，Hadoop YARN 这四种。</td>
+</tr>
+<tr>
+<td>Worker Node</td>
+<td>工作节点，负责完成具体计算</td>
+</tr>
+<tr>
+<td>Executor</td>
+<td>是运行在工作节点（Worker Node）上的一个进程，负责运行 Task，并为应用程序存储数据</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>运行在 Executor 上的工作单元，是 Executor 中的一个线程</td>
+</tr>
+<tr>
+<td>Application</td>
+<td>用户编写的 Spark 应用程序，一个 Application 包含多个 Job</td>
+</tr>
+<tr>
+<td>Job</td>
+<td>一个 Job 包含多个 RDD 及作用于相应 RDD 上的各种操作</td>
+</tr>
+<tr>
+<td>Stage</td>
+<td>作业的基本调度单位，一个作业会分为多组任务，每组任务就是一个 Stage</td>
+</tr>
+<tr>
+<td>DAG</td>
+<td>Directed Acyclic Graph，反映 RDD 之间的依赖关系</td>
+</tr>
+<tr>
+<td>RDD</td>
+<td>Resilient Distributed Dataset，是分布式内存的一个抽象概念，提供了一种高度受限的共享内存模型</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a></li>
+    <li><a href="#3-基本概念">3. 基本概念</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

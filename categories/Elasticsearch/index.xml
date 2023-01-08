@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Elasticsearch on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Elasticsearch/</link>
+    <description>Recent content in Elasticsearch on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch10-Elasticsearch 之 选举</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch10/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch10/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 选举&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Elasticsearch 之 threadpool</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch09/</link>
+      <pubDate>Mon, 30 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch09/</guid>
+      <description>&lt;p&gt;Elasticsearch 之线程池。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Elasticsearch 之 Http</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch08/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch08/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 Http&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Elasticsearch 之 Update</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch06/</link>
+      <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch06/</guid>
+      <description>&lt;p&gt;更新操作也是写操作。Elasticsearch 在创建新文档时，Elasticsearch 将为该文档分配一个版本号。对文档的每次更改都会产生一个新的版本号。当执行更新时，旧版本在.del 文件中被标记为已删除，并且新版本在新的分段中编入索引。旧版本可能仍然与搜索查询匹配，但是从结果中将其过滤掉。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Elasticsearch 之 Segment Merge</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch07/</link>
+      <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch07/</guid>
+      <description>&lt;p&gt;在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Elasticsearch 之 Delete</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch05/</link>
+      <pubDate>Fri, 20 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch05/</guid>
+      <description>&lt;p&gt;删除操作是也是写操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Elasticsearch 之 Search</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch04/</link>
+      <pubDate>Sun, 15 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch04/</guid>
+      <description>&lt;p&gt;Elasticsearch 的 Search 操作包含两个阶段，一个是 QueryPhase，另一个是 FetchPhase。QueryPhase 在初始查询阶段，查询会广播到索引中每一个分片副本 (主分片或副分片)。每个分片在本地执行搜索并构建一个匹配文档的优先队列（优先队列是一个存有 topN 匹配文档的有序列表，即 doc id。优先队列大小为分页参数 from + size），注意该队列中并没有取具体的数据。FetchPhase 会根据获取到的 doc id 向对应的节点依次发送 GET 请求，获取结果，然后合并，聚合，排序最终返回结果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Elasticsearch 之 Put</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch03/</link>
+      <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch03/</guid>
+      <description>&lt;p&gt;Elasticsearch 之 Put，不过与其说是 Elasticsearch 的操作流程，倒不如说是单个 Lucene 索引操作流程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Elasticsearch 之 Shard</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch02/</link>
+      <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch02/</guid>
+      <description>&lt;p&gt;Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Elasticsearch 介绍</title>
+      <link>https://acronymor.com/posts/elasticsearch/ch01/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/elasticsearch/ch01/</guid>
+      <description>&lt;p&gt;Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Zookeeper 之 ZAB 协议" />
+<meta property="og:description" content="Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-zookeeper/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-04-03T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-04-03T00:00:00+08:00" />
+<title>Ch02-Zookeeper 之 ZAB 协议 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Zookeeper 之 ZAB 协议</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-工作原理">1. 工作原理</a></li>
+    <li><a href="#2-工作模式">2. 工作模式</a>
+      <ul>
+        <li><a href="#21-消息广播模式">2.1 消息广播模式</a></li>
+        <li><a href="#22-崩溃恢模式">2.2 崩溃恢模式</a>
+          <ul>
+            <li><a href="#221-需要遵循的原则">2.2.1 需要遵循的原则</a></li>
+            <li><a href="#222-执行过程">2.2.2 执行过程</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#参考文献">参考文献</a></li>
+    <li><a href="#其他问题">其他问题</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-zookeeper/ch02/">Ch02-Zookeeper 之 ZAB 协议</a>
+  </h1>
+  
+  <h5>April 3, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/zookeeper/">zookeeper</a>
+  </div>
+  
+
+
+
+<p>Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。</p>
+<h1 id="1-工作原理">
+  1. 工作原理
+  <a class="anchor" href="#1-%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86">#</a>
+</h1>
+<p>在 Zookeeper 中只有一个 Leader，并且只有 Leader 可以处理外部客户端的事务请求，并将其转换成一个事务 Proposal（写操作），然后 Leader 服务器再将事务 Proposal 操作的数据同步到所有 Follower（数据广播/数据复制）。ZAB 协议规定，只要超过半数 Follower 节点反馈 OK，Leader 节点就会向所有的 Follower 服务器发送 Commit 消息。即将 Leader 节点上的数据同步到 Follower 节点之上。</p>
+<h1 id="2-工作模式">
+  2. 工作模式
+  <a class="anchor" href="#2-%e5%b7%a5%e4%bd%9c%e6%a8%a1%e5%bc%8f">#</a>
+</h1>
+<p>Zookeeper 正常情况下，会工作在消息广播模式，但是如果 Leader 宕机或者过半数 Follower 失联，那么会工作在崩溃恢复模式。</p>
+<h2 id="21-消息广播模式">
+  2.1 消息广播模式
+  <a class="anchor" href="#21-%e6%b6%88%e6%81%af%e5%b9%bf%e6%92%ad%e6%a8%a1%e5%bc%8f">#</a>
+</h2>
+<ol>
+<li>Leader 服务器将客户端的 request 请求转化为事务 Proposal 提案，同时为每个 Proposal 分配一个全局唯一的 ID，即 ZXID；</li>
+<li>Leader 服务器与每个 Follower 之间都有一个队列，Leader 将消息发送到该队列；</li>
+<li>Follower 机器从队列中取出消息处理 (写入本地事务日志中) 完成后，向 Leader 服务器发送 ACK 确认；</li>
+<li>Leader 服务器收到半数以上的 Follower 的 ACK 后，即认为可以发送 commit；</li>
+<li>Leader 向所有的 Follower 服务器发送 commit 消息。</li>
+</ol>
+<h2 id="22-崩溃恢模式">
+  2.2 崩溃恢模式
+  <a class="anchor" href="#22-%e5%b4%a9%e6%ba%83%e6%81%a2%e6%a8%a1%e5%bc%8f">#</a>
+</h2>
+<h3 id="221-需要遵循的原则">
+  2.2.1 需要遵循的原则
+  <a class="anchor" href="#221-%e9%9c%80%e8%a6%81%e9%81%b5%e5%be%aa%e7%9a%84%e5%8e%9f%e5%88%99">#</a>
+</h3>
+<p>该模式做数据恢的时候主要遵循两个原则，<code>已经处理过的消息不能丢</code>，<code>被丢弃的消息不能再现</code>。</p>
+<ul>
+<li>对于第一个原则，Leader 收到超过半数 Follower 的 ACKs 后就向各个 Follower 广播 Commit 消息，如果在此期间 Leader 宕机了，那么后续新选举出来的 Leader 在数据恢复完成后要保证所有的 Server 都成功执行前面部分 Follower 完成的事务。</li>
+<li>对于第二个原则，Leader 已经生成 Proposal 提案但是还没有发给 Follower 的时候，Leader 宕机了。新的 Leader 选取成功，旧的 Leader 注册称为 Follower 之后必须放弃先前的 Proposal 提案。</li>
+</ul>
+<h3 id="222-执行过程">
+  2.2.2 执行过程
+  <a class="anchor" href="#222-%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b">#</a>
+</h3>
+<p>崩溃恢复模式一般会经过两个执行过程，Leader 选举和初始化同步</p>
+<p><strong>Leader 选举</strong></p>
+<ol>
+<li>节点刚启动时，默认为 Following 状态。</li>
+<li>节点启动后，状态切换为 Looking 状态，先投票给自己，然后将投票消息发送给其他节点。投票消息内容为 Vote(epoch, zxID, serverID)。</li>
+<li>节点收到其他节点的投票消息后，比较 ZXID 和 ServerID 选出主节点，将选出主节点的投票消息广播给其他节点。</li>
+<li>选出的主节点计算得票数，如果超过集群中节点半数，则切换为 Leading 状态，并向其他节点发送心跳消息。</li>
+<li>其他节点切换为 Following 状态</li>
+</ol>
+<blockquote>
+<p>对于节点已经启动后，Leader 宕机后的 Leader 选举过程跟上述过程类似，唯一不同的是第 1 步中所有的节点不是 Following 状态，会先将自己的状态改为 Looking。剩余过程依旧一致。</p>
+</blockquote>
+<p><strong>初始化同步</strong></p>
+<p>当完成 Leader 选 举后，此时的 Leader 还是一个准 Leader，其要经过初始化同步后才能变为真正的 Leader。</p>
+<ol>
+<li>为了保证 Leader 向 Learner 发送提案的有序，Leader 会为每一个 Learner 服务器准备一 个队列；</li>
+<li>Leader 将那些没有被各个 Learner 同步的事务封装为 Proposal；</li>
+<li>Leader 将这些 Proposal 逐条发给各个 Learner，并在每一个 Proposal 后都紧跟一个 COMMIT 消息，表示该事务已经被提交，Learner 可以直接接收并执行</li>
+<li>Learner 接收来自于 Leader 的 Proposal，并将其更新到本地；</li>
+<li>当 Learner 更新成功后，会向准 Leader 发送 ACK 信息；</li>
+<li>Leader 服务器在收到来自 Learner 的 ACK 后就会将该 Learner 加入到真正可用的 Follower 列表或 Observer 列表。没有反馈 ACK，或反馈了但 Leader 没有收到的 Learner，Leader 不会将其加入到相应列表。</li>
+</ol>
+<h1 id="参考文献">
+  参考文献
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<p><a href="https://blog.csdn.net/lonewolf79218/article/details/106057152">分布式选举-ZAB 算法 -1 Leader 选举 原理</a></p>
+<hr>
+<h1 id="其他问题">
+  其他问题
+  <a class="anchor" href="#%e5%85%b6%e4%bb%96%e9%97%ae%e9%a2%98">#</a>
+</h1>
+<p><strong>0x01 ZAB 协议与 2PC 有何不同？</strong></p>
+<p>ZAB 协议简化了 2PC 事务提交：</p>
+<ul>
+<li>去除中断逻辑移除，Follower 要么 Ack，要么抛弃 Leader；</li>
+<li>Leader 不需要所有的 Follower 都响应成功，只要一个多数派 ACK 即可。</li>
+</ul>
+<p><strong>0x02 ZXID 长什么样？</strong></p>
+<p>ZAB 中每个事务对应一个 ZXID，它由两部分组成：&lt;e, c&gt;，e 即 Leader 选举时生成的 epoch，c 表示当次 epoch 内事务的编号、依次递增。
+假设有两个事务的 ZXID 分别是 z、z’，当满足 z.e &lt; z’.e 或者 z.e = z’.e &amp;&amp; z.c &lt; z’.c 时，定义 z 先于 z’发生 (z &lt; z’)。</p>
+<p><strong>0x03 Learner 是什么？</strong></p>
+<p>Learner 跟 Leader 和 Follower 不同，它并不是 ZooKeeper 的一种实际角色，属于一种逻辑概念，一般指 Follower 和 Obverser。</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-工作原理">1. 工作原理</a></li>
+    <li><a href="#2-工作模式">2. 工作模式</a>
+      <ul>
+        <li><a href="#21-消息广播模式">2.1 消息广播模式</a></li>
+        <li><a href="#22-崩溃恢模式">2.2 崩溃恢模式</a>
+          <ul>
+            <li><a href="#221-需要遵循的原则">2.2.1 需要遵循的原则</a></li>
+            <li><a href="#222-执行过程">2.2.2 执行过程</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#参考文献">参考文献</a></li>
+    <li><a href="#其他问题">其他问题</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

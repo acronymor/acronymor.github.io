@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Calcite 执行流程" />
+<meta property="og:description" content="Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-calcite/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-07T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-07T00:00:00+08:00" />
+<title>Ch02-Calcite 执行流程 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Calcite 执行流程</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-处理流程">1. 处理流程</a></li>
+    <li><a href="#2-sql-解析阶段sqlsqlnode">2. SQL 解析阶段（SQL–&gt;SqlNode）</a></li>
+    <li><a href="#3-sqlnode-验证sqlnodesqlnode">3. SqlNode 验证（SqlNode–&gt;SqlNode）</a></li>
+    <li><a href="#4-语义分析sqlnoderelnoderexnode">4. 语义分析（SqlNode–&gt;RelNode/RexNode）</a></li>
+    <li><a href="#5-优化阶段relnoderelnode">5. 优化阶段（RelNode–&gt;RelNode）</a>
+      <ul>
+        <li><a href="#51-hepplanner">5.1 HepPlanner</a></li>
+        <li><a href="#52-volcannoplanner">5.2 VolcannoPlanner</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-执行阶段">6. 执行阶段</a></li>
+    <li><a href="#7-总结">7. 总结</a></li>
+    <li><a href="#8-参考文献">8. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-calcite/ch02/">Ch02-Calcite 执行流程</a>
+  </h1>
+  
+  <h5>June 7, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/calcite/">calcite</a>
+  </div>
+  
+
+
+
+<p>Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。</p>
+<h1 id="1-处理流程">
+  1. 处理流程
+  <a class="anchor" href="#1-%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<p><img src="calcite-process.png" alt="calcite-process" /></p>
+<p>但这里为了讲述方便，把 SQL 的执行分为下面五个阶段（跟上面比比又独立出了一个阶段）：</p>
+<ul>
+<li>解析 SQL，把 SQL 转换成为 AST（抽象语法树），在 Calcite 中用 SqlNode 来表示；</li>
+<li>语法检查，根据数据库的元数据信息进行语法验证，验证之后还是用 SqlNode 表示 AST 语法树；</li>
+<li>语义分析，根据 SqlNode 及元信息构建 RelNode 树，也就是最初版本的逻辑计划（Logical Plan）；</li>
+<li>逻辑计划优化，优化器的核心，根据前面生成的逻辑计划按照相应的规则（Rule）进行优化；</li>
+<li>物理执行，生成物理计划，物理执行计划执行。</li>
+</ul>
+<p>这里只关注前四步的内容，会配合源码实现以及一个示例来讲解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>id  | name | sex
+</span></span><span style="display:flex;"><span>:---|:-----|:---
+</span></span><span style="display:flex;"><span>0   | bob  | male
+</span></span><span style="display:flex;"><span>1   | tom  | male
+</span></span><span style="display:flex;"><span>2   | tom  | female
+</span></span></code></pre></div><h1 id="2-sql-解析阶段sqlsqlnode">
+  2. SQL 解析阶段（SQL–&gt;SqlNode）
+  <a class="anchor" href="#2-sql-%e8%a7%a3%e6%9e%90%e9%98%b6%e6%ae%b5sqlsqlnode">#</a>
+</h1>
+<p><img src="parse.png" alt="parse" /></p>
+<p>Calcite 使用 JavaCC 做 SQL 解析，JavaCC 根据 Calcite 中定义的 Parser.jj 文件，生成一系列的 java 代码，生成的 Java 代码会把 SQL 转换成 AST 的数据结构（这里是 SqlNode 类型）。</p>
+<p><img src="sqlnode.png" alt="sqlnode" /></p>
+<h1 id="3-sqlnode-验证sqlnodesqlnode">
+  3. SqlNode 验证（SqlNode–&gt;SqlNode）
+  <a class="anchor" href="#3-sqlnode-%e9%aa%8c%e8%af%81sqlnodesqlnode">#</a>
+</h1>
+<p><img src="validate.png" alt="validate" /></p>
+<h1 id="4-语义分析sqlnoderelnoderexnode">
+  4. 语义分析（SqlNode–&gt;RelNode/RexNode）
+  <a class="anchor" href="#4-%e8%af%ad%e4%b9%89%e5%88%86%e6%9e%90sqlnoderelnoderexnode">#</a>
+</h1>
+<p>经过第二步之后，这里的 SqlNode 就是经过语法校验的 SqlNode 树，接下来这一步就是将 SqlNode 转换成 RelNode/RexNode，也就是生成相应的逻辑计划（Logical Plan）。</p>
+<p><img src="relnode.png" alt="relnode" /></p>
+<pre tabindex="0"><code class="language-log" data-lang="log">2021-05-21T23:54:16,187 DEBUG [main] calcite.sql2rel: Plan after converting SqlNode to RelNode
+LogicalSort(sort0=[$0], dir0=[ASC])
+  LogicalFilter(condition=[=($0, &#39;male&#39;)])
+    LogicalAggregate(group=[{0}], CNT=[COUNT()])
+      LogicalProject(SEX=[$2])
+        LogicalFilter(condition=[=($1, &#39;tom&#39;)])
+          LogicalTableScan(table=[[default, T_MEM_TABLE]])
+</code></pre><h1 id="5-优化阶段relnoderelnode">
+  5. 优化阶段（RelNode–&gt;RelNode）
+  <a class="anchor" href="#5-%e4%bc%98%e5%8c%96%e9%98%b6%e6%ae%b5relnoderelnode">#</a>
+</h1>
+<p>Calcite 中关于优化器提供了两种实现：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">优化器</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">HepPlanner</td>
+<td style="text-align:left">RBO 的实现，它是一个启发式的优化器，按照规则进行匹配，直到达到次数限制（match 次数限制）或者遍历一遍后不再出现 rule match 的情况才算完成；</td>
+</tr>
+<tr>
+<td style="text-align:left">VolcanoPlanner</td>
+<td style="text-align:left">CBO 的实现，它会一直迭代 rules，直到找到 cost 最小的 paln。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="51-hepplanner">
+  5.1 HepPlanner
+  <a class="anchor" href="#51-hepplanner">#</a>
+</h2>
+<p><img src="vertex.png" alt="vertex" /></p>
+<p>HepPlanner 会先将所有 relNode tree 转化为 HepRelVertex，这时就构建了一个 Graph：将所有的 elNode 节点使用 Vertex 表示，Gragh 会记录每个 HepRelVertex 的 input 信息，这样就是构成了一张 graph。在真正的实现时，递归逐渐将每个 relNode 转换为 HepRelVertex，并在 graph 中记录相关的信息。</p>
+<p><img src="hep-planner.png" alt="hep-planner" /></p>
+<h2 id="52-volcannoplanner">
+  5.2 VolcannoPlanner
+  <a class="anchor" href="#52-volcannoplanner">#</a>
+</h2>
+<p><img src="enumerable.png" alt="enumerable" /></p>
+<p>VolcanoPlanner 在优化过程中，rule 的触发会产⽣新的 RelNode, VolcanoPlanner 会把新的 RelNode 和 旧的 RelNode 都保存起来，通过⽐较代价 (cost) 的⼤⼩，选择最合适的 RelNode。新旧的 RelNode 在语义上等价，组成搜索空间，在这个搜索空间中，来⽐较 RelNode 的代价。</p>
+<p><img src="volcanno-planner.png" alt="volcanno planner" /></p>
+<h1 id="6-执行阶段">
+  6. 执行阶段
+  <a class="anchor" href="#6-%e6%89%a7%e8%a1%8c%e9%98%b6%e6%ae%b5">#</a>
+</h1>
+<p><img src="execute.png" alt="execute" /></p>
+<h1 id="7-总结">
+  7. 总结
+  <a class="anchor" href="#7-%e6%80%bb%e7%bb%93">#</a>
+</h1>
+<p><img src="calcite.png" alt="calcite" /></p>
+<h1 id="8-参考文献">
+  8. 参考文献
+  <a class="anchor" href="#8-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://arxiv.org/pdf/1802.10233.pdf">Apache Calcite: A Foundational Framework for Optimized Query Processing Over Heterogeneous Data Sources</a></li>
+<li><a href="https://matt33.com/2019/03/07/apache-calcite-process-flow/">Apache Calcite 处理流程详解（一）</a></li>
+<li><a href="https://blog.csdn.net/QuinnNorris/article/details/70739094">SQL 形式化语言——关系代数</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-处理流程">1. 处理流程</a></li>
+    <li><a href="#2-sql-解析阶段sqlsqlnode">2. SQL 解析阶段（SQL–&gt;SqlNode）</a></li>
+    <li><a href="#3-sqlnode-验证sqlnodesqlnode">3. SqlNode 验证（SqlNode–&gt;SqlNode）</a></li>
+    <li><a href="#4-语义分析sqlnoderelnoderexnode">4. 语义分析（SqlNode–&gt;RelNode/RexNode）</a></li>
+    <li><a href="#5-优化阶段relnoderelnode">5. 优化阶段（RelNode–&gt;RelNode）</a>
+      <ul>
+        <li><a href="#51-hepplanner">5.1 HepPlanner</a></li>
+        <li><a href="#52-volcannoplanner">5.2 VolcannoPlanner</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-执行阶段">6. 执行阶段</a></li>
+    <li><a href="#7-总结">7. 总结</a></li>
+    <li><a href="#8-参考文献">8. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

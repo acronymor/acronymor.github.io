@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch10-Spark 之内存管理" />
+<meta property="og:description" content="Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-spark/ch10/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-06-20T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-06-20T00:00:00+08:00" />
+<title>Ch10-Spark 之内存管理 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch10-Spark 之内存管理</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-static-memory-manager">1. Static Memory Manager</a>
+      <ul>
+        <li><a href="#11-基本介绍">1.1 基本介绍</a></li>
+        <li><a href="#12-计算公式">1.2 计算公式</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-unified-memory-manager">2. Unified Memory Manager</a>
+      <ul>
+        <li><a href="#21-基本介绍">2.1 基本介绍</a></li>
+        <li><a href="#21-动态内存占用机制">2.1 动态内存占用机制</a></li>
+        <li><a href="#23-计算公式">2.3 计算公式</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-spark/ch10/">Ch10-Spark 之内存管理</a>
+  </h1>
+  
+  <h5>June 20, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Spark/">Apache Spark</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/spark/">spark</a>
+  </div>
+  
+
+
+
+<p>Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；</p>
+<p>在 Spark 1.5 和之前版本里（Static Memory Manager），运行内存和存储内存是静态配置的，不支持借用；Spark 1.6 之后（Unified Memory Manager）引入的统一内存管理机制，与静态内存管理的区别在于存储内存和执行内存共享同一块空间，可以动态占用对方的空闲区域，提供更好的性能。它们可以通过参数 <code>spark.memory.useLegacyMode=true/false</code> 配置。</p>
+<h1 id="1-static-memory-manager">
+  1. Static Memory Manager
+  <a class="anchor" href="#1-static-memory-manager">#</a>
+</h1>
+<h2 id="11-基本介绍">
+  1.1 基本介绍
+  <a class="anchor" href="#11-%e5%9f%ba%e6%9c%ac%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<p>Spark 最原始的内存管理模式，默认通过系统固定的内存配置参数，分配相应的 Storage、Execution 等内存空间，支持用户自定义修改配置。</p>
+<p><img src="static.png" alt="static-memory-manager" /></p>
+<p><strong>堆内内存</strong>空间整体被分为 Storage(存储内存)、Execution(执行内存)、Other(其他内存) 三部分，默认按照 6:2:2 的比率划分。其中 Storage 内存区域参数：<code>spark.storage.memoryFraction</code>(默认为 0.6)，Execution 内存区域参数：<code>spark.shuffle.memoryFraction</code>(默认为 0.2)。Other 内存区域主要用来存储用户定义的数据结构、Spark 内部元数据，占系统内存的 20%。</p>
+<ul>
+<li>Storage 内存区域中，10% 的大小被用作 Reserved 预留空间，防止内存溢出情况，由参数：<code>spark.shuffle.safetyFraction</code>(默认 0.1) 控制。90% 的空间当作可用的 Storage 内存，这里是 Executor 进行 RDD 数据缓存和 broadcast 数据的内存区域，参数和 Reserved 一致。还有一部分 Unroll 区域，这一块主要存储 Unroll 过程的数据，占用 20% 的可用 Storage 空间。</li>
+<li>Execution 内存区域中，20% 的大小被用作 Reserved 预留空间，防止 OOM 和其他内存不够的情况，由参数：<code>spark.shuffle.safetyFraction</code>(默认 0.2) 控制。80% 的空间当作可用的 Execution 内存，缓存 shuffle 过程的中间数据，参数：<code>spark.shuffle.safetyFraction</code>(默认 0.8)。</li>
+</ul>
+<p><strong>堆外内存</strong>默认为 384M，由系统参数 <code>spark.yarn.executor.memoryOverhead</code> 设定。整体内存分为 Storage 和 Execution 两部分，此部分分配和堆内内存一致，由参数：<code>spark.memory.storageFaction</code> 决定。堆外内存一般存储序列化后的二进制数据 (字节流)，在存储空间中是一段连续的内存区域，其大小可精确计算，故此时无需设置预留空间。</p>
+<h2 id="12-计算公式">
+  1.2 计算公式
+  <a class="anchor" href="#12-%e8%ae%a1%e7%ae%97%e5%85%ac%e5%bc%8f">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>可用的存储内存 =
+</span></span><span style="display:flex;"><span>      systemMaxMemory
+</span></span><span style="display:flex;"><span>      * spark.storage.memoryFraction
+</span></span><span style="display:flex;"><span>      * spark.storage.safetyFraction
+</span></span><span style="display:flex;"><span>可用的执行内存 =
+</span></span><span style="display:flex;"><span>     systemMaxMemory
+</span></span><span style="display:flex;"><span>     * spark.shuffle.memoryFraction
+</span></span><span style="display:flex;"><span>     * spark.shuffle.safetyFraction
+</span></span></code></pre></div><h1 id="2-unified-memory-manager">
+  2. Unified Memory Manager
+  <a class="anchor" href="#2-unified-memory-manager">#</a>
+</h1>
+<h2 id="21-基本介绍">
+  2.1 基本介绍
+  <a class="anchor" href="#21-%e5%9f%ba%e6%9c%ac%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<p>为了解决 (Static Memory Manager) 静态内存管理的内存失衡等问题，Spark 在 1.6 之后使用了一种新的内存管理模式—Unified Memory Manager(统一内存管理)。在新模式下，移除了旧模式下的 Executor 内存静态占比分配，启用了内存动态占比机制，并将 Storage 和 Execution 划分为统一共享内存区域。</p>
+<p><img src="unified.png" alt="unified-memory-manager" /></p>
+<p><strong>堆内内存</strong>整体划分为 Usable Memory(可用内存) 和 Reversed Memory(预留内存) 两大部分。其中预留内存作为 OOM 等异常情况的内存使用区域，默认被分配 300M 的空间。可用内存可进一步分为 (Unified Memory) 统一内存和 Other 内存其他两部分，默认占比为 6:4。</p>
+<p>统一内存中的 Storage(存储内存) 和 Execution(执行内存) 以及 Other 内存，其参数及使用范围均与静态内存模式一致，不再重复赘述。只是此时的 Storage、Execution 之间启用了动态内存占用机制。</p>
+<h2 id="21-动态内存占用机制">
+  2.1 动态内存占用机制
+  <a class="anchor" href="#21-%e5%8a%a8%e6%80%81%e5%86%85%e5%ad%98%e5%8d%a0%e7%94%a8%e6%9c%ba%e5%88%b6">#</a>
+</h2>
+<ul>
+<li>设置内存的初始值，即 Execution 和 Storage 均需设定各自的内存区域范围 (默认参数 0.5)</li>
+<li>若存在一方内存不足，另一方内存空余时，可占用对方内存空间</li>
+<li>双方内存均不足时，需落盘处理</li>
+<li>Execution 内存被占用时，Storage 需将此部分转存硬盘并归还空间</li>
+<li>Storage 内存被占用时，Execution 无需归还</li>
+</ul>
+<p><strong>堆外内存</strong>默认值为 384M，这个和静态管理模式一致。整体分为 Storage 和 Execution 两部分，且启用动态内存占用机制，其中默认的初始化占比值均为 0.5。</p>
+<h2 id="23-计算公式">
+  2.3 计算公式
+  <a class="anchor" href="#23-%e8%ae%a1%e7%ae%97%e5%85%ac%e5%bc%8f">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>可用的存储&amp;执行内存 =
+</span></span><span style="display:flex;"><span>   (systemMaxMemory -ReservedMemory)
+</span></span><span style="display:flex;"><span>    * spark.memoryFraction
+</span></span><span style="display:flex;"><span>    * spark.storage.storageFraction
+</span></span><span style="display:flex;"><span>(启用内存动态分配机制，己方内存不足时可占用对方)
+</span></span></code></pre></div><h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.kdocs.cn/view/l/ccxGUq8Lbhzp">Spark 内存管理</a></li>
+<li><a href="https://blog.csdn.net/nzgmn/article/details/122741512">万字最全 Spark 内存管理详解</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-static-memory-manager">1. Static Memory Manager</a>
+      <ul>
+        <li><a href="#11-基本介绍">1.1 基本介绍</a></li>
+        <li><a href="#12-计算公式">1.2 计算公式</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-unified-memory-manager">2. Unified Memory Manager</a>
+      <ul>
+        <li><a href="#21-基本介绍">2.1 基本介绍</a></li>
+        <li><a href="#21-动态内存占用机制">2.1 动态内存占用机制</a></li>
+        <li><a href="#23-计算公式">2.3 计算公式</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

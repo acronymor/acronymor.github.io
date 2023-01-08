@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Kylin 之 Cube" />
+<meta property="og:description" content="Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-21T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-05-21T00:00:00+08:00" />
+<title>Ch02-Kylin 之 Cube | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Kylin 之 Cube</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前置知识">1. 前置知识</a></li>
+    <li><a href="#2-cube">2. Cube</a></li>
+    <li><a href="#3-维度爆炸">3. 维度爆炸</a></li>
+    <li><a href="#4-附件">4. 附件</a>
+      <ul>
+        <li><a href="#41-modeljson">4.1 model.json</a></li>
+        <li><a href="#42-cubejson">4.2 cube.json</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kylin/ch02/">Ch02-Kylin 之 Cube</a>
+  </h1>
+  
+  <h5>May 21, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">kylin</a>
+  </div>
+  
+
+
+
+<p>Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。</p>
+<h1 id="1-前置知识">
+  1. 前置知识
+  <a class="anchor" href="#1-%e5%89%8d%e7%bd%ae%e7%9f%a5%e8%af%86">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>名词</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>维度</td>
+<td>可以简单理解为观察数据的角度，一般是一组离散的值。</td>
+</tr>
+<tr>
+<td>度量</td>
+<td>被聚合的统计值，也是聚合运算的结果，一般指聚合函数 (如：sum、count、average 等)。</td>
+</tr>
+</tbody>
+</table>
+<p>比如下述 SQL 语句中，GROUP BY d_year, p_brand 中的 d_year 和 p_brand 就是维度。而 SELECT SUM(lo_revenue) AS lo_revenue 中的 SUM(lo_revenue) 就是度量。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">SUM</span>(lo_revenue) <span style="color:#66d9ef">AS</span> lo_revenue, d_year, p_brand
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> p_lineorder
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">LEFT</span> <span style="color:#66d9ef">JOIN</span> dates <span style="color:#66d9ef">ON</span> lo_orderdate <span style="color:#f92672">=</span> d_datekey
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">LEFT</span> <span style="color:#66d9ef">JOIN</span> part <span style="color:#66d9ef">ON</span> lo_partkey <span style="color:#f92672">=</span> p_partkey
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">LEFT</span> <span style="color:#66d9ef">JOIN</span> supplier <span style="color:#66d9ef">ON</span> lo_suppkey <span style="color:#f92672">=</span> s_suppkey
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> p_category <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;MFGR#12&#39;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">AND</span> s_region <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;AMERICA&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> d_year, p_brand
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> d_year, p_brand;
+</span></span></code></pre></div><h1 id="2-cube">
+  2. Cube
+  <a class="anchor" href="#2-cube">#</a>
+</h1>
+<p>而如果将表中的维度随意组合，那么每种组合我们称为 cuboid，而将这些所有的组合统称为 cube，因此其之间的关系如下图所示。</p>
+<p><img src="cube-vs-cuboid.png" alt="cube-vs-cuboid" /></p>
+<p>每一种维度组合称之为 Cuboid（上图中的每个点），所有 Cuboid 的集合是 Cube（上图中的整张图）。其中由所有维度组成的 Cuboid 称为 Base Cuboid，图中（time，item，location，supplier）即为 Base Cuboid，所有的 Cuboid 都可以基于 Base Cuboid 计算出来。Cube 在 kylin 中用 json 表示，如附件所示。</p>
+<blockquote>
+<p><strong>Model VS Cube</strong></p>
+<p>Model 是 Cube 的基础，用于描述一个数据模型
+有了数据模型，定义 Cube 可以直接从此模型定义的表和列中进行选择
+基于一个数据模型可以创建多个 Cube</p>
+</blockquote>
+<h1 id="3-维度爆炸">
+  3. 维度爆炸
+  <a class="anchor" href="#3-%e7%bb%b4%e5%ba%a6%e7%88%86%e7%82%b8">#</a>
+</h1>
+<p>其实很容易发现，维度如果设计的稍微不合理，就会导致出现若干 cuboid (最多 2^n 个)，而根据业务场景，可能相当多的 cuboid 根本用不到，因此需要一定的剪枝手段，来避免构建如此大量的 cuboid。</p>
+<p>因此 Kylin 在构建 Cube 的时候，用户可以选择 Mandatory Dimensions，Hierarchy Dimensions，Joint Dimensions 中的一种，进行剪枝，避免维度爆炸的问题。</p>
+<table>
+<thead>
+<tr>
+<th><strong>Entry</strong></th>
+<th><strong>名词</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mandatory Dimensions</td>
+<td>必要维度</td>
+<td>所有不含此维度的 cuboid 就可以被跳过计算</td>
+</tr>
+<tr>
+<td>Hierarchy Dimensions</td>
+<td>层级维度</td>
+<td>例如“国家” -&gt; “省” -&gt; “市”是一个层级；不符合此层级关系的 cuboid 可以被跳过计算</td>
+</tr>
+<tr>
+<td>Joint Dimensions</td>
+<td>联合维度</td>
+<td>有些维度往往一起出现，或者它们的基数非常接近（有 1:1 映射关系）。例如“user_id”和“email”。把多个维度定义为组合关系后，所有不符合此关系的 cuboids 会被跳过计算</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-附件">
+  4. 附件
+  <a class="anchor" href="#4-%e9%99%84%e4%bb%b6">#</a>
+</h1>
+<h2 id="41-modeljson">
+  4.1 model.json
+  <a class="anchor" href="#41-modeljson">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;uuid&#34;</span>: <span style="color:#e6db74">&#34;c5e7d814-c2f7-e312-f470-0a609b517684&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;last_modified&#34;</span>: <span style="color:#ae81ff">1623556297179</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;4.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;model_demo&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;owner&#34;</span>: <span style="color:#e6db74">&#34;ADMIN&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;is_draft&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;fact_table&#34;</span>: <span style="color:#e6db74">&#34;DEMO.T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;lookups&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;DEMO.T_PART&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;LOOKUP&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;alias&#34;</span>: <span style="color:#e6db74">&#34;T_PART&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;join&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;primary_key&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;T_PART.P_PARTKEY&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;foreign_key&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;T_STUDENT.STU_PARTKEY&#34;</span>
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;DEMO.T_DATES&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;LOOKUP&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;alias&#34;</span>: <span style="color:#e6db74">&#34;T_DATES&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;join&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;primary_key&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;T_DATES.D_DATEKEY&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;foreign_key&#34;</span>: [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#34;T_STUDENT.STU_DATEKEY&#34;</span>
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;dimensions&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;columns&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;STU_NAME&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;STU_CLASS&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;STU_PARTKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;STU_DATEKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_PART&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;columns&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;P_CATEGORY&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;P_PARTKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_DATES&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;columns&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;D_DATE&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;D_DATEKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;metrics&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;T_STUDENT.STU_AGE&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;T_STUDENT.STU_SCORE&#34;</span>
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;filter_condition&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;partition_desc&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_date_column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_time_column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_date_start&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_date_format&#34;</span>: <span style="color:#e6db74">&#34;yyyy-MM-dd&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_time_format&#34;</span>: <span style="color:#e6db74">&#34;HH:mm:ss&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_type&#34;</span>: <span style="color:#e6db74">&#34;APPEND&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;partition_condition_builder&#34;</span>: <span style="color:#e6db74">&#34;org.apache.kylin.metadata.model.PartitionDesc$DefaultPartitionConditionBuilder&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;capacity&#34;</span>: <span style="color:#e6db74">&#34;MEDIUM&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;projectName&#34;</span>: <span style="color:#e6db74">&#34;project_demo&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="42-cubejson">
+  4.2 cube.json
+  <a class="anchor" href="#42-cubejson">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;uuid&#34;</span>: <span style="color:#e6db74">&#34;9466fff1-072b-de1b-c80b-e3b2ce39868c&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;last_modified&#34;</span>: <span style="color:#ae81ff">1623556408303</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;4.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;cube_demo&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;is_draft&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;model_name&#34;</span>: <span style="color:#e6db74">&#34;model_demo&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;null_string&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;dimensions&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;STU_NAME&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;STU_NAME&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;STU_CLASS&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;STU_CLASS&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;STU_DATEKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;STU_DATEKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;STU_PARTKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;STU_PARTKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;P_PARTKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_PART&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;P_PARTKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;P_CATEGORY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_PART&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;P_CATEGORY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;D_DATEKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_DATES&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;D_DATEKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;D_DATE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;table&#34;</span>: <span style="color:#e6db74">&#34;T_DATES&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;derived&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;D_DATE&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;measures&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;_COUNT_&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;function&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;expression&#34;</span>: <span style="color:#e6db74">&#34;COUNT&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;parameter&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;constant&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;returntype&#34;</span>: <span style="color:#e6db74">&#34;bigint&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;MIN_AGE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;function&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;expression&#34;</span>: <span style="color:#e6db74">&#34;MIN&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;parameter&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;column&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_AGE&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;returntype&#34;</span>: <span style="color:#e6db74">&#34;integer&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;SUM_SCORE&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;function&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;expression&#34;</span>: <span style="color:#e6db74">&#34;SUM&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;parameter&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;column&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_SCORE&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;returntype&#34;</span>: <span style="color:#e6db74">&#34;bigint&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;dictionaries&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;rowkey&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;rowkey_columns&#34;</span>: [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_NAME&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;dict&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;isShardBy&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_CLASS&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;dict&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;isShardBy&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_DATEKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;dict&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;isShardBy&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;column&#34;</span>: <span style="color:#e6db74">&#34;T_STUDENT.STU_PARTKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;encoding&#34;</span>: <span style="color:#e6db74">&#34;dict&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;isShardBy&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;hbase_mapping&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;column_family&#34;</span>: [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;F1&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;columns&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;qualifier&#34;</span>: <span style="color:#e6db74">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;measure_refs&#34;</span>: [
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;_COUNT_&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;MIN_AGE&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">&#34;SUM_SCORE&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;aggregation_groups&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;includes&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;T_STUDENT.STU_NAME&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;T_STUDENT.STU_CLASS&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;T_STUDENT.STU_DATEKEY&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;T_STUDENT.STU_PARTKEY&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;select_rule&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;hierarchy_dims&#34;</span>: [],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mandatory_dims&#34;</span>: [],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;joint_dims&#34;</span>: []
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;signature&#34;</span>: <span style="color:#e6db74">&#34;6LXWNhNdvJC74BdBNyGRNw==&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;notify_list&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;status_need_notify&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;ERROR&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;DISCARDED&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;SUCCEED&#34;</span>
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;partition_date_start&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;partition_date_end&#34;</span>: <span style="color:#ae81ff">3153600000000</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;auto_merge_time_ranges&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">604800000</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">2419200000</span>
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;volatile_range&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;retention_range&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;engine_type&#34;</span>: <span style="color:#ae81ff">6</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;storage_type&#34;</span>: <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;override_kylin_properties&#34;</span>: {},
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;cuboid_black_list&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;parent_forward&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;mandatory_dimension_set_list&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;snapshot_table_desc_list&#34;</span>: []
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前置知识">1. 前置知识</a></li>
+    <li><a href="#2-cube">2. Cube</a></li>
+    <li><a href="#3-维度爆炸">3. 维度爆炸</a></li>
+    <li><a href="#4-附件">4. 附件</a>
+      <ul>
+        <li><a href="#41-modeljson">4.1 model.json</a></li>
+        <li><a href="#42-cubejson">4.2 cube.json</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

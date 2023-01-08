@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling&#43;分区实现的LSM典型代表。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-LevelDB 初识" />
+<meta property="og:description" content="leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling&#43;分区实现的LSM典型代表。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/leveldb/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-05-01T00:00:00+08:00" />
+<title>Ch01-LevelDB 初识 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-LevelDB 初识</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-特性">1. 特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-基本信息">2. 基本信息</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/leveldb/ch01/">Ch01-LevelDB 初识</a>
+  </h1>
+  
+  <h5>May 1, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+<p>leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。</p>
+<h2 id="1-特性">
+  1. 特性
+  <a class="anchor" href="#1-%e7%89%b9%e6%80%a7">#</a>
+</h2>
+<ul>
+<li>Key、Value 支持任意的 byte 类型数组，不单单支持字符串</li>
+<li>LevelDB 是一个持久化存储的 KV 系统，将大部分数据存储到磁盘上</li>
+<li>按照记录 key 值顺序存储数据，并且 LevelDB 支持按照用户定义的比较函数进行排序</li>
+<li>操作接口简单，包括写/读记录以及删除记录，也支持针对多条操作的原子批量操作。</li>
+<li>支持数据快照 (snapshot) 功能，使得读取操作不受写操作影响，可以在读操作过程中始终看到一致的数据。</li>
+<li>支持数据压缩 (snappy 压缩) 操作，有效减小存储空间、并增快 IO 效率。</li>
+<li>LSM 典型实现，适合写多读少。</li>
+</ul>
+<h1 id="2-基本信息">
+  2. 基本信息
+  <a class="anchor" href="#2-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目地址</td>
+<td><a href="https://github.com/google/leveldb">https://github.com/google/leveldb</a></td>
+</tr>
+<tr>
+<td>最新版本</td>
+<td>1.23</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-特性">1. 特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-基本信息">2. 基本信息</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

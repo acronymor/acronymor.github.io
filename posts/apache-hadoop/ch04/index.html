@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch04-Hadoop 之 Yarn" />
+<meta property="og:description" content="HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-hadoop/ch04/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-03-21T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-03-21T00:00:00+08:00" />
+<title>Ch04-Hadoop 之 Yarn | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch04-Hadoop 之 Yarn</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-yarn-基本架构">1. Yarn 基本架构</a>
+      <ul>
+        <li><a href="#11-resource-mananger">1.1 Resource Mananger</a></li>
+        <li><a href="#12-nodemananger">1.2 NodeMananger</a></li>
+        <li><a href="#13-appmaster">1.3 AppMaster</a></li>
+        <li><a href="#14-container">1.4 Container</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-yarn-提交流程">2. Yarn 提交流程</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-hadoop/ch04/">Ch04-Hadoop 之 Yarn</a>
+  </h1>
+  
+  <h5>March 21, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hadoop/">hadoop</a>
+  </div>
+  
+
+
+
+<p>HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。</p>
+<h1 id="1-yarn-基本架构">
+  1. Yarn 基本架构
+  <a class="anchor" href="#1-yarn-%e5%9f%ba%e6%9c%ac%e6%9e%b6%e6%9e%84">#</a>
+</h1>
+<p><img src="yarn-arch.png" alt="yarn-arch" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>组件</strong></th>
+<th><strong>功能</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container</td>
+<td>Yarn 资源（cpu，mem）的一种抽象，可以简单看做一台单独的“机器”。</td>
+</tr>
+<tr>
+<td>Resource Manager</td>
+<td>简称 RM，负责整个 yarn 的资源调度与分配；处理客户端的任务请求；启动或者监控 AppMaster。</td>
+</tr>
+<tr>
+<td>Node Manager</td>
+<td>简称 NM，负责管理单个节点的资源分配与执行；处理来自 Resource Mananger 的命令；处理来自 AppMaster 的命令。</td>
+</tr>
+<tr>
+<td>Application Master</td>
+<td>简称 AM，或 AppMaster，负责 MapReduce 任务相关资源的申请和内部任务分配，监控。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<ul>
+<li>如果某个节点的 NodeManager/Container 损坏，AppMaster 也会重新向 ResourceManager 申请资源，ResourceManager 分配一个除当前损坏节点外的空闲节点。</li>
+<li>若 AppMaster 所在的节点损坏，会导致整个 MapReduce 任务失败。</li>
+</ul>
+</blockquote>
+<h2 id="11-resource-mananger">
+  1.1 Resource Mananger
+  <a class="anchor" href="#11-resource-mananger">#</a>
+</h2>
+<p>Resource Mananger 是 Master 上一个独立运行的进程，负责集群统一的资源管理、调度、分配等，是一个全局的资源管理器。集群只有一个，它由应用程序管理器（Applications Manager，简称 ASM）和资源调度器（Resource Scheduler）组成。</p>
+<p><img src="yarn-rm.jpg" alt="yarn-rm" /></p>
+<blockquote>
+<p>易混点：</p>
+<ul>
+<li>Application Manager 缩写是 ASM，它是 Resource Mananger 里面的一个小模块</li>
+<li>Application Master 缩写是 AM 或者 AppMaster，它是由 Application Manager 管理的一个小模块</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>资源调度器（Resource Scheduler）</strong>，根据各个应用程序的资源需求进行资源分配，以 Container 集成的方式返回给 AM，其中调度器 Scheduler 是一个“纯调度器”，它不从事任何与具体应用程序相关的工作，只做资源的调度。它是一个可插拔的组件，有三种常见的调度器可供使用，分别是 <code>FIFO Scheduler</code>，<code>Capacity Scheduler</code> 和 <code>Fair Scheduler</code>，可以通过 yarn-site.xml 配置。</li>
+<li><strong>应用程序管理器（Applications Manager）</strong>，主要负责管理整个系统中所有 AM，RM 接收 job 的提交，其实是先提交给了 RM 的 ASM。它为应用分配第一个 Container 来启动运行 AM，这个 AM 是一个 pre-application ApplicationMaster，需要提前执行包括应用程序提交、与 调度器 Scheduler 协商资源以启动 AM、监控 AM 运行状态并在失败时重新启动它、监控 task 执行的进度等工作。</li>
+</ul>
+<h2 id="12-nodemananger">
+  1.2 NodeMananger
+  <a class="anchor" href="#12-nodemananger">#</a>
+</h2>
+<p>NM 是 Slave 上一个独立运行的进程，通过心跳机制上报节点的状态（磁盘，内存，CPU 等使用信息）给 RM，它是真正提供计算资源的，除了节点的状态还会上报节点上 Container 的使用信息。</p>
+<h2 id="13-appmaster">
+  1.3 AppMaster
+  <a class="anchor" href="#13-appmaster">#</a>
+</h2>
+<p>AM 是 Application 的监护人和管理者，负责监控，管理这个 Application 的所有 Attempt(task) 在集群中各个节点上的运行情况，同时负责向 RM 申请资源运行 task，task 执行完成后返还资源。AM 只有在集群运行 job 时，有任务在执行时，才会出现这个进程。</p>
+<h2 id="14-container">
+  1.4 Container
+  <a class="anchor" href="#14-container">#</a>
+</h2>
+<p>Container 是 YARN 中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等。目前为止，YARN 仅支持 CPU 和内存两种资源，且使用了 Linux 中轻量级资源隔离机制 Cgroups 进行资源隔离。Container 是一个动态资源划分单位，是根据应用程序的需求动态生成的，默认是 1G 内存 +1 核 CPU。
+当 AM 向 RM 申请资源时，AM 向 RM 询问 AM 有哪些 Container 可以用，向 NM 请求分配具体的 Container。</p>
+<h1 id="2-yarn-提交流程">
+  2. Yarn 提交流程
+  <a class="anchor" href="#2-yarn-%e6%8f%90%e4%ba%a4%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<p><img src="yarn-work.png" alt="yarn-work" /></p>
+<ol>
+<li>用户向 YARN 中提交应用程序，其中包括 AppMaster 程序、启动 AppMaster 的命令、用户程序等。</li>
+<li>ResourceManager 为该应用程序分配第一个 Container，并与对应的 NodeManager 通信，要求它在这个 Container 中启动应用程序的 AppMaster。</li>
+<li>AppMaster 首先向 ResourceManager 注册，这样用户可以直接通过 ResourceManage 查看应用程序的运行状态，然后它将为各个任务申请资源，并监控它的运行状态，直到运行结束，即重复步骤 4~7。</li>
+<li>AppMaster 采用轮询的方式通过 RPC 协议向 ResourceManager 申请和领取资源。</li>
+<li>一旦 AppMaster 申请到资源后，便与对应的 NodeManager 通信，要求它启动任务。</li>
+<li>NodeManager 为任务设置好运行环境 (包括环境变量、JAR 包、二进制程序等) 后，将任务启动命令写到一个脚本中，并通过运行该脚本启动任务。</li>
+<li>各个任务通过某个 RPC 协议向 AppMaster 汇报自己的状态和进度，以让 AppMaster 随时掌握各个任务的运行状态，从而可以在任务失败时重新启动任务。在应用程序运行过程中，用户可随时通过 RPC 向 AppMaster 查询应用程序的当前运行状态。</li>
+<li>应用程序运行完成后，AppMaster 向 ResourceManager 注销并关闭自己。</li>
+</ol>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.cnblogs.com/youngchaolin/p/12827635.html">Yarn 基础组件及提交流程</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-yarn-基本架构">1. Yarn 基本架构</a>
+      <ul>
+        <li><a href="#11-resource-mananger">1.1 Resource Mananger</a></li>
+        <li><a href="#12-nodemananger">1.2 NodeMananger</a></li>
+        <li><a href="#13-appmaster">1.3 AppMaster</a></li>
+        <li><a href="#14-container">1.4 Container</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-yarn-提交流程">2. Yarn 提交流程</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

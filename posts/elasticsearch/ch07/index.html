@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-Elasticsearch 之 Segment Merge" />
+<meta property="og:description" content="在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/elasticsearch/ch07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-21T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-21T00:00:00+08:00" />
+<title>Ch07-Elasticsearch 之 Segment Merge | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch07-Elasticsearch 之 Segment Merge</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-segment-merge-的流程">1. segment merge 的流程</a></li>
+    <li><a href="#2-segment-merge-配置">2. segment merge 配置</a></li>
+    <li><a href="#3-segment-merge-策略">3. segment merge 策略</a></li>
+    <li><a href="#4-forcemerge">4. forcemerge</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/elasticsearch/ch07/">Ch07-Elasticsearch 之 Segment Merge</a>
+  </h1>
+  
+  <h5>August 21, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+<p>在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。</p>
+<h1 id="1-segment-merge-的流程">
+  1. segment merge 的流程
+  <a class="anchor" href="#1-segment-merge-%e7%9a%84%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<p>segment merge 的流程还是比较容易理解的，简单来说就是每个小 segment 的数据 copy 到一个比较大的 segment 里面，然后删除掉之前比较小的 segment，并且重新修改 commit point。</p>
+<p>Elasticsearch 会不断在后台运行任务，主动将前面 flush 到磁盘的零散的 segment 做数据归并，尽量让索引内只保有少量的，每个都比较大的 segment 文件。这个过程是由独立的线程来进行的，并不影响新 segment 的产生。归并过程中，尚未完成的较大的 segment 是被排除在检索可见范围之外的。此时，索引状态如下图所示。</p>
+<p><img src="segment-merge-01.png" alt="segment-merge" /></p>
+<p>当归并完成，较大的这个 segment 刷到磁盘后，commit 文件做出相应变更，删除之前几个小 segment，改成新的大 segment。等检索请求都从小 segment 转到大 segment 上以后，删除没用的小 segment。这时候，索引里 segment 数量就下降了。此时，索引状态如下图所示。</p>
+<p><img src="segment-merge-02.png" alt="segment-merge" /></p>
+<h1 id="2-segment-merge-配置">
+  2. segment merge 配置
+  <a class="anchor" href="#2-segment-merge-%e9%85%8d%e7%bd%ae">#</a>
+</h1>
+<p>segment 归并的过程，需要先读取 segment，归并计算，再写一遍 segment，最后还要保证刷到磁盘。可以说，这是一个非常消耗磁盘 IO 和 CPU 的任务。所以，ES 提供了对归并线程的限速机制，确保这个任务不会过分影响到其他任务。
+在 5.0 之前，归并线程的限速配置 <code>indices.store.throttle.max_bytes_per_sec</code> 是 20MB。5.0 开始，ES 对此作了大幅度改进，使用了 Lucene 的 CMS(ConcurrentMergeScheduler) 的 auto throttle 机制，正常情况下已经不再需要手动配置 <code>indices.store.throttle.max_bytes_per_sec</code> 了。
+归并线程的数目，ES 也是有所控制的。默认数目的计算公式是：<code>Math.min(3, Runtime.getRuntime().availableProcessors() / 2)</code>。即服务器 CPU 核数的一半大于 3 时，启动 3 个归并线程；否则启动跟 CPU 核数的一半相等的线程数。相信一般做 Elastic Stack 的服务器 CPU 核数都会在 6 个以上。所以一般来说就是 3 个归并线程。如果你确定自己磁盘性能跟不上，可以降低 <code>index.merge.scheduler.max_thread_count</code> 配置，免得 IO 情况更加恶化。</p>
+<h1 id="3-segment-merge-策略">
+  3. segment merge 策略
+  <a class="anchor" href="#3-segment-merge-%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<p>segment merge 线程是按照一定的运行策略来挑选 segment 进行归并的。主要有以下几条：</p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index.merge.policy.floor_segment</td>
+<td>默认 2MB，小于这个大小的 segment，优先被归并。</td>
+</tr>
+<tr>
+<td>index.merge.policy.max_merge_at_once</td>
+<td>默认一次最多归并 10 个 segment</td>
+</tr>
+<tr>
+<td>index.merge.policy.max_merge_at_once_explicit</td>
+<td>默认 forcemerge 时一次最多归并 30 个 segment。</td>
+</tr>
+<tr>
+<td>index.merge.policy.max_merged_segment</td>
+<td>默认 5 GB，大于这个大小的 segment，不用参与归并。forcemerge 除外。</td>
+</tr>
+</tbody>
+</table>
+<p>根据这段策略，其实我们也可以从另一个角度考虑如何减少 segment 归并的消耗以及提高响应的办法——加大 flush 间隔，尽量让每次新生成的 segment 本身大小就比较大。</p>
+<h1 id="4-forcemerge">
+  4. forcemerge
+  <a class="anchor" href="#4-forcemerge">#</a>
+</h1>
+<p>既然默认的最大 segment 大小是 5GB。那么一个比较庞大的数据索引，就必然会有为数不少的 segment 永远存在，这对文件句柄，内存等资源都是极大的浪费。但是由于归并任务太消耗资源，所以一般不太选择加大 <code>index.merge.policy.max_merged_segment</code> 配置，而是在负载较低的时间段，通过 forcemerge 接口，强制归并 segment。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -XPOST http://127.0.0.1:9200/logstash-2015-06.10/_forcemerge?max_num_segments<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>由于 forcemerge 线程对资源的消耗比普通的归并线程大得多，所以，绝对不建议对还在写入数据的热索引执行这个操作。这个问题对于 Elastic Stack 来说非常好办，一般索引都是按天分割的。</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-segment-merge-的流程">1. segment merge 的流程</a></li>
+    <li><a href="#2-segment-merge-配置">2. segment merge 配置</a></li>
+    <li><a href="#3-segment-merge-策略">3. segment merge 策略</a></li>
+    <li><a href="#4-forcemerge">4. forcemerge</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

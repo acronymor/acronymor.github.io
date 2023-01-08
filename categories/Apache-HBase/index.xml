@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Apache HBase on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Apache-HBase/</link>
+    <description>Recent content in Apache HBase on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 27 Apr 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Apache-HBase/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch16-HBase 之 Scan</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch16/</link>
+      <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch16/</guid>
+      <description>&lt;p&gt;HBase Scan&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch15-HBase 之 Put</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch15/</link>
+      <pubDate>Thu, 15 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch15/</guid>
+      <description>&lt;p&gt;HBase Put&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-HBase 之 CreateTable</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch14/</link>
+      <pubDate>Fri, 09 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch14/</guid>
+      <description>&lt;p&gt;HBase CreateTable&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch13-HBase 之 RPC</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch13/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch13/</guid>
+      <description>&lt;p&gt;HBase RPC&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-HBase 之 Region Split</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch12/</link>
+      <pubDate>Wed, 24 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch12/</guid>
+      <description>&lt;p&gt;HBase Region Split 整个过程可以分为如下几步，&lt;code&gt;触发 Region Split&lt;/code&gt;，&lt;code&gt;寻找 SplitPoint&lt;/code&gt;，&lt;code&gt;拆分 Region&lt;/code&gt;，&lt;code&gt;等待 major compaction 删除旧的 Region&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-HBase 之 Region Compaction</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch11/</link>
+      <pubDate>Sun, 21 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch11/</guid>
+      <description>&lt;p&gt;HBase Region Compaction&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-HBase 之 Procedure v2</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch10/</link>
+      <pubDate>Wed, 17 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch10/</guid>
+      <description>&lt;p&gt;HBase Procedure V2&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-HBase 之 Procedure v2</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch09/</link>
+      <pubDate>Sun, 07 Mar 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch09/</guid>
+      <description>&lt;p&gt;HBase Procedure V2 其主要目标是提供多步执行的事务能力，跨多节点的通知机制，长时间 Procedure 运行的协同机制。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-HBase 之 事务</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch08/</link>
+      <pubDate>Thu, 19 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch08/</guid>
+      <description>&lt;p&gt;HBase 事务&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-HBase 之 Cache</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch07/</link>
+      <pubDate>Sun, 15 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch07/</guid>
+      <description>&lt;p&gt;HBase 相关的 Cache&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-HBase 之 StoreFile</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch06/</link>
+      <pubDate>Tue, 10 Nov 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch06/</guid>
+      <description>&lt;p&gt;HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-HBase 之 MemStore</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch05/</link>
+      <pubDate>Fri, 30 Oct 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch05/</guid>
+      <description>&lt;p&gt;HBase memstore 也被称为写缓存，优化大概可以分为三个阶段，其中每一种都是在上一次的基础上进行不断优化得到。memstore 最底层的数据结构都是 &lt;code&gt;skiplist&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-HBase 之 HLog</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch04/</link>
+      <pubDate>Tue, 23 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch04/</guid>
+      <description>&lt;p&gt;Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-HBase 之 CatalogTables</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch03/</link>
+      <pubDate>Sat, 20 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch03/</guid>
+      <description>&lt;p&gt;HBase Catalog Table&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-HBase 之数据模型</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch02/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch02/</guid>
+      <description>&lt;p&gt;逻辑上，HBase 的数据模型同关系型数据库很类似，数据存储在一张表中，有行有列。但从 HBase 的底层物理存储结构 (K-V) 来看，HBase 更像是一个 &lt;code&gt;multi-dimensional map&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-HBase 介绍</title>
+      <link>https://acronymor.com/posts/apache-hbase/ch01/</link>
+      <pubDate>Sat, 13 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-hbase/ch01/</guid>
+      <description>&lt;p&gt;HBase 是一种分布式、可扩展、支持海量数据存储的 NoSQL 数据库。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/MySQL/</link>
+    <description>Recent content in MySQL on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/MySQL/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch07-MySQL 之 复制技术</title>
+      <link>https://acronymor.com/posts/mysql/ch07/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
+      <description>&lt;p&gt;我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-MySQL 之 存储结构</title>
+      <link>https://acronymor.com/posts/mysql/ch04/</link>
+      <pubDate>Sun, 31 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch04/</guid>
+      <description> 参考文献 # MySQL 之 InnoDB 表空间 MySQL 之数据页结构 </description>
+    </item>
+    
+    <item>
+      <title>Ch03-MySQL 之 内存结构</title>
+      <link>https://acronymor.com/posts/mysql/ch03/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch03/</guid>
+      <description>&lt;p&gt;Buffer Pool&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-MySQL 之 事务</title>
+      <link>https://acronymor.com/posts/mysql/ch06/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
+      <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-MySQL 之 索引</title>
+      <link>https://acronymor.com/posts/mysql/ch05/</link>
+      <pubDate>Sat, 31 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch05/</guid>
+      <description>&lt;p&gt;InnoDB 索引选择&lt;strong&gt;B+树&lt;/strong&gt;作为其内存数据结构，选择&lt;strong&gt;聚簇索引&lt;/strong&gt;作为数据存储方式。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-MySQL 之 InnoDB 内存结构和存储结构</title>
+      <link>https://acronymor.com/posts/mysql/ch02/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch02/</guid>
+      <description>&lt;p&gt;InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-MySQL 介绍</title>
+      <link>https://acronymor.com/posts/mysql/ch01/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch01/</guid>
+      <description>&lt;p&gt;MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Kafka 介绍" />
+<meta property="og:description" content="Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kafka/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-06-20T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-06-20T00:00:00+08:00" />
+<title>Ch01-Kafka 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Kafka 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-术语介绍">2. 术语介绍</a></li>
+    <li><a href="#3-架构介绍">3. 架构介绍</a>
+      <ul>
+        <li><a href="#31-整体架构">3.1 整体架构</a></li>
+        <li><a href="#32-topic-架构">3.2 Topic 架构</a></li>
+        <li><a href="#33-zk-节点组织">3.3 ZK 节点组织</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kafka/ch01/">Ch01-Kafka 介绍</a>
+  </h1>
+  
+  <h5>June 20, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kafka/">kafka</a>
+  </div>
+  
+
+
+
+<p>Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://kafka.apache.org/">https://kafka.apache.org/</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://kafka.apache.org/downloads">https://kafka.apache.org/downloads</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-术语介绍">
+  2. 术语介绍
+  <a class="anchor" href="#2-%e6%9c%af%e8%af%ad%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>术语</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broker</td>
+<td>一台 Kafka 机器就是一个 broker。一个集群由多个 broker 组成。一个 broker 可以容纳多个 topic。</td>
+</tr>
+<tr>
+<td>Producer</td>
+<td>消息生产者，即向 Kafka Broker 发消息的客户端</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>消息消费者，从 Kafka Broker 取消息的客户端</td>
+</tr>
+<tr>
+<td>Consumer Group</td>
+<td>消费者组，由多个 consumer 组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个组内 消费者消费；消费者组之间互不影响。所有的消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。</td>
+</tr>
+<tr>
+<td>Topic</td>
+<td></td>
+</tr>
+<tr>
+<td>Partition</td>
+<td>一个 topic 可以分为多个 partition，每个 partition 是一个有序的队列。</td>
+</tr>
+<tr>
+<td>Replica</td>
+<td>一个 topic 的每个分区都有若干个副本，一个 leader 和若干个 follower。</td>
+</tr>
+<tr>
+<td>Leader</td>
+<td>每个 partition 多个副本的“主”，生产者发送数据的对象，以及消费者消费数据的对象都是 Leader（负责读写）</td>
+</tr>
+<tr>
+<td>Follower</td>
+<td>每个 partition 多个副本中的“从”，实时从 Leader 中同步数据，保持和 leader 数据的同步。leader 发生故障时，某个 follower 会成为新的 leader（只负责备份）。</td>
+</tr>
+<tr>
+<td>Offset</td>
+<td>每一条数据都有一个 offset，是数据在该 partition 中的唯一标识（其实就是消息的索引号），各个 consumer 会保存其消费到的 offset 位置，这样下次可以从该 offset 位置开始继续消费</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-架构介绍">
+  3. 架构介绍
+  <a class="anchor" href="#3-%e6%9e%b6%e6%9e%84%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<h2 id="31-整体架构">
+  3.1 整体架构
+  <a class="anchor" href="#31-%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84">#</a>
+</h2>
+<p>Kafka 主要由 Broker，Producer，Consumer 组成，用户可以使用 Producer 和 Consumer 插入和查询数据。Broker 是 Kafka 的核心服务部分，它将所有的数据组织起来，以 Topic 这个概念对外提供服务。</p>
+<blockquote>
+<p>Kafka 2.8 引入了 KRaft 机制来摆脱对 ZooKeeper 的依赖，不过截止 2022 年 4 月份，仍然没有达到生产环境使用标准。</p>
+</blockquote>
+<p><img src="kafka-arch.png" alt="ch01" /></p>
+<h2 id="32-topic-架构">
+  3.2 Topic 架构
+  <a class="anchor" href="#32-topic-%e6%9e%b6%e6%9e%84">#</a>
+</h2>
+<p>​topic 和 partition 是逻辑上的概念，partition 对应的 replica 则是物理概念，一个 replica 对应一个 log 文件，producer 每次生产的消息都会追加到该文件的末尾。
+​由于每次生产者生产消息都会追加到 log 文件中，为了防止日志文件过大影响消息的查找定位效率，kafka 引入了分片和索引的机制，将一个 replica 又分为若干个 segment，每个 segment 包含一个存储数据的 log 文件和查找的 index 索引文件，这些文件位于一个文件夹下，文件夹的命名规则为 <code>topic 名称 + 分区序号</code>。</p>
+<blockquote>
+<p>在 Kafka 中限定 replica 的数量不能大于 broker。</p>
+</blockquote>
+<p><img src="kafka-topic.png" alt="ch01" /></p>
+<h2 id="33-zk-节点组织">
+  3.3 ZK 节点组织
+  <a class="anchor" href="#33-zk-%e8%8a%82%e7%82%b9%e7%bb%84%e7%bb%87">#</a>
+</h2>
+<p><img src="kafka-zookeeper.png" alt="ch01" /></p>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/103249714">Kafka 概述：深入理解架构</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/2091555">图说 Kafka 基本概念</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-术语介绍">2. 术语介绍</a></li>
+    <li><a href="#3-架构介绍">3. 架构介绍</a>
+      <ul>
+        <li><a href="#31-整体架构">3.1 整体架构</a></li>
+        <li><a href="#32-topic-架构">3.2 Topic 架构</a></li>
+        <li><a href="#33-zk-节点组织">3.3 ZK 节点组织</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

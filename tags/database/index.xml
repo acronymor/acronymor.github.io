@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>database on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/database/</link>
+    <description>Recent content in database on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 03 Jan 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch04-执行模型</title>
+      <link>https://acronymor.com/posts/database/ch04/</link>
+      <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-CBO</title>
+      <link>https://acronymor.com/posts/database/ch03/</link>
+      <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-RBO</title>
+      <link>https://acronymor.com/posts/database/ch02/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-事务</title>
+      <link>https://acronymor.com/posts/database/ch01/</link>
+      <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/database/ch01/</guid>
+      <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

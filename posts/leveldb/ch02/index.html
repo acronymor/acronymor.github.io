@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="LevelDB 架构">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-LevelDB 架构" />
+<meta property="og:description" content="LevelDB 架构" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/leveldb/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-05T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-05-05T00:00:00+08:00" />
+<title>Ch02-LevelDB 架构 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-LevelDB 架构</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原理架构">1. 原理架构</a></li>
+    <li><a href="#2-常见功能">2. 常见功能</a></li>
+    <li><a href="#3-代码组织">3. 代码组织</a></li>
+    <li><a href="#4-文件组织">4. 文件组织</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/leveldb/ch02/">Ch02-LevelDB 架构</a>
+  </h1>
+  
+  <h5>May 5, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+<p>LevelDB 架构</p>
+<h1 id="1-原理架构">
+  1. 原理架构
+  <a class="anchor" href="#1-%e5%8e%9f%e7%90%86%e6%9e%b6%e6%9e%84">#</a>
+</h1>
+<p><img src="leveldb-arch.jpg" alt="leveldb-arch" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>组件名称</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MemTable</td>
+<td></td>
+</tr>
+<tr>
+<td>SSTable</td>
+<td>全称 Sorted String Table，按照 key 值将数据顺序存储在磁盘上。</td>
+</tr>
+<tr>
+<td>WAL</td>
+<td>保证可靠写入以及异常恢复。</td>
+</tr>
+<tr>
+<td>MANIFEST</td>
+<td>保存各种元数据，比如当前数据有哪些 SSTable，这些 SSTable 属于哪一层，每一个 SSTable 的键范围和文件大小等信息。由 CURRENT 来指向目前使用的是哪个 MANIFEST 文件。</td>
+</tr>
+<tr>
+<td>TableCache</td>
+<td>用于缓存 SSTable 的文件描述符、索引和 filter</td>
+</tr>
+<tr>
+<td>BlockCache</td>
+<td>用于缓存 SSTable Block 的数据</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-常见功能">
+  2. 常见功能
+  <a class="anchor" href="#2-%e5%b8%b8%e8%a7%81%e5%8a%9f%e8%83%bd">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>功能名称</strong></th>
+<th><strong>配置项</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comparator</td>
+<td>options.comparator</td>
+<td>比较 Key 的大小</td>
+</tr>
+<tr>
+<td>Sync</td>
+<td>options.sync</td>
+<td>同步写入 SSTable</td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td>options.snapshot</td>
+<td></td>
+</tr>
+<tr>
+<td>压缩</td>
+<td>options.compression</td>
+<td></td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>options.block_cache</td>
+<td>默认使用 LRU 算法</td>
+</tr>
+<tr>
+<td>布隆过滤器</td>
+<td>options.filter_policy</td>
+<td></td>
+</tr>
+<tr>
+<td>数据校验</td>
+<td>options.paranoid_checks</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-代码组织">
+  3. 代码组织
+  <a class="anchor" href="#3-%e4%bb%a3%e7%a0%81%e7%bb%84%e7%bb%87">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── db
+</span></span><span style="display:flex;"><span>│   ├── ···
+</span></span><span style="display:flex;"><span>│   ├── db_impl.h
+</span></span><span style="display:flex;"><span>│   └── db_impl.cc  // db 相关接口实现
+</span></span><span style="display:flex;"><span>├── table     // table 相关操作
+</span></span><span style="display:flex;"><span>│   ├── ···
+</span></span><span style="display:flex;"><span>│   ├── table_builder.cc
+</span></span><span style="display:flex;"><span>│   └── table.cc
+</span></span><span style="display:flex;"><span>├── include   // LevelDB 相关接口接口
+</span></span><span style="display:flex;"><span>│   └── leveldb
+</span></span><span style="display:flex;"><span>│       ├── ···
+</span></span><span style="display:flex;"><span>│       ├── c.h
+</span></span><span style="display:flex;"><span>│       ├── comparator.h
+</span></span><span style="display:flex;"><span>│       └── db.h
+</span></span><span style="display:flex;"><span>├── port      // OS 相关接口
+</span></span><span style="display:flex;"><span>│   ├── port.h
+</span></span><span style="display:flex;"><span>│   └── port_stdcxx.h
+</span></span><span style="display:flex;"><span>├── util      // 工具库
+</span></span><span style="display:flex;"><span>│   ├── bloom.cc
+</span></span><span style="display:flex;"><span>│   ├── arena.cc
+</span></span><span style="display:flex;"><span>│   └── arena.h
+</span></span><span style="display:flex;"><span>├── helpers
+</span></span><span style="display:flex;"><span>│   └── memenv
+</span></span><span style="display:flex;"><span>├── doc
+</span></span><span style="display:flex;"><span>├── issues
+</span></span><span style="display:flex;"><span>├── benchmarks
+</span></span><span style="display:flex;"><span>├── cmake
+</span></span><span style="display:flex;"><span>└── third_pary
+</span></span></code></pre></div><h1 id="4-文件组织">
+  4. 文件组织
+  <a class="anchor" href="#4-%e6%96%87%e4%bb%b6%e7%bb%84%e7%bb%87">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── 000016.ldb
+</span></span><span style="display:flex;"><span>├── 000018.ldb  // SSTABLE 文件
+</span></span><span style="display:flex;"><span>├── 000019.log  // WAL 文件
+</span></span><span style="display:flex;"><span>├── LOCK        // 进程锁文件，防止其他进程使用
+</span></span><span style="display:flex;"><span>├── LOG         // 日志文件
+</span></span><span style="display:flex;"><span>├── LOG.old
+</span></span><span style="display:flex;"><span>├── CURRENT     // 保存当前正在使用的 MANIFEST 文件名称
+</span></span><span style="display:flex;"><span>└── MANIFEST-000017  // 保存元数据信息
+</span></span></code></pre></div><h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.jianshu.com/p/750c7ea9b88c">LevelDB 完全解析（0）：基本原理和整体架构</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原理架构">1. 原理架构</a></li>
+    <li><a href="#2-常见功能">2. 常见功能</a></li>
+    <li><a href="#3-代码组织">3. 代码组织</a></li>
+    <li><a href="#4-文件组织">4. 文件组织</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

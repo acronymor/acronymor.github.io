@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Kafka 生产消费流程" />
+<meta property="og:description" content="Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kafka/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-06-22T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-06-22T00:00:00+08:00" />
+<title>Ch02-Kafka 生产消费流程 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Kafka 生产消费流程</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-生产者">1. 生产者</a>
+      <ul>
+        <li><a href="#11-生产流程">1.1 生产流程</a></li>
+        <li><a href="#12-消息发送模式">1.2 消息发送模式</a></li>
+        <li><a href="#13-acks">1.3 Acks</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-消费者">2. 消费者</a>
+      <ul>
+        <li><a href="#21-消费流程">2.1 消费流程</a></li>
+        <li><a href="#22-分区分配策略">2.2 分区分配策略</a></li>
+        <li><a href="#23-分区分配再均衡">2.3 分区分配再均衡</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kafka/ch02/">Ch02-Kafka 生产消费流程</a>
+  </h1>
+  
+  <h5>June 22, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kafka/">kafka</a>
+  </div>
+  
+
+
+
+<p>Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。</p>
+<h1 id="1-生产者">
+  1. 生产者
+  <a class="anchor" href="#1-%e7%94%9f%e4%ba%a7%e8%80%85">#</a>
+</h1>
+<h2 id="11-生产流程">
+  1.1 生产流程
+  <a class="anchor" href="#11-%e7%94%9f%e4%ba%a7%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>在生产端主要有两个线程：main 和 sender，两者通过共享内存 RecordAccumulator 通信。</p>
+<p><img src="kafka-producer.png" alt="kafka-producer" /></p>
+<ol>
+<li>KafkaProducer 创建消息；</li>
+<li>生产者拦截器在消息发送之前做一些准备工作，比如过滤不符合要求的消息、修改消息的内容等；</li>
+<li>序列化器将消息转换成字节数组的形式；</li>
+<li>分区器计算该消息的目标分区，然后数据会存储在 RecordAccumulator 中；</li>
+<li>发送线程获取数据进行发送；</li>
+<li>创建具体的请求；</li>
+<li>如果请求过多，会将部分请求缓存起来；</li>
+<li>将准备好的请求进行发送；</li>
+<li>发送到 kafka 集群；</li>
+<li>接收响应；</li>
+<li>清理数据。</li>
+</ol>
+<h2 id="12-消息发送模式">
+  1.2 消息发送模式
+  <a class="anchor" href="#12-%e6%b6%88%e6%81%af%e5%8f%91%e9%80%81%e6%a8%a1%e5%bc%8f">#</a>
+</h2>
+<p>这种模式并不是一种配置参数，而是一种代码处理方式。</p>
+<table>
+<thead>
+<tr>
+<th><strong>发送模式</strong></th>
+<th><strong>说明</strong></th>
+<th><strong>代码示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发后即忘 (fire and forget)</td>
+<td>只管发送不管结果性能最高，可靠性也最差</td>
+<td>producer.send(record)</td>
+</tr>
+<tr>
+<td>同步 (sync)</td>
+<td>等集群确认消息写入成功再返回可靠性最高，性能差很多</td>
+<td>Future<!-- raw HTML omitted --> f = producer.send(record);T meta = f.get();</td>
+</tr>
+<tr>
+<td>异步 (async)</td>
+<td>指定一个 callback，kafka 返回响应后调用来实现异步发送的确认</td>
+<td>producer.send(record, new Callback() {}</td>
+</tr>
+</tbody>
+</table>
+<p>与之有一个容易混淆的参数 producer.type，它表示消息发送到 broker 之后，要不要调用 flush 直接刷入到磁盘，如果设置为 sync，则表示 broker 接收到消息后直接刷盘。而 async 则表示接收到消息后不刷盘，过段时间后异步刷入。</p>
+<h2 id="13-acks">
+  1.3 Acks
+  <a class="anchor" href="#13-acks">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>acks</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>把消息发送出去，那么就认为消息已经写入成功。</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Leader 成功写入即表示写入成功。</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>Leader + Replica 全部成功写入即表示写入成功。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-消费者">
+  2. 消费者
+  <a class="anchor" href="#2-%e6%b6%88%e8%b4%b9%e8%80%85">#</a>
+</h1>
+<h2 id="21-消费流程">
+  2.1 消费流程
+  <a class="anchor" href="#21-%e6%b6%88%e8%b4%b9%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p>kafka consumer 采用 pull（拉）模式从 broker 中读取数据。kafka 中的消息都有一个 offset 唯一标识，对于消费者来说，每消费完一个消息需要通知 kafka，这样下次拉取消息的时候才不会拉到已消费的数据（不考虑重复消费的情况）。这个消费者已消费的消息位置就是消费位移，这个 offset 被保存在名为 <code>__consumer_offsets</code> 的 topic 中。</p>
+<p>与消费组相关有两个组件，一个是消费者客户端的 ConsumerCoordinator（线程），一个是 Kafka Broker 服务端的 GroupCoordinator（线程），ConsumerCoordinator 负责与 GroupCoordinator 通信确定 consumer leader，进而确定消费方案，然后由 GroupCoordinator 将消费方案下发到每个 consumer，各个 consumer 按照对应的消费方案进行消费。</p>
+<p><img src="kafka-consumer.png" alt="kafka-consumer" /></p>
+<ol>
+<li>每个 ConsumerCoordinator 通过对 groupid 取 hash 计算得到指定的 GroupCoordinator；</li>
+<li>然后 GroupCoordinator 从一个 consumer group 中取出一个 consumer 作为 leader；</li>
+<li>GroupCoordinator 把 consumer group 情况发送给这个 consumer leader；</li>
+<li>接着 consumer leader 会负责制定消费方案；</li>
+<li>通过 SyncGroup 发送给 GroupCoordinator；</li>
+<li>接着 GroupCoordinator 就把消费方案下发给所有的 consumer，他们会从指定的分区的 leader broker 开始进行 socket 连接和进行消息的消费；</li>
+</ol>
+<h2 id="22-分区分配策略">
+  2.2 分区分配策略
+  <a class="anchor" href="#22-%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<p>一个 consumer group 中有多个 consumer，一个 topic 有多个 partition，所以必然会涉及到 partition 的分配问题，即确定哪个 partition 由哪个 consumer 来消费。</p>
+<p><img src="kafka-consumer-rebalance.png" alt="kafka-consumer-rebalance" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>分区分配策略</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Range</td>
+<td>按照消费者的总数和分区总数进行整除运算来分配，不过是按照主题粒度的，所以可能会不均匀</td>
+</tr>
+<tr>
+<td>RoundRobin</td>
+<td>将消费组内所有消费者及消费者订阅的所有主题的分区按照字典序排序，然后通过轮询方式这个将分区一次分配给每个消费者。</td>
+</tr>
+<tr>
+<td>Sticky</td>
+<td>这个策略比较复杂，目的是分区的分配尽可能均匀，以及分配要尽可能和上次保持一致。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-分区分配再均衡">
+  2.3 分区分配再均衡
+  <a class="anchor" href="#23-%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d%e5%86%8d%e5%9d%87%e8%a1%a1">#</a>
+</h2>
+<p>以下三种现象会使 partition 的所有权在 consumer 之间转移，这样的行为叫作再均衡。</p>
+<ul>
+<li>消费者组中新添加消费者读取到原本是其他消费者读取的消息。</li>
+<li>消费者关闭或崩溃之后离开群组，原本由他读取的 partition 将由群组里其他消费者读取。</li>
+<li>当向一个 Topic 添加新的 partition，会发生 partition 在消费者中的重新分配。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>优缺点</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优点</td>
+<td>给消费者组带来了高可用性和伸缩性</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>再均衡期间消费者无法读取消息，整个群组有一小段时间不可用 partition 被重新分配给一个消费者时，消费者当前的读取状态会丢失，有可能还需要去刷新缓存，在它重新恢复状态之前会拖慢应用程序。因此需要进行安全的再均衡和避免不必要的再均衡</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-参考文献">
+  3 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<p><a href="https://www.jianshu.com/p/80528bc27ad5">kafka——消费者原理解析</a></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-生产者">1. 生产者</a>
+      <ul>
+        <li><a href="#11-生产流程">1.1 生产流程</a></li>
+        <li><a href="#12-消息发送模式">1.2 消息发送模式</a></li>
+        <li><a href="#13-acks">1.3 Acks</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-消费者">2. 消费者</a>
+      <ul>
+        <li><a href="#21-消费流程">2.1 消费流程</a></li>
+        <li><a href="#22-分区分配策略">2.2 分区分配策略</a></li>
+        <li><a href="#23-分区分配再均衡">2.3 分区分配再均衡</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-参考文献">3 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

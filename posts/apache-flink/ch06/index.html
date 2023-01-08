@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Flink 容错机制">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-Flink 之 容错机制" />
+<meta property="og:description" content="Flink 容错机制" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-flink/ch06/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-13T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-12-13T00:00:00+08:00" />
+<title>Ch06-Flink 之 容错机制 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch06-Flink 之 容错机制</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-作业容错">1. 作业容错</a>
+      <ul>
+        <li><a href="#11-task-failover-策略">1.1 Task Failover 策略</a></li>
+        <li><a href="#12-job-restart-策略">1.2 Job Restart 策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-守护进程容错">2. 守护进程容错</a>
+      <ul>
+        <li><a href="#21-jobmanager-容错">2.1 JobManager 容错</a>
+          <ul>
+            <li><a href="#211-resourcemanager-容错">2.1.1 ResourceManager 容错</a></li>
+            <li><a href="#212-jobmaster-容错">2.1.2 JobMaster 容错</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-taskmanager-容错">2.2 TaskManager 容错</a></li>
+        <li><a href="#23-并发故障">2.3 并发故障</a></li>
+      </ul>
+    </li>
+    <li><a href="#24-参考文献">2.4 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-flink/ch06/">Ch06-Flink 之 容错机制</a>
+  </h1>
+  
+  <h5>December 13, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Flink/">Apache Flink</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/flink/">flink</a>
+  </div>
+  
+
+
+
+<p>Flink 容错机制</p>
+<h1 id="1-作业容错">
+  1. 作业容错
+  <a class="anchor" href="#1-%e4%bd%9c%e4%b8%9a%e5%ae%b9%e9%94%99">#</a>
+</h1>
+<h2 id="11-task-failover-策略">
+  1.1 Task Failover 策略
+  <a class="anchor" href="#11-task-failover-%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<ul>
+<li>RestartAll</li>
+<li>RestartIndividualStrategy</li>
+<li>RestartPipelinedRegionStrategy</li>
+</ul>
+<h2 id="12-job-restart-策略">
+  1.2 Job Restart 策略
+  <a class="anchor" href="#12-job-restart-%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<ul>
+<li>FixedDelayRestartStrategy</li>
+<li>FailureRateRestartStrategy</li>
+<li>NoRestartStrategy</li>
+</ul>
+<h1 id="2-守护进程容错">
+  2. 守护进程容错
+  <a class="anchor" href="#2-%e5%ae%88%e6%8a%a4%e8%bf%9b%e7%a8%8b%e5%ae%b9%e9%94%99">#</a>
+</h1>
+<h2 id="21-jobmanager-容错">
+  2.1 JobManager 容错
+  <a class="anchor" href="#21-jobmanager-%e5%ae%b9%e9%94%99">#</a>
+</h2>
+<h3 id="211-resourcemanager-容错">
+  2.1.1 ResourceManager 容错
+  <a class="anchor" href="#211-resourcemanager-%e5%ae%b9%e9%94%99">#</a>
+</h3>
+<h3 id="212-jobmaster-容错">
+  2.1.2 JobMaster 容错
+  <a class="anchor" href="#212-jobmaster-%e5%ae%b9%e9%94%99">#</a>
+</h3>
+<h2 id="22-taskmanager-容错">
+  2.2 TaskManager 容错
+  <a class="anchor" href="#22-taskmanager-%e5%ae%b9%e9%94%99">#</a>
+</h2>
+<h2 id="23-并发故障">
+  2.3 并发故障
+  <a class="anchor" href="#23-%e5%b9%b6%e5%8f%91%e6%95%85%e9%9a%9c">#</a>
+</h2>
+<h1 id="24-参考文献">
+  2.4 参考文献
+  <a class="anchor" href="#24-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="http://www.whitewood.me/2019/07/28/%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3-Flink-%e5%ae%b9%e9%94%99%e6%9c%ba%e5%88%b6/">深入理解 Flink 容错机制</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-作业容错">1. 作业容错</a>
+      <ul>
+        <li><a href="#11-task-failover-策略">1.1 Task Failover 策略</a></li>
+        <li><a href="#12-job-restart-策略">1.2 Job Restart 策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-守护进程容错">2. 守护进程容错</a>
+      <ul>
+        <li><a href="#21-jobmanager-容错">2.1 JobManager 容错</a>
+          <ul>
+            <li><a href="#211-resourcemanager-容错">2.1.1 ResourceManager 容错</a></li>
+            <li><a href="#212-jobmaster-容错">2.1.2 JobMaster 容错</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-taskmanager-容错">2.2 TaskManager 容错</a></li>
+        <li><a href="#23-并发故障">2.3 并发故障</a></li>
+      </ul>
+    </li>
+    <li><a href="#24-参考文献">2.4 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

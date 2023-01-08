@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="elasticsearch" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://acronymor.com/tags/elasticsearch/" />
+<title>elasticsearch | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/tags/elasticsearch/index.xml" title="acronymor's blog" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>elasticsearch</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Database/">Database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Elasticsearch/">Elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-HBase/">Apache HBase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Flink/">Apache Flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Antlr4/">Antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Spark/">Apache Spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hive/">Apache Hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/database/">database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/elasticsearch/">elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kylin/">kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/calcite/">calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hbase/">hbase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/flink/">flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/antlr4/">antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/spark/">spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kafka/">kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hive/">hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/zookeeper/">zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hadoop/">hadoop</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch10/">Ch10-Elasticsearch 之 选举</a>
+    </h2>
+    
+  <h5>September 1, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 之 选举</p>
+        <a href="/posts/elasticsearch/ch10/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch09/">Ch09-Elasticsearch 之 threadpool</a>
+    </h2>
+    
+  <h5>August 30, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 之线程池。</p>
+        <a href="/posts/elasticsearch/ch09/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch08/">Ch08-Elasticsearch 之 Http</a>
+    </h2>
+    
+  <h5>August 25, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 之 Http</p>
+        <a href="/posts/elasticsearch/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch06/">Ch06-Elasticsearch 之 Update</a>
+    </h2>
+    
+  <h5>August 21, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>更新操作也是写操作。Elasticsearch 在创建新文档时，Elasticsearch 将为该文档分配一个版本号。对文档的每次更改都会产生一个新的版本号。当执行更新时，旧版本在.del 文件中被标记为已删除，并且新版本在新的分段中编入索引。旧版本可能仍然与搜索查询匹配，但是从结果中将其过滤掉。</p>
+        <a href="/posts/elasticsearch/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch07/">Ch07-Elasticsearch 之 Segment Merge</a>
+    </h2>
+    
+  <h5>August 21, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。</p>
+        <a href="/posts/elasticsearch/ch07/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch05/">Ch05-Elasticsearch 之 Delete</a>
+    </h2>
+    
+  <h5>August 20, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>删除操作是也是写操作。</p>
+        <a href="/posts/elasticsearch/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch04/">Ch04-Elasticsearch 之 Search</a>
+    </h2>
+    
+  <h5>August 15, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 的 Search 操作包含两个阶段，一个是 QueryPhase，另一个是 FetchPhase。QueryPhase 在初始查询阶段，查询会广播到索引中每一个分片副本 (主分片或副分片)。每个分片在本地执行搜索并构建一个匹配文档的优先队列（优先队列是一个存有 topN 匹配文档的有序列表，即 doc id。优先队列大小为分页参数 from + size），注意该队列中并没有取具体的数据。FetchPhase 会根据获取到的 doc id 向对应的节点依次发送 GET 请求，获取结果，然后合并，聚合，排序最终返回结果。</p>
+        <a href="/posts/elasticsearch/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch03/">Ch03-Elasticsearch 之 Put</a>
+    </h2>
+    
+  <h5>August 7, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 之 Put，不过与其说是 Elasticsearch 的操作流程，倒不如说是单个 Lucene 索引操作流程。</p>
+        <a href="/posts/elasticsearch/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch02/">Ch02-Elasticsearch 之 Shard</a>
+    </h2>
+    
+  <h5>August 3, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。</p>
+        <a href="/posts/elasticsearch/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/elasticsearch/ch01/">Ch01-Elasticsearch 介绍</a>
+    </h2>
+    
+  <h5>August 1, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+
+    <p><p>Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。</p>
+        <a href="/posts/elasticsearch/ch01/">...</a>
+      
+    </p>
+  </article>
+  
+
+  
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Database/">Database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Elasticsearch/">Elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-HBase/">Apache HBase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Flink/">Apache Flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Antlr4/">Antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Spark/">Apache Spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hive/">Apache Hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/database/">database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/elasticsearch/">elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kylin/">kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/calcite/">calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hbase/">hbase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/flink/">flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/antlr4/">antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/spark/">spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kafka/">kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hive/">hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/zookeeper/">zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hadoop/">hadoop</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Elasticsearch 之 Shard" />
+<meta property="og:description" content="Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/elasticsearch/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-03T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-03T00:00:00+08:00" />
+<title>Ch02-Elasticsearch 之 Shard | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Elasticsearch 之 Shard</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-shard-分配控制">1. Shard 分配控制</a></li>
+    <li><a href="#2-shard-路由计算">2. Shard 路由计算</a></li>
+    <li><a href="#3-shard-设置">3. Shard 设置</a></li>
+    <li><a href="#4-shard-查询">4. Shard 查询</a></li>
+    <li><a href="#5-replica">5. Replica</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/elasticsearch/ch02/">Ch02-Elasticsearch 之 Shard</a>
+  </h1>
+  
+  <h5>August 3, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/elasticsearch/">elasticsearch</a>
+  </div>
+  
+
+
+
+<p>Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。</p>
+<p>分片分为主分片和副本分片，一般情况一个主分片有多个副本分片。主分片负责处理写入请求和存储数据，副本分片只负责存储数据，是主分片的拷贝，文档会存储在具体的某个主分片和副本分片上。</p>
+<h1 id="1-shard-分配控制">
+  1. Shard 分配控制
+  <a class="anchor" href="#1-shard-%e5%88%86%e9%85%8d%e6%8e%a7%e5%88%b6">#</a>
+</h1>
+<p><img src="es-shard.png" alt="es-shard" /></p>
+<p>某个 shard 分配在哪个节点上，一般来说，是由 Elasticsearch 自动决定的。通常新索引生成，索引的删除，新增副本分片，节点增减引发的数据均衡等操作会触发 Shard 的分配操作，也可以通过 <code>cluster.routing.allocation.*</code> 等参数进行精细控制。此外还提供了部分手动参数，用户可以通过其对 Shard 进行设置，<code>allocate_replica</code>，<code>allocate_stale_primary</code>，<code>allocate_empty_primary</code>，<code>move,cancel</code>。</p>
+<h1 id="2-shard-路由计算">
+  2. Shard 路由计算
+  <a class="anchor" href="#2-shard-%e8%b7%af%e7%94%b1%e8%ae%a1%e7%ae%97">#</a>
+</h1>
+<p>作为一个没有额外依赖的简单的分布式方案，ES 在这个问题上同样选择了一个非常简洁的处理方式，对任一条数据计算其对应分片的方式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>shard = hash(routing) % number_of_primary_shards
+</span></span></code></pre></div><p>每个数据都有一个 routing 参数，默认情况下，就使用其 _id 值。将其 _id 值计算哈希后，对索引的主分片数取余，就是数据实际应该存储到的分片 ID。
+由于取余这个计算，完全依赖于分母，所以导致 ES 索引有一个限制，索引的主分片数，不可以随意修改。因为一旦主分片数不一样，所以数据的存储位置计算结果都会发生改变，索引数据就完全不可读了。</p>
+<h1 id="3-shard-设置">
+  3. Shard 设置
+  <a class="anchor" href="#3-shard-%e8%ae%be%e7%bd%ae">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PUT indexName
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;settings&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;number_of_shards&#34;</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h1 id="4-shard-查询">
+  4. Shard 查询
+  <a class="anchor" href="#4-shard-%e6%9f%a5%e8%af%a2">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>参数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>randomizeacross shards</td>
+<td>随机选择分片查询数据，es 的默认方式</td>
+</tr>
+<tr>
+<td>_local</td>
+<td>优先在本地节点上的分片查询数据然后再去其他节点上的分片查询，本地节点没有 IO 问题但有可能造成负载不均问题。数据量是完整的。</td>
+</tr>
+<tr>
+<td>_primary</td>
+<td>只在主分片中查询不去副本查，一般数据完整。</td>
+</tr>
+<tr>
+<td>_primary_first</td>
+<td>优先在主分片中查，如果主分片挂了则去副本查，一般数据完整。</td>
+</tr>
+<tr>
+<td>_only_node</td>
+<td>只在指定 id 的节点中的分片中查询，数据可能不完整。</td>
+</tr>
+<tr>
+<td>_prefer_node</td>
+<td>优先在指定你给节点中查询，一般数据完整。</td>
+</tr>
+<tr>
+<td>_shards</td>
+<td>在指定分片中查询，数据可能不完整。</td>
+</tr>
+<tr>
+<td>_only_nodes</td>
+<td>可以自定义去指定的多个节点查询，es 不提供此方式需要改</td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-replica">
+  5. Replica
+  <a class="anchor" href="#5-replica">#</a>
+</h1>
+<p>在有副本配置的情况下，数据从发向 ES 节点，到接到 ES 节点响应返回，流向如下图所示。</p>
+<p><img src="es-replica.png" alt="es-replica" /></p>
+<ol>
+<li>客户端请求发送给 Node 1 节点，注意图中 Node 1 是 Master 节点，实际完全可以不是。</li>
+<li>Node 1 用数据的 _id 取余计算得到应该讲数据存储到 shard 0 上。通过 cluster state 信息发现 shard 0 的主分片已经分配到了 Node 3 上。Node 1 转发请求数据给 Node 3。</li>
+<li>Node 3 完成请求数据的索引过程，存入主分片 0。然后并行转发数据给分配有 shard 0 的副本分片的 Node 1 和 Node 2。当收到任一节点汇报副本分片数据写入成功，Node 3 即返回给初始的接收节点 Node 1，宣布数据写入成功。Node 1 返回成功响应给客户端。</li>
+</ol></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-shard-分配控制">1. Shard 分配控制</a></li>
+    <li><a href="#2-shard-路由计算">2. Shard 路由计算</a></li>
+    <li><a href="#3-shard-设置">3. Shard 设置</a></li>
+    <li><a href="#4-shard-查询">4. Shard 查询</a></li>
+    <li><a href="#5-replica">5. Replica</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-Flink 之 State" />
+<meta property="og:description" content="State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-flink/ch07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-20T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-12-20T00:00:00+08:00" />
+<title>Ch07-Flink 之 State | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch07-Flink 之 State</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-state">1. State</a>
+      <ul>
+        <li><a href="#11-managed-state-vs-raw-state">1.1 Managed State VS Raw State</a></li>
+        <li><a href="#12-keyed-state-vs-operator-state">1.2 Keyed State VS Operator State</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-state-backends">2. State Backends</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-flink/ch07/">Ch07-Flink 之 State</a>
+  </h1>
+  
+  <h5>December 20, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Flink/">Apache Flink</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/flink/">flink</a>
+  </div>
+  
+
+
+
+<p>State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质</p>
+<h1 id="1-state">
+  1. State
+  <a class="anchor" href="#1-state">#</a>
+</h1>
+<p>state 本质上有点像分布式缓存，用来存储 task/operator 的状态。</p>
+<p><img src="flink-state.png" alt="flink-state" /></p>
+<h2 id="11-managed-state-vs-raw-state">
+  1.1 Managed State VS Raw State
+  <a class="anchor" href="#11-managed-state-vs-raw-state">#</a>
+</h2>
+<p>Managed State 是 Flink 自动管理的 State，而 Raw State 是原生态 State。</p>
+<table>
+<thead>
+<tr>
+<th><strong>区分角度</strong></th>
+<th><strong>Managed State</strong></th>
+<th><strong>Raw State</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>从状态管理方式来说</td>
+<td>由 Flink Runtime 管理，自动存储，自动恢复，在内存管理上有优化</td>
+<td>Raw State 需要用户自己管理，需要自己序列化，Flink 不知道 State 中存入的数据是什么结构，只有用户自己知道，需要最终序列化为可存储的数据结构</td>
+</tr>
+<tr>
+<td>从状态数据结构来说</td>
+<td>支持已知的数据结构，如 Value、List、Map 等</td>
+<td>只支持字节数组，所有状态都要转换为二进制字节数组才可以</td>
+</tr>
+<tr>
+<td>从推荐使用场景来说</td>
+<td>大多数情况下均可使用</td>
+<td>比如需要自定义 Operator 时，推荐使用 Raw State。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-keyed-state-vs-operator-state">
+  1.2 Keyed State VS Operator State
+  <a class="anchor" href="#12-keyed-state-vs-operator-state">#</a>
+</h2>
+<p>Managed State 分为两种，一种是 Keyed State；另外一种是 Operator State(Non-Key State)。</p>
+<p>在 Flink Stream 模型中，Datastream 经过 keyBy 的操作可以变为 KeyedStream。在 Flink Stream 模型中，Datastream 经过 keyBy 的操作可以变为 KeyedStream。每个 Key 对应一个 State，即一个 Operator 实例处理多个 Key，访问相应的多个 State，并由此就衍生了 Keyed State。</p>
+<table>
+<thead>
+<tr>
+<th><strong>区分角度</strong></th>
+<th><strong>Keyed State</strong></th>
+<th><strong>Operator State</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>从使用方式来看</td>
+<td>只能用在 KeyedStream 的算子中，即在整个程序中没有 keyBy 的过程就没有办法使用 KeyedStream</td>
+<td>可以用于所有算子，相对于数据源有一个更好的匹配方式，常用于 Source</td>
+</tr>
+<tr>
+<td>从访问角度来看</td>
+<td>通过 RuntimeContext 访问，这需要 Operator 是一个 Rich Function</td>
+<td>需要自己实现 CheckpointedFunction 或 ListCheckpointed 接口</td>
+</tr>
+<tr>
+<td>从数据结构来看</td>
+<td>支持较多的数据结构</td>
+<td>支持较少的数据结构</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意：
+Keyed State 跟 KeyedStream 绑定（ValueState, MapState, , ListState, ReducingState, AggregatingState）
+Operator State 由 Operator 自行管理 (ListState, UnionListState, BroadcastState)</p>
+</blockquote>
+<h1 id="2-state-backends">
+  2. State Backends
+  <a class="anchor" href="#2-state-backends">#</a>
+</h1>
+<p>目前支持的 State Backends 有</p>
+<table>
+<thead>
+<tr>
+<th><strong>StateBackend</strong></th>
+<th><strong>in-flight</strong></th>
+<th><strong>checkpoint</strong></th>
+<th><strong>吞吐</strong></th>
+<th><strong>推荐使用场景</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashMapStateBackend</td>
+<td>TaskManager Memory</td>
+<td>JM Memory</td>
+<td>高</td>
+<td>调试、无状态或对数据丢失或重复无要求</td>
+</tr>
+<tr>
+<td>RocksDBStateBackend</td>
+<td>RocksDB on TaskManager</td>
+<td>FS/HDFS</td>
+<td>低</td>
+<td>超大状态、超长窗口、大型 KV 结构</td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-state">1. State</a>
+      <ul>
+        <li><a href="#11-managed-state-vs-raw-state">1.1 Managed State VS Raw State</a></li>
+        <li><a href="#12-keyed-state-vs-operator-state">1.2 Keyed State VS Operator State</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-state-backends">2. State Backends</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

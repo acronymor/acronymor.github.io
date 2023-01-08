@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="distinct count">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-Kylin 之 DISTINCT COUNT" />
+<meta property="og:description" content="distinct count" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-07-04T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-07-04T00:00:00+08:00" />
+<title>Ch07-Kylin 之 DISTINCT COUNT | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch07-Kylin 之 DISTINCT COUNT</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-去重算法">1. 去重算法</a>
+      <ul>
+        <li><a href="#11-介绍">1.1 介绍</a></li>
+        <li><a href="#12-算法实现">1.2 算法实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-近似-distinct_count">2. 近似 distinct_count</a>
+      <ul>
+        <li><a href="#21-介绍">2.1 介绍</a></li>
+      </ul>
+    </li>
+    <li><a href="#22-算法实现">2.2 算法实现</a></li>
+    <li><a href="#3-精确-distinct_count">3. 精确 distinct_count</a>
+      <ul>
+        <li><a href="#31-介绍">3.1 介绍</a></li>
+        <li><a href="#32-算法实现">3.2 算法实现</a>
+          <ul>
+            <li><a href="#321-全局字典">3.2.1 全局字典</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kylin/ch07/">Ch07-Kylin 之 DISTINCT COUNT</a>
+  </h1>
+  
+  <h5>July 4, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">kylin</a>
+  </div>
+  
+
+
+
+<p>distinct count</p>
+<h1 id="1-去重算法">
+  1. 去重算法
+  <a class="anchor" href="#1-%e5%8e%bb%e9%87%8d%e7%ae%97%e6%b3%95">#</a>
+</h1>
+<h2 id="11-介绍">
+  1.1 介绍
+  <a class="anchor" href="#11-%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<p>Apache Kylin 使用 RoaringBitmap 算法实现了去重功能，RoaringBitmap 算是 bitmap 的一种改进版，能提供更优秀的压缩性能和更快的查询效率。</p>
+<h2 id="12-算法实现">
+  1.2 算法实现
+  <a class="anchor" href="#12-%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">#</a>
+</h2>
+<p>将 32 位无符号整数按照高 16 位分桶，即最多可能有 216=65536 个桶，论文内称为 container。存储数据时，按照数据的高 16 位找到 container（找不到就会新建一个），再将低 16 位放入 container 中。也就是说，一个 RBM 就是很多 container 的集合。</p>
+<p><img src="rbm.png" alt="rbm" /></p>
+<p>0x00020032（十进制 131122）放入一个 RBM 的过程如上图所示，0x00020032 的前 16 位是 0002，找到对应的桶 0x0002。在桶对应的 Container 中存储低 16 位，因为 Container 元素个数不足 4096，因此是一个 Array Container。低 16 位为 0032（十进制为 50）, 在 Array Container 中二分查找找到相应的位置插入即可（如上图 50 的位置）。</p>
+<p>相较于原始的 Bitmap 需要占用 16K (131122/8/1024) 内存来存储这个数，而这种存储实际只占用了 4B（桶中占 2 B，Container 中占 2 B，不考虑数组的初始容量）。</p>
+<h1 id="2-近似-distinct_count">
+  2. 近似 distinct_count
+  <a class="anchor" href="#2-%e8%bf%91%e4%bc%bc-distinct_count">#</a>
+</h1>
+<h2 id="21-介绍">
+  2.1 介绍
+  <a class="anchor" href="#21-%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<p>Apache Kylin 使用 HyperLogLog 算法实现了近似 Count Distinct，提供了错误率从 9.75% 到 1.22% 几种精度供选择；算法计算后的 Count Distinct 指标，理论上，结果最大只有 64KB，最低的错误率是 1.22%；这种实现方式用在需要快速计算、节省存储空间，并且能接受错误率的 Count Distinct 指标计算。</p>
+<h1 id="22-算法实现">
+  2.2 算法实现
+  <a class="anchor" href="#22-%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">#</a>
+</h1>
+<p>该算法的核心是基于伯努利实验的分析结果进行推测。用网上最常见的例子来说明下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>第一次试验：抛掷 1 次出现正面，此时 k=1,n=1;
+</span></span><span style="display:flex;"><span>第二次实验：抛掷 3 次出现正面，此时 k=3,n=2;
+</span></span><span style="display:flex;"><span>第三次实验：抛掷 6 次出现正面，此时 k=6,n=3;
+</span></span><span style="display:flex;"><span>第 n 次试验：抛掷 10 次出现正面，此时 k=10,n=n，通过估算关系计算，n=2^10
+</span></span></code></pre></div><p>上述的公式也可以理解为<code>为了得到得到 k 次正面，一共进行了 2^k 次实验</code>，此时可以简单认为 2^k 就是估计出来的 distinct_count 值。在 HyperLogLog 算法中，将所有的数字放入到 BitMap 中（完成了去重），然后从后向前取值为 0 的数字个数，然后该个数就是上述公式中的 k。</p>
+<p><img src="hll.png" alt="HyperLogLog" /></p>
+<p>如上图所示，估算出来的 distinct_count 值为 <code>2^4=16</code>。此时可以发现正确的 distinct_cout 值应该是 8，偏差有点大。为了解决估值偏差较大的问题，可以采用如下方式结合来缩小误差。</p>
+<ul>
+<li>增加测试的轮数，取平均值。假设三次伯努利试验为 1 轮测试，我们取出这一轮试验中最大的的 kmax 作为本轮测试的数据，同时我们将测试的轮数定位 100 轮，这样我们在 100 轮实验中，将会得到 100 个 kmax，此时平均数就是 (k_max_1 + … + k_max_m)/m，这里 m 为试验的轮数，此处为 100.</li>
+<li>增加修正因子，修正因子是一个不固定的值，会根据实际情况来进行值的调整。</li>
+</ul>
+<h1 id="3-精确-distinct_count">
+  3. 精确 distinct_count
+  <a class="anchor" href="#3-%e7%b2%be%e7%a1%ae-distinct_count">#</a>
+</h1>
+<h2 id="31-介绍">
+  3.1 介绍
+  <a class="anchor" href="#31-%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<p>从 1.5.3 版本开始，Kylin 中实现了基于 bitmap 的精确 Count Distinct 计算方式。当数据类型为 tiny int(byte)、small int(short) 以及 int，会直接将数据值映射到 bitmap 中；当数据类型为 long,string 或者其他，则需要将数据值以字符串形式编码成 dict(字典)，再将字典 ID 映射到 bitmap。指标计算后的结果，并不是计数后的值，而是包含了序列化值的 bitmap，这样才能确保在任意维度上的 Count Distinct 结果是正确的。这种实现方式提供了精确的无错误的 distinct_count 结果，但是需要更多的存储资源，如果数据中的不重复值超过百万，结果所占的存储应该会达到几百 MB。</p>
+<p>Kylin v3.0.0 引入了第一版的 Hive global dictionary(KYLIN-3841)。这个功能使用 Hive 的分布式 SQL 引擎来构建全局字典。为了进一步提升性能，kylin v3.1.0 引入了第二版的 Hive global dictionary v2(KYLIN-4342), 这个版本在某些步骤使用 MapReduce 代替 HQL 进行全局字典的构建。</p>
+<p>Kylin v4.0.0 又基于 spark 实现了另外一种分布式构建全局字典的方式。</p>
+<h2 id="32-算法实现">
+  3.2 算法实现
+  <a class="anchor" href="#32-%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">#</a>
+</h2>
+<p>可以看到不管是哪个版本 distinct_count 功能都是基于 dict 和 bitmap 实现的，先将 string 的等类型的数据存储到 dict 中形成 &lt;hash(string), offset&gt;，然后将 offset 放入到 bitmap 中完成 distinct，最后遍历 bitmap 中的元素计算出 count。</p>
+<p>这里简单说明下 kylin v4.0.0 中 dict 的构建方式。这个 dict 也称为全局字典，即所有 Server 都可见的一个 dict。</p>
+<h3 id="321-全局字典">
+  3.2.1 全局字典
+  <a class="anchor" href="#321-%e5%85%a8%e5%b1%80%e5%ad%97%e5%85%b8">#</a>
+</h3>
+<p>一份字典包括一份 meta 数据文件和多个字典文件，每个字典文件称之为桶 (Bucket)。</p>
+<p><img src="dict-arch.png" alt="dict-arch" /></p>
+<p><strong>第一次构建</strong></p>
+<p><img src="first-build.png" alt="first-build" /></p>
+<p>relative 表示本次本 Bucket 已有的数据，Absolute 表示将要构建出来的数据。</p>
+<p>以 Bucket2#Jack-1 举例，此时已知 Bucket1 中有 2 个元素，那么可以推断出此时 offset 为 2，那么在构建全局字典的时候，将 &lt;Jack,1&gt; 改成 &lt;Jack1, 1 + 2&gt; 便可。其他依次类推。</p>
+<p><strong>第二次构建</strong></p>
+<p><img src="second-build.png" alt="second-build" /></p>
+<p>relative 表示本次本 Bucket 已有的数据，Absolute 表示将要构建出来的数据（但是此时还有上次构建的数据）。</p>
+<p>以 Bucket2#May1-1 举例，此时已知第一次构建完成后中有 6 个元素，而本次 Bucket1 有 2 个元素，那么可以推断出此时 offset 为 8，那么在构建全局字典的时候，将 &lt;May,1&gt; 改成 &lt;May, 1 + 8&gt; 便可。其他依次类推。</p>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1481855">Roaring Bitmap 更好的位图压缩算法</a></li>
+<li><a href="https://www.jianshu.com/p/1327d03c8124">再谈基数估计之 HyperLogLog 算法</a></li>
+<li><a href="https://www.jianshu.com/p/818ac4e90daf">高效压缩位图 RoaringBitmap 的原理与应用</a></li>
+<li><a href="https://segmentfault.com/a/1190000038481589">Apache Kylin 4.0 精确去重的全局字典原理</a></li>
+<li><a href="https://www.bilibili.com/video/av969487170/">Kylin 4.0 全局字典设计和实现</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-去重算法">1. 去重算法</a>
+      <ul>
+        <li><a href="#11-介绍">1.1 介绍</a></li>
+        <li><a href="#12-算法实现">1.2 算法实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-近似-distinct_count">2. 近似 distinct_count</a>
+      <ul>
+        <li><a href="#21-介绍">2.1 介绍</a></li>
+      </ul>
+    </li>
+    <li><a href="#22-算法实现">2.2 算法实现</a></li>
+    <li><a href="#3-精确-distinct_count">3. 精确 distinct_count</a>
+      <ul>
+        <li><a href="#31-介绍">3.1 介绍</a></li>
+        <li><a href="#32-算法实现">3.2 算法实现</a>
+          <ul>
+            <li><a href="#321-全局字典">3.2.1 全局字典</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

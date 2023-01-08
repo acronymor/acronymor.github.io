@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/</link>
+    <description>Recent content in Categories on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LevelDB</title>
+      <link>https://acronymor.com/categories/LevelDB/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/LevelDB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>https://acronymor.com/categories/MySQL/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/MySQL/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Database</title>
+      <link>https://acronymor.com/categories/Database/</link>
+      <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Elasticsearch</title>
+      <link>https://acronymor.com/categories/Elasticsearch/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Kylin</title>
+      <link>https://acronymor.com/categories/Apache-Kylin/</link>
+      <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Kylin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Calcite</title>
+      <link>https://acronymor.com/categories/Apache-Calcite/</link>
+      <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Calcite/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache HBase</title>
+      <link>https://acronymor.com/categories/Apache-HBase/</link>
+      <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-HBase/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Flink</title>
+      <link>https://acronymor.com/categories/Apache-Flink/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Flink/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Antlr4</title>
+      <link>https://acronymor.com/categories/Antlr4/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Antlr4/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Spark</title>
+      <link>https://acronymor.com/categories/Apache-Spark/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Spark/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Kafka</title>
+      <link>https://acronymor.com/categories/Apache-Kafka/</link>
+      <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Kafka/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Hive</title>
+      <link>https://acronymor.com/categories/Apache-Hive/</link>
+      <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Hive/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Zookeeper</title>
+      <link>https://acronymor.com/categories/Apache-Zookeeper/</link>
+      <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Zookeeper/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Apache Hadoop</title>
+      <link>https://acronymor.com/categories/Apache-Hadoop/</link>
+      <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Apache-Hadoop/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

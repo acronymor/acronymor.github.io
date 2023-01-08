@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Apache Kafka on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Apache-Kafka/</link>
+    <description>Recent content in Apache Kafka on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 11 May 2019 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Apache-Kafka/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch12-Kafka 为什么这么快</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch12/</link>
+      <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch12/</guid>
+      <description>&lt;p&gt;Apache Kafka 以牺牲延迟和抖动为代价优化了吞吐量，但并没有牺牲，比如持久性、严格的记录有序性和至少一次的分发语义。当有人说“Kafka 速度很快”，并假设他们至少有一定的能力时，你可以认为他们指的是 Kafka 在短时间内分发大量记录的能力。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Kafka 之 Quota</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch11/</link>
+      <pubDate>Mon, 22 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch11/</guid>
+      <description>&lt;p&gt;kafka Quota&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Kafka 之事务</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch10/</link>
+      <pubDate>Thu, 18 Apr 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch10/</guid>
+      <description>&lt;p&gt;kafka Transaction.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch09-Kafka 之高可用</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch09/</link>
+      <pubDate>Wed, 20 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch09/</guid>
+      <description>&lt;p&gt;kafka HA&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Kafka 之选举</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch08/</link>
+      <pubDate>Tue, 12 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch08/</guid>
+      <description>&lt;p&gt;Kafka 选举主要体现在两个地方，一个是 Broker 的选举，另一个是 Partition 的选举。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Kafka 之数据可靠性</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch07/</link>
+      <pubDate>Sun, 03 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch07/</guid>
+      <description>&lt;p&gt;数据可靠性值指数据不会轻易丢失，数据一定会被可靠存储。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Kafka 之数据一致性</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch06/</link>
+      <pubDate>Fri, 01 Mar 2019 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch06/</guid>
+      <description>&lt;p&gt;数据一致性主要是说不论是老的 Leader 还是新选举的 Leader，Consumer 都能读到一样的数据。那么 Kafka 是如何实现的呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Kafka 之 Partition</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch05/</link>
+      <pubDate>Mon, 02 Jul 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch05/</guid>
+      <description>&lt;p&gt;Kafka Partition 相关的机制是比较复杂的，它自身保留了一个 leader 来对外提供消息操作的能力，若干 follower 通过 leader 同步消息保证数据可靠性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Kafka 之 ZeroCopy</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch04/</link>
+      <pubDate>Fri, 29 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch04/</guid>
+      <description>&lt;p&gt;Kafka 中存在大量的网络数据持久化到磁盘（Producer 到 Broker）和磁盘文件通过网络发送（Broker 到 Consumer）的过程。这一过程的性能直接影响 Kafka 的整体吞吐量，于是 Kafka 便引入了 ZeroCopy 技术来提升性能。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Kafka 之消息存储</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch03/</link>
+      <pubDate>Mon, 25 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch03/</guid>
+      <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Kafka 生产消费流程</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch02/</link>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch02/</guid>
+      <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Kafka 介绍</title>
+      <link>https://acronymor.com/posts/apache-kafka/ch01/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/apache-kafka/ch01/</guid>
+      <description>&lt;p&gt;Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

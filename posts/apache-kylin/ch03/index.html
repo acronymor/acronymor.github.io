@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-Kylin 之 Query" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-12T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-12T00:00:00+08:00" />
+<title>Ch03-Kylin 之 Query | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch03-Kylin 之 Query</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-query">1. Query</a>
+      <ul>
+        <li><a href="#11-cube-选取流程">1.1 Cube 选取流程</a>
+          <ul>
+            <li><a href="#111-对-model-及对应的-realizations-进行过滤及排序">1.1.1 对 model 及对应的 realizations 进行过滤及排序</a></li>
+            <li><a href="#112-从-modelmap-中选择最终的-realization">1.1.2 从 modelMap 中选择最终的 realization</a>
+              <ul>
+                <li><a href="#1121-modelmap-遍历逻辑">1.1.2.1 modelMap 遍历逻辑</a></li>
+                <li><a href="#1122-selectrealization-执行逻辑">1.1.2.2 selectRealization 执行逻辑</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#12-cuboid-定位流程">1.2 Cuboid 定位流程</a>
+          <ul>
+            <li><a href="#121-kylin-是怎么去掉-join-过程">1.2.1 Kylin 是怎么去掉 join 过程</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-参考文献">2. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-kylin/ch03/">Ch03-Kylin 之 Query</a>
+  </h1>
+  
+  <h5>June 12, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">kylin</a>
+  </div>
+  
+
+
+
+<p>query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：</p>
+<p><img src="route.png" alt="route" /></p>
+<p>完整的处理逻辑如下图所示：</p>
+<p><img src="query-all.png" alt="query" /></p>
+<p>query 和 update 的逻辑如下所示：</p>
+<p><img src="query-and-update.png" alt="query and update" /></p>
+<h1 id="1-query">
+  1. Query
+  <a class="anchor" href="#1-query">#</a>
+</h1>
+<p>在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在<code>implement</code>方法中完成 RelNode 到 Cube 处理逻辑的转换。</p>
+<h2 id="11-cube-选取流程">
+  1.1 Cube 选取流程
+  <a class="anchor" href="#11-cube-%e9%80%89%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p><img src="find-cube.png" alt="find cube" /></p>
+<p>整个过程封装在 <code>RealizationChooser#selectRealization</code> 中，大体上可以分为两步，第一部分是<code>makeOrderedModelMap()</code>，这一步会选出所有满足的 cuboid，第二步是<code>selectRealization()</code>，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲</p>
+<h3 id="111-对-model-及对应的-realizations-进行过滤及排序">
+  1.1.1 对 model 及对应的 realizations 进行过滤及排序
+  <a class="anchor" href="#111-%e5%af%b9-model-%e5%8f%8a%e5%af%b9%e5%ba%94%e7%9a%84-realizations-%e8%bf%9b%e8%a1%8c%e8%bf%87%e6%bb%a4%e5%8f%8a%e6%8e%92%e5%ba%8f">#</a>
+</h3>
+<ul>
+<li>获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName</li>
+<li>对 realizations 执行过滤，得到 filteredRealizations</li>
+<li>NOT READY cube 会被过滤</li>
+<li>黑名单中的 cube 会被过滤</li>
+<li>cube.allColumns 必须与 OLAPContext.allColumns 相等或是其父集。cube.allColumns 包含了事实表的外键列、维度表的主键列、所有度量涉及的列、所有维度列</li>
+<li>OLAPContext.allColumns 在 <code>OLAPRel#implementOLAP</code> 方法中被添加</li>
+<li>OLAPContext.filterColumns 在 <code>OLAPFilterRel#implementOLAP</code> 中被添加</li>
+<li>project 包含的列（即 agg 参数列即 group by 列），在 <code>OLAPProjectRel#implementOLAP</code> 添加</li>
+<li>遍历 filteredRealizations，对于每个 realization，获取其 model，并记录每个 mode 对应的最小的 realization cost 及 model 对应的 Set<!-- raw HTML omitted --></li>
+<li>根据各个 model 对应的最小 realization cost，对各个 <code>&lt;model, Set&lt;IRealization&gt;&gt;</code> 进行排序，得到 modelMap: <code>Map&lt;DataModelDesc, Set&lt;IRealization&gt;&gt;</code></li>
+<li>如果 modelMap 为空，则抛 No model found for &hellip; 异常</li>
+</ul>
+<h3 id="112-从-modelmap-中选择最终的-realization">
+  1.1.2 从 modelMap 中选择最终的 realization
+  <a class="anchor" href="#112-%e4%bb%8e-modelmap-%e4%b8%ad%e9%80%89%e6%8b%a9%e6%9c%80%e7%bb%88%e7%9a%84-realization">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RealizationChooser</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">attemptSelectRealization</span><span style="color:#f92672">(</span>OLAPContext context<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        Map<span style="color:#f92672">&lt;</span>DataModelDesc<span style="color:#f92672">,</span> Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> modelMap <span style="color:#f92672">=</span> makeOrderedModelMap<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>DataModelDesc<span style="color:#f92672">,</span> Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> entry <span style="color:#f92672">:</span> modelMap<span style="color:#f92672">.</span><span style="color:#a6e22e">entrySet</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>            IRealization realization <span style="color:#f92672">=</span> QueryRouter<span style="color:#f92672">.</span><span style="color:#a6e22e">selectRealization</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>realization <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                logger<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Give up on model {} because no suitable realization is found&#34;</span><span style="color:#f92672">,</span> model<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>                context<span style="color:#f92672">.</span><span style="color:#a6e22e">unfixModel</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            context<span style="color:#f92672">.</span><span style="color:#a6e22e">realization</span> <span style="color:#f92672">=</span> realization<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NoRealizationFoundException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No realization found for &#34;</span> <span style="color:#f92672">+</span> toErrorMsg<span style="color:#f92672">(</span>context<span style="color:#f92672">));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h4 id="1121-modelmap-遍历逻辑">
+  1.1.2.1 modelMap 遍历逻辑
+  <a class="anchor" href="#1121-modelmap-%e9%81%8d%e5%8e%86%e9%80%bb%e8%be%91">#</a>
+</h4>
+<p>IRealization realization = QueryRouter.selectRealization(context, entry.getValue())</p>
+<ul>
+<li>若 realization 不为 null，则 realization 就是选中的 realization，设置为 context.realization，选择过程结束；否则，continue，对下一个 entry 进行同样的调用</li>
+<li>若遍历完所有的 entry，依然没有符合要求的 realization，则抛异常 NoRealizationFoundException</li>
+</ul>
+<h4 id="1122-selectrealization-执行逻辑">
+  1.1.2.2 selectRealization 执行逻辑
+  <a class="anchor" href="#1122-selectrealization-%e6%89%a7%e8%a1%8c%e9%80%bb%e8%be%91">#</a>
+</h4>
+<p>对候选的 realizations 应用 3 条规则，以进行过滤和重新排序：</p>
+<ul>
+<li>移除 (RemoveBlackoutRealizationsRule) 黑名单中的和移除被配置 (kylin.query.realization-filter) 过滤的</li>
+<li>移除 (RemoveUncapableRealizationsRule) 不适用的（逻辑封装在 CubeCapabilityChecker#check 中），以下几种情况不适用：
+<ul>
+<li>OLAPContext 维度列（其 groupByColumns（在 OLAPAggregateRel#implementOLAP 中添加） + filterColumns（在 OLAPFilterRel#implementOLAP 中添加））中存在不在 cube 维度列中的情况</li>
+<li>OLAPContext.aggregations（在 OLAPAggregateRel#implementOLAP 中添加）中存在不在 cube aggregations 中的情况</li>
+<li>limit 在 agg 之前（使用 OLAPContext#limitPrecedesAggr 判断，在 OLAPAggregateRel#implementOLAP 中进行判断），会导致 cube 的度量结果与查询不一致</li>
+</ul>
+</li>
+<li>对剩下的进行排序 (RealizationSortRule)，优先级最高、cost 最小的胜出</li>
+</ul>
+<h2 id="12-cuboid-定位流程">
+  1.2 Cuboid 定位流程
+  <a class="anchor" href="#12-cuboid-%e5%ae%9a%e4%bd%8d%e6%b5%81%e7%a8%8b">#</a>
+</h2>
+<p><img src="choose-cuboid.png" alt="choose cuboid" /></p>
+<h3 id="121-kylin-是怎么去掉-join-过程">
+  1.2.1 Kylin 是怎么去掉 join 过程
+  <a class="anchor" href="#121-kylin-%e6%98%af%e6%80%8e%e4%b9%88%e5%8e%bb%e6%8e%89-join-%e8%bf%87%e7%a8%8b">#</a>
+</h3>
+<p>Kylin 最终下推到 Cubiod 的时候，应该是个点查的操作。比如 SQL 里面包含若干 left join，但是最终执行的时候，绝对不会有 left join，那么这个去掉 join 的过程是如何完成的？</p>
+<p>这一块逻辑可以参考<code>CalciteToSparkPlaner.scala</code>的逻辑。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-scala" data-lang="scala"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CalciteToSparkPlaner</span><span style="color:#f92672">(</span>dataContext<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">DataContext</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">RelVisitor</span> <span style="color:#66d9ef">with</span> <span style="color:#a6e22e">Logging</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> stack <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> util<span style="color:#f92672">.</span><span style="color:#a6e22e">Stack</span><span style="color:#f92672">[</span><span style="color:#66d9ef">DataFrame</span><span style="color:#f92672">]()</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> unionStack <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">new</span> util<span style="color:#f92672">.</span><span style="color:#a6e22e">Stack</span><span style="color:#f92672">[</span><span style="color:#66d9ef">Int</span><span style="color:#f92672">]()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  stack<span style="color:#f92672">.</span>push<span style="color:#f92672">(</span>node <span style="color:#66d9ef">match</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> rel<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">OLAPJoinRel</span> <span style="color:#f92672">=&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>rel<span style="color:#f92672">.</span>isRuntimeJoin<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          logTime<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;join with table scan&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">TableScanPlan</span><span style="color:#f92672">.</span>createOLAPTable<span style="color:#f92672">(</span>rel<span style="color:#f92672">,</span> dataContext<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">val</span> right <span style="color:#66d9ef">=</span> stack<span style="color:#f92672">.</span>pop<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">val</span> left <span style="color:#66d9ef">=</span> stack<span style="color:#f92672">.</span>pop<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>          logTime<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;join&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            plans<span style="color:#f92672">.</span><span style="color:#a6e22e">JoinPlan</span><span style="color:#f92672">.</span>join<span style="color:#f92672">(</span><span style="color:#a6e22e">Lists</span><span style="color:#f92672">.</span>newArrayList<span style="color:#f92672">(</span>left<span style="color:#f92672">,</span> right<span style="color:#f92672">),</span> rel<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> rel<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">OLAPUnionRel</span> <span style="color:#f92672">=&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> size <span style="color:#66d9ef">=</span> unionStack<span style="color:#f92672">.</span>pop<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> java <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">Range</span><span style="color:#f92672">(</span><span style="color:#ae81ff">0</span><span style="color:#f92672">,</span> stack<span style="color:#f92672">.</span>size<span style="color:#f92672">()</span> <span style="color:#f92672">-</span> size<span style="color:#f92672">).</span>map<span style="color:#f92672">(</span>a <span style="color:#66d9ef">=&gt;</span> stack<span style="color:#f92672">.</span>pop<span style="color:#f92672">()).</span>asJava
+</span></span><span style="display:flex;"><span>        logTime<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;union&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          plans<span style="color:#f92672">.</span><span style="color:#a6e22e">UnionPlan</span><span style="color:#f92672">.</span>union<span style="color:#f92672">(</span><span style="color:#a6e22e">Lists</span><span style="color:#f92672">.</span>newArrayList<span style="color:#f92672">(</span>java<span style="color:#f92672">),</span> rel<span style="color:#f92672">,</span> dataContext<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">})</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>可以看到对于查询是的 join 操作，最终会走到<code>TableScanPlan.createOLAPTable(rel, dataContext)</code>这个逻辑，而这个逻辑本质上是查找并读取 cuboid 的逻辑。</p>
+<p><img src="find-cuboid.png" alt="find-cuboid" /></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-scala" data-lang="scala"><span style="display:flex;"><span><span style="color:#66d9ef">object</span> <span style="color:#a6e22e">TableScanPlan</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LogEx</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> createOLAPTable<span style="color:#f92672">(</span>rel<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">OLAPRel</span><span style="color:#f92672">,</span> dataContext<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">DataContext</span><span style="color:#f92672">)</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">DataFrame</span> <span style="color:#f92672">=</span> logTime<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;table scan&#34;</span><span style="color:#f92672">,</span> info <span style="color:#66d9ef">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> request <span style="color:#66d9ef">=</span> query<span style="color:#f92672">.</span>getStorageQueryRequest<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>      olapContext<span style="color:#f92672">.</span>storageContext<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      olapContext<span style="color:#f92672">.</span>getSQLDigest<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      returnTupleInfo<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    request<span style="color:#f92672">.</span>getGroups
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> cuboid <span style="color:#66d9ef">=</span> request<span style="color:#f92672">.</span>getCuboid
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> df <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">SparderContext</span><span style="color:#f92672">.</span>getSparkSession<span style="color:#f92672">.</span>kylin
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">.</span>format<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;parquet&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">.</span>cuboidTable<span style="color:#f92672">(</span>cubeInstance<span style="color:#f92672">,</span> cuboid<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">.</span>toDF<span style="color:#f92672">(</span>schemaNames<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> columns <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">RuntimeHelper</span><span style="color:#f92672">.</span>gtSchemaToCalciteSchema<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>      cuboid<span style="color:#f92672">.</span>getCuboidToGridTableMapping<span style="color:#f92672">.</span>getPrimaryKey<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      tuple<span style="color:#f92672">.</span>_2<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      factTableAlias<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      rel<span style="color:#f92672">.</span>getColumnRowType<span style="color:#f92672">.</span>getAllColumns<span style="color:#f92672">.</span>asScala<span style="color:#f92672">.</span>toList<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      df<span style="color:#f92672">.</span>schema<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      columnIndex<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      tupleIdx<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      topNMapping<span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>      topNMeasureIndexes<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    df<span style="color:#f92672">.</span>select<span style="color:#f92672">(</span>columns<span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span><span style="color:#66d9ef">*</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>而 cuboid 的定位逻辑其实并不复杂。</p>
+<p>比如 SQL 中表示的维度是 A, B, C，用 3 位的 2 进制可以表示为<code>100</code>(A), <code>010</code>(B), <code>001</code>(C)。那么 AB 就可以表示为<code>110</code>，BC 可以表示为<code>011</code>，AC 可以表示为<code>101</code>，同理 ABC 就可以表示为<code>111</code>。</p>
+<p><img src="spark-read-parquet.png" alt="spark read parquet" /></p>
+<p>上图路径<code>hdfs://localhost:9000/kylin/kylin_metadata/project_demo/parquet/cube_demo/FULL_BUILD_UC0/3/part-00000-77d5c00c-95b0-4b35-b77d-c7f9acbbb694-c000.snappy.parquet</code>中的<strong>3</strong>表示的就是对维度 BC 建立的 cuboid。</p>
+<p>而文件内容中 schema 信息 (10, 11, 12) 则表示的是度量<code>COUNT(1)</code>, <code>MIN(D)</code>，<code>SUM(E)</code>。而（1，0）表示的是 A, B 两个维度。</p>
+<h1 id="2-参考文献">
+  2. 参考文献
+  <a class="anchor" href="#2-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/Ro0ebqHxQ7mALzC2h_jYKA">Kylin on Parquet 介绍和快速上手</a></li>
+<li><a href="https://www.jianshu.com/p/fd41f907c041">可能是全网最深度的 Apache Kylin 查询剖析</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-query">1. Query</a>
+      <ul>
+        <li><a href="#11-cube-选取流程">1.1 Cube 选取流程</a>
+          <ul>
+            <li><a href="#111-对-model-及对应的-realizations-进行过滤及排序">1.1.1 对 model 及对应的 realizations 进行过滤及排序</a></li>
+            <li><a href="#112-从-modelmap-中选择最终的-realization">1.1.2 从 modelMap 中选择最终的 realization</a>
+              <ul>
+                <li><a href="#1121-modelmap-遍历逻辑">1.1.2.1 modelMap 遍历逻辑</a></li>
+                <li><a href="#1122-selectrealization-执行逻辑">1.1.2.2 selectRealization 执行逻辑</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#12-cuboid-定位流程">1.2 Cuboid 定位流程</a>
+          <ul>
+            <li><a href="#121-kylin-是怎么去掉-join-过程">1.2.1 Kylin 是怎么去掉 join 过程</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-参考文献">2. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

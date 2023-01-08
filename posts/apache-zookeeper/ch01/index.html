@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Zookeeper 介绍" />
+<meta property="og:description" content="Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/apache-zookeeper/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-04-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-04-01T00:00:00+08:00" />
+<title>Ch01-Zookeeper 介绍 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Zookeeper 介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a>
+      <ul>
+        <li><a href="#21-相关角色">2.1 相关角色</a></li>
+        <li><a href="#22-服务状态">2.2 服务状态</a></li>
+        <li><a href="#23-数据模型">2.3 数据模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-机制介绍">3. 机制介绍</a>
+      <ul>
+        <li><a href="#31-事务">3.1 事务</a></li>
+        <li><a href="#32-状态信息">3.2 状态信息</a></li>
+        <li><a href="#33-版本机制">3.3 版本机制</a></li>
+        <li><a href="#34-watcher-机制">3.4 Watcher 机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/apache-zookeeper/ch01/">Ch01-Zookeeper 介绍</a>
+  </h1>
+  
+  <h5>April 1, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/zookeeper/">zookeeper</a>
+  </div>
+  
+
+
+
+<p>Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。</p>
+<p>ZooKpeer 是一个典型的分布式数据一致性的解决方案，分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master 选举、分布式锁和分布式队列等功能。</p>
+<h1 id="1-基本信息">
+  1. 基本信息
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e4%bf%a1%e6%81%af">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官网</td>
+<td><a href="https://zookeeper.apache.org/">https://zookeeper.apache.org/</a></td>
+</tr>
+<tr>
+<td>下载地址</td>
+<td><a href="https://zookeeper.apache.org/releases.html">https://zookeeper.apache.org/releases.html</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-架构介绍">
+  2. 架构介绍
+  <a class="anchor" href="#2-%e6%9e%b6%e6%9e%84%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<h2 id="21-相关角色">
+  2.1 相关角色
+  <a class="anchor" href="#21-%e7%9b%b8%e5%85%b3%e8%a7%92%e8%89%b2">#</a>
+</h2>
+<p><img src="zk-arch.png" alt="zk-arch" /></p>
+<p>ZooKeeper 集群中包含 Leader、Follower 以及 Observer 三个角色，每个节点只能是其中的某一个角色。</p>
+<table>
+<thead>
+<tr>
+<th><strong>角色</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Leader</td>
+<td>负责进行投票的发起和决议，更新系统状态，Leader 是由选举产生。</td>
+</tr>
+<tr>
+<td>Follower</td>
+<td>用于接受客户端请求并向客户端返回结果，在选主过程中参与投票。</td>
+</tr>
+<tr>
+<td>Observer</td>
+<td>可以接受客户端连接，接受读写请求，写请求转发给 Leader。但 Observer 不参加投票过程，只同步 Leader 的状态，Observer 的目的是为了扩展系统，提高读取速度。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-服务状态">
+  2.2 服务状态
+  <a class="anchor" href="#22-%e6%9c%8d%e5%8a%a1%e7%8a%b6%e6%80%81">#</a>
+</h2>
+<p>ZooKeeper 的每个节点在某个时间段会处于某个指定状态，目前常见的有下述 4 种状态。</p>
+<table>
+<thead>
+<tr>
+<th><strong>状态</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Looking</td>
+<td>寻找 Leader 状态。当服务器处于该状态时，它会认为集群中没有 Leader，因此需要进入 Leader 选举流程</td>
+</tr>
+<tr>
+<td>Following</td>
+<td>跟随者状态，表明当前服务器角色是 Follower。Follower 与 Leader 处于数据同步阶段</td>
+</tr>
+<tr>
+<td>Leading</td>
+<td>领导者状态，表明当前服务器角色是 Leader。前集群中有一个 Leader 为主进程</td>
+</tr>
+<tr>
+<td>Observing</td>
+<td>观察者状态，表明当前服务器角色是 Observer。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-数据模型">
+  2.3 数据模型
+  <a class="anchor" href="#23-%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<p>Zookeeper 通过一个共享的、树型结构的名字空间来进行相互协调。这个命名空间由若干个 ZNode 组成。</p>
+<p><img src="zk-model.png" alt="zk-model" /></p>
+<p>ZNode 可以分为<code>持久节点(PERSISTENT)</code>和<code>临时节点(EPHEMERAL)</code>。</p>
+<ul>
+<li>持久节点是指一旦这个 ZNode 被创建了，除非主动进行 ZNode 的移除操作，否则 ZNode 将一直保存在 ZooKeeper 上。</li>
+<li>临时节点的生命周期会和客户端会话绑定，一旦客户端会话失效，那么这个客户端创建的临时节点就会被移除。</li>
+<li>如果给持久节点和临时节点加上顺序特性，又可以形成持久顺序节点和临时顺序节点。</li>
+</ul>
+<h1 id="3-机制介绍">
+  3. 机制介绍
+  <a class="anchor" href="#3-%e6%9c%ba%e5%88%b6%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<h2 id="31-事务">
+  3.1 事务
+  <a class="anchor" href="#31-%e4%ba%8b%e5%8a%a1">#</a>
+</h2>
+<p>在 ZooKeeper 中，事务是指能够改变 ZooKeeper 服务器状态的操作，我们也称为事务操作和更新操作，一般包括数据节点创建与删除、数据节点内容更新和客户端会话失效操作等。
+对于每一个事务请求，ZooKeeper 都会为其分配一个全局唯一的事务 ID，用 ZXID 表示，每一个 ZXID 对应一次更新操作，从这些 ZXID 中可以间接地识别出 ZooKeeper 处理这些更新操作请求的全局顺序。</p>
+<h2 id="32-状态信息">
+  3.2 状态信息
+  <a class="anchor" href="#32-%e7%8a%b6%e6%80%81%e4%bf%a1%e6%81%af">#</a>
+</h2>
+<p>每个数据节点除了存储了数据内容之外，还存储了数据节点本身的一些状态信息。使用 get 命令便可以查看。</p>
+<table>
+<thead>
+<tr>
+<th><strong>状态属性</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>czxid</td>
+<td>即 Created ZXID，表示该数据节点被创建时的事务 ID</td>
+</tr>
+<tr>
+<td>mzxid</td>
+<td>即 Modified ZXID，表示该节点最后一次被更新时的事务 ID</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td>即 Created Time，表示节点被创建的时候</td>
+</tr>
+<tr>
+<td>mtime</td>
+<td>即 Modified Time，表示该节点最后一次被更新的时间</td>
+</tr>
+<tr>
+<td>version</td>
+<td>数据节点的版本号</td>
+</tr>
+<tr>
+<td>cversion</td>
+<td>子节点的版本号</td>
+</tr>
+<tr>
+<td>aversion</td>
+<td>节点的 ACL 版本号</td>
+</tr>
+<tr>
+<td>ephemeralOwner</td>
+<td>创建该临时节点的会话的 sessionID。如果该节点是持久节点，那么这个属性值为 0。</td>
+</tr>
+<tr>
+<td>dataLength</td>
+<td>数据内容的长度</td>
+</tr>
+<tr>
+<td>numChildren</td>
+<td>当前节点的子节点个数</td>
+</tr>
+<tr>
+<td>pzxid</td>
+<td>表示该节点的子节点列表最后一次被修改时的事务 ID。注意，只有子节点列表变更了才会变更 pzxid，子节点内容变更不会影响 pzxid</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-版本机制">
+  3.3 版本机制
+  <a class="anchor" href="#33-%e7%89%88%e6%9c%ac%e6%9c%ba%e5%88%b6">#</a>
+</h2>
+<p>每个 ZNode 节点都有三种类型的版本信息，对数据的任何操作都会引起版本的变化。不过这里要注意，虽然称为版本，但是叫做次数可能更加符合实际用途，它表示的是 数据内容，子节点，ACL 信息的修改次数。</p>
+<table>
+<thead>
+<tr>
+<th><strong>版本类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>version</td>
+<td>当前数据节点数据内容的版本号</td>
+</tr>
+<tr>
+<td>cversion</td>
+<td>当前数据节点子节点的版本号</td>
+</tr>
+<tr>
+<td>aversion</td>
+<td>当前数据节点 ACL 变更版本号</td>
+</tr>
+</tbody>
+</table>
+<h2 id="34-watcher-机制">
+  3.4 Watcher 机制
+  <a class="anchor" href="#34-watcher-%e6%9c%ba%e5%88%b6">#</a>
+</h2>
+<p>ZooKeeper 提供了分布式数据的发布/订阅功能，Watcher 机制则完成了分布式通知功能。它允许客户端向服务器端注册一个 Watcher 监听，当服务端的一些指定事件触发了这个 Watcher，那么就会向指定客户端发送一个事件通知，这样就实现了分布式的通知功能。</p>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<p><a href="https://www.jianshu.com/p/2d0496af033c">Zookeeper 集群如何高可用部署？</a></p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本信息">1. 基本信息</a></li>
+    <li><a href="#2-架构介绍">2. 架构介绍</a>
+      <ul>
+        <li><a href="#21-相关角色">2.1 相关角色</a></li>
+        <li><a href="#22-服务状态">2.2 服务状态</a></li>
+        <li><a href="#23-数据模型">2.3 数据模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-机制介绍">3. 机制介绍</a>
+      <ul>
+        <li><a href="#31-事务">3.1 事务</a></li>
+        <li><a href="#32-状态信息">3.2 状态信息</a></li>
+        <li><a href="#33-版本机制">3.3 版本机制</a></li>
+        <li><a href="#34-watcher-机制">3.4 Watcher 机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
