@@ -6,7 +6,25 @@
     <description>Recent content in Categories on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL</title>
+      <link>https://acronymor.com/categories/MySQL/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/MySQL/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; | STL</title>
+      <link>https://acronymor.com/categories/C&#43;&#43;-STL/</link>
+      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/C&#43;&#43;-STL/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>LevelDB</title>
       <link>https://acronymor.com/categories/LevelDB/</link>
@@ -17,11 +35,11 @@
     </item>
     
     <item>
-      <title>MySQL</title>
-      <link>https://acronymor.com/categories/MySQL/</link>
-      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      <title>C&#43;&#43; | Basic</title>
+      <link>https://acronymor.com/categories/C&#43;&#43;-Basic/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/categories/MySQL/</guid>
+      <guid>https://acronymor.com/categories/C&#43;&#43;-Basic/</guid>
       <description></description>
     </item>
     
@@ -40,6 +58,15 @@
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/categories/Elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java | IO</title>
+      <link>https://acronymor.com/categories/Java-IO/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Java-IO/</guid>
       <description></description>
     </item>
     
@@ -76,6 +103,15 @@
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/categories/Apache-Flink/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java | JUC</title>
+      <link>https://acronymor.com/categories/Java-JUC/</link>
+      <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Java-JUC/</guid>
       <description></description>
     </item>
     
@@ -130,6 +166,51 @@
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/categories/Apache-Hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JVM</title>
+      <link>https://acronymor.com/categories/JVM/</link>
+      <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/JVM/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Software Engineering</title>
+      <link>https://acronymor.com/categories/Software-Engineering/</link>
+      <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Software-Engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java | Map</title>
+      <link>https://acronymor.com/categories/Java-Map/</link>
+      <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Java-Map/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java | Collection</title>
+      <link>https://acronymor.com/categories/Java-Collection/</link>
+      <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Java-Collection/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java | Basic</title>
+      <link>https://acronymor.com/categories/Java-Basic/</link>
+      <pubDate>Fri, 13 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/Java-Basic/</guid>
       <description></description>
     </item>
     

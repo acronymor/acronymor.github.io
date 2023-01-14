@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-Java 之 Q/A" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/java-basic/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-01-02T00:00:00+08:00" />
+<meta property="article:modified_time" content="2017-01-02T00:00:00+08:00" />
+<title>Ch02-Java 之 Q/A | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-Java 之 Q/A</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-ab和aequalsb有什么区别">1. <code>a==b</code>和<code>a.equals(b)</code>有什么区别？</a></li>
+    <li><a href="#2-ahashcode-有什么用与-aequalsb-有什么关系">2. <code>a.hashCode()</code> 有什么用？与 <code>a.equals(b)</code> 有什么关系？</a></li>
+    <li><a href="#3-finalfinalize-和-finally-的不同之处">3. <code>final</code>、<code>finalize</code> 和 <code>finally</code> 的不同之处？</a></li>
+    <li><a href="#4-stringstringbuffer-与-stringbuilder-的区别">4. String、StringBuffer 与 StringBuilder 的区别</a></li>
+    <li><a href="#5-移位运算符">5. 移位运算符</a></li>
+    <li><a href="#6-如何理解-java-中的泛型是伪泛型泛型中类型擦除">6. 如何理解 Java 中的泛型是伪泛型？泛型中类型擦除？</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/java-basic/ch02/">Ch02-Java 之 Q/A</a>
+  </h1>
+  
+  <h5>January 2, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Basic/">Java | Basic</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<h1 id="1-ab和aequalsb有什么区别">
+  1. <code>a==b</code>和<code>a.equals(b)</code>有什么区别？
+  <a class="anchor" href="#1-ab%e5%92%8caequalsb%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab">#</a>
+</h1>
+<p>如果 a 和 b 都是对象，则 a==b 是比较两个对象的引用，只有当 a 和 b 指向的是堆中的同一个对象才会返回 true，而 a.equals(b) 是进行逻辑比较，所以通常需要重写该方法来提供逻辑一致性的比较。例如，String 类重写 equals() 方法，所以可以用于两个不同对象，但是包含的字母相同的比较。#</p>
+<h1 id="2-ahashcode-有什么用与-aequalsb-有什么关系">
+  2. <code>a.hashCode()</code> 有什么用？与 <code>a.equals(b)</code> 有什么关系？
+  <a class="anchor" href="#2-ahashcode-%e6%9c%89%e4%bb%80%e4%b9%88%e7%94%a8%e4%b8%8e-aequalsb-%e6%9c%89%e4%bb%80%e4%b9%88%e5%85%b3%e7%b3%bb">#</a>
+</h1>
+<p><code>hashCode()</code> 方法是相应对象整型的 hash 值，根据 Java 规范，两个使用 <code>equals()</code> 方法来判断相等的对象，其 hash code 必须相等。</p>
+<h1 id="3-finalfinalize-和-finally-的不同之处">
+  3. <code>final</code>、<code>finalize</code> 和 <code>finally</code> 的不同之处？
+  <a class="anchor" href="#3-finalfinalize-%e5%92%8c-finally-%e7%9a%84%e4%b8%8d%e5%90%8c%e4%b9%8b%e5%a4%84">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>final</td>
+<td>是一个修饰符，可以修饰变量、方法和类。如果 final 修饰变量，意味着该变量的值在初始化后不能被改变。</td>
+</tr>
+<tr>
+<td>finalize</td>
+<td>允许使用 finalize() 方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>是一个关键字，与 try 和 catch 一起用于异常的处理。finally 块一定会被执行，无论在 try 块中是否有发生异常。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-stringstringbuffer-与-stringbuilder-的区别">
+  4. String、StringBuffer 与 StringBuilder 的区别
+  <a class="anchor" href="#4-stringstringbuffer-%e4%b8%8e-stringbuilder-%e7%9a%84%e5%8c%ba%e5%88%ab">#</a>
+</h1>
+<ul>
+<li>可变和适用范围。String 对象是不可变的，而 StringBuffer 和 StringBuilder 是可变字符序列。每次对 String 的操作相当于生成一个新的 String 对象，而对 StringBuffer 和 StringBuilder 的操作是对对象本身的操作，而不会生成新的对象，所以对于频繁改变内容的字符串避免使用 String，因为频繁的生成对象将会对系统性能产生影响。</li>
+<li>线程安全。String 由于有 final 修饰，是 immutable 的，安全性是简单而纯粹的。StringBuilder 和 StringBuffer 的区别在于 StringBuilder 不保证同步，也就是说如果需要线程安全需要使用 StringBuffer，不需要同步的 StringBuilder 效率更高。</li>
+</ul>
+<h1 id="5-移位运算符">
+  5. 移位运算符
+  <a class="anchor" href="#5-%e7%a7%bb%e4%bd%8d%e8%bf%90%e7%ae%97%e7%ac%a6">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>运算符</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>左移运算符，x &laquo; 1，相当于 x 乘以 2 (不溢出的情况下),低位补 0</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>带符号右移，x &raquo; 1，相当于 x 除以 2，正数高位补 0，负数高位补 1</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;&gt;</code></td>
+<td>无符号右移，忽略符号位，空位都以 0 补齐</td>
+</tr>
+</tbody>
+</table>
+<h1 id="6-如何理解-java-中的泛型是伪泛型泛型中类型擦除">
+  6. 如何理解 Java 中的泛型是伪泛型？泛型中类型擦除？
+  <a class="anchor" href="#6-%e5%a6%82%e4%bd%95%e7%90%86%e8%a7%a3-java-%e4%b8%ad%e7%9a%84%e6%b3%9b%e5%9e%8b%e6%98%af%e4%bc%aa%e6%b3%9b%e5%9e%8b%e6%b3%9b%e5%9e%8b%e4%b8%ad%e7%b1%bb%e5%9e%8b%e6%93%a6%e9%99%a4">#</a>
+</h1>
+<p>Java 泛型这个特性是从 JDK 1.5 才开始加入的，因此为了兼容之前的版本，Java 泛型的实现采取了“伪泛型”的策略，即 Java 在语法上支持泛型，但是在编译阶段会进行所谓的“类型擦除”（Type Erasure），将所有的泛型表示（尖括号中的内容）都替换为具体的类型（其对应的原生态类型），就像完全没有泛型一样。</p>
+<ul>
+<li>消除类型参数声明，即删除&lt;&gt;及其包围的部分。</li>
+<li>根据类型参数的上下界推断并替换所有的类型参数为原生态类型：如果类型参数是无限制通配符或没有上下界限定则替换为 Object，如果存在上下界限定则根据子类替换原则取类型参数的最左边限定类型（即父类）。</li>
+<li>为了保证类型安全，必要时插入强制类型转换代码。</li>
+<li>自动产生“桥接方法”以保证擦除类型后的代码仍然具有泛型的“多态性”。</li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-ab和aequalsb有什么区别">1. <code>a==b</code>和<code>a.equals(b)</code>有什么区别？</a></li>
+    <li><a href="#2-ahashcode-有什么用与-aequalsb-有什么关系">2. <code>a.hashCode()</code> 有什么用？与 <code>a.equals(b)</code> 有什么关系？</a></li>
+    <li><a href="#3-finalfinalize-和-finally-的不同之处">3. <code>final</code>、<code>finalize</code> 和 <code>finally</code> 的不同之处？</a></li>
+    <li><a href="#4-stringstringbuffer-与-stringbuilder-的区别">4. String、StringBuffer 与 StringBuilder 的区别</a></li>
+    <li><a href="#5-移位运算符">5. 移位运算符</a></li>
+    <li><a href="#6-如何理解-java-中的泛型是伪泛型泛型中类型擦除">6. 如何理解 Java 中的泛型是伪泛型？泛型中类型擦除？</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/java/</link>
+    <description>Recent content in java on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch04-Java 之 AIO</title>
+      <link>https://acronymor.com/posts/java-io/ch04/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 NIO</title>
+      <link>https://acronymor.com/posts/java-io/ch03/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 BIO</title>
+      <link>https://acronymor.com/posts/java-io/ch02/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 IO</title>
+      <link>https://acronymor.com/posts/java-io/ch01/</link>
+      <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch18-Java Atomic 之 Atomic*</title>
+      <link>https://acronymor.com/posts/java-juc/ch18/</link>
+      <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch18/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch17-Java Executors 之 ThreadPoolExecutor</title>
+      <link>https://acronymor.com/posts/java-juc/ch17/</link>
+      <pubDate>Fri, 10 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch17/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ThreadPoolExecutor&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch16-Java tools 之 CyclicBarrier</title>
+      <link>https://acronymor.com/posts/java-juc/ch16/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch16/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CyclicBarrier&lt;/code&gt; 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch15-Java tools 之 Semaphore</title>
+      <link>https://acronymor.com/posts/java-juc/ch15/</link>
+      <pubDate>Tue, 24 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch15/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.Semaphore&lt;/code&gt; 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-Java tools 之 CountDownLatch</title>
+      <link>https://acronymor.com/posts/java-juc/ch14/</link>
+      <pubDate>Wed, 18 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch14/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CountDownLatch&lt;/code&gt; 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch13-Java Collections 之 CopyOnWriteArrayList</title>
+      <link>https://acronymor.com/posts/java-juc/ch13/</link>
+      <pubDate>Sat, 14 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch13/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CopyOnWriteArrayList&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Java Collections 之 DelayQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch12/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch12/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Java Collections 之 PriorityBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch11/</link>
+      <pubDate>Mon, 02 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch11/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.PriorityBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Java Collections 之 LinkedBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch10/</link>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch10/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.LinkedBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch9-Java Collections 之 ArrayBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch09/</link>
+      <pubDate>Fri, 31 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch09/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ArrayBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch8-Java Lock 之 ReentrantReadWriteLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch08/</link>
+      <pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch08/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantReadWriteLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch7-Java Lock 之 ReentrantLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch07/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch07/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch6-Java Lock 之 LockSupport</title>
+      <link>https://acronymor.com/posts/java-juc/ch06/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch06/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch5-Java Lock 之 AQS</title>
+      <link>https://acronymor.com/posts/java-juc/ch05/</link>
+      <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch05/</guid>
+      <description>&lt;p&gt;AQS 即 &lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch4-Java 之 JUC</title>
+      <link>https://acronymor.com/posts/java-juc/ch04/</link>
+      <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch04/</guid>
+      <description>&lt;p&gt;JUC 即 &lt;code&gt;java.util.concurrent&lt;/code&gt;，是 Java 并发编程中很常用的实用工具类。它包含了 &lt;code&gt;Lock 框架&lt;/code&gt;，&lt;code&gt;Collections 并发集合&lt;/code&gt;，&lt;code&gt;Executors 线程池&lt;/code&gt;，&lt;code&gt;Atomic 原子类&lt;/code&gt;，&lt;code&gt;Tools&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch3-Java 之 ThreadLocal</title>
+      <link>https://acronymor.com/posts/java-juc/ch03/</link>
+      <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch03/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.lang.ThreadLocal&lt;/code&gt;是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java JUC 之 线程基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch02/</link>
+      <pubDate>Thu, 06 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java JUC 之 理论基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch01/</link>
+      <pubDate>Tue, 04 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch12-Java Map 之 WeakHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch12/</link>
+      <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch12/</guid>
+      <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java Map 之 TreeMap</title>
+      <link>https://acronymor.com/posts/java-map/ch03/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch03/</guid>
+      <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java Map 之 LinkedHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch02/</link>
+      <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch02/</guid>
+      <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java Map 之 HashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch01/</link>
+      <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch05-Java Collection 之 PriorityQueue</title>
+      <link>https://acronymor.com/posts/java-collection/ch05/</link>
+      <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch05/</guid>
+      <description>&lt;p&gt;优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java Collection 之 ArrayDeque</title>
+      <link>https://acronymor.com/posts/java-collection/ch04/</link>
+      <pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch04/</guid>
+      <description>&lt;p&gt;Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java Collection 之 LinkedList</title>
+      <link>https://acronymor.com/posts/java-collection/ch03/</link>
+      <pubDate>Mon, 23 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch03/</guid>
+      <description>&lt;p&gt;LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java Collection 之 ArrayList</title>
+      <link>https://acronymor.com/posts/java-collection/ch02/</link>
+      <pubDate>Fri, 20 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch02/</guid>
+      <description>&lt;p&gt;ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 Collection 和 Map</title>
+      <link>https://acronymor.com/posts/java-collection/ch01/</link>
+      <pubDate>Sun, 15 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java 之 synchronized</title>
+      <link>https://acronymor.com/posts/java-basic/ch04/</link>
+      <pubDate>Fri, 13 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch04/</guid>
+      <description>&lt;p&gt;synchronized 是 Java 中的一个关键字，主要用于解决 Java 中常见的并发问题（原子性，可见性，有序性）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 各种机制</title>
+      <link>https://acronymor.com/posts/java-basic/ch03/</link>
+      <pubDate>Tue, 10 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 Q/A</title>
+      <link>https://acronymor.com/posts/java-basic/ch02/</link>
+      <pubDate>Mon, 02 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 基础</title>
+      <link>https://acronymor.com/posts/java-basic/ch01/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch01/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

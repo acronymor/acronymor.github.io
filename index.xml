@@ -6,7 +6,34 @@
     <description>Recent content in Introduction on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch08-MySQL 之 锁</title>
+      <link>https://acronymor.com/posts/mysql/ch08/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch08/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-C&#43;&#43; STL 之 Container</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</link>
+      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-C&#43;&#43; 之 STL</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</link>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</guid>
+      <description>&lt;p&gt;STL 是 1979 年诞生，1998 年加入 cpp 标准库。C11 出来之前 boost 库是常见的智能指针库，c11 有自己的智能指针。且有多个 STL 版本，如 &lt;code&gt;SGI STL&lt;/code&gt;，&lt;code&gt;GNU STL&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Ch09-LevelDB 之 Open</title>
       <link>https://acronymor.com/posts/leveldb/ch09/</link>
@@ -85,16 +112,88 @@
     </item>
     
     <item>
-      <title>Ch07-MySQL 之 复制技术</title>
-      <link>https://acronymor.com/posts/mysql/ch07/</link>
+      <title>Ch08-C&#43;&#43; 之 point</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</guid>
+      <description>&lt;p&gt;&lt;code&gt;std::unique_ptr&lt;/code&gt;，&lt;code&gt;std::shared_ptr&lt;/code&gt;，&lt;code&gt;std::weak_ptr&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-C&#43;&#43; 之 reference</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</link>
+      <pubDate>Wed, 27 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</guid>
+      <description>&lt;p&gt;&lt;code&gt;lvalue reference&lt;/code&gt;，&lt;code&gt;lvalue reference&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</link>
+      <pubDate>Mon, 25 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</guid>
+      <description>&lt;p&gt;&lt;code&gt;virtual&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</link>
+      <pubDate>Sun, 24 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</guid>
+      <description>&lt;p&gt;&lt;code&gt;static_cast&lt;/code&gt;，&lt;code&gt;dynamic_cast&lt;/code&gt;，&lt;code&gt;const_cast&lt;/code&gt;，&lt;code&gt;reinterpret_cast&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</link>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</guid>
+      <description>&lt;p&gt;&lt;code&gt;new&lt;/code&gt;，&lt;code&gt;delete&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</link>
+      <pubDate>Fri, 22 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</guid>
+      <description>&lt;p&gt;&lt;code&gt;define&lt;/code&gt;，&lt;code&gt;typedef&lt;/code&gt;，&lt;code&gt;using&lt;/code&gt;，&lt;code&gt;inline&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</link>
+      <pubDate>Thu, 21 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</guid>
+      <description>&lt;p&gt;&lt;code&gt;static&lt;/code&gt;，&lt;code&gt;const&lt;/code&gt;，&lt;code&gt;constexpr&lt;/code&gt;，&lt;code&gt;volatile&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-C&#43;&#43; 之 基础</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</link>
+      <pubDate>Wed, 20 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch06-MySQL 之 复制技术</title>
+      <link>https://acronymor.com/posts/mysql/ch06/</link>
       <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
+      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
       <description>&lt;p&gt;我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Ch04-执行模型</title>
+      <title>Ch04-数据库理论 之 执行模型</title>
       <link>https://acronymor.com/posts/database/ch04/</link>
       <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
       
@@ -103,7 +202,7 @@
     </item>
     
     <item>
-      <title>Ch03-CBO</title>
+      <title>Ch03-数据库理论 之 CBO</title>
       <link>https://acronymor.com/posts/database/ch03/</link>
       <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
       
@@ -117,7 +216,7 @@
       <pubDate>Sun, 31 Oct 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/mysql/ch04/</guid>
-      <description> 参考文献 # MySQL 之 InnoDB 表空间 MySQL 之数据页结构 </description>
+      <description></description>
     </item>
     
     <item>
@@ -130,7 +229,7 @@
     </item>
     
     <item>
-      <title>Ch02-RBO</title>
+      <title>Ch02-数据库理论 之 RBO</title>
       <link>https://acronymor.com/posts/database/ch02/</link>
       <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
       
@@ -226,6 +325,42 @@
       
       <guid>https://acronymor.com/posts/elasticsearch/ch01/</guid>
       <description>&lt;p&gt;Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java 之 AIO</title>
+      <link>https://acronymor.com/posts/java-io/ch04/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 NIO</title>
+      <link>https://acronymor.com/posts/java-io/ch03/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 BIO</title>
+      <link>https://acronymor.com/posts/java-io/ch02/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 IO</title>
+      <link>https://acronymor.com/posts/java-io/ch01/</link>
+      <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch01/</guid>
+      <description></description>
     </item>
     
     <item>
@@ -553,6 +688,132 @@
     </item>
     
     <item>
+      <title>Ch18-Java Atomic 之 Atomic*</title>
+      <link>https://acronymor.com/posts/java-juc/ch18/</link>
+      <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch18/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch17-Java Executors 之 ThreadPoolExecutor</title>
+      <link>https://acronymor.com/posts/java-juc/ch17/</link>
+      <pubDate>Fri, 10 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch17/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ThreadPoolExecutor&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch16-Java tools 之 CyclicBarrier</title>
+      <link>https://acronymor.com/posts/java-juc/ch16/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch16/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CyclicBarrier&lt;/code&gt; 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch15-Java tools 之 Semaphore</title>
+      <link>https://acronymor.com/posts/java-juc/ch15/</link>
+      <pubDate>Tue, 24 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch15/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.Semaphore&lt;/code&gt; 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-Java tools 之 CountDownLatch</title>
+      <link>https://acronymor.com/posts/java-juc/ch14/</link>
+      <pubDate>Wed, 18 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch14/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CountDownLatch&lt;/code&gt; 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch13-Java Collections 之 CopyOnWriteArrayList</title>
+      <link>https://acronymor.com/posts/java-juc/ch13/</link>
+      <pubDate>Sat, 14 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch13/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CopyOnWriteArrayList&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Java Collections 之 DelayQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch12/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch12/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Java Collections 之 PriorityBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch11/</link>
+      <pubDate>Mon, 02 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch11/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.PriorityBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Java Collections 之 LinkedBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch10/</link>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch10/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.LinkedBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch9-Java Collections 之 ArrayBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch09/</link>
+      <pubDate>Fri, 31 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch09/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ArrayBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch8-Java Lock 之 ReentrantReadWriteLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch08/</link>
+      <pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch08/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantReadWriteLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch7-Java Lock 之 ReentrantLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch07/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch07/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch6-Java Lock 之 LockSupport</title>
+      <link>https://acronymor.com/posts/java-juc/ch06/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch06/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch5-Java Lock 之 AQS</title>
+      <link>https://acronymor.com/posts/java-juc/ch05/</link>
+      <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch05/</guid>
+      <description>&lt;p&gt;AQS 即 &lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Ch01-Antlr V4 介绍</title>
       <link>https://acronymor.com/posts/antlr4/ch01/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
@@ -841,11 +1102,11 @@
     </item>
     
     <item>
-      <title>Ch06-MySQL 之 事务</title>
-      <link>https://acronymor.com/posts/mysql/ch06/</link>
+      <title>Ch07-MySQL 之 事务</title>
+      <link>https://acronymor.com/posts/mysql/ch07/</link>
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
+      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     
@@ -909,7 +1170,7 @@
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/mysql/ch02/</guid>
-      <description>&lt;p&gt;InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
+      <description>&lt;p&gt;InnoDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -922,12 +1183,286 @@
     </item>
     
     <item>
-      <title>Ch01-事务</title>
+      <title>Ch01-数据库理论 之 事务</title>
       <link>https://acronymor.com/posts/database/ch01/</link>
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/database/ch01/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch08-Java 之 垃圾回收器</title>
+      <link>https://acronymor.com/posts/jdk/ch08/</link>
+      <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch08/</guid>
+      <description>&lt;p&gt;&lt;code&gt;CMS GC&lt;/code&gt;、&lt;code&gt;G1&lt;/code&gt;、&lt;code&gt;ZGC&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-Java 之 内存分配与回收策略</title>
+      <link>https://acronymor.com/posts/jdk/ch07/</link>
+      <pubDate>Tue, 05 Sep 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch07/</guid>
+      <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-Java 之 垃圾收集算法</title>
+      <link>https://acronymor.com/posts/jdk/ch06/</link>
+      <pubDate>Wed, 30 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch06/</guid>
+      <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-Java 之 引用类型</title>
+      <link>https://acronymor.com/posts/jdk/ch05/</link>
+      <pubDate>Sat, 19 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch05/</guid>
+      <description>&lt;p&gt;无论是通过引用计算算法判断对象的引用数量，还是通过可达性分析算法判断对象是否可达，判定对象是否可被回收都与引用有关。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java 之 类的整个生命周期</title>
+      <link>https://acronymor.com/posts/jdk/ch04/</link>
+      <pubDate>Tue, 15 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch04/</guid>
+      <description>&lt;p&gt;其中类加载的过程包括了&lt;code&gt;加载&lt;/code&gt;、&lt;code&gt;验证&lt;/code&gt;、&lt;code&gt;准备&lt;/code&gt;、&lt;code&gt;解析&lt;/code&gt;、&lt;code&gt;初始化&lt;/code&gt;五个阶段。在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持 Java 语言的运行时绑定 (也成为动态绑定或晚期绑定)。另外注意这里的几个阶段是按顺序开始，而不是按顺序进行或完成，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 Java 对象结构</title>
+      <link>https://acronymor.com/posts/jdk/ch03/</link>
+      <pubDate>Thu, 10 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch03/</guid>
+      <description>&lt;p&gt;在 HotSpot 虚拟机中，对象在内存中存储的布局可以分为三块区域：&lt;strong&gt;对象头 (Header)&lt;/strong&gt;、 &lt;strong&gt;实例数据 (Instance Data)&lt;/strong&gt;、&lt;strong&gt;对齐填充 (Padding)&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 JVM 内存结构 (JVM)</title>
+      <link>https://acronymor.com/posts/jdk/ch02/</link>
+      <pubDate>Sun, 06 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch02/</guid>
+      <description>&lt;p&gt;Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;线程私有：程序计数器、虚拟机栈、本地方法区&lt;/li&gt;
+&lt;li&gt;线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 Java 内存模型 (JMM)</title>
+      <link>https://acronymor.com/posts/jdk/ch01/</link>
+      <pubDate>Tue, 01 Aug 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/jdk/ch01/</guid>
+      <description>&lt;p&gt;JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch4-Java 之 JUC</title>
+      <link>https://acronymor.com/posts/java-juc/ch04/</link>
+      <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch04/</guid>
+      <description>&lt;p&gt;JUC 即 &lt;code&gt;java.util.concurrent&lt;/code&gt;，是 Java 并发编程中很常用的实用工具类。它包含了 &lt;code&gt;Lock 框架&lt;/code&gt;，&lt;code&gt;Collections 并发集合&lt;/code&gt;，&lt;code&gt;Executors 线程池&lt;/code&gt;，&lt;code&gt;Atomic 原子类&lt;/code&gt;，&lt;code&gt;Tools&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch3-Java 之 ThreadLocal</title>
+      <link>https://acronymor.com/posts/java-juc/ch03/</link>
+      <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch03/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.lang.ThreadLocal&lt;/code&gt;是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java JUC 之 线程基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch02/</link>
+      <pubDate>Thu, 06 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java JUC 之 理论基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch01/</link>
+      <pubDate>Tue, 04 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch05-锁</title>
+      <link>https://acronymor.com/posts/software-engineering/ch05/</link>
+      <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/software-engineering/ch05/</guid>
+      <description>&lt;p&gt;锁概念&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-并发问题</title>
+      <link>https://acronymor.com/posts/software-engineering/ch04/</link>
+      <pubDate>Mon, 13 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/software-engineering/ch04/</guid>
+      <description>&lt;p&gt;并发问题&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Java Map 之 WeakHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch12/</link>
+      <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch12/</guid>
+      <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java Map 之 TreeMap</title>
+      <link>https://acronymor.com/posts/java-map/ch03/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch03/</guid>
+      <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java Map 之 LinkedHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch02/</link>
+      <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch02/</guid>
+      <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java Map 之 HashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch01/</link>
+      <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch05-Java Collection 之 PriorityQueue</title>
+      <link>https://acronymor.com/posts/java-collection/ch05/</link>
+      <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch05/</guid>
+      <description>&lt;p&gt;优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java Collection 之 ArrayDeque</title>
+      <link>https://acronymor.com/posts/java-collection/ch04/</link>
+      <pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch04/</guid>
+      <description>&lt;p&gt;Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java Collection 之 LinkedList</title>
+      <link>https://acronymor.com/posts/java-collection/ch03/</link>
+      <pubDate>Mon, 23 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch03/</guid>
+      <description>&lt;p&gt;LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java Collection 之 ArrayList</title>
+      <link>https://acronymor.com/posts/java-collection/ch02/</link>
+      <pubDate>Fri, 20 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch02/</guid>
+      <description>&lt;p&gt;ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 Collection 和 Map</title>
+      <link>https://acronymor.com/posts/java-collection/ch01/</link>
+      <pubDate>Sun, 15 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-collection/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch04-Java 之 synchronized</title>
+      <link>https://acronymor.com/posts/java-basic/ch04/</link>
+      <pubDate>Fri, 13 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch04/</guid>
+      <description>&lt;p&gt;synchronized 是 Java 中的一个关键字，主要用于解决 Java 中常见的并发问题（原子性，可见性，有序性）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 各种机制</title>
+      <link>https://acronymor.com/posts/java-basic/ch03/</link>
+      <pubDate>Tue, 10 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 Q/A</title>
+      <link>https://acronymor.com/posts/java-basic/ch02/</link>
+      <pubDate>Mon, 02 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 基础</title>
+      <link>https://acronymor.com/posts/java-basic/ch01/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-basic/ch01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-equals</title>
+      <link>https://acronymor.com/posts/software-engineering/ch03/</link>
+      <pubDate>Sat, 15 Oct 2016 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/software-engineering/ch03/</guid>
+      <description>&lt;p&gt;equals() 或者 ==&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-重写与重载</title>
+      <link>https://acronymor.com/posts/software-engineering/ch02/</link>
+      <pubDate>Sun, 25 Sep 2016 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/software-engineering/ch02/</guid>
+      <description>&lt;p&gt;重写与重载&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-面向对象</title>
+      <link>https://acronymor.com/posts/software-engineering/ch01/</link>
+      <pubDate>Wed, 21 Sep 2016 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/software-engineering/ch01/</guid>
+      <description>&lt;p&gt;面向对象有三大特性，&lt;code&gt;封装&lt;/code&gt;、&lt;code&gt;继承&lt;/code&gt;、&lt;code&gt;多态&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     
     <item>

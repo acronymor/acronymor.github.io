@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 03 Jan 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Database/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Ch04-执行模型</title>
+      <title>Ch04-数据库理论 之 执行模型</title>
       <link>https://acronymor.com/posts/database/ch04/</link>
       <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
       
@@ -17,7 +17,7 @@
     </item>
     
     <item>
-      <title>Ch03-CBO</title>
+      <title>Ch03-数据库理论 之 CBO</title>
       <link>https://acronymor.com/posts/database/ch03/</link>
       <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
       
@@ -26,7 +26,7 @@
     </item>
     
     <item>
-      <title>Ch02-RBO</title>
+      <title>Ch02-数据库理论 之 RBO</title>
       <link>https://acronymor.com/posts/database/ch02/</link>
       <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
       
@@ -35,7 +35,7 @@
     </item>
     
     <item>
-      <title>Ch01-事务</title>
+      <title>Ch01-数据库理论 之 事务</title>
       <link>https://acronymor.com/posts/database/ch01/</link>
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
       

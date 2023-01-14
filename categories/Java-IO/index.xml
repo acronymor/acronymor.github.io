@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java | IO on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Java-IO/</link>
+    <description>Recent content in Java | IO on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-IO/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch04-Java 之 AIO</title>
+      <link>https://acronymor.com/posts/java-io/ch04/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java 之 NIO</title>
+      <link>https://acronymor.com/posts/java-io/ch03/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java 之 BIO</title>
+      <link>https://acronymor.com/posts/java-io/ch02/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java 之 IO</title>
+      <link>https://acronymor.com/posts/java-io/ch01/</link>
+      <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-io/ch01/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

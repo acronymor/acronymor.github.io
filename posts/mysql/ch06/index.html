@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：原子性 (Atomicity)、一致性 (Consistency)、隔离性 (Isolation)、持久性 (Durability)。">
+<meta name="description" content="我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-MySQL 之 事务" />
-<meta property="og:description" content="数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：原子性 (Atomicity)、一致性 (Consistency)、隔离性 (Isolation)、持久性 (Durability)。" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-MySQL 之 复制技术" />
+<meta property="og:description" content="我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/mysql/ch06/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2018-04-01T00:00:00+08:00" />
-<meta property="article:modified_time" content="2018-04-01T00:00:00+08:00" />
-<title>Ch06-MySQL 之 事务 | acronymor&#39;s blog</title>
+<meta property="article:published_time" content="2022-04-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-04-10T00:00:00+08:00" />
+<title>Ch06-MySQL 之 复制技术 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -125,7 +125,7 @@ var _hmt = _hmt || [];
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Ch06-MySQL 之 事务</strong>
+  <strong>Ch06-MySQL 之 复制技术</strong>
 
   <label for="toc-control">
     
@@ -141,22 +141,9 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-原子性-atomicity">1. 原子性 (Atomicity)</a></li>
-    <li><a href="#2-一致性-consistency">2. 一致性 (Consistency)</a></li>
-    <li><a href="#3-隔离性-isolation">3. 隔离性 (Isolation)</a>
-      <ul>
-        <li><a href="#31-说明">3.1 说明</a></li>
-        <li><a href="#32-问题">3.2 问题</a></li>
-      </ul>
-    </li>
-    <li><a href="#4-持久性-durability">4. 持久性 (Durability)</a>
-      <ul>
-        <li><a href="#41-mysql-数据持久化doublewrite">4.1 MySQL 数据持久化（DoubleWrite）</a></li>
-        <li><a href="#42-redolog-持久化策略innodb_flush_log_at_trx_commit">4.2 redolog 持久化策略（innodb_flush_log_at_trx_commit）</a></li>
-        <li><a href="#43-binlog-持久化策略sync_binlog">4.3 binlog 持久化策略（sync_binlog）</a></li>
-      </ul>
-    </li>
-    <li><a href="#5-参考文献">5. 参考文献</a></li>
+    <li><a href="#1-五种-mts-技术">1. 五种 MTS 技术</a></li>
+    <li><a href="#2-三种复制模式">2. 三种复制模式</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>
 
@@ -171,10 +158,10 @@ var _hmt = _hmt || [];
       
 <article class="markdown">
   <h1>
-    <a href="/posts/mysql/ch06/">Ch06-MySQL 之 事务</a>
+    <a href="/posts/mysql/ch06/">Ch06-MySQL 之 复制技术</a>
   </h1>
   
-  <h5>April 1, 2018</h5>
+  <h5>April 10, 2022</h5>
 
 
 
@@ -194,145 +181,85 @@ var _hmt = _hmt || [];
 
 
 
-<p>数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：<code>原子性 (Atomicity)</code>、<code>一致性 (Consistency)</code>、<code>隔离性 (Isolation)</code>、<code>持久性 (Durability)</code>。</p>
-<h1 id="1-原子性-atomicity">
-  1. 原子性 (Atomicity)
-  <a class="anchor" href="#1-%e5%8e%9f%e5%ad%90%e6%80%a7-atomicity">#</a>
+<p>我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。</p>
+<p>复制主要的作用体现为：<code>提升可用性</code>；<code>提升读扩展能力</code>；<code>提升数据持久性保证</code>；<code>提升事务提交性能</code>。</p>
+<p><img src="source-replica.png" alt="source replica" /></p>
+<p>在 MySQL 的演进迭代过程中，有三种复制模式和五种 MTS 技术。实际应用中，一般是一种复制模式和一种或者多种 MTS 技术组合在一起的。</p>
+<h1 id="1-五种-mts-技术">
+  1. 五种 MTS 技术
+  <a class="anchor" href="#1-%e4%ba%94%e7%a7%8d-mts-%e6%8a%80%e6%9c%af">#</a>
 </h1>
-<p>MySQL 实现回滚操作完全依赖于 undo log。使用 undo 实现原子性在操作任何数据之前，首先会将修改前的数据记录到 undo log 中，再进行实际修改。如果出现异常需要回滚，系统可以利用 undo 中的备份将数据恢复到事务开始之前的状态。</p>
-<p><img src="mysql-transaction.png" alt="transaction" /></p>
-<p>上图是 MySQL 中表示事务的基本数据结构，其中与 undo 相关的字段为 insert_undo 和 update_undo，分别指向本次事务所产生的 undo log。</p>
-<p>事务回滚根据 update_undo（或者 insert_undo）找到对应的 undo log，做逆向操作即可。对于已经标记删除的数据清理删除标记，对于更新数据直接回滚更新；插入操作稍微复杂一些，不仅需要删除数据，还需要删除相关的聚集索引以及二级索引记录。</p>
-<h1 id="2-一致性-consistency">
-  2. 一致性 (Consistency)
-  <a class="anchor" href="#2-%e4%b8%80%e8%87%b4%e6%80%a7-consistency">#</a>
-</h1>
-<h1 id="3-隔离性-isolation">
-  3. 隔离性 (Isolation)
-  <a class="anchor" href="#3-%e9%9a%94%e7%a6%bb%e6%80%a7-isolation">#</a>
-</h1>
-<h2 id="31-说明">
-  3.1 说明
-  <a class="anchor" href="#31-%e8%af%b4%e6%98%8e">#</a>
-</h2>
 <table>
 <thead>
 <tr>
-<th><strong>隔离级别</strong></th>
-<th><strong>说明</strong></th>
+<th>MTS</th>
+<th>Remark</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Read uncommitted</td>
-<td>一个会话可以读取其他事务未提交的更新结果，如果这个事务最后以回滚结束，这时的读取结果就可能是错误的，所以多数的数据库应用都不会使用这种隔离级别。</td>
+<td>Single Thread Slave (STS)</td>
+<td>在 replica 上从 replay log 回放到 replica 表空间只有一个线程，主要存在于 MySQL 5.6.2 之前。这个时期复制延迟通常很大，因为主/从数据库的并发度差距很大。</td>
 </tr>
 <tr>
-<td>Read commited</td>
-<td>这种隔离级别的事务只能读取其他事务已经提交的更新结果，否则，发生等待，但是其他会话可以修改这个事务中被读取的记录，而不必等待事务结束，显然，在这种隔离级别下，一个事务中的两个相同的读取操作，其结果可能不同。</td>
+<td>Schema based MTS (SB-MTS)</td>
+<td>MySQL 5.6.3 引入。多个 schema(MySQL 中等同于 database) 之间可以并发的回放 replay log 到 replica 表空间。</td>
 </tr>
 <tr>
-<td>Repeatable read</td>
-<td>在一个事务中，如果在两次相同条件的读取操作之间没有添加记录的操作，也没有其他更新操作导致在这个查询条件下记录数增多，则两次读取结果相同。（该级别是 InnoDB 默认的隔离等级）。</td>
+<td>Logical Clock based MTS (LC-MTS)</td>
+<td>MySQL 5.7.2 引入。MySQL 主库上为了提升 I/O 的利用率，采用了 group commit 的技术，简单理解就是把多个小 I/O 聚合成一个大 I/O，去分担存储设备寻道的开销（SSD 没有磁道的概念，但小 I/O 据称的收益依然非常可观）。一批可以 group commit 的事务，读写的数据集是没有冲突的，LC-MTS 正是利用了这个特点，在 repliac 上同一个 group commit 中多个事务可以并行的回放。</td>
 </tr>
 <tr>
-<td>Serializable</td>
-<td>在一个事务中，读取操作的结果是在这个事务开始之前其他事务就已经提交的记录。</td>
+<td>Lock Interval based MTS (LI-MTS)</td>
+<td>MySQL 5.7.6 引入，在 LC-MTS 的基础上进行了进一步的优化，将同一个 group 中补充的事务并行化。推导逻辑是：只要两个事务可以同时获得锁，说明他们读写的资源是不冲突的，因此就可以并行回放。</td>
+</tr>
+<tr>
+<td>Writeset based MTS (WS-MTS)</td>
+<td>MySQL 5.7.22 引入，之前 MTS 技术都依赖 source 节点上运行态的情况实施并发策略，但 WS-MTS 把并发回放的策略细类度到数据本身，两个事务读写的数据集没有交集，就可以并行回放。</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>InnoDB 默认的隔离级别是 REPEATABLE READ（可重复读），并且通过间隙锁算法 (next-key locking) 策略防止 Phantom Read 的出现</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th><strong>问题</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dirty Read</td>
-<td>事务 A 读取了事务 B 未提交的数据，并在这个基础上又做了其他操作。</td>
-</tr>
-<tr>
-<td>NonRepeatable Read</td>
-<td>事务 A 读取了事务 B 已提交的数据，然后事务 B 又进行了修改操作。</td>
-</tr>
-<tr>
-<td>Phantom Read</td>
-<td>事务 A 读取了事务 B 已提交的数据，然后事务 B 又进行了插入操作。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="32-问题">
-  3.2 问题
-  <a class="anchor" href="#32-%e9%97%ae%e9%a2%98">#</a>
-</h2>
-<p>不同的隔离级别面临的问题。</p>
-<table>
-<thead>
-<tr>
-<th><strong>Isolation/Question</strong></th>
-<th><strong>Dirty Read</strong></th>
-<th><strong>NonRepeatable Read</strong></th>
-<th><strong>Phantom Read</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Read uncommitted</td>
-<td>Y</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>Read commited</td>
-<td>N</td>
-<td>Y</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>Repeatable read</td>
-<td>N</td>
-<td>N</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>Serializable</td>
-<td>N</td>
-<td>N</td>
-<td>N</td>
-</tr>
-</tbody>
-</table>
-<h1 id="4-持久性-durability">
-  4. 持久性 (Durability)
-  <a class="anchor" href="#4-%e6%8c%81%e4%b9%85%e6%80%a7-durability">#</a>
+<h1 id="2-三种复制模式">
+  2. 三种复制模式
+  <a class="anchor" href="#2-%e4%b8%89%e7%a7%8d%e5%a4%8d%e5%88%b6%e6%a8%a1%e5%bc%8f">#</a>
 </h1>
-<p>MySQL 事务持久化涉及的组件相对比较多，主要有 doublewrite、redo log 以及 binlog。</p>
-<h2 id="41-mysql-数据持久化doublewrite">
-  4.1 MySQL 数据持久化（DoubleWrite）
-  <a class="anchor" href="#41-mysql-%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96doublewrite">#</a>
-</h2>
-<p>实际上 MySQL 的真实数据写入分为两次写入，一次写入到一个称为 DoubleWrite 的地方，写成功之后再真实写入数据所在磁盘。为什么要写两次？这是因为 MySQL 数据页大小与磁盘一次原子操作大小不一致，有可能会出现部分写入的情况，比如默认 InnoDB 数据页大小为 16K，而磁盘一次原子写入大小为 512 字节（扇区大小），这样一个数据页写入需要多次 IO，这样一旦中间发生异常就会出现数据丢失。另外需要注意的是 DoubleWrite 性能并不会影响太大，因为写入 DoubleWrite 是顺序写入，对性能影响来说不是很大。</p>
-<h2 id="42-redolog-持久化策略innodb_flush_log_at_trx_commit">
-  4.2 redolog 持久化策略（innodb_flush_log_at_trx_commit）
-  <a class="anchor" href="#42-redolog-%e6%8c%81%e4%b9%85%e5%8c%96%e7%ad%96%e7%95%a5innodb_flush_log_at_trx_commit">#</a>
-</h2>
-<p>redolog 是 InnoDB 的 WAL，数据先写入 redolog 并落盘，再写入更新到 bufferpool。redolog 的持久化策略默认为 1，表示每次事务提交之后 log 就会持久化到磁盘；该值为 0 表示每隔 1 秒钟左右由异步线程持久化到磁盘，这种情况下 MySQL 发生宕机有可能会丢失部分数据。该值为 2 表示每次事务提交之后 log 会 flush 到操作系统缓冲区，再由操作系统异步 flush 到磁盘，这种情况下 MySQL 发生宕机不会丢失数据，但机器宕机有可能会丢失部分数据。</p>
-<h2 id="43-binlog-持久化策略sync_binlog">
-  4.3 binlog 持久化策略（sync_binlog）
-  <a class="anchor" href="#43-binlog-%e6%8c%81%e4%b9%85%e5%8c%96%e7%ad%96%e7%95%a5sync_binlog">#</a>
-</h2>
-<p>binlog 作为 Server 层的日志系统，主要以 events 的形式顺序纪录了数据库的各种操作，同时可以纪录每次操作所花费的时间。在 MySQL 官方文档上，主要介绍了 Binlog 的两个最基本核心作用：备份和复制，因此 binlog 的持久化会一定程度影响数据备份和复制的完整性。和 redo 持久化策略相同，可取值有 0，1，N。默认为 0，表示写入操作系统缓冲区，异步 flush 到磁盘。该值为 1 表示同步写入磁盘。为 N 则表示每写 N 次操作系统缓冲就执行一次刷新操作。</p>
-<h1 id="5-参考文献">
-  5. 参考文献
-  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+<table>
+<thead>
+<tr>
+<th><strong>MTS</strong></th>
+<th><strong>Remark</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single Thread Slave (STS)</td>
+<td>在 replica 上从 replay log 回放到 replica 表空间只有一个线程，主要存在于 MySQL 5.6.2 之前。这个时期复制延迟通常很大，因为主/从数据库的并发度差距很大。</td>
+</tr>
+<tr>
+<td>Schema based MTS (SB-MTS)</td>
+<td>MySQL 5.6.3 引入。多个 schema(MySQL 中等同于 database) 之间可以并发的回放 replay log 到 replica 表空间。</td>
+</tr>
+<tr>
+<td>Logical Clock based MTS (LC-MTS)</td>
+<td>MySQL 5.7.2 引入。MySQL 主库上为了提升 I/O 的利用率，采用了 group commit 的技术，简单理解就是把多个小 I/O 聚合成一个大 I/O，去分担存储设备寻道的开销（SSD 没有磁道的概念，但小 I/O 据称的收益依然非常可观）。一批可以 group commit 的事务，读写的数据集是没有冲突的，LC-MTS 正是利用了这个特点，在 repliac 上同一个 group commit 中多个事务可以并行的回放。</td>
+</tr>
+<tr>
+<td>Lock Interval based MTS (LI-MTS)</td>
+<td>MySQL 5.7.6 引入，在 LC-MTS 的基础上进行了进一步的优化，将同一个 group 中补充的事务并行化。推导逻辑是：只要两个事务可以同时获得锁，说明他们读写的资源是不冲突的，因此就可以并行回放。</td>
+</tr>
+<tr>
+<td>Writeset based MTS (WS-MTS)</td>
+<td>MySQL 5.7.22 引入，之前 MTS 技术都依赖 source 节点上运行态的情况实施并发策略，但 WS-MTS 把并发回放的策略细类度到数据本身，两个事务读写的数据集没有交集，就可以并行回放。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
 </h1>
 <ul>
-<li><a href="http://hbasefly.com/2017/08/19/mysql-transaction/">数据库事务系列－MySQL 跨行事务模型</a></li>
+<li><a href="https://mp.weixin.qq.com/s/PIaH_KegxeJfmt8ufgA2jA">MySQL 并行复制技术进化史</a></li>
+<li><a href="https://blog.csdn.net/weixin_30080745/article/details/113305346">MySQL 新特性 MTS</a></li>
 </ul></article>
  
       
@@ -374,22 +301,9 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-原子性-atomicity">1. 原子性 (Atomicity)</a></li>
-    <li><a href="#2-一致性-consistency">2. 一致性 (Consistency)</a></li>
-    <li><a href="#3-隔离性-isolation">3. 隔离性 (Isolation)</a>
-      <ul>
-        <li><a href="#31-说明">3.1 说明</a></li>
-        <li><a href="#32-问题">3.2 问题</a></li>
-      </ul>
-    </li>
-    <li><a href="#4-持久性-durability">4. 持久性 (Durability)</a>
-      <ul>
-        <li><a href="#41-mysql-数据持久化doublewrite">4.1 MySQL 数据持久化（DoubleWrite）</a></li>
-        <li><a href="#42-redolog-持久化策略innodb_flush_log_at_trx_commit">4.2 redolog 持久化策略（innodb_flush_log_at_trx_commit）</a></li>
-        <li><a href="#43-binlog-持久化策略sync_binlog">4.3 binlog 持久化策略（sync_binlog）</a></li>
-      </ul>
-    </li>
-    <li><a href="#5-参考文献">5. 参考文献</a></li>
+    <li><a href="#1-五种-mts-技术">1. 五种 MTS 技术</a></li>
+    <li><a href="#2-三种复制模式">2. 三种复制模式</a></li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>
 

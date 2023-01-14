@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-Java 之 NIO" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/java-io/ch03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-07-25T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-07-25T00:00:00+08:00" />
+<title>Ch03-Java 之 NIO | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch03-Java 之 NIO</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-常见类">1. 常见类</a></li>
+    <li><a href="#2-网络模型">2. 网络模型</a>
+      <ul>
+        <li><a href="#21-reactor-模型">2.1 Reactor 模型</a></li>
+        <li><a href="#22-proactor-模型">2.2 Proactor 模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-selector">3. Selector</a></li>
+    <li><a href="#4-零拷贝">4. 零拷贝</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/java-io/ch03/">Ch03-Java 之 NIO</a>
+  </h1>
+  
+  <h5>July 25, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-IO/">Java | IO</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+<p>操作系统层面的多路复用 IO 实现主要包括四种：<code>select</code>、<code>poll</code>、<code>epoll</code>、<code>kqueue</code>。</p>
+<h1 id="1-常见类">
+  1. 常见类
+  <a class="anchor" href="#1-%e5%b8%b8%e8%a7%81%e7%b1%bb">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">nio</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ByteBuffer</span>
+</span></span><span style="display:flex;"><span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">nio</span><span style="color:#f92672">.</span><span style="color:#a6e22e">channels</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Selector</span>
+</span></span><span style="display:flex;"><span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">nio</span><span style="color:#f92672">.</span><span style="color:#a6e22e">channels</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SelectableChannel</span>
+</span></span><span style="display:flex;"><span>java<span style="color:#f92672">.</span><span style="color:#a6e22e">nio</span><span style="color:#f92672">.</span><span style="color:#a6e22e">channels</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ServerSocketChannel</span>
+</span></span></code></pre></div><h1 id="2-网络模型">
+  2. 网络模型
+  <a class="anchor" href="#2-%e7%bd%91%e7%bb%9c%e6%a8%a1%e5%9e%8b">#</a>
+</h1>
+<h2 id="21-reactor-模型">
+  2.1 Reactor 模型
+  <a class="anchor" href="#21-reactor-%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<p>Reactor 是非阻塞同步网络模型，Java 可以借用 NIO 接口实现各种 Reactor 模型，比如 <code>单Reactor单线程</code>、<code>单Reactor多线程</code>、<code>主从Reactor多线程</code></p>
+<h2 id="22-proactor-模型">
+  2.2 Proactor 模型
+  <a class="anchor" href="#22-proactor-%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<p>Proactor 是异步网络模型，需要 OS 的支持才能实现，所以 Java 借用 NIO 接口不一定能实现。</p>
+<h1 id="3-selector">
+  3. Selector
+  <a class="anchor" href="#3-selector">#</a>
+</h1>
+<p>不同的 SelectorProvider 实现对应了不同的 Selector，由具体的 SelectorProvider（根据不同的 OS 确定）实现进行创建。</p>
+<p><img src="java-io-nio.png" alt="java-io-nio" /></p>
+<h1 id="4-零拷贝">
+  4. 零拷贝
+  <a class="anchor" href="#4-%e9%9b%b6%e6%8b%b7%e8%b4%9d">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>条目</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MappedByteBuffer</td>
+<td>基于内存映射（mmap）</td>
+</tr>
+<tr>
+<td>DirectByteBuffer</td>
+<td>JVM 可以对 DirectByteBuffer 的对象进行 JVM 堆外内存分配和回收管理</td>
+</tr>
+<tr>
+<td>FileChannel</td>
+<td>用于文件读写、映射和操作的通道；定义了 transferFrom() 和 transferTo() 两个抽象方法，它通过在通道和通道之间建立连接实现数据传输</td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-参考文献">
+  5. 参考文献
+  <a class="anchor" href="#5-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://pdai.tech/md/java/io/java-io-nio-select-epoll.html">Java NIO - IO 多路复用详解</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-常见类">1. 常见类</a></li>
+    <li><a href="#2-网络模型">2. 网络模型</a>
+      <ul>
+        <li><a href="#21-reactor-模型">2.1 Reactor 模型</a></li>
+        <li><a href="#22-proactor-模型">2.2 Proactor 模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-selector">3. Selector</a></li>
+    <li><a href="#4-零拷贝">4. 零拷贝</a></li>
+    <li><a href="#5-参考文献">5. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

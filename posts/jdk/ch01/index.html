@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Java 之 Java 内存模型 (JMM)" />
+<meta property="og:description" content="JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/jdk/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-08-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2017-08-01T00:00:00+08:00" />
+<title>Ch01-Java 之 Java 内存模型 (JMM) | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Java 之 Java 内存模型 (JMM)</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-jmm-介绍">1. JMM 介绍</a></li>
+    <li><a href="#2-jmm-与-jvm-之间的关系">2. JMM 与 JVM 之间的关系</a></li>
+    <li><a href="#3-jmm-与-硬件内存的关系">3. JMM 与 硬件内存的关系</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/jdk/ch01/">Ch01-Java 之 Java 内存模型 (JMM)</a>
+  </h1>
+  
+  <h5>August 1, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+<p>JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。</p>
+<h1 id="1-jmm-介绍">
+  1. JMM 介绍
+  <a class="anchor" href="#1-jmm-%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p>根据 JMM 模型，JVM 把内存分成了线程栈区（工作内存）和堆区（主内存）。</p>
+<p>一个变量如何从主内存拷贝到工作内存，如何从工作内存同步回主内存之类的实现细节，Java 内存模型中定义了以下 8 种操作来完成。这 8 种操作都是原子性的、不可再分的。</p>
+<p><img src="jmm-overview.png" alt="jmm-overview" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>操作</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lock</td>
+<td>作用于主内存变量，它把一个变量标识为一条线程独占的状态。</td>
+</tr>
+<tr>
+<td>unlock</td>
+<td>作用于主内存变量，它把一个处理锁定的状态的变量释放出来，释放后的变量才可以被其它线程锁定，unlock 之前必须将变量值同步回主内存。</td>
+</tr>
+<tr>
+<td>read</td>
+<td>作用于主内存变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的 load 动作使用。</td>
+</tr>
+<tr>
+<td>load</td>
+<td>作用于工作内存变量，它把 read 操作从主内存中得到的值放入工作内存的变量副本中。</td>
+</tr>
+<tr>
+<td>use</td>
+<td>作用于工作内存中的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用到变量的字节码指令时将会执行这个操作。</td>
+</tr>
+<tr>
+<td>assign</td>
+<td>作用于工作内存变量，它把一个从执行引擎接到的值赋值给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</td>
+</tr>
+<tr>
+<td>store</td>
+<td>作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的 write 操作使用。</td>
+</tr>
+<tr>
+<td>write</td>
+<td>作用于主内存的变量，它把 store 操作从工作内存中得到的值放入主内存的变量中。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-jmm-与-jvm-之间的关系">
+  2. JMM 与 JVM 之间的关系
+  <a class="anchor" href="#2-jmm-%e4%b8%8e-jvm-%e4%b9%8b%e9%97%b4%e7%9a%84%e5%85%b3%e7%b3%bb">#</a>
+</h1>
+<p><img src="jmm-jvm.png" alt="mm-jvm" /></p>
+<h1 id="3-jmm-与-硬件内存的关系">
+  3. JMM 与 硬件内存的关系
+  <a class="anchor" href="#3-jmm-%e4%b8%8e-%e7%a1%ac%e4%bb%b6%e5%86%85%e5%ad%98%e7%9a%84%e5%85%b3%e7%b3%bb">#</a>
+</h1>
+<p><img src="jmm-mem.png" alt="jmm-mem" /></p>
+<h1 id="参考文献">
+  参考文献
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://pdai.tech/md/java/jvm/java-jvm-x-introduce.html">Java 内存模型引入</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-jmm-介绍">1. JMM 介绍</a></li>
+    <li><a href="#2-jmm-与-jvm-之间的关系">2. JMM 与 JVM 之间的关系</a></li>
+    <li><a href="#3-jmm-与-硬件内存的关系">3. JMM 与 硬件内存的关系</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,22 +6,31 @@
     <description>Recent content in Tags on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mysql</title>
+      <link>https://acronymor.com/tags/mysql/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c&#43;&#43;</title>
+      <link>https://acronymor.com/tags/c&#43;&#43;/</link>
+      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>leveldb</title>
       <link>https://acronymor.com/tags/leveldb/</link>
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/tags/leveldb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>mysql</title>
-      <link>https://acronymor.com/tags/mysql/</link>
-      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/mysql/</guid>
       <description></description>
     </item>
     
@@ -40,6 +49,15 @@
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/tags/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>java</title>
+      <link>https://acronymor.com/tags/java/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/java/</guid>
       <description></description>
     </item>
     
@@ -130,6 +148,24 @@
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/tags/hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jvm</title>
+      <link>https://acronymor.com/tags/jvm/</link>
+      <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/jvm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>software</title>
+      <link>https://acronymor.com/tags/software/</link>
+      <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/software/</guid>
       <description></description>
     </item>
     

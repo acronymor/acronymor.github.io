@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.9ff18f2a52ef539e59828ed5f15531bafab57db6ecd2dab01f73de14dc40e390.js" integrity="sha256-n/GPKlLvU55Zgo7V8VUxuvq1fbbs0tqwH3PeFNxA45A=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -150,9 +150,9 @@ var _hmt = _hmt || [];
     <li><a href="#2-近似-distinct_count">2. 近似 distinct_count</a>
       <ul>
         <li><a href="#21-介绍">2.1 介绍</a></li>
+        <li><a href="#22-算法实现">2.2 算法实现</a></li>
       </ul>
     </li>
-    <li><a href="#22-算法实现">2.2 算法实现</a></li>
     <li><a href="#3-精确-distinct_count">3. 精确 distinct_count</a>
       <ul>
         <li><a href="#31-介绍">3.1 介绍</a></li>
@@ -228,10 +228,10 @@ var _hmt = _hmt || [];
   <a class="anchor" href="#21-%e4%bb%8b%e7%bb%8d">#</a>
 </h2>
 <p>Apache Kylin 使用 HyperLogLog 算法实现了近似 Count Distinct，提供了错误率从 9.75% 到 1.22% 几种精度供选择；算法计算后的 Count Distinct 指标，理论上，结果最大只有 64KB，最低的错误率是 1.22%；这种实现方式用在需要快速计算、节省存储空间，并且能接受错误率的 Count Distinct 指标计算。</p>
-<h1 id="22-算法实现">
+<h2 id="22-算法实现">
   2.2 算法实现
   <a class="anchor" href="#22-%e7%ae%97%e6%b3%95%e5%ae%9e%e7%8e%b0">#</a>
-</h1>
+</h2>
 <p>该算法的核心是基于伯努利实验的分析结果进行推测。用网上最常见的例子来说明下</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>第一次试验：抛掷 1 次出现正面，此时 k=1,n=1;
 </span></span><span style="display:flex;"><span>第二次实验：抛掷 3 次出现正面，此时 k=3,n=2;
@@ -335,9 +335,9 @@ var _hmt = _hmt || [];
     <li><a href="#2-近似-distinct_count">2. 近似 distinct_count</a>
       <ul>
         <li><a href="#21-介绍">2.1 介绍</a></li>
+        <li><a href="#22-算法实现">2.2 算法实现</a></li>
       </ul>
     </li>
-    <li><a href="#22-算法实现">2.2 算法实现</a></li>
     <li><a href="#3-精确-distinct_count">3. 精确 distinct_count</a>
       <ul>
         <li><a href="#31-介绍">3.1 介绍</a></li>

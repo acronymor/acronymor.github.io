@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="JVM" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://acronymor.com/categories/JVM/" />
+<title>JVM | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/categories/JVM/index.xml" title="acronymor's blog" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>JVM</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Database/">Database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Elasticsearch/">Elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-IO/">Java | IO</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-HBase/">Apache HBase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Flink/">Apache Flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-JUC/">Java | JUC</a>
+          <span>18</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Antlr4/">Antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Spark/">Apache Spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hive/">Apache Hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/JVM/">JVM</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Software-Engineering/">Software Engineering</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Map/">Java | Map</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Collection/">Java | Collection</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Basic/">Java | Basic</a>
+          <span>4</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/database/">database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/elasticsearch/">elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/java/">java</a>
+          <span>35</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kylin/">kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/calcite/">calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hbase/">hbase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/flink/">flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/antlr4/">antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/spark/">spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kafka/">kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hive/">hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/zookeeper/">zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hadoop/">hadoop</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/jvm/">jvm</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/software/">software</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch08/">Ch08-Java 之 垃圾回收器</a>
+    </h2>
+    
+  <h5>September 10, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>CMS GC</code>、<code>G1</code>、<code>ZGC</code></p>
+        <a href="/posts/jdk/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch07/">Ch07-Java 之 内存分配与回收策略</a>
+    </h2>
+    
+  <h5>September 5, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。</p>
+        <a href="/posts/jdk/ch07/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch06/">Ch06-Java 之 垃圾收集算法</a>
+    </h2>
+    
+  <h5>August 30, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。</p>
+        <a href="/posts/jdk/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch05/">Ch05-Java 之 引用类型</a>
+    </h2>
+    
+  <h5>August 19, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>无论是通过引用计算算法判断对象的引用数量，还是通过可达性分析算法判断对象是否可达，判定对象是否可被回收都与引用有关。</p>
+        <a href="/posts/jdk/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch04/">Ch04-Java 之 类的整个生命周期</a>
+    </h2>
+    
+  <h5>August 15, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>其中类加载的过程包括了<code>加载</code>、<code>验证</code>、<code>准备</code>、<code>解析</code>、<code>初始化</code>五个阶段。在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持 Java 语言的运行时绑定 (也成为动态绑定或晚期绑定)。另外注意这里的几个阶段是按顺序开始，而不是按顺序进行或完成，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。</p>
+        <a href="/posts/jdk/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch03/">Ch03-Java 之 Java 对象结构</a>
+    </h2>
+    
+  <h5>August 10, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在 HotSpot 虚拟机中，对象在内存中存储的布局可以分为三块区域：<strong>对象头 (Header)</strong>、 <strong>实例数据 (Instance Data)</strong>、<strong>对齐填充 (Padding)</strong>。</p>
+        <a href="/posts/jdk/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch02/">Ch02-Java 之 JVM 内存结构 (JVM)</a>
+    </h2>
+    
+  <h5>August 6, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。</p>
+<ul>
+<li>线程私有：程序计数器、虚拟机栈、本地方法区</li>
+<li>线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）</li>
+</ul>
+        <a href="/posts/jdk/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch01/">Ch01-Java 之 Java 内存模型 (JMM)</a>
+    </h2>
+    
+  <h5>August 1, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。</p>
+        <a href="/posts/jdk/ch01/">...</a>
+      
+    </p>
+  </article>
+  
+
+  
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Database/">Database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Elasticsearch/">Elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-IO/">Java | IO</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Calcite/">Apache Calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-HBase/">Apache HBase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Flink/">Apache Flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-JUC/">Java | JUC</a>
+          <span>18</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Antlr4/">Antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Spark/">Apache Spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hive/">Apache Hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Zookeeper/">Apache Zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Apache-Hadoop/">Apache Hadoop</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/JVM/">JVM</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Software-Engineering/">Software Engineering</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Map/">Java | Map</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Collection/">Java | Collection</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Java-Basic/">Java | Basic</a>
+          <span>4</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/database/">database</a>
+          <span>4</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/elasticsearch/">elasticsearch</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/java/">java</a>
+          <span>35</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kylin/">kylin</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/calcite/">calcite</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hbase/">hbase</a>
+          <span>16</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/flink/">flink</a>
+          <span>14</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/antlr4/">antlr4</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/spark/">spark</a>
+          <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/kafka/">kafka</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hive/">hive</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/zookeeper/">zookeeper</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/hadoop/">hadoop</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/jvm/">jvm</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/software/">software</a>
+          <span>5</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

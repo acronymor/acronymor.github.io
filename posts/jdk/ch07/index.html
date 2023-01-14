@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-Java 之 内存分配与回收策略" />
+<meta property="og:description" content="在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/jdk/ch07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-09-05T00:00:00+08:00" />
+<meta property="article:modified_time" content="2017-09-05T00:00:00+08:00" />
+<title>Ch07-Java 之 内存分配与回收策略 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch07-Java 之 内存分配与回收策略</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-minor-gc-major-gc-full-gc">1. Minor GC, Major GC, Full GC</a>
+      <ul>
+        <li><a href="#11-minor-gc-触发条件">1.1 Minor GC 触发条件</a></li>
+        <li><a href="#12-full-gc-触发条件">1.2 Full GC 触发条件</a>
+          <ul>
+            <li><a href="#121-调用-systemgc">1.2.1 调用 System.gc()</a></li>
+            <li><a href="#122-老年代空间不足">1.2.2 老年代空间不足</a></li>
+            <li><a href="#123-空间分配担保失败">1.2.3 空间分配担保失败</a></li>
+            <li><a href="#124-jdk-17-及以前的永久代空间不足在">1.2.4 JDK 1.7 及以前的永久代空间不足在</a></li>
+            <li><a href="#125-concurrent-mode-failure">1.2.5 Concurrent Mode Failure</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-内存分配策略">2. 内存分配策略</a>
+      <ul>
+        <li><a href="#21-对象优先在-eden-分配">2.1 对象优先在 Eden 分配</a></li>
+        <li><a href="#22-大对象直接进入老年代">2.2 大对象直接进入老年代</a></li>
+        <li><a href="#23-长期存活的对象进入老年代">2.3 长期存活的对象进入老年代</a></li>
+        <li><a href="#24-动态对象年龄判定">2.4 动态对象年龄判定</a></li>
+        <li><a href="#25-空间分配担保">2.5 空间分配担保</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/jdk/ch07/">Ch07-Java 之 内存分配与回收策略</a>
+  </h1>
+  
+  <h5>September 5, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+<p>在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。</p>
+<h1 id="1-minor-gc-major-gc-full-gc">
+  1. Minor GC, Major GC, Full GC
+  <a class="anchor" href="#1-minor-gc-major-gc-full-gc">#</a>
+</h1>
+<p>JVM 在进行 GC 时，并非每次都对堆内存（新生代、老年代；方法区）区域一起回收的，大部分时候回收的都是指新生代。</p>
+<p>针对 HotSpot VM 的实现，它里面的 GC 按照回收区域又分为两大类：部分收集（Partial GC），整堆收集（Full GC）</p>
+<ul>
+<li>部分收集：不是完整收集整个 Java 堆的垃圾收集。其中又分为：
+<ul>
+<li>新生代收集（Minor GC/Young GC）：只是新生代的垃圾收集</li>
+<li>老年代收集（Major GC/Old GC）：只是老年代的垃圾收集
+<ul>
+<li>目前，只有 CMS GC 会有单独收集老年代的行为</li>
+<li>很多时候 Major GC 会和 Full GC 混合使用，需要具体分辨是老年代回收还是整堆回收</li>
+</ul>
+</li>
+<li>混合收集（Mixed GC）：收集整个新生代以及部分老年代的垃圾收集
+<ul>
+<li>目前只有 G1 GC 会有这种行为</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>整堆收集（Full GC）：收集整个 Java 堆和方法区的垃圾</li>
+</ul>
+<h2 id="11-minor-gc-触发条件">
+  1.1 Minor GC 触发条件
+  <a class="anchor" href="#11-minor-gc-%e8%a7%a6%e5%8f%91%e6%9d%a1%e4%bb%b6">#</a>
+</h2>
+<p>当 Eden 空间满时，就将触发一次 Minor GC</p>
+<h2 id="12-full-gc-触发条件">
+  1.2 Full GC 触发条件
+  <a class="anchor" href="#12-full-gc-%e8%a7%a6%e5%8f%91%e6%9d%a1%e4%bb%b6">#</a>
+</h2>
+<h3 id="121-调用-systemgc">
+  1.2.1 调用 System.gc()
+  <a class="anchor" href="#121-%e8%b0%83%e7%94%a8-systemgc">#</a>
+</h3>
+<p>只是建议虚拟机执行 Full GC，但是虚拟机不一定真正去执行。不建议使用这种方式，而是让虚拟机管理内存。</p>
+<h3 id="122-老年代空间不足">
+  1.2.2 老年代空间不足
+  <a class="anchor" href="#122-%e8%80%81%e5%b9%b4%e4%bb%a3%e7%a9%ba%e9%97%b4%e4%b8%8d%e8%b6%b3">#</a>
+</h3>
+<p>老年代空间不足的常见场景为前文所讲的大对象直接进入老年代、长期存活的对象进入老年代等。为了避免以上原因引起的 Full GC，应当尽量不要创建过大的对象以及数组。除此之外，可以通过 -Xmn 虚拟机参数调大新生代的大小，让对象尽量在新生代被回收掉，不进入老年代。还可以通过 -XX:MaxTenuringThreshold 调大对象进入老年代的年龄，让对象在新生代多存活一段时间。</p>
+<h3 id="123-空间分配担保失败">
+  1.2.3 空间分配担保失败
+  <a class="anchor" href="#123-%e7%a9%ba%e9%97%b4%e5%88%86%e9%85%8d%e6%8b%85%e4%bf%9d%e5%a4%b1%e8%b4%a5">#</a>
+</h3>
+<p>使用复制算法的 Minor GC 需要老年代的内存空间作担保，如果担保失败会执行一次 Full GC。</p>
+<h3 id="124-jdk-17-及以前的永久代空间不足在">
+  1.2.4 JDK 1.7 及以前的永久代空间不足在
+  <a class="anchor" href="#124-jdk-17-%e5%8f%8a%e4%bb%a5%e5%89%8d%e7%9a%84%e6%b0%b8%e4%b9%85%e4%bb%a3%e7%a9%ba%e9%97%b4%e4%b8%8d%e8%b6%b3%e5%9c%a8">#</a>
+</h3>
+<p>JDK 1.7 及以前，HotSpot 虚拟机中的方法区是用永久代实现的，永久代中存放的为一些 Class 的信息、常量、静态变量等数据。</p>
+<p>当系统中要加载的类、反射的类和调用的方法较多时，永久代可能会被占满，在未配置为采用 CMS GC 的情况下也会执行 Full GC。如果经过 Full GC 仍然回收不了，那么虚拟机会抛出 java.lang.OutOfMemoryError。</p>
+<p>为避免以上原因引起的 Full GC，可采用的方法为增大永久代空间或转为使用 CMS GC。</p>
+<h3 id="125-concurrent-mode-failure">
+  1.2.5 Concurrent Mode Failure
+  <a class="anchor" href="#125-concurrent-mode-failure">#</a>
+</h3>
+<p>执行 CMS GC 的过程中同时有对象要放入老年代，而此时老年代空间不足 (可能是 GC 过程中浮动垃圾过多导致暂时性的空间不足)，便会报 Concurrent Mode Failure 错误，并触发 Full GC。</p>
+<h1 id="2-内存分配策略">
+  2. 内存分配策略
+  <a class="anchor" href="#2-%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<h2 id="21-对象优先在-eden-分配">
+  2.1 对象优先在 Eden 分配
+  <a class="anchor" href="#21-%e5%af%b9%e8%b1%a1%e4%bc%98%e5%85%88%e5%9c%a8-eden-%e5%88%86%e9%85%8d">#</a>
+</h2>
+<p>大多数情况下，对象在新生代 Eden 区分配，当 Eden 区空间不够时，发起 Minor GC。</p>
+<h2 id="22-大对象直接进入老年代">
+  2.2 大对象直接进入老年代
+  <a class="anchor" href="#22-%e5%a4%a7%e5%af%b9%e8%b1%a1%e7%9b%b4%e6%8e%a5%e8%bf%9b%e5%85%a5%e8%80%81%e5%b9%b4%e4%bb%a3">#</a>
+</h2>
+<p>大对象是指需要连续内存空间的对象，最典型的大对象是那种很长的字符串以及数组。经常出现大对象会提前触发垃圾收集以获取足够的连续空间分配给大对象。-XX:PretenureSizeThreshold，大于此值的对象直接在老年代分配，避免在 Eden 区和 Survivor 区之间的大量内存复制。</p>
+<h2 id="23-长期存活的对象进入老年代">
+  2.3 长期存活的对象进入老年代
+  <a class="anchor" href="#23-%e9%95%bf%e6%9c%9f%e5%ad%98%e6%b4%bb%e7%9a%84%e5%af%b9%e8%b1%a1%e8%bf%9b%e5%85%a5%e8%80%81%e5%b9%b4%e4%bb%a3">#</a>
+</h2>
+<p>为对象定义年龄计数器，对象在 Eden 出生并经过 Minor GC 依然存活，将移动到 Survivor 中，年龄就增加 1 岁，增加到一定年龄则移动到老年代中。-XX:MaxTenuringThreshold 用来定义年龄的阈值。</p>
+<h2 id="24-动态对象年龄判定">
+  2.4 动态对象年龄判定
+  <a class="anchor" href="#24-%e5%8a%a8%e6%80%81%e5%af%b9%e8%b1%a1%e5%b9%b4%e9%be%84%e5%88%a4%e5%ae%9a">#</a>
+</h2>
+<p>虚拟机并不是永远地要求对象的年龄必须达到 MaxTenuringThreshold 才能晋升老年代，如果在 Survivor 中相同年龄所有对象大小的总和大于 Survivor 空间的一半，则年龄大于或等于该年龄的对象可以直接进入老年代，无需等到 MaxTenuringThreshold 中要求的年龄。</p>
+<h2 id="25-空间分配担保">
+  2.5 空间分配担保
+  <a class="anchor" href="#25-%e7%a9%ba%e9%97%b4%e5%88%86%e9%85%8d%e6%8b%85%e4%bf%9d">#</a>
+</h2>
+<p>在发生 Minor GC 之前，虚拟机先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果条件成立的话，那么 Minor GC 可以确认是安全的。</p>
+<p>如果不成立的话虚拟机会查看 HandlePromotionFailure 设置值是否允许担保失败，如果允许那么就会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试着进行一次 Minor GC；如果小于，或者 HandlePromotionFailure 设置不允许冒险，那么就要进行一次 Full GC。</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-minor-gc-major-gc-full-gc">1. Minor GC, Major GC, Full GC</a>
+      <ul>
+        <li><a href="#11-minor-gc-触发条件">1.1 Minor GC 触发条件</a></li>
+        <li><a href="#12-full-gc-触发条件">1.2 Full GC 触发条件</a>
+          <ul>
+            <li><a href="#121-调用-systemgc">1.2.1 调用 System.gc()</a></li>
+            <li><a href="#122-老年代空间不足">1.2.2 老年代空间不足</a></li>
+            <li><a href="#123-空间分配担保失败">1.2.3 空间分配担保失败</a></li>
+            <li><a href="#124-jdk-17-及以前的永久代空间不足在">1.2.4 JDK 1.7 及以前的永久代空间不足在</a></li>
+            <li><a href="#125-concurrent-mode-failure">1.2.5 Concurrent Mode Failure</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-内存分配策略">2. 内存分配策略</a>
+      <ul>
+        <li><a href="#21-对象优先在-eden-分配">2.1 对象优先在 Eden 分配</a></li>
+        <li><a href="#22-大对象直接进入老年代">2.2 大对象直接进入老年代</a></li>
+        <li><a href="#23-长期存活的对象进入老年代">2.3 长期存活的对象进入老年代</a></li>
+        <li><a href="#24-动态对象年龄判定">2.4 动态对象年龄判定</a></li>
+        <li><a href="#25-空间分配担保">2.5 空间分配担保</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

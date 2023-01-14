@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java | JUC on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Java-JUC/</link>
+    <description>Recent content in Java | JUC on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Apr 2020 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-JUC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch18-Java Atomic 之 Atomic*</title>
+      <link>https://acronymor.com/posts/java-juc/ch18/</link>
+      <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch18/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch17-Java Executors 之 ThreadPoolExecutor</title>
+      <link>https://acronymor.com/posts/java-juc/ch17/</link>
+      <pubDate>Fri, 10 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch17/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ThreadPoolExecutor&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch16-Java tools 之 CyclicBarrier</title>
+      <link>https://acronymor.com/posts/java-juc/ch16/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch16/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CyclicBarrier&lt;/code&gt; 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch15-Java tools 之 Semaphore</title>
+      <link>https://acronymor.com/posts/java-juc/ch15/</link>
+      <pubDate>Tue, 24 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch15/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.Semaphore&lt;/code&gt; 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch14-Java tools 之 CountDownLatch</title>
+      <link>https://acronymor.com/posts/java-juc/ch14/</link>
+      <pubDate>Wed, 18 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch14/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CountDownLatch&lt;/code&gt; 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch13-Java Collections 之 CopyOnWriteArrayList</title>
+      <link>https://acronymor.com/posts/java-juc/ch13/</link>
+      <pubDate>Sat, 14 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch13/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CopyOnWriteArrayList&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-Java Collections 之 DelayQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch12/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch12/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-Java Collections 之 PriorityBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch11/</link>
+      <pubDate>Mon, 02 Mar 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch11/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.PriorityBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch10-Java Collections 之 LinkedBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch10/</link>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch10/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.LinkedBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch9-Java Collections 之 ArrayBlockingQueue</title>
+      <link>https://acronymor.com/posts/java-juc/ch09/</link>
+      <pubDate>Fri, 31 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch09/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ArrayBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch8-Java Lock 之 ReentrantReadWriteLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch08/</link>
+      <pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch08/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantReadWriteLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch7-Java Lock 之 ReentrantLock</title>
+      <link>https://acronymor.com/posts/java-juc/ch07/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch07/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch6-Java Lock 之 LockSupport</title>
+      <link>https://acronymor.com/posts/java-juc/ch06/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch06/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch5-Java Lock 之 AQS</title>
+      <link>https://acronymor.com/posts/java-juc/ch05/</link>
+      <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch05/</guid>
+      <description>&lt;p&gt;AQS 即 &lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch4-Java 之 JUC</title>
+      <link>https://acronymor.com/posts/java-juc/ch04/</link>
+      <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch04/</guid>
+      <description>&lt;p&gt;JUC 即 &lt;code&gt;java.util.concurrent&lt;/code&gt;，是 Java 并发编程中很常用的实用工具类。它包含了 &lt;code&gt;Lock 框架&lt;/code&gt;，&lt;code&gt;Collections 并发集合&lt;/code&gt;，&lt;code&gt;Executors 线程池&lt;/code&gt;，&lt;code&gt;Atomic 原子类&lt;/code&gt;，&lt;code&gt;Tools&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch3-Java 之 ThreadLocal</title>
+      <link>https://acronymor.com/posts/java-juc/ch03/</link>
+      <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch03/</guid>
+      <description>&lt;p&gt;&lt;code&gt;java.lang.ThreadLocal&lt;/code&gt;是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java JUC 之 线程基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch02/</link>
+      <pubDate>Thu, 06 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java JUC 之 理论基础</title>
+      <link>https://acronymor.com/posts/java-juc/ch01/</link>
+      <pubDate>Tue, 04 Apr 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-juc/ch01/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

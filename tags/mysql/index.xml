@@ -6,13 +6,22 @@
     <description>Recent content in mysql on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Ch07-MySQL 之 复制技术</title>
-      <link>https://acronymor.com/posts/mysql/ch07/</link>
+      <title>Ch08-MySQL 之 锁</title>
+      <link>https://acronymor.com/posts/mysql/ch08/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch08/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch06-MySQL 之 复制技术</title>
+      <link>https://acronymor.com/posts/mysql/ch06/</link>
       <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
+      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
       <description>&lt;p&gt;我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。&lt;/p&gt;</description>
     </item>
     
@@ -22,7 +31,7 @@
       <pubDate>Sun, 31 Oct 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/mysql/ch04/</guid>
-      <description> 参考文献 # MySQL 之 InnoDB 表空间 MySQL 之数据页结构 </description>
+      <description></description>
     </item>
     
     <item>
@@ -35,11 +44,11 @@
     </item>
     
     <item>
-      <title>Ch06-MySQL 之 事务</title>
-      <link>https://acronymor.com/posts/mysql/ch06/</link>
+      <title>Ch07-MySQL 之 事务</title>
+      <link>https://acronymor.com/posts/mysql/ch07/</link>
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/mysql/ch06/</guid>
+      <guid>https://acronymor.com/posts/mysql/ch07/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     
@@ -58,7 +67,7 @@
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/mysql/ch02/</guid>
-      <description>&lt;p&gt;InnDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
+      <description>&lt;p&gt;InnoDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
     </item>
     
     <item>

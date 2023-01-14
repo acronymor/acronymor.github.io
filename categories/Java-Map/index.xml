@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java | Map on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/categories/Java-Map/</link>
+    <description>Recent content in Java | Map on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 Mar 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-Map/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch12-Java Map 之 WeakHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch12/</link>
+      <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch12/</guid>
+      <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-Java Map 之 TreeMap</title>
+      <link>https://acronymor.com/posts/java-map/ch03/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch03/</guid>
+      <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-Java Map 之 LinkedHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch02/</link>
+      <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch02/</guid>
+      <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Java Map 之 HashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch01/</link>
+      <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/java-map/ch01/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
