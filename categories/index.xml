@@ -6,20 +6,20 @@
     <description>Recent content in Categories on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>MySQL</title>
-      <link>https://acronymor.com/categories/MySQL/</link>
-      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      <title>AmDB</title>
+      <link>https://acronymor.com/categories/AmDB/</link>
+      <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/categories/MySQL/</guid>
+      <guid>https://acronymor.com/categories/AmDB/</guid>
       <description></description>
     </item>
     
     <item>
       <title>C&#43;&#43; | STL</title>
       <link>https://acronymor.com/categories/C&#43;&#43;-STL/</link>
-      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/categories/C&#43;&#43;-STL/</guid>
       <description></description>
@@ -40,6 +40,15 @@
       <pubDate>Thu, 28 Apr 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/categories/C&#43;&#43;-Basic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>https://acronymor.com/categories/MySQL/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/categories/MySQL/</guid>
       <description></description>
     </item>
     

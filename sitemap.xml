@@ -2,35 +2,53 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://acronymor.com/tags/amdb/</loc>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/categories/AmDB/</loc>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://acronymor.com/posts/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/categories/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch08/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+    <loc>https://acronymor.com/posts/amdb/ch06/</loc>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/tags/mysql/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/categories/MySQL/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/tags/</loc>
-    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+    <lastmod>2022-12-06T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/amdb/ch05/</loc>
+    <lastmod>2022-12-05T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/amdb/ch04/</loc>
+    <lastmod>2022-12-04T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/amdb/ch03/</loc>
+    <lastmod>2022-12-03T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/amdb/ch02/</loc>
+    <lastmod>2022-12-02T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/amdb/ch01/</loc>
+    <lastmod>2022-12-01T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/tags/c&#43;&#43;/</loc>
-    <lastmod>2022-06-22T00:00:00+08:00</lastmod>
+    <lastmod>2022-06-24T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/categories/C&#43;&#43;-STL/</loc>
-    <lastmod>2022-06-22T00:00:00+08:00</lastmod>
+    <lastmod>2022-06-24T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</loc>
+    <lastmod>2022-06-24T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</loc>
-    <lastmod>2022-06-22T00:00:00+08:00</lastmod>
+    <lastmod>2022-06-21T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</loc>
     <lastmod>2022-06-20T00:00:00+08:00</lastmod>
@@ -93,6 +111,12 @@
     <lastmod>2022-04-20T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/mysql/ch06/</loc>
+    <lastmod>2022-04-10T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/tags/mysql/</loc>
+    <lastmod>2022-04-10T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/categories/MySQL/</loc>
     <lastmod>2022-04-10T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/database/ch04/</loc>

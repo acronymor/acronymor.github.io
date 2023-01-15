@@ -6,20 +6,20 @@
     <description>Recent content in Tags on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>mysql</title>
-      <link>https://acronymor.com/tags/mysql/</link>
-      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      <title>amdb</title>
+      <link>https://acronymor.com/tags/amdb/</link>
+      <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/tags/mysql/</guid>
+      <guid>https://acronymor.com/tags/amdb/</guid>
       <description></description>
     </item>
     
     <item>
       <title>c&#43;&#43;</title>
       <link>https://acronymor.com/tags/c&#43;&#43;/</link>
-      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/tags/c&#43;&#43;/</guid>
       <description></description>
@@ -31,6 +31,15 @@
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/tags/leveldb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mysql</title>
+      <link>https://acronymor.com/tags/mysql/</link>
+      <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/tags/mysql/</guid>
       <description></description>
     </item>
     

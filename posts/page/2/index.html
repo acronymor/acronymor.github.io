@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.96babe06e1984e7e0c21b886ed35012e18447989b71abb185b28b22806bd7679.js" integrity="sha256-lrq&#43;BuGYTn4MIbiG7TUBLhhEeYm3GrsYWyiyKAa9dnk=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -146,13 +146,13 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/categories/MySQL/">MySQL</a>
-          <span>8</span>
+          <a href="/categories/AmDB/">AmDB</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
-          <span>2</span>
+          <span>3</span>
         </li>
       
         <li class="flex justify-between">
@@ -163,6 +163,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
           <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">
@@ -270,18 +275,23 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/mysql/">mysql</a>
-          <span>8</span>
+          <a href="/tags/amdb/">amdb</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-          <span>10</span>
+          <span>11</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">leveldb</a>
           <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">
@@ -374,6 +384,203 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch08/">Ch08-LevelDB 之 编码</a>
+    </h2>
+    
+  <h5>May 30, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Endian-neutral encoding:
+</span></span><span style="display:flex;"><span>* Fixed-length numbers are encoded with least-significant byte first
+</span></span><span style="display:flex;"><span>* In addition we support variable length &#34;varint&#34; encoding
+</span></span><span style="display:flex;"><span>* Strings are encoded prefixed by their length in varint format
+</span></span><span style="display:flex;"><span>-- util/coding.h
+</span></span></code></pre></div>
+        <a href="/posts/leveldb/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch07/">Ch07-LevelDB 之 WAL</a>
+    </h2>
+    
+  <h5>May 25, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>WAL 一般用于故障恢复，其内容就是内存里 MemTable 内容的持久化，当一个 MemTable 写满后，开启一个新的 MemTable 时，也同时会开启一个新的 WAL，当 MemTable 被 Dump 到磁盘后，相应的 WAL 可以被删除。所以说控制每次 WAL 写入磁盘的方式，便可以控制最多可能丢失的数据量。</p>
+        <a href="/posts/leveldb/ch07/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch05/">Ch05-LevelDB 之 SSTable</a>
+    </h2>
+    
+  <h5>May 16, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>SSTable</p>
+        <a href="/posts/leveldb/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch04/">Ch04-LevelDB 之 MemTable</a>
+    </h2>
+    
+  <h5>May 12, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>MemTable</p>
+        <a href="/posts/leveldb/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch03/">Ch03-LevelDB 之 Arena 内存管理</a>
+    </h2>
+    
+  <h5>May 10, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>Arena 内存管理</p>
+        <a href="/posts/leveldb/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch02/">Ch02-LevelDB 架构</a>
+    </h2>
+    
+  <h5>May 5, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>LevelDB 架构</p>
+        <a href="/posts/leveldb/ch02/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -503,198 +710,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch05/">Ch05-C&#43;&#43; 之 keyword</a>
-    </h2>
-    
-  <h5>April 24, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>static_cast</code>，<code>dynamic_cast</code>，<code>const_cast</code>，<code>reinterpret_cast</code>。</p>
-        <a href="/posts/c&#43;&#43;-basic/ch05/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch04/">Ch04-C&#43;&#43; 之 keyword</a>
-    </h2>
-    
-  <h5>April 23, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>new</code>，<code>delete</code></p>
-        <a href="/posts/c&#43;&#43;-basic/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch03/">Ch03-C&#43;&#43; 之 keyword</a>
-    </h2>
-    
-  <h5>April 22, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>define</code>，<code>typedef</code>，<code>using</code>，<code>inline</code></p>
-        <a href="/posts/c&#43;&#43;-basic/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch02/">Ch02-C&#43;&#43; 之 keyword</a>
-    </h2>
-    
-  <h5>April 21, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>static</code>，<code>const</code>，<code>constexpr</code>，<code>volatile</code></p>
-        <a href="/posts/c&#43;&#43;-basic/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch01/">Ch01-C&#43;&#43; 之 基础</a>
-    </h2>
-    
-  <h5>April 20, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/c&#43;&#43;-basic/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/mysql/ch06/">Ch06-MySQL 之 复制技术</a>
-    </h2>
-    
-  <h5>April 10, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/MySQL/">MySQL</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/mysql/">mysql</a>
-  </div>
-  
-
-
-
-
-    <p><p>我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。</p>
-        <a href="/posts/mysql/ch06/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -768,13 +783,13 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/categories/MySQL/">MySQL</a>
-          <span>8</span>
+          <a href="/categories/AmDB/">AmDB</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
-          <span>2</span>
+          <span>3</span>
         </li>
       
         <li class="flex justify-between">
@@ -785,6 +800,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
           <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/MySQL/">MySQL</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">
@@ -892,18 +912,23 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/mysql/">mysql</a>
-          <span>8</span>
+          <a href="/tags/amdb/">amdb</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
-          <span>10</span>
+          <span>11</span>
         </li>
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">leveldb</a>
           <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/mysql/">mysql</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">

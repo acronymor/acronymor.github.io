@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch05-AmDB 之 Index" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/amdb/ch05/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-05T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-12-05T00:00:00+08:00" />
+<title>Ch05-AmDB 之 Index | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch05-AmDB 之 Index</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-接口定义">1. 接口定义</a></li>
+    <li><a href="#2-bptree">2. BpTree</a>
+      <ul>
+        <li><a href="#21-接口定义">2.1 接口定义</a></li>
+        <li><a href="#22-原理实现">2.2 原理实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-treectx">3. TreeCtx</a>
+      <ul>
+        <li><a href="#31-接口定义">3.1 接口定义</a></li>
+        <li><a href="#32-原理实现">3.2 原理实现</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/amdb/ch05/">Ch05-AmDB 之 Index</a>
+  </h1>
+  
+  <h5>December 5, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/AmDB/">AmDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/amdb/">amdb</a>
+  </div>
+  
+
+
+
+<p>AmDB 的 Index 实现的是<strong>聚簇索引</strong>，主要是为了避免最后加载进来的 B+ Tree 占用内存过高。而且 B+ Tree 底层基于 KV 存储实现，从 B+ Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。</p>
+<h1 id="1-接口定义">
+  1. 接口定义
+  <a class="anchor" href="#1-%e6%8e%a5%e5%8f%a3%e5%ae%9a%e4%b9%89">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Index</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  Status Save();
+</span></span><span style="display:flex;"><span>  Status <span style="color:#a6e22e">GetRecords</span>(std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;&amp;</span> keys, std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;*</span> values);
+</span></span><span style="display:flex;"><span>  Status <span style="color:#a6e22e">Insert</span>(chunk<span style="color:#f92672">::</span>Chunk<span style="color:#f92672">*</span> chunk);
+</span></span><span style="display:flex;"><span>  Status <span style="color:#a6e22e">Delete</span>(chunk<span style="color:#f92672">::</span>Chunk<span style="color:#f92672">*</span> chunk);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  Bptree<span style="color:#f92672">*</span> bptree_;
+</span></span><span style="display:flex;"><span>  TreeCtx<span style="color:#f92672">*</span> tree_ctx_;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。</p>
+<h1 id="2-bptree">
+  2. BpTree
+  <a class="anchor" href="#2-bptree">#</a>
+</h1>
+<h2 id="21-接口定义">
+  2.1 接口定义
+  <a class="anchor" href="#21-%e6%8e%a5%e5%8f%a3%e5%ae%9a%e4%b9%89">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Bptree</span> {
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">explicit</span> Bptree(TreeCtx<span style="color:#f92672">*</span> tree_ctx, BptNode<span style="color:#f92672">*</span> root);
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">~</span>Bptree() { root_ <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>; };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">[[nodiscard]]</span> Status Insert(std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;&amp;</span> key, std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;&amp;</span> value);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">[[nodiscard]]</span> Status Delete(<span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;</span> key);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">[[nodiscard]]</span> Status GetItem(<span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string<span style="color:#f92672">&amp;</span> key, std<span style="color:#f92672">::</span>string<span style="color:#f92672">*</span> output) <span style="color:#66d9ef">const</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  BptNode<span style="color:#f92672">*</span> root_{<span style="color:#66d9ef">nullptr</span>};
+</span></span><span style="display:flex;"><span>  TreeCtx<span style="color:#f92672">*</span> tree_ctx_{<span style="color:#66d9ef">nullptr</span>};
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h2 id="22-原理实现">
+  2.2 原理实现
+  <a class="anchor" href="#22-%e5%8e%9f%e7%90%86%e5%ae%9e%e7%8e%b0">#</a>
+</h2>
+<p>BpTree 全名 B+ Tree，AmDB 的 Index 借助 B+ Tree 实现。</p>
+<p><img src="bptnode.jpg" alt="bptnode" /></p>
+<p>对于每个节点都有一个 NodeStatistics 属性，其中存储了叶子节点的最大 key，最小 key，key 值个数，以及 kv 所占的字节数。</p>
+<ul>
+<li>在插入的过程中，会记录这些统计信息，当某个叶子节点的大小大于 16KB 的时候便会开始分裂。</li>
+<li>在查询的过程中，则会从根节点根据每个节点的统计信息依次查找，直到查找到叶子节点为止。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong></p>
+<ul>
+<li>这里留了个大坑，B+ Tree 的叶子节点应该是使用指针连接起来的，因为时间（懒）的原因，在实现的时候并未将其连接起来。所以现在应该算是像 B+ Tree 的多叉树。</li>
+<li>查询的时候并不是所有的节点一次性被全部加载进来的，而是根据 NodeStatistics 信息按需加载节点，比如查找 key 为 3 的数据，那么会先后加载 ID 为 &lt;0,1,3, 4&gt; 的节点（这里之所以会把 4 号节点加载进来是因为 ID:1 与 ID:3 和 ID:4 的关系被序列化保存到一起了）。</li>
+</ul>
+</blockquote>
+<h1 id="3-treectx">
+  3. TreeCtx
+  <a class="anchor" href="#3-treectx">#</a>
+</h1>
+<h2 id="31-接口定义">
+  3.1 接口定义
+  <a class="anchor" href="#31-%e6%8e%a5%e5%8f%a3%e5%ae%9a%e4%b9%89">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TreeCtx</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> CollectUnsavedTreeNode(BptNode<span style="color:#f92672">*</span> node);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">RemoveUnsavedTreeNode</span>(BptNode<span style="color:#f92672">*</span> node);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">PullUnsavedTreeNode</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>unordered_map<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">uint64_t</span>, BptNode<span style="color:#f92672">*&gt;</span> unsaved_nodes_;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="32-原理实现">
+  3.2 原理实现
+  <a class="anchor" href="#32-%e5%8e%9f%e7%90%86%e5%ae%9e%e7%8e%b0">#</a>
+</h2>
+<p>TreeCtx 主要是为了避免对 BpTree 的反复遍历引入，比如 PullUnsavedTreeNode() 等函数会将修改过的 BpNode 拉到 Index 层面统一进行处理。也可以在遍历 BpTree 的时候，调用 CollectUnsavedTreeNode() 将修改过的节点暂时缓存到 TreeCtx 方便后续统一处理。</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-接口定义">1. 接口定义</a></li>
+    <li><a href="#2-bptree">2. BpTree</a>
+      <ul>
+        <li><a href="#21-接口定义">2.1 接口定义</a></li>
+        <li><a href="#22-原理实现">2.2 原理实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-treectx">3. TreeCtx</a>
+      <ul>
+        <li><a href="#31-接口定义">3.1 接口定义</a></li>
+        <li><a href="#32-原理实现">3.2 原理实现</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

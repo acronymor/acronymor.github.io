@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-C&#43;&#43; STL 之 Container" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/c&#43;&#43;-stl/ch03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-24T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-06-24T00:00:00+08:00" />
+<title>Ch03-C&#43;&#43; STL 之 Container | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch03-C&#43;&#43; STL 之 Container</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/c&#43;&#43;-stl/ch03/">Ch03-C&#43;&#43; STL 之 Container</a>
+  </h1>
+  
+  <h5>June 24, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
+  </div>
+  
+
+
+
+<table>
+<thead>
+<tr>
+<th><strong>容器</strong></th>
+<th><strong>底层数据结构</strong></th>
+<th><strong>时间复杂度</strong></th>
+<th><strong>有无序</strong></th>
+<th><strong>可否重复</strong></th>
+<th><strong>其他</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>数组</td>
+<td>随机读改 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>支持随机访问</td>
+</tr>
+<tr>
+<td>vector</td>
+<td>数组</td>
+<td>随机读改、尾部插入、尾部删除 O(1)；头部插入、头部删除 O(n)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>支持随机访问</td>
+</tr>
+<tr>
+<td>deque</td>
+<td>双端队列</td>
+<td>头尾插入、头尾删除 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>一个中央控制器 + 多个缓冲区，支持首尾快速增删，支持随机访问</td>
+</tr>
+<tr>
+<td>forward_list</td>
+<td>单向链表</td>
+<td>插入、删除 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>不支持随机访问</td>
+</tr>
+<tr>
+<td>list</td>
+<td>双向链表</td>
+<td>插入、删除 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>不支持随机访问</td>
+</tr>
+<tr>
+<td>stack</td>
+<td>deque / list</td>
+<td>顶部插入、顶部删除 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时</td>
+</tr>
+<tr>
+<td>queue</td>
+<td>deque / list</td>
+<td>尾部插入、头部删除 O(1)</td>
+<td>无序</td>
+<td>可重复</td>
+<td>deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时</td>
+</tr>
+<tr>
+<td>priority_queue</td>
+<td>vector + max-heap</td>
+<td>插入、删除 O(log2n)</td>
+<td>有序</td>
+<td>可重复</td>
+<td>vector 容器+heap 处理规则</td>
+</tr>
+<tr>
+<td>set</td>
+<td>红黑树</td>
+<td>插入、删除、查找 O(log2n)</td>
+<td>有序</td>
+<td>不可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>multiset</td>
+<td>红黑树</td>
+<td>插入、删除、查找 O(log2n)</td>
+<td>有序</td>
+<td>可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>map</td>
+<td>红黑树</td>
+<td>插入、删除、查找 O(log2n)</td>
+<td>有序</td>
+<td>不可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>multimap</td>
+<td>红黑树</td>
+<td>插入、删除、查找 O(log2n)</td>
+<td>有序</td>
+<td>可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>unordered_set</td>
+<td>哈希表</td>
+<td>插入、删除、查找 O(1) 最差 O(n)</td>
+<td>无序</td>
+<td>不可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>unordered_multiset</td>
+<td>哈希表</td>
+<td>插入、删除、查找 O(1) 最差 O(n)</td>
+<td>无序</td>
+<td>可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>unordered_map</td>
+<td>哈希表</td>
+<td>插入、删除、查找 O(1) 最差 O(n)</td>
+<td>无序</td>
+<td>不可重复</td>
+<td></td>
+</tr>
+<tr>
+<td>unordered_multimap</td>
+<td>哈希表</td>
+<td>插入、删除、查找 O(1) 最差 O(n)</td>
+<td>无序</td>
+<td>可重复</td>
+<td></td>
+</tr>
+</tbody>
+</table></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

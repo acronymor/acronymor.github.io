@@ -6,23 +6,77 @@
     <description>Recent content in Blog on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Ch08-MySQL 之 锁</title>
-      <link>https://acronymor.com/posts/mysql/ch08/</link>
-      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      <title>Ch06-AmDB 之 Executor</title>
+      <link>https://acronymor.com/posts/amdb/ch06/</link>
+      <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/mysql/ch08/</guid>
+      <guid>https://acronymor.com/posts/amdb/ch06/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Ch02-C&#43;&#43; STL 之 Container</title>
+      <title>Ch05-AmDB 之 Index</title>
+      <link>https://acronymor.com/posts/amdb/ch05/</link>
+      <pubDate>Mon, 05 Dec 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/amdb/ch05/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch04-AmDB 之 Chunk</title>
+      <link>https://acronymor.com/posts/amdb/ch04/</link>
+      <pubDate>Sun, 04 Dec 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/amdb/ch04/</guid>
+      <description>&lt;p&gt;Chunk 由多个 Row 组成&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-AmDB 之 ID 生成器</title>
+      <link>https://acronymor.com/posts/amdb/ch03/</link>
+      <pubDate>Sat, 03 Dec 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/amdb/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-AmDB 之编码</title>
+      <link>https://acronymor.com/posts/amdb/ch02/</link>
+      <pubDate>Fri, 02 Dec 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/amdb/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-AmDB 介绍</title>
+      <link>https://acronymor.com/posts/amdb/ch01/</link>
+      <pubDate>Thu, 01 Dec 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/amdb/ch01/</guid>
+      <description>&lt;p&gt;AmDB 为本人独立研发的一款单机版关系型数据库管理系统，旨在更加深入的学习数据库的相关知识，所涉及到的功能点会逐渐向 MySQL 对齐，后续应该会考虑完全兼容 MySQL 相关协议。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch03-C&#43;&#43; STL 之 Container</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-C&#43;&#43; 之 trait</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</link>
-      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      <pubDate>Tue, 21 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</guid>
-      <description></description>
+      <description>&lt;p&gt;trait 并不是 C++ 的关键字之类的，属于 C++ 的一种“机制”，或者说 C++ 特有的一种编程小技巧。&lt;/p&gt;</description>
     </item>
     
     <item>
