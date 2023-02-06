@@ -6,7 +6,16 @@
     <description>Recent content in mysql on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch08-MySQL 之 锁</title>
+      <link>https://acronymor.com/posts/mysql/ch08/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch08/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Ch06-MySQL 之 复制技术</title>
       <link>https://acronymor.com/posts/mysql/ch06/</link>

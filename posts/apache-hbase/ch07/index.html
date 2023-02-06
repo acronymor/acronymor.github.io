@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -232,7 +232,7 @@ var _hmt = _hmt || [];
   1. HBase Cache 介绍
   <a class="anchor" href="#1-hbase-cache-%e4%bb%8b%e7%bb%8d">#</a>
 </h1>
-<p>HBase 在实现中提供了两种缓存结构：<strong>MemStore</strong>和<strong>BlockCache</strong>。</p>
+<p>HBase 在实现中提供了两种缓存结构：<strong>MemStore</strong> 和 <strong>BlockCache</strong>。</p>
 <p>MemStore 称为写缓存，HBase 执行写操作首先会将数据写入 MemStore，并顺序写入 HLog，等满足一定条件后统一将 MemStore 中数据刷新到磁盘，这种设计可以极大地提升 HBase 的写性能。不仅如此，MemStore 对于读性能也至关重要，假如没有 MemStore，读取刚写入的数据就需要从文件中通过 IO 查找，这种代价显然是昂贵的。</p>
 <p>BlockCache 称为读缓存，HBase 会将一次文件查找的 Block 块缓存到 Cache 中，以便后续同一请求或者邻近数据查找请求，可以直接从内存中获取，避免昂贵的 IO 操作。</p>
 <h1 id="2-memstore">

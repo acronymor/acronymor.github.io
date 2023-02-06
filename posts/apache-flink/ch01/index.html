@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -159,6 +159,7 @@ var _hmt = _hmt || [];
       <ul>
         <li><a href="#31-tasks-and-operator-chains">3.1 Tasks and Operator Chains</a></li>
         <li><a href="#32-task-slots-and-resources">3.2 Task Slots and Resources</a></li>
+        <li><a href="#33-task-划分原则">3.3 Task 划分原则</a></li>
       </ul>
     </li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>
@@ -237,7 +238,7 @@ var _hmt = _hmt || [];
   2.2 JobManager
   <a class="anchor" href="#22-jobmanager">#</a>
 </h2>
-<p>JobManager 具有许多与协调 Flink 应用程序的分布式执行有关的职责：它决定何时调度下一个 task（或一组 task）、对完成的 task 或执行失败做出反应、协调 checkpoint、并且协调从失败中恢复等等。这个进程由三个不同的组件组成：</p>
+<p>JobManager 具有许多与协调 Flink 应用程序的分布式执行有关的职责：它决定何时调度下一个 task（或一组 task）、对完成的 task 或执行失败做出反应、协调 checkpoint、并且协调从失败中恢复等等。这个进程由三个不同的组件组成：<code>ResourceManager</code>, <code>Dispatcher</code>, <code>JobMaster</code>。</p>
 <h3 id="221-resourcemanager">
   2.2.1 ResourceManager
   <a class="anchor" href="#221-resourcemanager">#</a>
@@ -268,9 +269,16 @@ var _hmt = _hmt || [];
   3.1 Tasks and Operator Chains
   <a class="anchor" href="#31-tasks-and-operator-chains">#</a>
 </h2>
-<p>对于分布式执行，Flink 将算子的 subtasks 链接成 tasks。每个 task 由一个线程执行。将算子链接成 task 是个有用的优化：它减少线程间切换、缓冲的开销，并且减少延迟的同时增加整体吞吐量。Operator Chains 行为是可以配置的。</p>
+<p>在 Flink 中，并行度相同的一对一（one to one）算子操作，可以直接链接在一起形成一个“大”的任务（task），这样原来的算子就成为了真正任务里的一部分。每个 task 会被一个线程执行，这样的技术被称为“算子链”（Operator Chain）。将算子链接成 task 是个有用的优化：它减少线程间切换、缓冲的开销，并且减少延迟的同时增加整体吞吐量。Operator Chains 行为是可以配置的。</p>
 <p><img src="operator-chains.png" alt="operator-chains" /></p>
 <p>上图中样例数据流用 5 个 subtask 执行，因此有 5 个并行线程。</p>
+<blockquote>
+<p>数据流在算子之间传输数据的形式可以是一对一（one-to-one）的直通 (forwarding) 模式，也可以是打乱的重分区（redistributing）模式，具体是哪一种形式，取决于算子的种类。</p>
+<ul>
+<li>One-to-one，forwarding：该模式下数据流维护着分区以及元素的顺序，map、filter、flatMap 等算子都是这种关系。</li>
+<li>Redistributing：该模式下数据流的分区会发生改变，keyBy、window 等算子都是这种关系。</li>
+</ul>
+</blockquote>
 <h2 id="32-task-slots-and-resources">
   3.2 Task Slots and Resources
   <a class="anchor" href="#32-task-slots-and-resources">#</a>
@@ -286,6 +294,11 @@ var _hmt = _hmt || [];
 <li>Flink 集群所需的 task slot 和作业中使用的最大并行度恰好一样。无需计算程序总共包含多少个 task（具有不同并行度）。</li>
 <li>容易获得更好的资源利用。如果没有 slot 共享，非密集 subtask（source/map()）将阻塞和密集型 subtask（window）一样多的资源。通过 slot 共享，我们示例中的基本并行度从 2 增加到 6，可以充分利用分配的资源，同时确保繁重的 subtask 在 TaskManager 之间公平分配。</li>
 </ul>
+<h2 id="33-task-划分原则">
+  3.3 Task 划分原则
+  <a class="anchor" href="#33-task-%e5%88%92%e5%88%86%e5%8e%9f%e5%88%99">#</a>
+</h2>
+<p>Flink 中称为任务链优化技术，它要求<code>并行度相同</code>、并且是 <code>one-to-one</code> 操作。这样就可以将该 operator 划分到同一个 task 中。</p>
 <h1 id="4-参考文献">
   4. 参考文献
   <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
@@ -351,6 +364,7 @@ var _hmt = _hmt || [];
       <ul>
         <li><a href="#31-tasks-and-operator-chains">3.1 Tasks and Operator Chains</a></li>
         <li><a href="#32-task-slots-and-resources">3.2 Task Slots and Resources</a></li>
+        <li><a href="#33-task-划分原则">3.3 Task 划分原则</a></li>
       </ul>
     </li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>

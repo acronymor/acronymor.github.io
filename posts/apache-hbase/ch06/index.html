@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -146,7 +146,7 @@ var _hmt = _hmt || [];
     <li><a href="#3-hfileblock-介绍">3. HFileBlock 介绍</a>
       <ul>
         <li><a href="#31-data">3.1 DATA</a></li>
-        <li><a href="#32-root_index--leaf_index--intermediate_index">3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX</a>
+        <li><a href="#32-root_index--intermediate_index--leaf_index">3.2 ROOT_INDEX | INTERMEDIATE_INDEX | LEAF_INDEX</a>
           <ul>
             <li><a href="#321-root_index">3.2.1 ROOT_INDEX</a></li>
             <li><a href="#322-leaf_index--intermediate_index">3.2.2 LEAF_INDEX | INTERMEDIATE_INDEX</a></li>
@@ -200,7 +200,7 @@ var _hmt = _hmt || [];
   1. HFile V2 逻辑结构
   <a class="anchor" href="#1-hfile-v2-%e9%80%bb%e8%be%91%e7%bb%93%e6%9e%84">#</a>
 </h1>
-<p>文件主要分为四个部分：<code>Scanned block section</code>，<code>Non-scanned block section</code>，<code>Opening-time data section</code>和<code>Trailer</code>。如下图所示：</p>
+<p>文件主要分为四个部分：<code>Scanned block section</code>，<code>Non-scanned block section</code>，<code>Load-on-open section</code>和<code>Trailer</code>。如下图所示：</p>
 <p><img src="hfilev2-logic.png" alt="hfilev2" /></p>
 <p>其中每个部分的作用如下</p>
 <table>
@@ -220,7 +220,7 @@ var _hmt = _hmt || [];
 <td style="text-align:left">表示在 HFile 顺序扫描的时候数据不会被读取，主要包括 Meta Block(用来兼容 v1，v2 后就不再存储数据了) 和 Intermediate Level Data Index Blocks 两部分</td>
 </tr>
 <tr>
-<td style="text-align:left">Load-on-open-section</td>
+<td style="text-align:left">Load-on-open section</td>
 <td style="text-align:left">该部分数据在 HBase 的 region server 启动时，会被加载到内存中。其中包括 FileInfo、Bloom filter block、Data block index 和 Meta block index。</td>
 </tr>
 <tr>
@@ -253,9 +253,9 @@ var _hmt = _hmt || [];
 <p>DataBlock 是 HBase 中数据存储的最小单元。DataBlock 中主要存储用户的 KeyValue 数据（KeyValue 后面一般会跟一个 timestamp，图中未标出），而 KeyValue 结构是 HBase 存储的核心，每个数据都是以 KeyValue 结构在 HBase 中进行存储。KeyValue 结构在内存和磁盘中可以表示为下图</p>
 <p><img src="data-block.png" alt="DataBlock" /></p>
 <p>每个 KeyValue 都由 4 个部分构成，分别为 key length，value length，key 和 value。其中 key value 和 value length 是两个固定长度的数值，而 key 是一个复杂的结构，首先是 rowkey 的长度，接着是 rowkey，然后是 ColumnFamily 的长度，再是 ColumnFamily，之后是 ColumnQualifier，最后是时间戳和 KeyType（keytype 有四种类型，分别是 Put、Delete、DeleteColumn 和 DeleteFamily），value 就没有那么复杂，就是一串纯粹的二进制数据。</p>
-<h2 id="32-root_index--leaf_index--intermediate_index">
-  3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX
-  <a class="anchor" href="#32-root_index--leaf_index--intermediate_index">#</a>
+<h2 id="32-root_index--intermediate_index--leaf_index">
+  3.2 ROOT_INDEX | INTERMEDIATE_INDEX | LEAF_INDEX
+  <a class="anchor" href="#32-root_index--intermediate_index--leaf_index">#</a>
 </h2>
 <p>HFile 中的<strong>index level</strong>是不固定的，根据不同的数据类型和数据大小有不同的选择，主要有两类，一类是 single-level（单级索引），另一类是 multi-level（多级索引，索引 block 无法在内存中存放，所以采用多级索引）。</p>
 <p>HFile 中的<strong>index chunk</strong>有两大类，分别是 root index chunk、nonRoot index chunk。而 nonRoot index chunk 又分为 interMetadiate index chunk 和 leaf index chunk，但 intermetadiate index chunk 和 leaf index chunk 在内存中的分布是一样的。</p>
@@ -264,9 +264,9 @@ var _hmt = _hmt || [];
 采用的索引是 single-level 形式，只用 root index chunk 来保存指向 block 的索引信息（<code>root_index -&gt; xxx_block</code>）</li>
 <li>对于 data
 <ul>
-<li>当 data block 数量较少时，采用的是 single level，一般情况下是一级索引 (<code>root_index -&gt; data_block</code>)；</li>
-<li>当 data block 数量较多时，采用的是 multi-level，一般情况下是两级索引，使用 root index chunk 和 leaf index chunk 来保存索引信息 (<code>root_index -&gt; leaf_index -&gt; data_block</code>)；</li>
-<li>当 data block 数量很多时，采用的是 multi-level，一般情况下是三级索引，使用 root index chunk、intermetadiate index chunk 和 leaf index chunk 来保存指向数据的索引（<code>root_index -&gt; intermediate_index -&gt; leaf_index-&gt;data_block</code>）。</li>
+<li>当 data block 数量较少时，采用的是 single level，一般情况下是一层索引 (<code>root_index -&gt; data_block</code>)；</li>
+<li>当 data block 数量较多时，采用的是 multi-level，一般情况下是二层索引，使用 root index chunk 和 leaf index chunk 来保存索引信息 (<code>root_index -&gt; leaf_index -&gt; data_block</code>)；</li>
+<li>当 data block 数量很多时，采用的是 multi-level，一般情况下是三层索引，使用 root index chunk、intermetadiate index chunk 和 leaf index chunk 来保存指向数据的索引（<code>root_index -&gt; intermediate_index -&gt; leaf_index-&gt;data_block</code>）。</li>
 </ul>
 </li>
 </ul>
@@ -432,7 +432,7 @@ var _hmt = _hmt || [];
     <li><a href="#3-hfileblock-介绍">3. HFileBlock 介绍</a>
       <ul>
         <li><a href="#31-data">3.1 DATA</a></li>
-        <li><a href="#32-root_index--leaf_index--intermediate_index">3.2 ROOT_INDEX | LEAF_INDEX | INTERMEDIATE_INDEX</a>
+        <li><a href="#32-root_index--intermediate_index--leaf_index">3.2 ROOT_INDEX | INTERMEDIATE_INDEX | LEAF_INDEX</a>
           <ul>
             <li><a href="#321-root_index">3.2.1 ROOT_INDEX</a></li>
             <li><a href="#322-leaf_index--intermediate_index">3.2.2 LEAF_INDEX | INTERMEDIATE_INDEX</a></li>

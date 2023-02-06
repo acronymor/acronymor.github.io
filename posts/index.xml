@@ -62,6 +62,15 @@
     </item>
     
     <item>
+      <title>Ch08-MySQL 之 锁</title>
+      <link>https://acronymor.com/posts/mysql/ch08/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/mysql/ch08/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ch03-C&#43;&#43; STL 之 Container</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</link>
       <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
@@ -621,7 +630,9 @@
       <pubDate>Sun, 03 Jan 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/apache-flink/ch10/</guid>
-      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;</description>
+      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;tcp_flow.png&#34; alt=&#34;tcp flow&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;简单来说，如果反压机制实现在 Socket 层，那便是 TCP-Based 反压机制；如果实现在 Netty 层，那便是 Credit-Based 反压机制。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1135,6 +1146,28 @@
       
       <guid>https://acronymor.com/posts/apache-hive/ch01/</guid>
       <description>&lt;p&gt;Apache Hive 是基于 Hadoop 的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的 SQL 查询功能，其基本原理是将 SQL 语句转换为 MapReduce 任务进行数据处理功能。所以从代码层面来看，整个 Hive 就是将 SQL 语句转换成 MapReduce 代码的一款软件。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-BASE</title>
+      <link>https://acronymor.com/posts/distributed-system/ch02/</link>
+      <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/distributed-system/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch01-CAP</title>
+      <link>https://acronymor.com/posts/distributed-system/ch01/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/distributed-system/ch01/</guid>
+      <description>&lt;p&gt;CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。&lt;/p&gt;</description>
     </item>
     
     <item>

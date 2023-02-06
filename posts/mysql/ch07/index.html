@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -218,35 +218,6 @@ var _hmt = _hmt || [];
 <table>
 <thead>
 <tr>
-<th><strong>隔离级别</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Read uncommitted</td>
-<td>一个会话可以读取其他事务未提交的更新结果，如果这个事务最后以回滚结束，这时的读取结果就可能是错误的，所以多数的数据库应用都不会使用这种隔离级别。</td>
-</tr>
-<tr>
-<td>Read commited</td>
-<td>这种隔离级别的事务只能读取其他事务已经提交的更新结果，否则，发生等待，但是其他会话可以修改这个事务中被读取的记录，而不必等待事务结束，显然，在这种隔离级别下，一个事务中的两个相同的读取操作，其结果可能不同。</td>
-</tr>
-<tr>
-<td>Repeatable read</td>
-<td>在一个事务中，如果在两次相同条件的读取操作之间没有添加记录的操作，也没有其他更新操作导致在这个查询条件下记录数增多，则两次读取结果相同。（该级别是 InnoDB 默认的隔离等级）。</td>
-</tr>
-<tr>
-<td>Serializable</td>
-<td>在一个事务中，读取操作的结果是在这个事务开始之前其他事务就已经提交的记录。</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>InnoDB 默认的隔离级别是 REPEATABLE READ（可重复读），并且通过间隙锁算法 (next-key locking) 策略防止 Phantom Read 的出现</p>
-</blockquote>
-<table>
-<thead>
-<tr>
 <th><strong>问题</strong></th>
 <th><strong>说明</strong></th>
 </tr>
@@ -266,11 +237,40 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th><strong>隔离级别</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read uncommitted</td>
+<td>一个事务还没提交时，它做的变更就能被别的事务看到。</td>
+</tr>
+<tr>
+<td>Read commited</td>
+<td>一个事务提交之后，它做的变更才会被其他事务看到。</td>
+</tr>
+<tr>
+<td>Repeatable read</td>
+<td>一个事务提交之后，它做的变更才会被其他事务看到，但是限定一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致。</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td>当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>InnoDB 默认的隔离级别是 REPEATABLE READ（可重复读），并且通过间隙锁算法 (next-key locking) 策略防止 Phantom Read 的出现</p>
+</blockquote>
 <h2 id="32-问题">
   3.2 问题
   <a class="anchor" href="#32-%e9%97%ae%e9%a2%98">#</a>
 </h2>
-<p>不同的隔离级别面临的问题。</p>
+<p>对于隔离性出现的不同问题可以采用对应的隔离级别解决。</p>
 <table>
 <thead>
 <tr>
@@ -333,6 +333,7 @@ var _hmt = _hmt || [];
 </h1>
 <ul>
 <li><a href="http://hbasefly.com/2017/08/19/mysql-transaction/">数据库事务系列－MySQL 跨行事务模型</a></li>
+<li><a href="https://www.cnblogs.com/xumBlog/p/16220883.html">详解幻读、脏读和不可重复读</a></li>
 </ul></article>
  
       

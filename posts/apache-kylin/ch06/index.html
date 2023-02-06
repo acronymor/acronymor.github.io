@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -141,10 +141,10 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-聚合组-aggregation-group">1. 聚合组 (Aggregation group)</a></li>
+    <li><a href="#1-聚合组-aggregation-group">1. 聚合组 (aggregation group)</a></li>
     <li><a href="#2-必要维度-mandatory-dimension">2. 必要维度 (mandatory dimension)</a></li>
     <li><a href="#3-层级维度-hierarchy-dimension">3. 层级维度 (hierarchy dimension)</a></li>
-    <li><a href="#4-联合维度-joint-dimension">4. 联合维度 (Joint dimension)</a></li>
+    <li><a href="#4-联合维度-joint-dimension">4. 联合维度 (joint dimension)</a></li>
     <li><a href="#5-参考文献">5. 参考文献</a></li>
   </ul>
 </nav>
@@ -188,7 +188,7 @@ var _hmt = _hmt || [];
 <p><img src="cube.png" alt="cube" /></p>
 <p>随着维度数目的增加 Cuboid 的数量会爆炸式地增长，不仅占用大量的存储空间还会延长 Cube 的构建时间。为了缓解 Cube 的构建压力，减少生成的 Cuboid 数目，占用存储空间，同时提高查询性能，Apache Kylin 引入了一系列的高级设置，帮助用户筛选出真正需要的 Cuboid。这些高级设置包括聚合组（Aggregation Group）、联合维度（Joint Dimension）、层级维度（Hierachy Dimension）和必要维度（Mandatory Dimension）等。</p>
 <h1 id="1-聚合组-aggregation-group">
-  1. 聚合组 (Aggregation group)
+  1. 聚合组 (aggregation group)
   <a class="anchor" href="#1-%e8%81%9a%e5%90%88%e7%bb%84-aggregation-group">#</a>
 </h1>
 <p>用户根据自己关注的维度组合，可以划分出自己关注的组合大类，这些大类在 Apache Kylin 里面被称为聚合组。上面的例子如果用户仅仅关注维度 AB 组合和维度 CD 组合，那么该 Cube 则可以被分化成两个聚合组，分别是聚合组 AB 和聚合组 CD。如图所示，生成的 Cuboid 数目从 16 个缩减成了 8 个。</p>
@@ -205,7 +205,7 @@ var _hmt = _hmt || [];
 <p><img src="hierarchy-dimension.png" alt="hierarchy-dimension" /></p>
 <p>基于 ABCD 四个维度的场景，假设维度 A 代表国家，维度 B 代表省份，维度 C 代表城市，那么 ABC 三个维度可以被设置为层级维度，生成的 Cube 如图所示，Cuboid 数目从 16 减小到 8。即可同时出现，也可不同时出现，若出现那么出现的顺序必须跟层级维度的顺序保持一直。</p>
 <h1 id="4-联合维度-joint-dimension">
-  4. 联合维度 (Joint dimension)
+  4. 联合维度 (joint dimension)
   <a class="anchor" href="#4-%e8%81%94%e5%90%88%e7%bb%b4%e5%ba%a6-joint-dimension">#</a>
 </h1>
 <p>将维度 A、B 和 C 定义为联合维度，Apache Kylin 就仅仅会构建 Cuboid ABC，而 Cuboid AB、BC、A 等等 Cuboid 都不会被生成。即要么都不出现，要么都出现。</p>
@@ -257,10 +257,10 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-聚合组-aggregation-group">1. 聚合组 (Aggregation group)</a></li>
+    <li><a href="#1-聚合组-aggregation-group">1. 聚合组 (aggregation group)</a></li>
     <li><a href="#2-必要维度-mandatory-dimension">2. 必要维度 (mandatory dimension)</a></li>
     <li><a href="#3-层级维度-hierarchy-dimension">3. 层级维度 (hierarchy dimension)</a></li>
-    <li><a href="#4-联合维度-joint-dimension">4. 联合维度 (Joint dimension)</a></li>
+    <li><a href="#4-联合维度-joint-dimension">4. 联合维度 (joint dimension)</a></li>
     <li><a href="#5-参考文献">5. 参考文献</a></li>
   </ul>
 </nav>

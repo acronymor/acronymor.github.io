@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -149,7 +149,7 @@ var _hmt = _hmt || [];
     </li>
     <li><a href="#2-文件结构">2. 文件结构</a></li>
     <li><a href="#3-写入流程">3. 写入流程</a></li>
-    <li><a href="#4-hlog-的生命周期">4. Hlog 的生命周期</a></li>
+    <li><a href="#4-hlog-的生命周期">4. HLog 的生命周期</a></li>
     <li><a href="#5-持久化等级">5. 持久化等级</a></li>
     <li><a href="#6-参考文献">6. 参考文献</a></li>
   </ul>
@@ -230,28 +230,30 @@ var _hmt = _hmt || [];
 </h1>
 <p>下图主要描述了 HRegion 中调用 append 和 sync 后，hbase 的 wal 线程流转模型。最左边是有多个 client 提交到 HRegion 的 append 和 sync 操作。</p>
 <p><img src="hlog-write.jpg" alt="hlog-write" /></p>
-<p>当调用 append 后 WALEdit 和 WALKey 会被封装成 FSWALEntry 类进而再封装成 RinbBufferTruck 类放入一个线程安全的 Buffer(LMAX Disruptor RingBuffer) 中。
-当调用 sync 后会生成一个 SyncFuture 进而封装成 RinbBufferTruck 类同样放入这个 Buffer 中，然后工作线程此时会被阻塞等待被 notify() 唤醒。</p>
+<ol>
+<li>当调用 append 后 WALEdit 和 WALKey 会被封装成 FSWALEntry 类进而再封装成 RinbBufferTruck 类放入一个线程安全的 Buffer(LMAX Disruptor RingBuffer) 中。</li>
+<li>当调用 sync 后会生成一个 SyncFuture 进而封装成 RinbBufferTruck 类同样放入这个 Buffer 中，然后工作线程此时会被阻塞等待被 notify() 唤醒。</li>
+</ol>
 <p>在每个 Buffer 的最右边会有一个且只有一个线程专门去处理这些 RinbBufferTruck，如果是 FSWALEntry 则写入 HLog 文件。因为文件缓存的存在，这时候很可能 client 数据并没有落盘。所以进一步如果是 SyncFuture 会被批量的放到一个线程池中，异步的批量去刷盘，刷盘成功后唤醒工作线程完成 wal。</p>
 <h1 id="4-hlog-的生命周期">
-  4. Hlog 的生命周期
+  4. HLog 的生命周期
   <a class="anchor" href="#4-hlog-%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f">#</a>
 </h1>
-<p>Hlog 从产生到最后删除需要经历如下几个过程：</p>
+<p>HLog 从产生到最后删除需要经历如下几个过程：</p>
 <ul>
 <li>
-<p><strong>产生</strong> 所有涉及到数据的变更都会先写 Hlog，除非是你关闭了 Hlog。</p>
+<p><strong>产生</strong> 所有涉及到数据的变更都会先写 HLog，除非是你关闭了 HLog。</p>
 </li>
 <li>
-<p><strong>滚动</strong> Hlog 的大小通过参数 hbase.regionserver.logroll.period 控制，默认是 1 个小时，时间达到 hbase.regionserver.logroll.period 设置的时间，Hbase 会创建一个新的 Hlog 文件。这就实现了 Hlog 滚动的目的。Hbase 通过 hbase.regionserver.maxlogs 参数控制 Hlog 的个数。滚动的目的，为了控制单个 Hlog 文件过大的情况，方便后续的过期和删除。</p>
+<p><strong>滚动</strong> HLog 的大小通过参数 <code>hbase.regionserver.logroll.period</code> 控制，默认是 1 个小时，时间达到 <code>hbase.regionserver.logroll.period</code> 设置的时间，HBase 会创建一个新的 HLog 文件。这就实现了 HLog 滚动的目的。HBase 通过 hbase.regionserver.maxlogs 参数控制 HLog 的个数。滚动的目的，为了控制单个 HLog 文件过大的情况，方便后续的过期和删除。</p>
 </li>
 <li>
-<p><strong>过期</strong> 前面我们有讲到 sequenceid 这个东东，Hlog 的过期依赖于对 sequenceid 的判断。Hbase 会将 Hlog 的 sequenceid 和 Hfile 最大的 sequenceid（刷新到的最新位置）进行比较，如果该 Hlog 文件中的 sequenceid 比刷新的最新位置的 sequenceid 都要小，那么这个 Hlog 就过期了，过期了以后，对应 Hlog 会被移动到.oldlogs 目录。</p>
-<p>这里有个问题，为什么要将过期的 Hlog 移动到.oldlogs 目录，而不是直接删除呢？
-答案是因为 Hbase 还有一个主从同步的功能，这个依赖 Hlog 来同步 Hbase 的变更，有一种情况不能删除 Hlog，那就是 Hlog 虽然过期，但是对应的 Hlog 并没有同步完成，因此比较好的做好是移动到别的目录。再增加对应的检查和保留时间。</p>
+<p><strong>过期</strong> 前面我们有讲到 sequenceid 这个东西，HLog 的过期依赖于对 sequenceid 的判断。HBase 会将 HLog 的 sequenceid 和 Hfile 最大的 sequenceid（刷新到的最新位置）进行比较，如果该 HLog 文件中的 sequenceid 比刷新的最新位置的 sequenceid 都要小，那么这个 HLog 就过期了，过期了以后，对应 HLog 会被移动到 .oldlogs 目录。</p>
+<p>这里有个问题，为什么要将过期的 HLog 移动到 .oldlogs 目录，而不是直接删除呢？
+答案是因为 HBase 还有一个主从同步的功能，这个依赖 HLog 来同步 HBase 的变更，有一种情况不能删除 HLog，那就是 HLog 虽然过期，但是对应的 HLog 并没有同步完成，因此比较&gt; 好的做好是移动到别的目录。再增加对应的检查和保留时间。</p>
 </li>
 <li>
-<p><strong>删除</strong> 如果 Hbase 开启了 replication，当 replication 执行完一个 Hlog 的时候，会删除 Zoopkeeper 上的对应 Hlog 节点。在 Hlog 被移动到.oldlogs 目录后，Hbase 每隔 <code>hbase.master.cleaner.interval</code>（默认 60 秒）时间会去检查.oldlogs 目录下的所有 Hlog，确认对应的 Zookeeper 的 Hlog 节点是否被删除，如果 Zookeeper 上不存在对应的 Hlog 节点，那么就直接删除对应的 Hlog。<code>hbase.master.logcleaner.ttl</code>（默认 10 分钟）这个参数设置 Hlog 在.oldlogs 目录保留的最长时间。</p>
+<p><strong>删除</strong> 如果 HBase 开启了 replication，当 replication 执行完一个 HLog 的时候，会删除 Zoopkeeper 上的对应 HLog 节点。在 HLog 被移动到 .oldlogs 目录后，HBase 每隔 <code>hbase.master.cleaner.interval</code>（默认 60 秒）时间会去检查.oldlogs 目录下的所有 HLog，确认对应的 Zookeeper 的 HLog 节点是否被删除，如果 Zookeeper 上不存在对应的 HLog 节点，那么就直接删除对应的 HLog。<code>hbase.master.logcleaner.ttl</code>（默认 10 分钟）这个参数设置 HLog 在 .oldlogs 目录保留的最长时间。</p>
 </li>
 </ul>
 <h1 id="5-持久化等级">
@@ -345,7 +347,7 @@ var _hmt = _hmt || [];
     </li>
     <li><a href="#2-文件结构">2. 文件结构</a></li>
     <li><a href="#3-写入流程">3. 写入流程</a></li>
-    <li><a href="#4-hlog-的生命周期">4. Hlog 的生命周期</a></li>
+    <li><a href="#4-hlog-的生命周期">4. HLog 的生命周期</a></li>
     <li><a href="#5-持久化等级">5. 持久化等级</a></li>
     <li><a href="#6-参考文献">6. 参考文献</a></li>
   </ul>

@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -226,30 +226,22 @@ var _hmt = _hmt || [];
 <table>
 <thead>
 <tr>
-<th><strong>MTS</strong></th>
-<th><strong>Remark</strong></th>
+<th>Replication</th>
+<th>Remark</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Single Thread Slave (STS)</td>
-<td>在 replica 上从 replay log 回放到 replica 表空间只有一个线程，主要存在于 MySQL 5.6.2 之前。这个时期复制延迟通常很大，因为主/从数据库的并发度差距很大。</td>
+<td>Asynchronous replication</td>
+<td>dump 线程只管把 binlog 发送到 replica 节点，不等待 replica 的 ACK。因此主/从同步的差距依赖主/从之间的网络状况，也依赖 replica 上写入 replay log 的速度，更依赖 replica 节点上采用了那种 MTS 技术。Relay log 回放完成后，数据对向 replica 发起的查询才可见。</td>
 </tr>
 <tr>
-<td>Schema based MTS (SB-MTS)</td>
-<td>MySQL 5.6.3 引入。多个 schema(MySQL 中等同于 database) 之间可以并发的回放 replay log 到 replica 表空间。</td>
+<td>Semi-sync replication</td>
+<td>Source 节点写入 binlog 后、事务提交之前，会等待一定数量的 replica ACK。这样保证一个事务 ACK 给 client 之后，即便发生 source 节点永久宕机，事务也不会丢失。</td>
 </tr>
 <tr>
-<td>Logical Clock based MTS (LC-MTS)</td>
-<td>MySQL 5.7.2 引入。MySQL 主库上为了提升 I/O 的利用率，采用了 group commit 的技术，简单理解就是把多个小 I/O 聚合成一个大 I/O，去分担存储设备寻道的开销（SSD 没有磁道的概念，但小 I/O 据称的收益依然非常可观）。一批可以 group commit 的事务，读写的数据集是没有冲突的，LC-MTS 正是利用了这个特点，在 repliac 上同一个 group commit 中多个事务可以并行的回放。</td>
-</tr>
-<tr>
-<td>Lock Interval based MTS (LI-MTS)</td>
-<td>MySQL 5.7.6 引入，在 LC-MTS 的基础上进行了进一步的优化，将同一个 group 中补充的事务并行化。推导逻辑是：只要两个事务可以同时获得锁，说明他们读写的资源是不冲突的，因此就可以并行回放。</td>
-</tr>
-<tr>
-<td>Writeset based MTS (WS-MTS)</td>
-<td>MySQL 5.7.22 引入，之前 MTS 技术都依赖 source 节点上运行态的情况实施并发策略，但 WS-MTS 把并发回放的策略细类度到数据本身，两个事务读写的数据集没有交集，就可以并行回放。</td>
+<td>Group replication (MGR)</td>
+<td>Source 节点先在本地乐观地执行事务，在准备提交之前，会把事务涉及到的改变行和 writeset 通过原子广播 (通过 paxos 协议的变种 mencius 协议实现) 发送到所有的节点上，每一个节点独立进行 certification，certification 通过则继续事务的提交 (事务发起节点写入 binlog 后完成 commit，其他节点写入 relay log，采用 WS-MTS 并行回放策略回放到各自的表空间)，失败则回滚事务。关键点是通过基于 paxos 的原子广播确定事务提交的顺序，以及通过 WS-MTS 进行事务回放到本地数据库表空间。</td>
 </tr>
 </tbody>
 </table>

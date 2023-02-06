@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -265,6 +265,7 @@ var _hmt = _hmt || [];
   3.2.1 全局字典
   <a class="anchor" href="#321-%e5%85%a8%e5%b1%80%e5%ad%97%e5%85%b8">#</a>
 </h3>
+<p>如上所述，全局字典存在的含义就是保存非数据类型的数据与数值之间的映射关系 <code>&lt;key, hash(key)&gt;</code>，这样就可以将非数值类型的数据映射到 bitmap 上面来实现精确去重。</p>
 <p>一份字典包括一份 meta 数据文件和多个字典文件，每个字典文件称之为桶 (Bucket)。</p>
 <p><img src="dict-arch.png" alt="dict-arch" /></p>
 <p><strong>第一次构建</strong></p>
@@ -275,6 +276,10 @@ var _hmt = _hmt || [];
 <p><img src="second-build.png" alt="second-build" /></p>
 <p>relative 表示本次本 Bucket 已有的数据，Absolute 表示将要构建出来的数据（但是此时还有上次构建的数据）。</p>
 <p>以 Bucket2#May1-1 举例，此时已知第一次构建完成后中有 6 个元素，而本次 Bucket1 有 2 个元素，那么可以推断出此时 offset 为 8，那么在构建全局字典的时候，将 &lt;May,1&gt; 改成 &lt;May, 1 + 8&gt; 便可。其他依次类推。</p>
+<blockquote>
+<p>Note：
+官方给出的示意图中具有一定的误导性，这个 offset 并不是后续会放入到 bitmap 中的数值，单纯的只是记录当前 Buckect 中的数据数量。</p>
+</blockquote>
 <h1 id="4-参考文献">
   4. 参考文献
   <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
@@ -283,8 +288,9 @@ var _hmt = _hmt || [];
 <li><a href="https://cloud.tencent.com/developer/article/1481855">Roaring Bitmap 更好的位图压缩算法</a></li>
 <li><a href="https://www.jianshu.com/p/1327d03c8124">再谈基数估计之 HyperLogLog 算法</a></li>
 <li><a href="https://www.jianshu.com/p/818ac4e90daf">高效压缩位图 RoaringBitmap 的原理与应用</a></li>
-<li><a href="https://segmentfault.com/a/1190000038481589">Apache Kylin 4.0 精确去重的全局字典原理</a></li>
+<li><a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=158870452">Apache Kylin 4.0 精确去重的全局字典原理</a></li>
 <li><a href="https://www.bilibili.com/video/av969487170/">Kylin 4.0 全局字典设计和实现</a></li>
+<li><a href="https://blog.bcmeng.com/post/kylin-distinct-count-global-dict.html">Apache Kylin 精确去重和全局字典权威指南</a></li>
 </ul></article>
  
       

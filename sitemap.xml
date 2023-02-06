@@ -38,6 +38,15 @@
     <loc>https://acronymor.com/posts/amdb/ch01/</loc>
     <lastmod>2022-12-01T00:00:00+08:00</lastmod>
   </url><url>
+    <loc>https://acronymor.com/posts/mysql/ch08/</loc>
+    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/tags/mysql/</loc>
+    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/categories/MySQL/</loc>
+    <lastmod>2022-06-29T00:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://acronymor.com/tags/c&#43;&#43;/</loc>
     <lastmod>2022-06-24T00:00:00+08:00</lastmod>
   </url><url>
@@ -111,12 +120,6 @@
     <lastmod>2022-04-20T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/mysql/ch06/</loc>
-    <lastmod>2022-04-10T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/tags/mysql/</loc>
-    <lastmod>2022-04-10T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/categories/MySQL/</loc>
     <lastmod>2022-04-10T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/posts/database/ch04/</loc>
@@ -484,6 +487,18 @@
   </url><url>
     <loc>https://acronymor.com/posts/apache-hive/ch01/</loc>
     <lastmod>2018-06-10T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/distributed-system/ch02/</loc>
+    <lastmod>2018-05-03T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/tags/distributed-system/</loc>
+    <lastmod>2018-05-03T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/categories/Distributed-System/</loc>
+    <lastmod>2018-05-03T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://acronymor.com/posts/distributed-system/ch01/</loc>
+    <lastmod>2018-05-02T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://acronymor.com/categories/Apache-Zookeeper/</loc>
     <lastmod>2018-04-03T00:00:00+08:00</lastmod>

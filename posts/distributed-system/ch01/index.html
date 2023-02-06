@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：
+
+It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.
+
+在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-CAP" />
+<meta property="og:description" content="CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：
+
+It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.
+
+在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/distributed-system/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-05-02T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-05-02T00:00:00+08:00" />
+<title>Ch01-CAP | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-CAP</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本概念">1. 基本概念</a>
+      <ul>
+        <li><a href="#11-一致性">1.1 一致性</a></li>
+        <li><a href="#12-acid-与-cap-中-c-的区别">1.2 ACID 与 CAP 中 C 的区别</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-举例说明">2. 举例说明</a></li>
+    <li><a href="#3-常见指标">3. 常见指标</a></li>
+    <li><a href="#4-一些分布式方案">4. 一些分布式方案</a>
+      <ul>
+        <li><a href="#41-quorum-replication">4.1 Quorum Replication</a></li>
+        <li><a href="#42-consensus-algorithm">4.2 Consensus algorithm</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/distributed-system/ch01/">Ch01-CAP</a>
+  </h1>
+  
+  <h5>May 2, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Distributed-System/">Distributed-System</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/distributed-system/">distributed-system</a>
+  </div>
+  
+
+
+
+<p>CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：</p>
+<blockquote>
+<p>It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.</p>
+</blockquote>
+<p>在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。</p>
+<p>CAP 理论告诉我们，一个分布式系统不可能同时满足数据一致性、服务可用性和分区容错性这三个基本需求，最多只能同时满足其中的两个。</p>
+<h1 id="1-基本概念">
+  1. 基本概念
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5">#</a>
+</h1>
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一致性 (C)</td>
+<td>等同于所有节点访问<em>同一份</em>的<em>最新</em>副本</td>
+</tr>
+<tr>
+<td>可用性 (A)</td>
+<td>每次请求都能获取到<em>非错</em>的响应，但不保证获取到的数据为最新的数据</td>
+</tr>
+<tr>
+<td>分区容错性 (P)</td>
+<td>尽管任意数量的消息被节点间的网络<em>丢失</em>或<em>延迟</em>，系统仍然能正常工作</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-一致性">
+  1.1 一致性
+  <a class="anchor" href="#11-%e4%b8%80%e8%87%b4%e6%80%a7">#</a>
+</h2>
+<p>常见的一致性有 <code>强一致性（Strong Consistency）</code>、<code>弱一致性（Weak Consistency）</code>、<code>最终一致性（Eventual Consistency）</code>。在 CAP 中特指强一致性。</p>
+<h2 id="12-acid-与-cap-中-c-的区别">
+  1.2 ACID 与 CAP 中 C 的区别
+  <a class="anchor" href="#12-acid-%e4%b8%8e-cap-%e4%b8%ad-c-%e7%9a%84%e5%8c%ba%e5%88%ab">#</a>
+</h2>
+<p>CAP 中的 C 侧重于一条数据在多副本中的一致性，而 CAP 中的 C 侧重于多条数据在总数上的一致性。</p>
+<ul>
+<li>CAP 中的 C 就像是用户 A 有 100 块钱被银行存储在北京，然后数据会被同步到深圳，不管是从北京取还是深圳取，都是这 100 块钱。银行需要保证这 100 块钱同步正确。</li>
+<li>ACID 中的 C 就像是用户 A 有 100 块钱，要转账给用户 B，那么需要保证 A 少了 100 块钱，B 多了 100 块钱。银行需要保证这一系列过程和最终结果是正确的。</li>
+</ul>
+<h1 id="2-举例说明">
+  2. 举例说明
+  <a class="anchor" href="#2-%e4%b8%be%e4%be%8b%e8%af%b4%e6%98%8e">#</a>
+</h1>
+<p><img src="1-write.jpg" alt="1-write" /></p>
+<p>在 1 写的情况下，只要一个副本写入成功即可返回写入成功。</p>
+<p>出现网络分区后，三台机器的数据就可能出现不一致，无法保证 C；但是因为可以正常写入所以返回写入成功，A 依旧可以保证。</p>
+<p><img src="3-write.jpg" alt="3-write" /></p>
+<p>在 3 写的情况下，需要 3 个副本全部写入成功才可返回写入成功。</p>
+<p>出现网络分区后，无法保证 3 个副本全部写入成功，所以无法保证 A；但是保证了 C。</p>
+<h1 id="3-常见指标">
+  3. 常见指标
+  <a class="anchor" href="#3-%e5%b8%b8%e8%a7%81%e6%8c%87%e6%a0%87">#</a>
+</h1>
+<p>分布式系统中 P 是一定存在，一旦出现了网络分区，那么一致性和可用性就必须抛弃一个。常见的，对于 NoSQL 数据库更加注重可用性，所以一般是一个 AP 系统；对于分布式关系型数据库更加注重一致性，所以一般是一个 CP 系统。</p>
+<p>不过凡事无绝对，即便是分布式关系型数据库系统，对于 A 也有要求，虽然达不到 100%，但是依然可以具备 n 个 9 以上的高可用能力。因此分布式关系型数据库系统也可以看做 <code>CP+HA</code>的系统。</p>
+<table>
+<thead>
+<tr>
+<th><strong>指标</strong></th>
+<th><strong>全称</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RPO(Recovery Point Objective)</td>
+<td>恢复点目标</td>
+<td>数据库在灾难后会丢失多长时间的数据</td>
+</tr>
+<tr>
+<td>RTO(Recovery Time Objective)</td>
+<td>恢复时间目标</td>
+<td>指数据库在灾难发生后到整个系统恢复正常所需要的时间</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-一些分布式方案">
+  4. 一些分布式方案
+  <a class="anchor" href="#4-%e4%b8%80%e4%ba%9b%e5%88%86%e5%b8%83%e5%bc%8f%e6%96%b9%e6%a1%88">#</a>
+</h1>
+<h2 id="41-quorum-replication">
+  4.1 Quorum Replication
+  <a class="anchor" href="#41-quorum-replication">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>N (副本数)，W（写入成功副本数），R（读取成功副本数）
+</span></span><span style="display:flex;"><span>一般需要 W + R &gt; N
+</span></span></code></pre></div><ul>
+<li>N = 3, W = 1, R = 3（写 AP，读 CP）</li>
+<li>N = 3, W = 3, R = 1(写 CP，读 AP)</li>
+</ul>
+<h2 id="42-consensus-algorithm">
+  4.2 Consensus algorithm
+  <a class="anchor" href="#42-consensus-algorithm">#</a>
+</h2>
+<p>leader 提供读写，leader 宕机后选择新的 leader，只有选举期间短暂的不可用</p>
+<ul>
+<li>CP + HA</li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本概念">1. 基本概念</a>
+      <ul>
+        <li><a href="#11-一致性">1.1 一致性</a></li>
+        <li><a href="#12-acid-与-cap-中-c-的区别">1.2 ACID 与 CAP 中 C 的区别</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-举例说明">2. 举例说明</a></li>
+    <li><a href="#3-常见指标">3. 常见指标</a></li>
+    <li><a href="#4-一些分布式方案">4. 一些分布式方案</a>
+      <ul>
+        <li><a href="#41-quorum-replication">4.1 Quorum Replication</a></li>
+        <li><a href="#42-consensus-algorithm">4.2 Consensus algorithm</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

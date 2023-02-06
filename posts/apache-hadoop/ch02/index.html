@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.de43bc3be86a09db5a3f8d8533c982283945469b7900bc1a4b1ab1c279f0a313.js" integrity="sha256-3kO8O&#43;hqCdtaP42FM8mCKDlFRpt5ALwaSxqxwnnwoxM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -155,9 +155,15 @@ var _hmt = _hmt || [];
     <li><a href="#2-hdfs-ha-架构">2. HDFS HA 架构</a>
       <ul>
         <li><a href="#21-基本组成">2.1 基本组成</a></li>
+        <li><a href="#22-checkpoint-过程">2.2 Checkpoint 过程</a></li>
       </ul>
     </li>
-    <li><a href="#3-fsmage-和-edit-小细节">3. Fsmage 和 edit 小细节</a></li>
+    <li><a href="#3-fsmage-和-edit-小细节">3. Fsmage 和 edit 小细节</a>
+      <ul>
+        <li><a href="#31-txnid">3.1 txnid</a></li>
+        <li><a href="#32-fencing-隔离机制">3.2 Fencing 隔离机制</a></li>
+      </ul>
+    </li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>
   </ul>
 </nav>
@@ -251,16 +257,79 @@ var _hmt = _hmt || [];
 <p>HDFS 中，DataNode 自身保存了多个副本，所以某种意义上来说本身就是 HA 架构；NameNode 和 Secondary NameNode 本身却只是单点结构，如果 NameNode 宕机，那么 HDFS 将无法对外提供服务，所以社区就设计了 HA 架构（也叫做 QJM(Quorum Journal Manager) ）。其结构如下图所示。</p>
 <p><img src="hdfs-ha.png" alt="hdfs-ha" /></p>
 <p>原理较为简单，将 NameNode 变成多个并将其划分不同角色（1 个 Active NameNode，n 个 Standy NameNode），只让 Active NameNode 提供 NameNode 的服务。接着设计了个名称为 ZKFC 的监控组件，不断的监控所有 NameNode 状态，如果发现 Active NameNode 宕机了，便从 Standby NameNode 中选一个并切换角色为  Active NameNode，同时也会保证只有一个 Active NameNode 在线。</p>
-<p>为了能够保证所有 NameNode 看到的 edit 文件一致，所以社区又设计了 JournalNode Cluster（基于 Poxos 算法保证 edit 一致性），这样只需要向 JournalNode Cluster 中写 edit 文件便可。
-基础架构中的 NameNode 功能由 HA 架构中的 Active NameNode 完成，那 Secondary NameNode 岂不是没了？事实上 HA 架构中的 Standby NameNode 维护了一个线程，会不断的监听 JournalNode Cluster 中的 edit 文件变更，如果满足条件（比如时间到了）那么便拉取 edit 文件并与 fsimage 文件合并，最后重新发送回 Active NameNode。</p>
+<p>为了能够保证所有 NameNode 看到的 edit 文件一致，所以社区又设计了 JournalNode Cluster（基于 Poxos 算法保证 edit 一致性），这样只需要向 JournalNode Cluster 中写 edit 文件便可。</p>
+<h2 id="22-checkpoint-过程">
+  2.2 Checkpoint 过程
+  <a class="anchor" href="#22-checkpoint-%e8%bf%87%e7%a8%8b">#</a>
+</h2>
+<p><img src="qjm-arch.png" alt="qjm-arch" /></p>
+<table>
+<thead>
+<tr>
+<th><strong>组件</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FSEditLog</td>
+<td>所有 EditLog 操作的入口</td>
+</tr>
+<tr>
+<td>JournalSet</td>
+<td>集成本地磁盘和 JournalNode 集群上 EditLog 的相关操作</td>
+</tr>
+<tr>
+<td>FileJournalManager</td>
+<td>实现本地磁盘上 EditLog 操作</td>
+</tr>
+<tr>
+<td>QuorumJournalManager</td>
+<td>实现 JournalNode 集群 EditLog 操作</td>
+</tr>
+<tr>
+<td>AsyncLoggerSet</td>
+<td>实现 JournalNode 集群 EditLog 的写操作集合</td>
+</tr>
+<tr>
+<td>AsyncLogger</td>
+<td>发起 RPC 请求到 JournalNode，执行具体的日志同步功能</td>
+</tr>
+<tr>
+<td>JournalNodeHttpServer</td>
+<td>运行在 JournalNode 节点进程中的 Http 服务，用于接收处于 Standby NameNode 和其它 JournalNode 的同步 EditLog 文件流的请求</td>
+</tr>
+<tr>
+<td>JournalNodeRpcServer</td>
+<td>运行在 JournalNode 节点进程中的 RPC 服务，接收 NameNode 端的 AsyncLogger 的 RPC 请求</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>基础架构中的 NameNode 功能由 HA 架构中的 Active NameNode 完成，那 Secondary NameNode 岂不是没了？那 fsimage 和 edit 的工作谁来做呢？</p>
+<p>事实上  Secondary NameNode  的确没了，其 merge 工作则由 Standby NameNode 取而代之。它维护了一个线程，会不断的监听 JournalNode Cluster 中的 edit 文件变更，如果满足条件（比如时间到了）那么便拉取 edit 文件并与 fsimage 文件合并，最后重新发送回 Active NameNode。</p>
+</blockquote>
 <h1 id="3-fsmage-和-edit-小细节">
   3. Fsmage 和 edit 小细节
   <a class="anchor" href="#3-fsmage-%e5%92%8c-edit-%e5%b0%8f%e7%bb%86%e8%8a%82">#</a>
 </h1>
+<h2 id="31-txnid">
+  3.1 txnid
+  <a class="anchor" href="#31-txnid">#</a>
+</h2>
 <p>文件名自带 txnid，可以用来确认 fsimage 和 edits 之间的关系。同目录中还有一个名为 seen_txid 的文件，保存了最后一个 edits 文件名的 txnid。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>edits 文件名称：edits_0000000000000000264-edits_0000000000000000267
 </span></span><span style="display:flex;"><span>fsimage 文件名称：fsimage_0000000000000000267
 </span></span></code></pre></div><p>比如上述两个文件，fsimage (*-0267) 已经将 edits 文件  (*0264-*267) 合并进来了，此时可以删除 edits 文件  (*0264-*267)  文件。</p>
+<h2 id="32-fencing-隔离机制">
+  3.2 Fencing 隔离机制
+  <a class="anchor" href="#32-fencing-%e9%9a%94%e7%a6%bb%e6%9c%ba%e5%88%b6">#</a>
+</h2>
+<p>HDFS HA 中 利用了 Fencing 机制来避免脑裂问题，将先前的 Active 节点 杀死，然后将本地 NameNode 转换为 Active 状态。Hadoop 公共库中对外提供了两种 fenching 实现：</p>
+<ul>
+<li>sshfence：通过 ssh 登陆目标节点上，使用命令 fuser 将进程杀死（通过 tcp 端口号定位进程 pid，该方法比 jps 命令更准确）</li>
+<li>shellfence（缺省实现），执行一个用户事先定义的 shell 命令（脚本）完成隔离</li>
+</ul>
 <h1 id="4-参考文献">
   4. 参考文献
   <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
@@ -269,6 +338,8 @@ var _hmt = _hmt || [];
 <li><a href="https://www.cnblogs.com/yuexiuping/p/14806782.html">Hadoop 之 HDFS</a></li>
 <li><a href="https://blog.csdn.net/weixin_52851967/article/details/127070265">Namenode 与 SecondaryNameNode</a></li>
 <li><a href="https://xie.infoq.cn/article/c62c656fcc819f3d5ad1536fe">详解 HDFS 底层交互原理</a></li>
+<li><a href="https://blog.csdn.net/breakout_alex/article/details/88171114">HADOOP-QJM 原理</a></li>
+<li><a href="https://www.malaoshi.top/show_1IX26KeAQn5B.html">hadoop3.x ha 高可用-QJM 解决方案、ZKFailoverController、Fencing 隔离机制、Journal Node 同步数据</a></li>
 </ul></article>
  
       
@@ -324,9 +395,15 @@ var _hmt = _hmt || [];
     <li><a href="#2-hdfs-ha-架构">2. HDFS HA 架构</a>
       <ul>
         <li><a href="#21-基本组成">2.1 基本组成</a></li>
+        <li><a href="#22-checkpoint-过程">2.2 Checkpoint 过程</a></li>
       </ul>
     </li>
-    <li><a href="#3-fsmage-和-edit-小细节">3. Fsmage 和 edit 小细节</a></li>
+    <li><a href="#3-fsmage-和-edit-小细节">3. Fsmage 和 edit 小细节</a>
+      <ul>
+        <li><a href="#31-txnid">3.1 txnid</a></li>
+        <li><a href="#32-fencing-隔离机制">3.2 Fencing 隔离机制</a></li>
+      </ul>
+    </li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>
   </ul>
 </nav>
