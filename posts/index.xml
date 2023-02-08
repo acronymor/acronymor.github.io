@@ -175,65 +175,65 @@
     </item>
     
     <item>
-      <title>Ch08-C&#43;&#43; 之 point</title>
-      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</link>
+      <title>Ch09-C&#43;&#43; 之 point</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch09/</link>
       <pubDate>Thu, 28 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</guid>
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch09/</guid>
       <description>&lt;p&gt;&lt;code&gt;std::unique_ptr&lt;/code&gt;，&lt;code&gt;std::shared_ptr&lt;/code&gt;，&lt;code&gt;std::weak_ptr&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Ch07-C&#43;&#43; 之 reference</title>
-      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</link>
+      <title>Ch08-C&#43;&#43; 之 reference</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</link>
       <pubDate>Wed, 27 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</guid>
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</guid>
       <description>&lt;p&gt;&lt;code&gt;lvalue reference&lt;/code&gt;，&lt;code&gt;lvalue reference&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch07-C&#43;&#43; 之 keyword</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</link>
+      <pubDate>Mon, 25 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</guid>
+      <description>&lt;p&gt;&lt;code&gt;virtual&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Ch06-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</link>
-      <pubDate>Mon, 25 Apr 2022 00:00:00 +0800</pubDate>
+      <pubDate>Sun, 24 Apr 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</guid>
-      <description>&lt;p&gt;&lt;code&gt;virtual&lt;/code&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;code&gt;static_cast&lt;/code&gt;，&lt;code&gt;dynamic_cast&lt;/code&gt;，&lt;code&gt;const_cast&lt;/code&gt;，&lt;code&gt;reinterpret_cast&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Ch05-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</link>
-      <pubDate>Sun, 24 Apr 2022 00:00:00 +0800</pubDate>
+      <pubDate>Sat, 23 Apr 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</guid>
-      <description>&lt;p&gt;&lt;code&gt;static_cast&lt;/code&gt;，&lt;code&gt;dynamic_cast&lt;/code&gt;，&lt;code&gt;const_cast&lt;/code&gt;，&lt;code&gt;reinterpret_cast&lt;/code&gt;。&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;code&gt;new&lt;/code&gt;，&lt;code&gt;delete&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Ch04-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</link>
-      <pubDate>Sat, 23 Apr 2022 00:00:00 +0800</pubDate>
+      <pubDate>Fri, 22 Apr 2022 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</guid>
-      <description>&lt;p&gt;&lt;code&gt;new&lt;/code&gt;，&lt;code&gt;delete&lt;/code&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;code&gt;define&lt;/code&gt;，&lt;code&gt;typedef&lt;/code&gt;，&lt;code&gt;using&lt;/code&gt;，&lt;code&gt;inline&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Ch03-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</link>
-      <pubDate>Fri, 22 Apr 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</guid>
-      <description>&lt;p&gt;&lt;code&gt;define&lt;/code&gt;，&lt;code&gt;typedef&lt;/code&gt;，&lt;code&gt;using&lt;/code&gt;，&lt;code&gt;inline&lt;/code&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Ch02-C&#43;&#43; 之 keyword</title>
-      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</link>
       <pubDate>Thu, 21 Apr 2022 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</guid>
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</guid>
       <description>&lt;p&gt;&lt;code&gt;static&lt;/code&gt;，&lt;code&gt;const&lt;/code&gt;，&lt;code&gt;constexpr&lt;/code&gt;，&lt;code&gt;volatile&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
@@ -244,6 +244,15 @@
       
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-C&#43;&#43; 之 内存模型</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</link>
+      <pubDate>Wed, 20 Apr 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</guid>
+      <description>&lt;p&gt;内存模型就是一种语言它独特的管理者一套程序的机制，每种语言都有自己的一套程序机制。&lt;/p&gt;</description>
     </item>
     
     <item>

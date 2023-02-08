@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="lvalue reference，lvalue reference。">
+<meta name="description" content="virtual">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-C&#43;&#43; 之 reference" />
-<meta property="og:description" content="lvalue reference，lvalue reference。" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch07-C&#43;&#43; 之 keyword" />
+<meta property="og:description" content="virtual" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/c&#43;&#43;-basic/ch07/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-04-27T00:00:00+08:00" />
-<meta property="article:modified_time" content="2022-04-27T00:00:00+08:00" />
-<title>Ch07-C&#43;&#43; 之 reference | acronymor&#39;s blog</title>
+<meta property="article:published_time" content="2022-04-25T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-04-25T00:00:00+08:00" />
+<title>Ch07-C&#43;&#43; 之 keyword | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -125,7 +125,7 @@ var _hmt = _hmt || [];
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Ch07-C&#43;&#43; 之 reference</strong>
+  <strong>Ch07-C&#43;&#43; 之 keyword</strong>
 
   <label for="toc-control">
     
@@ -141,14 +141,14 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-左值-vs-右值">1. 左值 VS 右值</a></li>
-    <li><a href="#2-左值引用-vs-右值引用">2. 左值引用 VS 右值引用</a></li>
-    <li><a href="#3-万能引用">3. 万能引用</a>
+    <li><a href="#1-常见用法">1. 常见用法</a></li>
+    <li><a href="#2-虚表-vtable">2. 虚表 (vtable)</a>
       <ul>
-        <li><a href="#31--含义">3.1 <code>&amp;&amp;</code> 含义</a></li>
-        <li><a href="#32-引用折叠">3.2 引用折叠</a></li>
+        <li><a href="#21-代码示例">2.1 代码示例</a></li>
+        <li><a href="#22-示例说明">2.2 示例说明</a></li>
       </ul>
     </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>
 
@@ -163,10 +163,10 @@ var _hmt = _hmt || [];
       
 <article class="markdown">
   <h1>
-    <a href="/posts/c&#43;&#43;-basic/ch07/">Ch07-C&#43;&#43; 之 reference</a>
+    <a href="/posts/c&#43;&#43;-basic/ch07/">Ch07-C&#43;&#43; 之 keyword</a>
   </h1>
   
-  <h5>April 27, 2022</h5>
+  <h5>April 25, 2022</h5>
 
 
 
@@ -186,153 +186,102 @@ var _hmt = _hmt || [];
 
 
 
-<p><code>lvalue reference</code>，<code>lvalue reference</code>。</p>
-<h1 id="1-左值-vs-右值">
-  1. 左值 VS 右值
-  <a class="anchor" href="#1-%e5%b7%a6%e5%80%bc-vs-%e5%8f%b3%e5%80%bc">#</a>
+<p><code>virtual</code></p>
+<h1 id="1-常见用法">
+  1. 常见用法
+  <a class="anchor" href="#1-%e5%b8%b8%e8%a7%81%e7%94%a8%e6%b3%95">#</a>
 </h1>
 <table>
 <thead>
 <tr>
-<th><strong>类型</strong></th>
+<th><strong>条目</strong></th>
 <th><strong>说明</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>左值</td>
-<td>能对表达式取地址、或具名对象/变量。一般指表达式结束后依然存在的持久对象。</td>
+<td>虚析构</td>
+<td>析构函数设为虚函数主要是为了防止内存泄漏</td>
 </tr>
 <tr>
-<td>右值</td>
-<td>不能对表达式取地址，或匿名对象。一般指表达式结束就不再存在的临时对象。</td>
+<td>虚函数</td>
+<td>用于实现动态多态</td>
+</tr>
+<tr>
+<td>虚继承</td>
+<td>用来解决多继承时可能发生对同一父类继承多次而产生的二义性问题</td>
+</tr>
+<tr>
+<td>虚基类</td>
+<td>多个子类继承自同一个父类时，将继承方式指定为虚继承（继承时加关键字 virtual）即可，此时的父类称为虚基类</td>
 </tr>
 </tbody>
 </table>
-<p>右值又可以细分为纯右值和将亡值。</p>
-<table>
-<thead>
-<tr>
-<th><strong>类型</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>纯右值</td>
-<td>指生命期即将结束的值，一般是跟右值引用相关的表达式，这样表达式通常是将要被移动的对象，如返回类型为 T&amp;&amp;的函数返回值（如 std::move）、经类型转换为右值引用的对象（如 static_cast&lt;T&amp;&amp;&gt;(obj)）</td>
-</tr>
-<tr>
-<td>将亡值</td>
-<td>不能对表达式取地址，或匿名对象。一般指表达式结束就不再存在的临时对象。</td>
-</tr>
-</tbody>
-</table>
-<h1 id="2-左值引用-vs-右值引用">
-  2. 左值引用 VS 右值引用
-  <a class="anchor" href="#2-%e5%b7%a6%e5%80%bc%e5%bc%95%e7%94%a8-vs-%e5%8f%b3%e5%80%bc%e5%bc%95%e7%94%a8">#</a>
+<h1 id="2-虚表-vtable">
+  2. 虚表 (vtable)
+  <a class="anchor" href="#2-%e8%99%9a%e8%a1%a8-vtable">#</a>
+</h1>
+<p>虚表是一个指针数组，其元素是虚函数的指针，每个元素对应一个虚函数的函数指针。需要指出的是，普通的函数即非虚函数，其调用并不需要经过虚表，所以虚表的元素并不包括普通函数的函数指针。每个类包含了虚函数的类都包含一个虚表。所以如果一个基类包含了虚函数，那么其继承类也可调用这些虚函数，换句话说，一个类继承了包含虚函数的基类，那么这个类也拥有自己的虚表。</p>
+<p>此外虚函数表位于只读数据段（.rodata），也就是 C++ 内存模型中的常量区。同一类的不同对象共用一张虚函数表，不存在所谓的逻辑上共用，物理上不同的问题。</p>
+<h2 id="21-代码示例">
+  2.1 代码示例
+  <a class="anchor" href="#21-%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> vfunc1();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">vfunc2</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">func1</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">func2</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> m_data1, m_data2;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> A {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> vfunc1();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">func1</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> m_data3;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">C</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> B {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> vfunc2();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">func2</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> m_data1, m_data4;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p><img src="vtable.png" alt="vtable" /></p>
+<p>由于这三个类都有虚函数，故编译器为每个类都创建了一个虚表，即类 A 的虚表（A vtbl），类 B 的虚表（B vtbl），类 C 的虚表（C vtbl）。类 A，类 B，类 C 的对象都拥有一个虚表指针，<code>*__vptr</code>，用来指向自己所属类的虚表。</p>
+<ul>
+<li>类 A 包括两个虚函数，故 A vtbl 包含两个指针，分别指向 A::vfunc1() 和 A::vfunc2()。</li>
+<li>类 B 继承于类 A，故类 B 可以调用类 A 的函数，但由于类 B 重写了 B::vfunc1() 函数，故 B vtbl 的两个指针分别指向 B::vfunc1() 和 A::vfunc2()。</li>
+<li>类 C 继承于类 B，故类 C 可以调用类 B 的函数，但由于类 C 重写了 C::vfunc2() 函数，故 C vtbl 的两个指针分别指向 B::vfunc1()（指向继承的最近的一个类的函数）和 C::vfunc2()。</li>
+</ul>
+<h2 id="22-示例说明">
+  2.2 示例说明
+  <a class="anchor" href="#22-%e7%a4%ba%e4%be%8b%e8%af%b4%e6%98%8e">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>    B bObject;
+</span></span><span style="display:flex;"><span>    A <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span> bObject;
+</span></span><span style="display:flex;"><span>    p<span style="color:#f92672">-&gt;</span>vfunc1();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol>
+<li>程序在执行 <code>p-&gt;vfunc1()</code> 时，会发现 p 是个指针，且调用的函数是虚函数，接下来便会进行以下的步骤。</li>
+<li>根据虚表指针 <code>p-&gt;__vptr</code> 来访问对象 bObject 对应的虚表。虽然指针 p 是基类 A<em>类型，但是</em>__vptr 也是基类的一部分，所以可以通过 p-&gt;__vptr 可以访问到对象对应的虚表。</li>
+<li>在虚表中查找所调用的函数对应的条目。由于虚表在编译阶段就可以构造出来了，所以可以根据所调用的函数定位到虚表中的对应条目。对于 <code>p-&gt;vfunc1()</code> 的调用，B vtbl 的第一项即是 vfunc1 对应的条目。</li>
+<li>根据虚表中找到的函数指针，调用函数。从图 3 可以看到，B vtbl 的第一项指向 <code>B::vfunc1()</code>，所以 <code>p-&gt;vfunc1()</code> 实质会调用 B::vfunc1() 函数。</li>
+</ol>
+<p>我们把经过虚表调用虚函数的过程称为动态绑定，其表现出来的现象称为运行时多态。</p>
+<h1 id="3-参考文献">
+  3. 参考文献
+  <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
 </h1>
 <ul>
-<li>左值引用是具名变量/对象的别名</li>
-<li>右值引用是匿名变量/对象的别名</li>
-</ul>
-<p>左值和右值是独立于它的类型的，即左右值与类型没有直接关系，它们是表达式的属性。具名的右值引用是左值，匿名的右值引用是右值。</p>
-<p>如 Type&amp;&amp; t 中 t 是个具名变量（最简单的表达式），t 的类型是右值引用类型，但具有左值属性。
-而 Type&amp;&amp; func() 中的返回值（是个表达式）是右值引用类型，但具有右值属性（因为是个匿名对象）</p>
-<table>
-<thead>
-<tr>
-<th><strong>引用类型</strong></th>
-<th><strong>非常量左值</strong></th>
-<th><strong>常量左值</strong></th>
-<th><strong>非常量右值</strong></th>
-<th><strong>常量右值</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Type&amp;</td>
-<td>Y</td>
-<td>N</td>
-<td>N</td>
-<td>N</td>
-<td>只能绑定到非常量左值</td>
-</tr>
-<tr>
-<td>const Type&amp;</td>
-<td>Y</td>
-<td>Y</td>
-<td>Y</td>
-<td>Y</td>
-<td>万能类型、用于拷贝语议</td>
-</tr>
-<tr>
-<td>Type&amp;&amp;</td>
-<td>N</td>
-<td>N</td>
-<td>Y</td>
-<td>N</td>
-<td>只能绑定到右值。用于移动语义和完美转发</td>
-</tr>
-<tr>
-<td>const Type&amp;&amp;</td>
-<td>N</td>
-<td>N</td>
-<td>Y</td>
-<td>Y</td>
-<td>暂无用途</td>
-</tr>
-</tbody>
-</table>
-<h1 id="3-万能引用">
-  3. 万能引用
-  <a class="anchor" href="#3-%e4%b8%87%e8%83%bd%e5%bc%95%e7%94%a8">#</a>
-</h1>
-<h2 id="31--含义">
-  3.1 <code>&amp;&amp;</code> 含义
-  <a class="anchor" href="#31--%e5%90%ab%e4%b9%89">#</a>
-</h2>
-<ul>
-<li>右值引用：当 T 是确定的类型时，<code>T&amp;&amp;</code> 为右值引用。如 <code>int&amp;&amp; a</code></li>
-<li>万能引用：当 T 存在类型推导时，<code>T&amp;&amp;</code> 为 <code>万能引用</code>，表示一个未定的引用类型。如果被右值初始化，则 <code>T&amp;&amp;</code> 为右值引用。如果被左值初始化，则 <code>T&amp;&amp;</code> 为左值引用。一般与 template 搭配使用。</li>
-</ul>
-<h2 id="32-引用折叠">
-  3.2 引用折叠
-  <a class="anchor" href="#32-%e5%bc%95%e7%94%a8%e6%8a%98%e5%8f%a0">#</a>
-</h2>
-<p><strong>auto&amp;&amp;</strong> 或 <strong>T&amp;&amp;</strong> 存在类型推导时，它可能是左值引用，也可能是右值引用，取决于初始化的值类型。如果多个 <code>&amp;</code> 进行叠加，会出现引用折叠的现象。</p>
-<table>
-<thead>
-<tr>
-<th>原始引用</th>
-<th>折叠引用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>T&amp;&amp; &amp;&amp;</td>
-<td>T&amp;&amp;</td>
-<td>右值引用</td>
-</tr>
-<tr>
-<td>T&amp;&amp; &amp;</td>
-<td>T&amp;</td>
-<td>左值引用</td>
-</tr>
-<tr>
-<td>T&amp; &amp;&amp;</td>
-<td>T&amp;</td>
-<td>左值引用</td>
-</tr>
-<tr>
-<td>T&amp; &amp;</td>
-<td>T&amp;</td>
-<td>左值引用</td>
-</tr>
-</tbody>
-</table></article>
+<li><a href="https://leehao.blog.csdn.net/article/details/50688337">C++虚函数表剖析</a></li>
+</ul></article>
  
       
 
@@ -373,14 +322,14 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-左值-vs-右值">1. 左值 VS 右值</a></li>
-    <li><a href="#2-左值引用-vs-右值引用">2. 左值引用 VS 右值引用</a></li>
-    <li><a href="#3-万能引用">3. 万能引用</a>
+    <li><a href="#1-常见用法">1. 常见用法</a></li>
+    <li><a href="#2-虚表-vtable">2. 虚表 (vtable)</a>
       <ul>
-        <li><a href="#31--含义">3.1 <code>&amp;&amp;</code> 含义</a></li>
-        <li><a href="#32-引用折叠">3.2 引用折叠</a></li>
+        <li><a href="#21-代码示例">2.1 代码示例</a></li>
+        <li><a href="#22-示例说明">2.2 示例说明</a></li>
       </ul>
     </li>
+    <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>
 

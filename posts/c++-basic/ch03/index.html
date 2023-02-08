@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="define，typedef，using，inline">
+<meta name="description" content="static，const，constexpr，volatile">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-C&#43;&#43; 之 keyword" />
-<meta property="og:description" content="define，typedef，using，inline" />
+<meta property="og:description" content="static，const，constexpr，volatile" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/c&#43;&#43;-basic/ch03/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-04-22T00:00:00+08:00" />
-<meta property="article:modified_time" content="2022-04-22T00:00:00+08:00" />
+<meta property="article:published_time" content="2022-04-21T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-04-21T00:00:00+08:00" />
 <title>Ch03-C&#43;&#43; 之 keyword | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.547e164a6881eabc0e50e5d884aac44e0a803154a6f90290db386c3ae30e082c.js" integrity="sha256-VH4WSmiB6rwOUOXYhKrETgqAMVSm&#43;QKQ2zhsOuMOCCw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -141,10 +141,20 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-define">1. define</a></li>
-    <li><a href="#2-typedef">2. typedef</a></li>
-    <li><a href="#3-using">3. using</a></li>
-    <li><a href="#4-inline">4. inline</a></li>
+    <li><a href="#1-static">1. static</a></li>
+    <li><a href="#2-const">2. const</a>
+      <ul>
+        <li><a href="#21-使用样例">2.1 使用样例</a></li>
+        <li><a href="#22-存在的问题">2.2 存在的问题</a>
+          <ul>
+            <li><a href="#221-问题-1">2.2.1 问题 1</a></li>
+            <li><a href="#222-问题-2">2.2.2 问题 2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-constexpr">3. constexpr</a></li>
+    <li><a href="#4-volatile">4. volatile</a></li>
   </ul>
 </nav>
 
@@ -162,7 +172,7 @@ var _hmt = _hmt || [];
     <a href="/posts/c&#43;&#43;-basic/ch03/">Ch03-C&#43;&#43; 之 keyword</a>
   </h1>
   
-  <h5>April 22, 2022</h5>
+  <h5>April 21, 2022</h5>
 
 
 
@@ -182,32 +192,172 @@ var _hmt = _hmt || [];
 
 
 
-<p><code>define</code>，<code>typedef</code>，<code>using</code>，<code>inline</code></p>
-<h1 id="1-define">
-  1. define
-  <a class="anchor" href="#1-define">#</a>
+<p><code>static</code>，<code>const</code>，<code>constexpr</code>，<code>volatile</code></p>
+<h1 id="1-static">
+  1. static
+  <a class="anchor" href="#1-static">#</a>
 </h1>
-<p>其作用是给类型起一个别名，它只是简单的文本替换，不支持类型检查，是在预处理阶段完成的。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#define alias_name original_name
-</span></span></span></code></pre></div><h1 id="2-typedef">
-  2. typedef
-  <a class="anchor" href="#2-typedef">#</a>
+<table>
+<thead>
+<tr>
+<th><strong>修饰类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修饰普通变量</td>
+<td>修改变量的存储区域和生命周期，使变量存储在静态区，在 main 函数运行前就分配了空间，如果有初始值就用初始值初始化它，如果没有初始值系统用默认值初始化它。</td>
+</tr>
+<tr>
+<td>修饰普通函数</td>
+<td>表明函数的作用范围，仅在定义该函数的文件内才能使用。在多人开发项目时，为了防止与他人命名空间里的函数重名，可以将函数定位为 static。</td>
+</tr>
+<tr>
+<td>修饰成员变量</td>
+<td>修饰成员变量使所有的对象只保存一个该变量，而且不需要生成对象就可以访问该成员。</td>
+</tr>
+<tr>
+<td>修饰成员函数</td>
+<td>修饰成员函数使得不需要生成对象就可以访问该函数，但是在 static 函数内不能访问非静态成员。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-const">
+  2. const
+  <a class="anchor" href="#2-const">#</a>
 </h1>
-<p>其作用是给类型起一个别名，它是在运行期间完成的。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> original_name alias_name;
-</span></span></code></pre></div><h1 id="3-using">
-  3. using
-  <a class="anchor" href="#3-using">#</a>
+<table>
+<thead>
+<tr>
+<th><strong>修饰类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修饰变量</td>
+<td>说明该变量不可以被改变。</td>
+</tr>
+<tr>
+<td>修饰指针</td>
+<td>分为指向常量的指针（pointer to const）和自身是常量的指针（常量指针，const pointer）。</td>
+</tr>
+<tr>
+<td>修饰引用</td>
+<td>指向常量的引用（reference to const），用于形参类型，即避免了拷贝，又避免了函数对值的修改。</td>
+</tr>
+<tr>
+<td>修饰成员函数</td>
+<td>说明该成员函数内不能修改成员变量。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-使用样例">
+  2.1 使用样例
+  <a class="anchor" href="#21-%e4%bd%bf%e7%94%a8%e6%a0%b7%e4%be%8b">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>使用</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const pointer</td>
+<td><code>int a = 1; const int* p = &amp;a;</code></td>
+</tr>
+<tr>
+<td>pointer to const</td>
+<td><code>const int a = 1; const int* p = &amp;a;</code></td>
+</tr>
+<tr>
+<td>const reference</td>
+<td><code>int a = 1; const int&amp; q = a;</code></td>
+</tr>
+<tr>
+<td>reference to const</td>
+<td><code>const int a = 1; const int&amp; q = a;</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-存在的问题">
+  2.2 存在的问题
+  <a class="anchor" href="#22-%e5%ad%98%e5%9c%a8%e7%9a%84%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<h3 id="221-问题-1">
+  2.2.1 问题 1
+  <a class="anchor" href="#221-%e9%97%ae%e9%a2%98-1">#</a>
+</h3>
+<p>const 实际上只是保证了<strong>只读</strong>，但是没有严格意义上的<strong>不可修改</strong>。比如下述例子，通过修改 a 的值，间接的将 const 修饰的变量修改了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&amp;</span> b <span style="color:#f92672">=</span> a;
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> b <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl; <span style="color:#75715e">// 10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    a <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>;
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> b <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl; <span style="color:#75715e">// 20
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="222-问题-2">
+  2.2.2 问题 2
+  <a class="anchor" href="#222-%e9%97%ae%e9%a2%98-2">#</a>
+</h3>
+<p>const 放在 <code>*</code> 前后会出现不同的语义。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 允许 b=&amp;x；禁止 *b = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> b <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">const</span><span style="color:#f92672">*</span> c <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 允许 *d=1；禁止 d=&amp;x
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> d <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 禁止 *e=1，e=&amp;x
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#66d9ef">const</span> e <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="3-constexpr">
+  3. constexpr
+  <a class="anchor" href="#3-constexpr">#</a>
 </h1>
-<p>其作用是给类型起一个别名。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> alias_name<span style="color:#f92672">=</span>original_name;
-</span></span></code></pre></div><h1 id="4-inline">
-  4. inline
-  <a class="anchor" href="#4-inline">#</a>
+<p>constexpr 严格的保证了<strong>只读</strong>和<strong>不可修改</strong>两大特性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">constexpr</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&amp;</span> b <span style="color:#f92672">=</span> a; <span style="color:#75715e">// 编译报错：error: ‘a’is not a constant expression
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> b <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span>    a <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>;
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> b <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="4-volatile">
+  4. volatile
+  <a class="anchor" href="#4-volatile">#</a>
 </h1>
-<p>在编译阶段在被调用处进行代码展开（会做安全检查或自动类型转换），省去了参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">inline</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">func</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b) {...}
-</span></span></code></pre></div></article>
+<p>volatile 关键字声明的变量，每次访问时都必须从内存中取出值（没有被 volatile 修饰的变量，可能由于编译器的优化，从 CPU 寄存器中取值）</p>
+<table>
+<thead>
+<tr>
+<th><strong>修饰类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修饰变量</td>
+<td>该变量会被某些编译器未知的因素（操作系统、硬件、其它线程等）更改，所以编译器不应对这样的对象进行优化。</td>
+</tr>
+</tbody>
+</table></article>
  
       
 
@@ -248,10 +398,20 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-define">1. define</a></li>
-    <li><a href="#2-typedef">2. typedef</a></li>
-    <li><a href="#3-using">3. using</a></li>
-    <li><a href="#4-inline">4. inline</a></li>
+    <li><a href="#1-static">1. static</a></li>
+    <li><a href="#2-const">2. const</a>
+      <ul>
+        <li><a href="#21-使用样例">2.1 使用样例</a></li>
+        <li><a href="#22-存在的问题">2.2 存在的问题</a>
+          <ul>
+            <li><a href="#221-问题-1">2.2.1 问题 1</a></li>
+            <li><a href="#222-问题-2">2.2.2 问题 2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-constexpr">3. constexpr</a></li>
+    <li><a href="#4-volatile">4. volatile</a></li>
   </ul>
 </nav>
 
