@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -225,32 +225,31 @@ var _hmt = _hmt || [];
 <td>较高</td>
 <td>Reactor</td>
 <td>windows/Linux</td>
-<td>支持，Reactor 模式 (反应器设计模式)。Linux 操作系统的 kernels 2.4 内核版本之前，默认使用 select；而目前 windows 下对同步 IO 的支持，都是 select</td>
+<td>支持</td>
 </tr>
 <tr>
 <td>poll</td>
 <td>较高</td>
 <td>Reactor</td>
 <td>Linux</td>
-<td>Linux 下的 JAVA NIO 框架，Linux kernels 2.6 内核版本之前使用 poll 进行支持。也是使用的 Reactor 模式</td>
+<td>支持</td>
 </tr>
 <tr>
 <td>epoll</td>
 <td>高</td>
 <td>Reactor/Proactor</td>
 <td>Linux</td>
-<td>Linux kernels 2.6 内核版本及以后使用 epoll 进行支持；Linux kernels 2.6 内核版本之前使用 poll 进行支持；另外一定注意，由于 Linux 下没有 Windows 下的 IOCP 技术提供真正的 异步 IO 支持，所以 Linux 下使用 epoll 模拟异步 IO</td>
+<td>支持</td>
 </tr>
 <tr>
 <td>kqueue</td>
 <td>高</td>
 <td>Proactor</td>
 <td>Linux</td>
-<td>目前 JAVA 的版本不支持</td>
+<td>不支持</td>
 </tr>
 </tbody>
-</table>
-<p>多路复用 IO 技术最适用的是“高并发”场景，所谓高并发是指 1 毫秒内至少同时有上千个连接请求准备好。其他情况下多路复用 IO 技术发挥不出来它的优势。另一方面，使用 JAVA NIO 进行功能实现，相对于传统的 Socket 套接字实现要复杂一些，所以实际应用中，需要根据自己的业务需求进行技术选择。</p></article>
+</table></article>
  
       
 

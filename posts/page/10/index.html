@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -181,6 +181,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/Java-IO/">Java | IO</a>
           <span>4</span>
         </li>
@@ -310,6 +315,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/java/">java</a>
           <span>35</span>
         </li>
@@ -394,6 +404,230 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch18/">Ch18-Java Atomic 之 Atomic*</a>
+    </h2>
+    
+  <h5>April 20, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.atomic</code>，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。</p>
+        <a href="/posts/java-juc/ch18/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch17/">Ch17-Java Executors 之 ThreadPoolExecutor</a>
+    </h2>
+    
+  <h5>April 10, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.ThreadPoolExecutor</code></p>
+        <a href="/posts/java-juc/ch17/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch16/">Ch16-Java tools 之 CyclicBarrier</a>
+    </h2>
+    
+  <h5>April 1, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.CyclicBarrier</code> 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。</p>
+        <a href="/posts/java-juc/ch16/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch15/">Ch15-Java tools 之 Semaphore</a>
+    </h2>
+    
+  <h5>March 24, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.Semaphore</code> 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。</p>
+        <a href="/posts/java-juc/ch15/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch14/">Ch14-Java tools 之 CountDownLatch</a>
+    </h2>
+    
+  <h5>March 18, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.CountDownLatch</code> 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。</p>
+        <a href="/posts/java-juc/ch14/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch13/">Ch13-Java Collections 之 CopyOnWriteArrayList</a>
+    </h2>
+    
+  <h5>March 14, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.CopyOnWriteArrayList</code></p>
+        <a href="/posts/java-juc/ch13/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch12/">Ch12-Java Collections 之 DelayQueue</a>
+    </h2>
+    
+  <h5>March 10, 2020</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p><code>java.util.concurrent.DelayQueue</code></p>
+        <a href="/posts/java-juc/ch12/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -487,230 +721,6 @@ var _hmt = _hmt || [];
 
     <p><p><code>java.util.concurrent.ArrayBlockingQueue</code></p>
         <a href="/posts/java-juc/ch09/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch08/">Ch8-Java Lock 之 ReentrantReadWriteLock</a>
-    </h2>
-    
-  <h5>January 21, 2020</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>java.util.concurrent.locks.ReentrantReadWriteLock</code></p>
-        <a href="/posts/java-juc/ch08/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch07/">Ch7-Java Lock 之 ReentrantLock</a>
-    </h2>
-    
-  <h5>January 15, 2020</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>java.util.concurrent.locks.ReentrantLock</code></p>
-        <a href="/posts/java-juc/ch07/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch06/">Ch6-Java Lock 之 LockSupport</a>
-    </h2>
-    
-  <h5>January 9, 2020</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>java.util.concurrent.locks.LockSupport</code></p>
-        <a href="/posts/java-juc/ch06/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch05/">Ch5-Java Lock 之 AQS</a>
-    </h2>
-    
-  <h5>January 2, 2020</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p>AQS 即 <code>java.util.concurrent.locks.AbstractQueuedSynchronizer</code>，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。</p>
-        <a href="/posts/java-juc/ch05/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/antlr4/ch01/">Ch01-Antlr V4 介绍</a>
-    </h2>
-    
-  <h5>August 1, 2019</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Antlr4/">Antlr4</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/antlr4/">antlr4</a>
-  </div>
-  
-
-
-
-
-    <p><p>ANTLR（ANother Tool for Language Recognition）是一个强大的解析器生成器，用于读取、处理、执行或翻译结构化文本或二进制文件。它被广泛用于构建语言、工具和框架。ANTLR 根据语法定义生成解析器，解析器可以构建和遍历解析树。</p>
-        <a href="/posts/antlr4/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-spark/ch10/">Ch10-Spark 之内存管理</a>
-    </h2>
-    
-  <h5>June 20, 2019</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/spark/">spark</a>
-  </div>
-  
-
-
-
-
-    <p><p>Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；</p>
-        <a href="/posts/apache-spark/ch10/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-spark/ch09/">Ch09-Spark 之 BlockMananger</a>
-    </h2>
-    
-  <h5>June 15, 2019</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/spark/">spark</a>
-  </div>
-  
-
-
-
-
-    <p><p>Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 <code>persist()</code> 和 <code>cache()</code> 函数来缓存 RDD）。</p>
-        <a href="/posts/apache-spark/ch09/">...</a>
       
     </p>
   </article>
@@ -823,6 +833,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/Java-IO/">Java | IO</a>
           <span>4</span>
         </li>
@@ -949,6 +964,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/elasticsearch/">elasticsearch</a>
           <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">

@@ -382,6 +382,50 @@
     </item>
     
     <item>
+      <title>Ch07-TCP 之 可靠性机制</title>
+      <link>https://acronymor.com/posts/network/ch07/</link>
+      <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch07/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch06-TCP 之 流量控制</title>
+      <link>https://acronymor.com/posts/network/ch06/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch06/</guid>
+      <description>&lt;p&gt;流量控制是一个点对点通信的控制，通过滑动窗口实现。借助流量控制也可以实现上层应用的反压机制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;拥塞控制是一个全局的过程，其 cwnd 由发送端控制，会随着网络拥塞程度动态变化。&lt;/li&gt;
+&lt;li&gt;流量控制是一个点到点通信量的控制；通过滑动窗口实现，其 windows/rwnd 由接收端控制，根据接收方的缓冲区大小动态变化。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以每次发送端能发送的报文数量是 &lt;code&gt;swnd=min(cwnd, rwnd)&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch05-TCP 之 拥塞控制</title>
+      <link>https://acronymor.com/posts/network/ch05/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch05/</guid>
+      <description>&lt;p&gt;在某段时间，若对网络中某一资源的需求超过了该资源所能提供的可用部分，网络性能就要变坏，这种情况就叫做网络拥塞。在计算机网络中数位链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。若出现拥塞而不进行控制，整个网络的吞吐量将随输入负荷的增大而下降。&lt;/p&gt;
+&lt;p&gt;当输入的负载到达一定程度吞吐量不会增加，即一部分网络资源会丢失掉，网络的吞吐量维持在其所能控制的最大值，转发节点的缓存不够大这造成分组的丢失是拥塞的征兆。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch04-TCP 之 四次挥手</title>
+      <link>https://acronymor.com/posts/network/ch04/</link>
+      <pubDate>Wed, 04 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch04/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ch02-Elasticsearch 之 Shard</title>
       <link>https://acronymor.com/posts/elasticsearch/ch02/</link>
       <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
@@ -391,12 +435,39 @@
     </item>
     
     <item>
+      <title>Ch03-TCP 之 三次握手</title>
+      <link>https://acronymor.com/posts/network/ch03/</link>
+      <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch03/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ch02-TCP 之 网络模型</title>
+      <link>https://acronymor.com/posts/network/ch02/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch02/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ch01-Elasticsearch 介绍</title>
       <link>https://acronymor.com/posts/elasticsearch/ch01/</link>
       <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/elasticsearch/ch01/</guid>
       <description>&lt;p&gt;Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-Select/Poll/Epoll</title>
+      <link>https://acronymor.com/posts/network/ch01/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/network/ch01/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Select&lt;/code&gt; &lt;code&gt;Poll&lt;/code&gt; &lt;code&gt;Epoll&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1418,11 +1489,11 @@
     </item>
     
     <item>
-      <title>Ch12-Java Map 之 WeakHashMap</title>
-      <link>https://acronymor.com/posts/java-map/ch12/</link>
+      <title>Ch04-Java Map 之 WeakHashMap</title>
+      <link>https://acronymor.com/posts/java-map/ch04/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
       
-      <guid>https://acronymor.com/posts/java-map/ch12/</guid>
+      <guid>https://acronymor.com/posts/java-map/ch04/</guid>
       <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
     </item>
     

@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -181,6 +181,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/Java-IO/">Java | IO</a>
           <span>4</span>
         </li>
@@ -307,6 +312,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/elasticsearch/">elasticsearch</a>
           <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">
@@ -429,6 +439,142 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/network/ch07/">Ch07-TCP 之 可靠性机制</a>
+    </h2>
+    
+  <h5>August 7, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p>
+        <a href="/posts/network/ch07/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/network/ch06/">Ch06-TCP 之 流量控制</a>
+    </h2>
+    
+  <h5>August 6, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p><p>流量控制是一个点对点通信的控制，通过滑动窗口实现。借助流量控制也可以实现上层应用的反压机制。</p>
+<blockquote>
+<ul>
+<li>拥塞控制是一个全局的过程，其 cwnd 由发送端控制，会随着网络拥塞程度动态变化。</li>
+<li>流量控制是一个点到点通信量的控制；通过滑动窗口实现，其 windows/rwnd 由接收端控制，根据接收方的缓冲区大小动态变化。</li>
+</ul>
+<p>所以每次发送端能发送的报文数量是 <code>swnd=min(cwnd, rwnd)</code></p>
+</blockquote>
+        <a href="/posts/network/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/network/ch05/">Ch05-TCP 之 拥塞控制</a>
+    </h2>
+    
+  <h5>August 5, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p><p>在某段时间，若对网络中某一资源的需求超过了该资源所能提供的可用部分，网络性能就要变坏，这种情况就叫做网络拥塞。在计算机网络中数位链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。若出现拥塞而不进行控制，整个网络的吞吐量将随输入负荷的增大而下降。</p>
+<p>当输入的负载到达一定程度吞吐量不会增加，即一部分网络资源会丢失掉，网络的吞吐量维持在其所能控制的最大值，转发节点的缓存不够大这造成分组的丢失是拥塞的征兆。</p>
+        <a href="/posts/network/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/network/ch04/">Ch04-TCP 之 四次挥手</a>
+    </h2>
+    
+  <h5>August 4, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p>
+        <a href="/posts/network/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/elasticsearch/ch02/">Ch02-Elasticsearch 之 Shard</a>
     </h2>
     
@@ -455,6 +601,70 @@ var _hmt = _hmt || [];
 
     <p><p>Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。</p>
         <a href="/posts/elasticsearch/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/network/ch03/">Ch03-TCP 之 三次握手</a>
+    </h2>
+    
+  <h5>August 3, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p>
+        <a href="/posts/network/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/network/ch02/">Ch02-TCP 之 网络模型</a>
+    </h2>
+    
+  <h5>August 2, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+
+    <p>
+        <a href="/posts/network/ch02/">...</a>
       
     </p>
   </article>
@@ -493,224 +703,32 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/java-io/ch04/">Ch04-Java 之 AIO</a>
+      <a href="/posts/network/ch01/">Ch01-Select/Poll/Epoll</a>
     </h2>
     
-  <h5>July 31, 2021</h5>
+  <h5>August 1, 2021</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Java-IO/">Java | IO</a>
+      <a href="/categories/Network/">Network</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/java/">java</a>
+      <a href="/tags/network/">network</a>
   </div>
   
 
 
 
 
-    <p>
-        <a href="/posts/java-io/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-io/ch03/">Ch03-Java 之 NIO</a>
-    </h2>
-    
-  <h5>July 25, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-IO/">Java | IO</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-io/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-io/ch02/">Ch02-Java 之 BIO</a>
-    </h2>
-    
-  <h5>July 20, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-IO/">Java | IO</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-io/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-io/ch01/">Ch01-Java 之 IO</a>
-    </h2>
-    
-  <h5>July 15, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-IO/">Java | IO</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-io/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kylin/ch08/">Ch08-Kylin 之 部分细节</a>
-    </h2>
-    
-  <h5>July 10, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kylin/">kylin</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kylin 部分细节</p>
-        <a href="/posts/apache-kylin/ch08/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kylin/ch07/">Ch07-Kylin 之 DISTINCT COUNT</a>
-    </h2>
-    
-  <h5>July 4, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kylin/">kylin</a>
-  </div>
-  
-
-
-
-
-    <p><p>distinct count</p>
-        <a href="/posts/apache-kylin/ch07/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kylin/ch06/">Ch06-Kylin 之 剪枝优化</a>
-    </h2>
-    
-  <h5>June 29, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kylin/">kylin</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kylin 剪枝优化</p>
-        <a href="/posts/apache-kylin/ch06/">...</a>
+    <p><p><code>Select</code> <code>Poll</code> <code>Epoll</code></p>
+        <a href="/posts/network/ch01/">...</a>
       
     </p>
   </article>
@@ -820,6 +838,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/categories/Elasticsearch/">Elasticsearch</a>
           <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">
@@ -949,6 +972,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/elasticsearch/">elasticsearch</a>
           <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">

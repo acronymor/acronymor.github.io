@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.266b7315cee6128ee515dbe10e955a2a41087fa4b5cf1ca62e3a97d7b63e7674.js" integrity="sha256-JmtzFc7mEo7lFdvhDpVaKkEIf6S1zxymLjqX17Y&#43;dnQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -181,6 +181,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/Java-IO/">Java | IO</a>
           <span>4</span>
         </li>
@@ -310,6 +315,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/java/">java</a>
           <span>35</span>
         </li>
@@ -394,6 +404,234 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch06/">Ch06-Java 之 垃圾收集算法</a>
+    </h2>
+    
+  <h5>August 30, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。</p>
+        <a href="/posts/jdk/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch05/">Ch05-Java 之 引用类型</a>
+    </h2>
+    
+  <h5>August 19, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>无论是通过引用计算算法判断对象的引用数量，还是通过可达性分析算法判断对象是否可达，判定对象是否可被回收都与引用有关。</p>
+        <a href="/posts/jdk/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch04/">Ch04-Java 之 类的整个生命周期</a>
+    </h2>
+    
+  <h5>August 15, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>其中类加载的过程包括了<code>加载</code>、<code>验证</code>、<code>准备</code>、<code>解析</code>、<code>初始化</code>五个阶段。在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持 Java 语言的运行时绑定 (也成为动态绑定或晚期绑定)。另外注意这里的几个阶段是按顺序开始，而不是按顺序进行或完成，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。</p>
+        <a href="/posts/jdk/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch03/">Ch03-Java 之 Java 对象结构</a>
+    </h2>
+    
+  <h5>August 10, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在 HotSpot 虚拟机中，对象在内存中存储的布局可以分为三块区域：<strong>对象头 (Header)</strong>、 <strong>实例数据 (Instance Data)</strong>、<strong>对齐填充 (Padding)</strong>。</p>
+        <a href="/posts/jdk/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch02/">Ch02-Java 之 JVM 内存结构 (JVM)</a>
+    </h2>
+    
+  <h5>August 6, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。</p>
+<ul>
+<li>线程私有：程序计数器、虚拟机栈、本地方法区</li>
+<li>线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）</li>
+</ul>
+        <a href="/posts/jdk/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch01/">Ch01-Java 之 Java 内存模型 (JMM)</a>
+    </h2>
+    
+  <h5>August 1, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。</p>
+        <a href="/posts/jdk/ch01/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-juc/ch04/">Ch4-Java 之 JUC</a>
+    </h2>
+    
+  <h5>April 11, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-JUC/">Java | JUC</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">java</a>
+  </div>
+  
+
+
+
+
+    <p><p>JUC 即 <code>java.util.concurrent</code>，是 Java 并发编程中很常用的实用工具类。它包含了 <code>Lock 框架</code>，<code>Collections 并发集合</code>，<code>Executors 线程池</code>，<code>Atomic 原子类</code>，<code>Tools</code>。</p>
+        <a href="/posts/java-juc/ch04/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -487,230 +725,6 @@ var _hmt = _hmt || [];
 
     <p>
         <a href="/posts/java-juc/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/software-engineering/ch05/">Ch05-锁</a>
-    </h2>
-    
-  <h5>March 14, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Software-Engineering/">Software Engineering</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/software/">software</a>
-  </div>
-  
-
-
-
-
-    <p><p>锁概念</p>
-        <a href="/posts/software-engineering/ch05/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/software-engineering/ch04/">Ch04-并发问题</a>
-    </h2>
-    
-  <h5>March 13, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Software-Engineering/">Software Engineering</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/software/">software</a>
-  </div>
-  
-
-
-
-
-    <p><p>并发问题</p>
-        <a href="/posts/software-engineering/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-map/ch12/">Ch12-Java Map 之 WeakHashMap</a>
-    </h2>
-    
-  <h5>March 3, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Map/">Java | Map</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p>WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。</p>
-        <a href="/posts/java-map/ch12/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-map/ch03/">Ch03-Java Map 之 TreeMap</a>
-    </h2>
-    
-  <h5>February 28, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Map/">Java | Map</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p>TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。</p>
-        <a href="/posts/java-map/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-map/ch02/">Ch02-Java Map 之 LinkedHashMap</a>
-    </h2>
-    
-  <h5>February 13, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Map/">Java | Map</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p>LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。</p>
-        <a href="/posts/java-map/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-map/ch01/">Ch01-Java Map 之 HashMap</a>
-    </h2>
-    
-  <h5>February 10, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Map/">Java | Map</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-map/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-collection/ch05/">Ch05-Java Collection 之 PriorityQueue</a>
-    </h2>
-    
-  <h5>February 5, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Collection/">Java | Collection</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p>优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。</p>
-        <a href="/posts/java-collection/ch05/">...</a>
       
     </p>
   </article>
@@ -823,6 +837,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/Network/">Network</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/Java-IO/">Java | IO</a>
           <span>4</span>
         </li>
@@ -949,6 +968,11 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/elasticsearch/">elasticsearch</a>
           <span>10</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/network/">network</a>
+          <span>7</span>
         </li>
       
         <li class="flex justify-between">

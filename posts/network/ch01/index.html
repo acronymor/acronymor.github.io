@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Select Poll Epoll">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Select/Poll/Epoll" />
+<meta property="og:description" content="Select Poll Epoll" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/network/ch01/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-01T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-08-01T00:00:00+08:00" />
+<title>Ch01-Select/Poll/Epoll | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch01-Select/Poll/Epoll</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本说明">1. 基本说明</a></li>
+    <li><a href="#2-原理介绍">2. 原理介绍</a>
+      <ul>
+        <li><a href="#21-select">2.1 Select</a></li>
+        <li><a href="#22-poll">2.2 Poll</a></li>
+        <li><a href="#23-epoll">2.3 Epoll</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/network/ch01/">Ch01-Select/Poll/Epoll</a>
+  </h1>
+  
+  <h5>August 1, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Network/">Network</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/network/">network</a>
+  </div>
+  
+
+
+
+<p><code>Select</code> <code>Poll</code> <code>Epoll</code></p>
+<h1 id="1-基本说明">
+  1. 基本说明
+  <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e8%af%b4%e6%98%8e">#</a>
+</h1>
+<p>select，poll，epoll 是用来实现多路复用的，即一个线程利用它们即可 hold 诸多个 socket。</p>
+<table>
+<thead>
+<tr>
+<th><strong>IO 模型</strong></th>
+<th><strong>相对性能</strong></th>
+<th><strong>关键思路</strong></th>
+<th><strong>底层实现</strong></th>
+<th><strong>IO 效率</strong></th>
+<th><strong>fd 拷贝</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>select</td>
+<td>较高</td>
+<td>Reactor</td>
+<td>数组</td>
+<td>O(n)</td>
+<td>每次调用都需要把 fd 集合从用户态拷贝到内核态</td>
+</tr>
+<tr>
+<td>poll</td>
+<td>较高</td>
+<td>Reactor</td>
+<td>链表</td>
+<td>O(n)</td>
+<td>每次调用都需要把 fd 集合从用户态拷贝到内核态</td>
+</tr>
+<tr>
+<td>epoll</td>
+<td>高</td>
+<td>Reactor/Proactor</td>
+<td>哈希表</td>
+<td>O(1)</td>
+<td>调用 epoll_ctl 时拷贝进内核并保存，之后调用 epoll_wait 不拷贝</td>
+</tr>
+<tr>
+<td>kqueue</td>
+<td>高</td>
+<td>Proactor</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-原理介绍">
+  2. 原理介绍
+  <a class="anchor" href="#2-%e5%8e%9f%e7%90%86%e4%bb%8b%e7%bb%8d">#</a>
+</h1>
+<p><img src="multiplex.jpg" alt="multiplex" /></p>
+<h2 id="21-select">
+  2.1 Select
+  <a class="anchor" href="#21-select">#</a>
+</h2>
+<p><img src="select.jpg" alt="select" /></p>
+<p>调用 select 会把所有要管理的 socket 的 fd（简单理解就是通过 fd 能找到这个 socket）传到内核中。
+此时，需要遍历所有 socket，看看是否有感兴趣的事件发生。</p>
+<ul>
+<li>如果遍历后发现没有一个 socket 有事件发生，那么 select 线程就需要让出 cpu 阻塞等待，这个等待可以是不设置超时时间的死等，也可以是设置 timeout 的有超时时间的等待。</li>
+<li>如果遍历后发现有 socket 事件发生，那么 select 线程就会从 socket 获取数据并进行业务处理。</li>
+</ul>
+<p>前面说到，如果没有 socket 发生事件，会被阻塞挂起，那么事件到来的时候，又是如何唤醒的呢？事实上每个 socket 有个属于自己的睡眠队列，select 会在自己管理的 socket 睡眠队列里面塞入一个与自己相关的 entry，OS 调用 entry 设置的 callback 方法就能唤醒 select。于是当数据到达 socket 的时候，NIC 通过中断调用到 entry，进而触发对应的 select。</p>
+<blockquote>
+<p>1024 限制指的是 select 管理的 fd 使用数组实现，且该数组长度为 1024。所以导致 select 最多只能控制 1024 个 socket，或者说 select 允许的最大连接数是 1024。</p>
+</blockquote>
+<h2 id="22-poll">
+  2.2 Poll
+  <a class="anchor" href="#22-poll">#</a>
+</h2>
+<p>poll 与 select 基本原理类似，只是管理 fd 的数据结构不一致。</p>
+<blockquote>
+<p>poll 管理的 fd 使用单链表实现，无长度限制。所以说 poll 允许的最大连接数没有限制。</p>
+</blockquote>
+<h2 id="23-epoll">
+  2.3 Epoll
+  <a class="anchor" href="#23-epoll">#</a>
+</h2>
+<p><img src="epoll.jpg" alt="epoll" /></p>
+<p>回顾下 select/poll 缺点，epoll 主要就是基于下面两点做了优化。</p>
+<ul>
+<li>为什么每次 select 需要把监控的 fds 传输到内核里？不能在内核里维护个？</li>
+<li>为什么 socket 只唤醒 select，不能告诉它是哪个 socket 来数据了？</li>
+</ul>
+<p>epoll 搞了个叫 epoll_ctl 的方法，这方法就是用来管理维护 epoll 所监控的哪些 socket。这样在内核里面就维护了此 epoll 管理的 socket 集合，不用每次调用的时候都得把所有管理的 fds 拷贝到内核了。（这个 socket 集合是用红黑树实现的）。同时还引入了一个 ready_list 双向链表，当数据来的时候，callback 里面会把当前的 socket 加入到 ready_list，这样被唤醒的 epoll 只需要遍历 ready_list 即可（这个链表里一定是有数据可读的 socket，相比于 select 就不会做无用的遍历了)。</p>
+<blockquote>
+<p>收集到的可读的 fd 按理是要拷贝到用户空间的，这里又做了个优化，利用了 mmp，让用户空间和内核空间映射到同一块内存中，这样就避免了拷贝。</p>
+</blockquote>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.51cto.com/article/702199.html">彻底搞懂 Select / Poll / Epoll，就这篇了！</a></li>
+<li><a href="https://www.jianshu.com/p/722819425dbd/">Select、Poll、Epoll 详解</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-基本说明">1. 基本说明</a></li>
+    <li><a href="#2-原理介绍">2. 原理介绍</a>
+      <ul>
+        <li><a href="#21-select">2.1 Select</a></li>
+        <li><a href="#22-poll">2.2 Poll</a></li>
+        <li><a href="#23-epoll">2.3 Epoll</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
