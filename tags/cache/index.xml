@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cache on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/tags/cache/</link>
+    <description>Recent content in cache on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Feb 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/cache/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch03-缓存与数据库一致性</title>
+      <link>https://acronymor.com/posts/cache/ch03/</link>
+      <pubDate>Wed, 08 Feb 2023 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/cache/ch03/</guid>
+      <description>&lt;p&gt;缓存和数据库之间的一致性是指缓存中的数据和数据库中的数据保持一致。当缓存中的数据和数据库中的数据不一致时，就会出现数据不一致的情况，可能会导致应用程序出现错误。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch02-CPU 缓存一致性</title>
+      <link>https://acronymor.com/posts/cache/ch02/</link>
+      <pubDate>Sat, 04 Feb 2023 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/cache/ch02/</guid>
+      <description>&lt;p&gt;CPU 缓存一致性&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch01-缓存雪崩、缓存击穿、缓存穿透</title>
+      <link>https://acronymor.com/posts/cache/ch01/</link>
+      <pubDate>Wed, 01 Feb 2023 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/cache/ch01/</guid>
+      <description>&lt;p&gt;通常情况下可以采用限流降级等技术，限制请求的访问频率，避免数据库压力过大，保证应用程序的可用性，这样也可以解决伤处问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

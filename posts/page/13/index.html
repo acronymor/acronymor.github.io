@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ae9ce631496e6bbaa9aa73c3980281f061e0439efc55510757402451d4dd33cc.js" integrity="sha256-rpzmMUlua7qpqnPDmAKB8GHgQ578VVEHV0AkUdTdM8w=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -144,6 +144,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Categories</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Cache/">Cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/categories/AmDB/">AmDB</a>
@@ -285,6 +290,11 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
+          <a href="/tags/cache/">cache</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/amdb/">amdb</a>
           <span>6</span>
         </li>
@@ -404,6 +414,102 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kafka/ch10/">Ch10-Kafka 之事务</a>
+    </h2>
+    
+  <h5>April 18, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kafka/">kafka</a>
+  </div>
+  
+
+
+
+
+    <p><p>kafka Transaction.</p>
+        <a href="/posts/apache-kafka/ch10/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-hbase/ch02/">Ch02-HBase 之数据模型</a>
+    </h2>
+    
+  <h5>April 15, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+
+    <p><p>逻辑上，HBase 的数据模型同关系型数据库很类似，数据存储在一张表中，有行有列。但从 HBase 的底层物理存储结构 (K-V) 来看，HBase 更像是一个 <code>multi-dimensional map</code>。</p>
+        <a href="/posts/apache-hbase/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-hbase/ch01/">Ch01-HBase 介绍</a>
+    </h2>
+    
+  <h5>April 13, 2019</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-HBase/">Apache HBase</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/hbase/">hbase</a>
+  </div>
+  
+
+
+
+
+    <p><p>HBase 是一种分布式、可扩展、支持海量数据存储的 NoSQL 数据库。</p>
+        <a href="/posts/apache-hbase/ch01/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -629,102 +735,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kafka/ch04/">Ch04-Kafka 之 ZeroCopy</a>
-    </h2>
-    
-  <h5>June 29, 2018</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kafka/">kafka</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kafka 中存在大量的网络数据持久化到磁盘（Producer 到 Broker）和磁盘文件通过网络发送（Broker 到 Consumer）的过程。这一过程的性能直接影响 Kafka 的整体吞吐量，于是 Kafka 便引入了 ZeroCopy 技术来提升性能。</p>
-        <a href="/posts/apache-kafka/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kafka/ch03/">Ch03-Kafka 之消息存储</a>
-    </h2>
-    
-  <h5>June 25, 2018</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kafka/">kafka</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。</p>
-        <a href="/posts/apache-kafka/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kafka/ch02/">Ch02-Kafka 生产消费流程</a>
-    </h2>
-    
-  <h5>June 22, 2018</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kafka/">Apache Kafka</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kafka/">kafka</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。</p>
-        <a href="/posts/apache-kafka/ch02/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -753,7 +763,7 @@ var _hmt = _hmt || [];
         <a href="/posts/page/14/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/18/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -796,6 +806,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Categories</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Cache/">Cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/categories/AmDB/">AmDB</a>
@@ -935,6 +950,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Tags</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/cache/">cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/tags/amdb/">amdb</a>

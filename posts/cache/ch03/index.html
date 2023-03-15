@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="缓存和数据库之间的一致性是指缓存中的数据和数据库中的数据保持一致。当缓存中的数据和数据库中的数据不一致时，就会出现数据不一致的情况，可能会导致应用程序出现错误。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-缓存与数据库一致性" />
+<meta property="og:description" content="缓存和数据库之间的一致性是指缓存中的数据和数据库中的数据保持一致。当缓存中的数据和数据库中的数据不一致时，就会出现数据不一致的情况，可能会导致应用程序出现错误。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/cache/ch03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-02-08T00:00:00+08:00" />
+<meta property="article:modified_time" content="2023-02-08T00:00:00+08:00" />
+<title>Ch03-缓存与数据库一致性 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ae9ce631496e6bbaa9aa73c3980281f061e0439efc55510757402451d4dd33cc.js" integrity="sha256-rpzmMUlua7qpqnPDmAKB8GHgQ578VVEHV0AkUdTdM8w=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch03-缓存与数据库一致性</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-读写锁">1. 读写锁</a></li>
+    <li><a href="#2-缓存更新策略">2. 缓存更新策略</a>
+      <ul>
+        <li><a href="#21-先更新数据库再更新缓存">2.1 先更新数据库，再更新缓存</a></li>
+        <li><a href="#22-先更新缓存再更新数据库">2.2 先更新缓存，再更新数据库</a></li>
+        <li><a href="#23-先删除缓存再更新数据库">2.3 先删除缓存，再更新数据库</a></li>
+        <li><a href="#24-先更新数据库再删除缓存">2.4 先更新数据库，再删除缓存</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-数据库通知机制">3. 数据库通知机制</a></li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/cache/ch03/">Ch03-缓存与数据库一致性</a>
+  </h1>
+  
+  <h5>February 8, 2023</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Cache/">Cache</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/cache/">cache</a>
+  </div>
+  
+
+
+
+<p>缓存和数据库之间的一致性是指缓存中的数据和数据库中的数据保持一致。当缓存中的数据和数据库中的数据不一致时，就会出现数据不一致的情况，可能会导致应用程序出现错误。</p>
+<h1 id="1-读写锁">
+  1. 读写锁
+  <a class="anchor" href="#1-%e8%af%bb%e5%86%99%e9%94%81">#</a>
+</h1>
+<p>在读多写少的场景中，可以采用读写锁来保证缓存和数据库之间的一致性。</p>
+<ul>
+<li>当一个线程要修改数据时，需要获取写锁，其他线程不能读取或修改数据，直到该线程完成修改并释放写锁</li>
+<li>当一个线程要读取数据时，需要获取读锁，其他线程可以同时读取数据，但不能修改数据</li>
+</ul>
+<h1 id="2-缓存更新策略">
+  2. 缓存更新策略
+  <a class="anchor" href="#2-%e7%bc%93%e5%ad%98%e6%9b%b4%e6%96%b0%e7%ad%96%e7%95%a5">#</a>
+</h1>
+<p>在写多读少的场景中，可以采用缓存更新策略来保证缓存和数据库之间的一致性。</p>
+<h2 id="21-先更新数据库再更新缓存">
+  2.1 先更新数据库，再更新缓存
+  <a class="anchor" href="#21-%e5%85%88%e6%9b%b4%e6%96%b0%e6%95%b0%e6%8d%ae%e5%ba%93%e5%86%8d%e6%9b%b4%e6%96%b0%e7%bc%93%e5%ad%98">#</a>
+</h2>
+<p><img src="ud-uc.png" alt="update db and then update cache" /></p>
+<p>A 请求先将数据库的数据更新为 1，然后在更新缓存前，请求 B 将数据库的数据更新为 2，紧接着也把缓存更新为 2，然后 A 请求更新缓存为 1。此时，数据库中的数据是 2，而缓存中的数据却是 1，出现了缓存和数据库中的数据不一致的现象。</p>
+<p>为了解决数据不一致的现象，可以采用 <code>锁 + 过期时间</code> 的方式来解决。</p>
+<ul>
+<li>在更新缓存前先加个分布式锁，保证同一时间只运行一个请求更新缓存，就会不会产生并发问题了，当然引入了锁后，对于写入的性能就会带来影响。</li>
+<li>在更新完缓存时，给缓存加上较短的过期时间，这样即时出现缓存不一致的情况，缓存的数据也会很快过期，对业务还是能接受的。</li>
+</ul>
+<h2 id="22-先更新缓存再更新数据库">
+  2.2 先更新缓存，再更新数据库
+  <a class="anchor" href="#22-%e5%85%88%e6%9b%b4%e6%96%b0%e7%bc%93%e5%ad%98%e5%86%8d%e6%9b%b4%e6%96%b0%e6%95%b0%e6%8d%ae%e5%ba%93">#</a>
+</h2>
+<p><img src="uc-ud.png" alt="update cache and then update db" /></p>
+<p>A 请求先将缓存的数据更新为 1，然后在更新数据库前，B 请求来了，将缓存的数据更新为 2，紧接着把数据库更新为 2，然后 A 请求将数据库的数据更新为 1。此时，数据库中的数据是 1，而缓存中的数据却是 2，出现了缓存和数据库中的数据不一致的现象。</p>
+<h2 id="23-先删除缓存再更新数据库">
+  2.3 先删除缓存，再更新数据库
+  <a class="anchor" href="#23-%e5%85%88%e5%88%a0%e9%99%a4%e7%bc%93%e5%ad%98%e5%86%8d%e6%9b%b4%e6%96%b0%e6%95%b0%e6%8d%ae%e5%ba%93">#</a>
+</h2>
+<p><img src="dc-ud.png" alt="delete cache and then update db" /></p>
+<p>假设某个用户的年龄是 20，请求 A 要更新用户年龄为 21，所以它会删除缓存中的内容。这时，另一个请求 B 要读取这个用户的年龄，它查询缓存发现未命中后，会从数据库中读取到年龄为 20，并且写入到缓存中，然后请求 A 继续更改数据库，将用户的年龄更新为 21。最终，该用户年龄在缓存中是 20（旧值），在数据库中是 21（新值），缓存和数据库的数据不一致。可以看到，先删除缓存，再更新数据库，在「读 + 写」并发的时候，还是会出现缓存和数据库的数据不一致的问题。</p>
+<p>为了解决数据不一致的现象，可以采用 <code>延迟双删</code> 的方式来解决。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>redis<span style="color:#f92672">.</span><span style="color:#a6e22e">delKey</span><span style="color:#f92672">(</span>X<span style="color:#f92672">)</span>  <span style="color:#75715e">// 删除缓存
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>db<span style="color:#f92672">.</span><span style="color:#a6e22e">update</span><span style="color:#f92672">(</span>X<span style="color:#f92672">)</span>     <span style="color:#75715e">// 更新数据库
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>N<span style="color:#f92672">)</span>  <span style="color:#75715e">// 睡眠
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>redis<span style="color:#f92672">.</span><span style="color:#a6e22e">delKey</span><span style="color:#f92672">(</span>X<span style="color:#f92672">)</span>  <span style="color:#75715e">// 再删除缓存
+</span></span></span></code></pre></div><h2 id="24-先更新数据库再删除缓存">
+  2.4 先更新数据库，再删除缓存
+  <a class="anchor" href="#24-%e5%85%88%e6%9b%b4%e6%96%b0%e6%95%b0%e6%8d%ae%e5%ba%93%e5%86%8d%e5%88%a0%e9%99%a4%e7%bc%93%e5%ad%98">#</a>
+</h2>
+<p>Cache Aside 策略，中文是叫旁路缓存策略。</p>
+<p><strong>写策略的步骤</strong></p>
+<ul>
+<li>更新数据库中的数据；</li>
+<li>删除缓存中的数据。</li>
+</ul>
+<p><strong>读策略的步骤</strong></p>
+<ul>
+<li>如果读取的数据命中了缓存，则直接返回数据；</li>
+<li>如果读取的数据没有命中缓存，则从数据库中读取数据，然后将数据写入到缓存，并且返回给用户。</li>
+</ul>
+<p><img src="ud-dc.png" alt="update ddb and then delete cache" /></p>
+<p>假如某个用户数据在缓存中不存在，请求 A 读取数据时从数据库中查询到年龄为 20，在未写入缓存中时另一个请求 B 更新数据。它更新数据库中的年龄为 21，并且清空缓存。这时请求 A 把从数据库中读到的年龄为 20 的数据写入到缓存中。最终，该用户年龄在缓存中是 20（旧值），在数据库中是 21（新值），缓存和数据库数据不一致。</p>
+<blockquote>
+<p>从上面的理论上分析，先更新数据库，再删除缓存也是会出现数据不一致性的问题，但是在实际中，这个问题出现的概率并不高。</p>
+<p>因为缓存的写入通常要远远快于数据库的写入，所以在实际中很难出现请求 B 已经更新了数据库并且删除了缓存，请求 A 才更新完缓存的情况。而一旦请求 A 早于请求 B 删除缓存之前更新了缓存，那么接下来的请求就会因为缓存不命中而从数据库中重新读取数据，所以不会出现这种不一致的情况。</p>
+</blockquote>
+<p>所以，「先更新数据库 + 再删除缓存」的方案，是&quot;可以&quot;保证数据一致性的。如果再给缓存加上「过期时间」，就算在这期间存在缓存数据不一致，有过期时间来兜底，这样也能达到最终一致。</p>
+<p><strong>如何保证「先更新数据库，再删除缓存」这两个操作能执行成功？</strong></p>
+<ul>
+<li>重试机制
+引入消息队列，将第二个操作（删除缓存）要操作的数据加入到消息队列，由消费者来操作数据。</li>
+<li>订阅 binlog，再操作缓存
+通过订阅 binlog 日志，拿到具体要操作的数据，然后再执行缓存删除。</li>
+</ul>
+<h1 id="3-数据库通知机制">
+  3. 数据库通知机制
+  <a class="anchor" href="#3-%e6%95%b0%e6%8d%ae%e5%ba%93%e9%80%9a%e7%9f%a5%e6%9c%ba%e5%88%b6">#</a>
+</h1>
+<p>在写多读少的场景中，可以采用数据库通知机制来保证缓存和数据库之间的一致性。</p>
+<p>当数据库中的数据被修改时，可以向缓存发送通知，告知缓存中的数据已经过期，需要重新从数据库中读取数据。这种方式可以避免缓存中的数据和数据库中的数据不一致。</p>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://xiaolincoding.com/redis/architecture/mysql_redis_consistency.html">数据库和缓存如何保证一致性？</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-读写锁">1. 读写锁</a></li>
+    <li><a href="#2-缓存更新策略">2. 缓存更新策略</a>
+      <ul>
+        <li><a href="#21-先更新数据库再更新缓存">2.1 先更新数据库，再更新缓存</a></li>
+        <li><a href="#22-先更新缓存再更新数据库">2.2 先更新缓存，再更新数据库</a></li>
+        <li><a href="#23-先删除缓存再更新数据库">2.3 先删除缓存，再更新数据库</a></li>
+        <li><a href="#24-先更新数据库再删除缓存">2.4 先更新数据库，再删除缓存</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-数据库通知机制">3. 数据库通知机制</a></li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

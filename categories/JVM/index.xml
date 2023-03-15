@@ -13,7 +13,7 @@
       <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
       
       <guid>https://acronymor.com/posts/jdk/ch08/</guid>
-      <description>&lt;p&gt;&lt;code&gt;CMS GC&lt;/code&gt;、&lt;code&gt;G1&lt;/code&gt;、&lt;code&gt;ZGC&lt;/code&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;垃圾回收器经过了很长时间的发展，很多垃圾回收器也慢慢的埋入到了历史场合中。这里简单的做个划分，已经淘汰的垃圾回收器归到&lt;strong&gt;古典 GC&lt;/strong&gt;的范畴，目前还在使用以及正在开发的归到&lt;strong&gt;现代 GC&lt;/strong&gt;的范畴。&lt;/p&gt;</description>
     </item>
     
     <item>

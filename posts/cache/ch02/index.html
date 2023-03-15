@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CPU 缓存一致性">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch02-CPU 缓存一致性" />
+<meta property="og:description" content="CPU 缓存一致性" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/cache/ch02/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-02-04T00:00:00+08:00" />
+<meta property="article:modified_time" content="2023-02-04T00:00:00+08:00" />
+<title>Ch02-CPU 缓存一致性 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ae9ce631496e6bbaa9aa73c3980281f061e0439efc55510757402451d4dd33cc.js" integrity="sha256-rpzmMUlua7qpqnPDmAKB8GHgQ578VVEHV0AkUdTdM8w=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch02-CPU 缓存一致性</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-总线锁定">1. 总线锁定</a></li>
+    <li><a href="#2-缓存一致性协议">2. 缓存一致性协议</a></li>
+    <li><a href="#3-内存屏障">3. 内存屏障</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/cache/ch02/">Ch02-CPU 缓存一致性</a>
+  </h1>
+  
+  <h5>February 4, 2023</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Cache/">Cache</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/cache/">cache</a>
+  </div>
+  
+
+
+
+<p>CPU 缓存一致性</p>
+<h1 id="1-总线锁定">
+  1. 总线锁定
+  <a class="anchor" href="#1-%e6%80%bb%e7%ba%bf%e9%94%81%e5%ae%9a">#</a>
+</h1>
+<p>在多处理器系统中，可以通过总线锁定的方式来保证缓存一致性。当一个处理器要访问共享内存时，它会向总线发送一个请求，锁定总线，其他处理器就不能访问共享内存，直到该处理器完成访问并释放总线。</p>
+<h1 id="2-缓存一致性协议">
+  2. 缓存一致性协议
+  <a class="anchor" href="#2-%e7%bc%93%e5%ad%98%e4%b8%80%e8%87%b4%e6%80%a7%e5%8d%8f%e8%ae%ae">#</a>
+</h1>
+<p>现代处理器通常采用缓存一致性协议来保证缓存一致性。常见的缓存一致性协议有 MESI 协议和 MOESI 协议等。这些协议通过在缓存中添加状态位来标识缓存中的数据是否有效，以及是否被修改等信息，从而保证缓存一致性。</p>
+<h1 id="3-内存屏障">
+  3. 内存屏障
+  <a class="anchor" href="#3-%e5%86%85%e5%ad%98%e5%b1%8f%e9%9a%9c">#</a>
+</h1>
+<p>内存屏障是一种硬件或软件机制，用于保证处理器的指令执行顺序和内存访问顺序。在多处理器系统中，可以通过内存屏障来保证缓存一致性。当一个处理器要访问共享内存时，它会在访问前插入一个内存屏障，确保之前的所有内存访问都已经完成，从而保证缓存一致性。</p></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-总线锁定">1. 总线锁定</a></li>
+    <li><a href="#2-缓存一致性协议">2. 缓存一致性协议</a></li>
+    <li><a href="#3-内存屏障">3. 内存屏障</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

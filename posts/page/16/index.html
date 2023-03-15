@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.ccc243e02c4f274c81d70b313cc02b254430808a318e8729ab8646e952dc7032.js" integrity="sha256-zMJD4CxPJ0yB1wsxPMArJUQwgIoxjocpq4ZG6VLccDI=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.ae9ce631496e6bbaa9aa73c3980281f061e0439efc55510757402451d4dd33cc.js" integrity="sha256-rpzmMUlua7qpqnPDmAKB8GHgQ578VVEHV0AkUdTdM8w=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -144,6 +144,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Categories</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Cache/">Cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/categories/AmDB/">AmDB</a>
@@ -285,6 +290,11 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
+          <a href="/tags/cache/">cache</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/amdb/">amdb</a>
           <span>6</span>
         </li>
@@ -404,6 +414,102 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/database/ch01/">Ch01-数据库理论 之 事务</a>
+    </h2>
+    
+  <h5>February 25, 2018</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Database/">Database</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/database/">database</a>
+  </div>
+  
+
+
+
+
+    <p><p>数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：<code>原子性 (Atomicity)</code>、<code>一致性 (Consistency)</code>、<code>隔离性 (Isolation)</code>、<code>持久性 (Durability)</code>。</p>
+        <a href="/posts/database/ch01/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch08/">Ch08-Java 之 垃圾回收器</a>
+    </h2>
+    
+  <h5>September 10, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>垃圾回收器经过了很长时间的发展，很多垃圾回收器也慢慢的埋入到了历史场合中。这里简单的做个划分，已经淘汰的垃圾回收器归到<strong>古典 GC</strong>的范畴，目前还在使用以及正在开发的归到<strong>现代 GC</strong>的范畴。</p>
+        <a href="/posts/jdk/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/jdk/ch07/">Ch07-Java 之 内存分配与回收策略</a>
+    </h2>
+    
+  <h5>September 5, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/JVM/">JVM</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/jvm/">jvm</a>
+  </div>
+  
+
+
+
+
+    <p><p>在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。</p>
+        <a href="/posts/jdk/ch07/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -633,102 +739,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch03/">Ch3-Java 之 ThreadLocal</a>
-    </h2>
-    
-  <h5>April 9, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>java.lang.ThreadLocal</code>是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。</p>
-        <a href="/posts/java-juc/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch02/">Ch02-Java JUC 之 线程基础</a>
-    </h2>
-    
-  <h5>April 6, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-juc/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-juc/ch01/">Ch01-Java JUC 之 理论基础</a>
-    </h2>
-    
-  <h5>April 4, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-JUC/">Java | JUC</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">java</a>
-  </div>
-  
-
-
-
-
-    <p>
-        <a href="/posts/java-juc/ch01/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -757,7 +767,7 @@ var _hmt = _hmt || [];
         <a href="/posts/page/17/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/18/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -800,6 +810,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Categories</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Cache/">Cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/categories/AmDB/">AmDB</a>
@@ -939,6 +954,11 @@ var _hmt = _hmt || [];
     <li class="book-section-flat">
       <strong>Tags</strong>
       <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/cache/">cache</a>
+          <span>3</span>
+        </li>
       
         <li class="flex justify-between">
           <a href="/tags/amdb/">amdb</a>
