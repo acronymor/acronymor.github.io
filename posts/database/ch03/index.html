@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.ae9ce631496e6bbaa9aa73c3980281f061e0439efc55510757402451d4dd33cc.js" integrity="sha256-rpzmMUlua7qpqnPDmAKB8GHgQ578VVEHV0AkUdTdM8w=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.f5beb686abbc8c5af924219402ebff9fdf0db78c8f89d1fa45c60f3f5aebe91f.js" integrity="sha256-9b62hqu8jFr5JCGUAuv/n98Nt4yPidH6RcYPP1rr6R8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -141,12 +141,9 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#直方图">直方图</a>
-      <ul>
-        <li><a href="#等宽直方图">等宽直方图</a></li>
-        <li><a href="#等高直方图">等高直方图</a></li>
-      </ul>
-    </li>
+    <li><a href="#volcano-optimizer">Volcano Optimizer</a></li>
+    <li><a href="#cascades-optimizer">Cascades Optimizer</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
   </ul>
 </nav>
 
@@ -184,19 +181,28 @@ var _hmt = _hmt || [];
 
 
 
+<p>基数 Cardinality，某列唯一键的数量，称为基数，即某列非重复值的数量。
+选择性 Selectivity，某列基数与总行数的比值再乘以 100%，则称为某列选择性。可选择率的取值范围显然是 0～1，它的值越小，就表明可选择性越好。当可选择率为 1 时的可选择性是最差的。</p>
 <p>Cost-Based Optimization 基于代价的优化器</p>
-<h1 id="直方图">
-  直方图
-  <a class="anchor" href="#%e7%9b%b4%e6%96%b9%e5%9b%be">#</a>
+<h1 id="volcano-optimizer">
+  Volcano Optimizer
+  <a class="anchor" href="#volcano-optimizer">#</a>
 </h1>
-<h2 id="等宽直方图">
-  等宽直方图
-  <a class="anchor" href="#%e7%ad%89%e5%ae%bd%e7%9b%b4%e6%96%b9%e5%9b%be">#</a>
-</h2>
-<h2 id="等高直方图">
-  等高直方图
-  <a class="anchor" href="#%e7%ad%89%e9%ab%98%e7%9b%b4%e6%96%b9%e5%9b%be">#</a>
-</h2></article>
+<p><a href="https://zhuanlan.zhihu.com/p/364619893">The Volcano Optimizer Generator : Extensibility and Efficient Search</a></p>
+<h1 id="cascades-optimizer">
+  Cascades Optimizer
+  <a class="anchor" href="#cascades-optimizer">#</a>
+</h1>
+<p><a href="https://zhuanlan.zhihu.com/p/365085770">The Cascades Framework for Query Optimization</a></p>
+<hr>
+<h1 id="参考文献">
+  参考文献
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://www.zhihu.com/column/c_1364661018229141504">优化器技术论文学习</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/363997416">优化器论文列表</a></li>
+</ul></article>
  
       
 
@@ -237,12 +243,9 @@ var _hmt = _hmt || [];
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#直方图">直方图</a>
-      <ul>
-        <li><a href="#等宽直方图">等宽直方图</a></li>
-        <li><a href="#等高直方图">等高直方图</a></li>
-      </ul>
-    </li>
+    <li><a href="#volcano-optimizer">Volcano Optimizer</a></li>
+    <li><a href="#cascades-optimizer">Cascades Optimizer</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
   </ul>
 </nav>
 
