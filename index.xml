@@ -89,6 +89,33 @@
     </item>
     
     <item>
+      <title>Ch13-LevelDB 之 事务</title>
+      <link>https://acronymor.com/posts/leveldb/ch13/</link>
+      <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch13/</guid>
+      <description>&lt;p&gt;LevelDB 事务&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch12-LevelDB 之 Major Compaction</title>
+      <link>https://acronymor.com/posts/leveldb/ch12/</link>
+      <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch12/</guid>
+      <description>&lt;p&gt;在 Minor Compaction 完成的时候，会对新生成的 version 计算一次 compaction_level_ 和 compaction_score_。这两个参数决定了当前 version 的 是否需要做 Major Compaction。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch11-LevelDB 之 Minor Compaction</title>
+      <link>https://acronymor.com/posts/leveldb/ch11/</link>
+      <pubDate>Thu, 30 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch11/</guid>
+      <description>&lt;p&gt;Minor Compaction 流程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Ch08-MySQL 之 锁</title>
       <link>https://acronymor.com/posts/mysql/ch08/</link>
       <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
@@ -154,6 +181,15 @@
       
       <guid>https://acronymor.com/posts/leveldb/ch07/</guid>
       <description>&lt;p&gt;WAL 一般用于故障恢复，其内容就是内存里 MemTable 内容的持久化，当一个 MemTable 写满后，开启一个新的 MemTable 时，也同时会开启一个新的 WAL，当 MemTable 被 Dump 到磁盘后，相应的 WAL 可以被删除。所以说控制每次 WAL 写入磁盘的方式，便可以控制最多可能丢失的数据量。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ch06-LevelDB 之 Manifest</title>
+      <link>https://acronymor.com/posts/leveldb/ch06/</link>
+      <pubDate>Wed, 18 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://acronymor.com/posts/leveldb/ch06/</guid>
+      <description>&lt;p&gt;要想说明 Manifest 就不得不提出另一个重要的概念——Version。&lt;/p&gt;</description>
     </item>
     
     <item>

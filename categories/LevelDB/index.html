@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.f5beb686abbc8c5af924219402ebff9fdf0db78c8f89d1fa45c60f3f5aebe91f.js" integrity="sha256-9b62hqu8jFr5JCGUAuv/n98Nt4yPidH6RcYPP1rr6R8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.1b9188c77b5430d8b2a218a16db846a56b2564cc4aaee78852ab29945ed22d83.js" integrity="sha256-G5GIx3tUMNiyohihbbhGpWslZMxKrueIUqsplF7SLYM=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://acronymor.com/categories/LevelDB/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
@@ -156,6 +156,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/MySQL/">MySQL</a>
           <span>8</span>
         </li>
@@ -163,11 +168,6 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
           <span>3</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/categories/LevelDB/">LevelDB</a>
-          <span>8</span>
         </li>
       
         <li class="flex justify-between">
@@ -300,6 +300,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/mysql/">mysql</a>
           <span>8</span>
         </li>
@@ -307,11 +312,6 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
           <span>12</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/leveldb/">leveldb</a>
-          <span>8</span>
         </li>
       
         <li class="flex justify-between">
@@ -417,6 +417,102 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/leveldb/ch13/">Ch13-LevelDB 之 事务</a>
+    </h2>
+    
+  <h5>July 18, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>LevelDB 事务</p>
+        <a href="/posts/leveldb/ch13/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch12/">Ch12-LevelDB 之 Major Compaction</a>
+    </h2>
+    
+  <h5>July 10, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>在 Minor Compaction 完成的时候，会对新生成的 version 计算一次 compaction_level_ 和 compaction_score_。这两个参数决定了当前 version 的 是否需要做 Major Compaction。</p>
+        <a href="/posts/leveldb/ch12/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch11/">Ch11-LevelDB 之 Minor Compaction</a>
+    </h2>
+    
+  <h5>June 30, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>Minor Compaction 流程</p>
+        <a href="/posts/leveldb/ch11/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/leveldb/ch09/">Ch09-LevelDB 之 Open</a>
     </h2>
     
@@ -518,6 +614,38 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/leveldb/ch06/">Ch06-LevelDB 之 Manifest</a>
+    </h2>
+    
+  <h5>May 18, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>要想说明 Manifest 就不得不提出另一个重要的概念——Version。</p>
+        <a href="/posts/leveldb/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/leveldb/ch05/">Ch05-LevelDB 之 SSTable</a>
     </h2>
     
@@ -612,72 +740,28 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch02/">Ch02-LevelDB 架构</a>
-    </h2>
-    
-  <h5>May 5, 2022</h5>
-
-
 
   
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>LevelDB 架构</p>
-        <a href="/posts/leveldb/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch01/">Ch01-LevelDB 初识</a>
-    </h2>
-    
-  <h5>May 1, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。</p>
-        <a href="/posts/leveldb/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-
-  
+    <ul class="pagination pagination-default">
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="First" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Previous" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item active">
+        <a aria-current="page" aria-label="Page 1" class="page-link" role="button">1</a>
+      </li>
+      <li class="page-item">
+        <a href="/categories/LevelDB/page/2/" aria-label="Page 2" class="page-link" role="button">2</a>
+      </li>
+      <li class="page-item">
+        <a href="/categories/LevelDB/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/categories/LevelDB/page/2/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      </li>
+    </ul>
  
       
 
@@ -730,6 +814,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/categories/LevelDB/">LevelDB</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/categories/MySQL/">MySQL</a>
           <span>8</span>
         </li>
@@ -737,11 +826,6 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
           <span>3</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/categories/LevelDB/">LevelDB</a>
-          <span>8</span>
         </li>
       
         <li class="flex justify-between">
@@ -874,6 +958,11 @@ var _hmt = _hmt || [];
         </li>
       
         <li class="flex justify-between">
+          <a href="/tags/leveldb/">leveldb</a>
+          <span>12</span>
+        </li>
+      
+        <li class="flex justify-between">
           <a href="/tags/mysql/">mysql</a>
           <span>8</span>
         </li>
@@ -881,11 +970,6 @@ var _hmt = _hmt || [];
         <li class="flex justify-between">
           <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a>
           <span>12</span>
-        </li>
-      
-        <li class="flex justify-between">
-          <a href="/tags/leveldb/">leveldb</a>
-          <span>8</span>
         </li>
       
         <li class="flex justify-between">

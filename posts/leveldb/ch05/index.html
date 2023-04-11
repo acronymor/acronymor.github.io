@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.f5beb686abbc8c5af924219402ebff9fdf0db78c8f89d1fa45c60f3f5aebe91f.js" integrity="sha256-9b62hqu8jFr5JCGUAuv/n98Nt4yPidH6RcYPP1rr6R8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.1b9188c77b5430d8b2a218a16db846a56b2564cc4aaee78852ab29945ed22d83.js" integrity="sha256-G5GIx3tUMNiyohihbbhGpWslZMxKrueIUqsplF7SLYM=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -143,6 +143,7 @@ var _hmt = _hmt || [];
   <ul>
     <li><a href="#1-基本结构">1. 基本结构</a></li>
     <li><a href="#2-生成流程">2. 生成流程</a></li>
+    <li><a href="#3-读取流程">3. 读取流程</a></li>
     <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>
@@ -182,13 +183,12 @@ var _hmt = _hmt || [];
 
 
 <p>SSTable</p>
-<p>SSTable 不是一个内存数据结构，准确来说按照指定格式对数据组织后存储的文件。在 doc/table_format.md 中可以看到部分格式说明。
-SSTable 由若干种不同的 Block 组成。</p>
+<p>SSTable 不是一个内存数据结构，其保存的是 MemTable（SkipList）第 i 层的数据，在 Minor Compaction 触发的时候，由 TableBuilder 将其构建成不同的 Block，最后保存到<code>ldb</code>文件中。在 doc/table_format.md 中可以看到部分格式说明。</p>
 <h1 id="1-基本结构">
   1. 基本结构
   <a class="anchor" href="#1-%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84">#</a>
 </h1>
-<p><img src="structure.jpg" alt="structure" /></p>
+<p><img src="structure.jpg" alt="sstable structure" /></p>
 <blockquote>
 <p>注意：上图中 Meta Block 等于下文中的 Filter Block</p>
 </blockquote>
@@ -207,7 +207,7 @@ SSTable 由若干种不同的 Block 组成。</p>
 </tr>
 <tr>
 <td>Filter Block</td>
-<td>Filter 由 FilterBlockBuilder 完成构建，存储了对应的 DataBlock 的 Bloom Filter。</td>
+<td>由 FilterBlockBuilder 完成构建，存储了对应的 DataBlock 的 Bloom Filter。</td>
 </tr>
 <tr>
 <td>MetaIndex Block</td>
@@ -219,6 +219,42 @@ SSTable 由若干种不同的 Block 组成。</p>
 </tr>
 </tbody>
 </table>
+<h1 id="2-生成流程">
+  2. 生成流程
+  <a class="anchor" href="#2-%e7%94%9f%e6%88%90%e6%b5%81%e7%a8%8b">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BlockBuilder</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> Add(<span style="color:#66d9ef">const</span> Slice<span style="color:#f92672">&amp;</span> key, <span style="color:#66d9ef">const</span> Slice<span style="color:#f92672">&amp;</span> value); <span style="color:#75715e">// 将 MemTable 中的所有数据存入到 buffer 中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  Slice <span style="color:#a6e22e">Finish</span>(); <span style="color:#75715e">// 将 buffer 中的字符转成 Slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>string buffer_;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BlockHandle</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">uint64_t</span> offset_;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">uint64_t</span> size_;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>BlockBuilder</code> 和 <code>BlockHandle</code> 关系是 <code>BlockBuilder::Finish()</code> 产生 content，<code>BlockHandler</code> 保存该 content 保存到 <code>ldb</code> 文件中的 offset 和 content 大小。举个例子，比如 data_block-&gt;Finish() 生成了 data_block 这一 block 的所有字符，将其写入到 <code>ldb</code> 文件前，在将 offset 和 content.size() 记录到 data_block_handle 中。而对于其他的 block（比如 filter_block, meta_index_block, index_block）也是同理。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// table/table_builder.cc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status TableBuilder<span style="color:#f92672">::</span>Finish() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 1. data_block
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  Flush();  <span style="color:#75715e">// WriteBlock(&amp;r-&gt;data_block, &amp;r-&gt;pending_handle);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// 2. meta_blcok | filter
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteRawBlock(r<span style="color:#f92672">-&gt;</span>filter_block<span style="color:#f92672">-&gt;</span>Finish(), kNoCompression, <span style="color:#f92672">&amp;</span>filter_block_handle);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 3. meta_index_block
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteBlock(<span style="color:#f92672">&amp;</span>meta_index_block, <span style="color:#f92672">&amp;</span>metaindex_block_handle);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 4. index_block
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteBlock(<span style="color:#f92672">&amp;</span>r<span style="color:#f92672">-&gt;</span>index_block, <span style="color:#f92672">&amp;</span>index_block_handle);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 5. footer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  r<span style="color:#f92672">-&gt;</span>status <span style="color:#f92672">=</span> r<span style="color:#f92672">-&gt;</span>file<span style="color:#f92672">-&gt;</span>Append(footer_encoding);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>TableBuilder 则是调用各个 BlockBuilder 将编码好的 content 依次存入到 <code>ldb</code> 中。</p>
+<h1 id="3-读取流程">
+  3. 读取流程
+  <a class="anchor" href="#3-%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b">#</a>
+</h1>
 <p>打开 SSTable 步骤如下：</p>
 <ol>
 <li>读取 Footer，根据里面的读取 Meta Index Block 和 Index Block，将 Index Block 的内容缓存到内存中；</li>
@@ -236,24 +272,6 @@ SSTable 由若干种不同的 Block 组成。</p>
 <li>对 Data Block 里的 restart point 进行二分搜索，找到搜索键对应的 restart point；</li>
 <li>对这个 restart point 对应的键进行搜索，最多搜索 16 个键，找到键或者找不到键。</li>
 </ol>
-<h1 id="2-生成流程">
-  2. 生成流程
-  <a class="anchor" href="#2-%e7%94%9f%e6%88%90%e6%b5%81%e7%a8%8b">#</a>
-</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// table/table_builder.cc
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Status TableBuilder<span style="color:#f92672">::</span>Finish() {
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 1. data_block
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  Flush();  <span style="color:#75715e">// WriteBlock(&amp;r-&gt;data_block, &amp;r-&gt;pending_handle);
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// 2. meta_blcok | filter
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteRawBlock(r<span style="color:#f92672">-&gt;</span>filter_block<span style="color:#f92672">-&gt;</span>Finish(), kNoCompression, <span style="color:#f92672">&amp;</span>filter_block_handle);
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 3. meta_index_block
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteBlock(<span style="color:#f92672">&amp;</span>meta_index_block, <span style="color:#f92672">&amp;</span>metaindex_block_handle);
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 4. index_block
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  WriteBlock(<span style="color:#f92672">&amp;</span>r<span style="color:#f92672">-&gt;</span>index_block, <span style="color:#f92672">&amp;</span>index_block_handle);
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 5. footer
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  r<span style="color:#f92672">-&gt;</span>status <span style="color:#f92672">=</span> r<span style="color:#f92672">-&gt;</span>file<span style="color:#f92672">-&gt;</span>Append(footer_encoding);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在调用 <code>TableBuilder::Finish()</code>的时候，会按照 SSTable 定义的结构，将数据依次写入到指定的文件中，这样就完成了 SSTable 的生成。</p>
 <h1 id="3-参考文献">
   3. 参考文献
   <a class="anchor" href="#3-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
@@ -304,6 +322,7 @@ SSTable 由若干种不同的 Block 组成。</p>
   <ul>
     <li><a href="#1-基本结构">1. 基本结构</a></li>
     <li><a href="#2-生成流程">2. 生成流程</a></li>
+    <li><a href="#3-读取流程">3. 读取流程</a></li>
     <li><a href="#3-参考文献">3. 参考文献</a></li>
   </ul>
 </nav>

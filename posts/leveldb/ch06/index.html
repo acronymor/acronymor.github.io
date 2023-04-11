@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="要想说明 Manifest 就不得不提出另一个重要的概念——Version。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-LevelDB 之 Manifest" />
+<meta property="og:description" content="要想说明 Manifest 就不得不提出另一个重要的概念——Version。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/leveldb/ch06/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-18T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-05-18T00:00:00+08:00" />
+<title>Ch06-LevelDB 之 Manifest | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.1b9188c77b5430d8b2a218a16db846a56b2564cc4aaee78852ab29945ed22d83.js" integrity="sha256-G5GIx3tUMNiyohihbbhGpWslZMxKrueIUqsplF7SLYM=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch06-LevelDB 之 Manifest</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-组织形式">1. 组织形式</a>
+      <ul>
+        <li><a href="#11-versionset-与-version">1.1 VersionSet 与 Version</a></li>
+        <li><a href="#12-version-与-versionedit">1.2 Version 与 VersionEdit</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-versionedit">2. VersionEdit</a></li>
+    <li><a href="#3-version">3. Version</a></li>
+    <li><a href="#4-versionset">4. VersionSet</a></li>
+    <li><a href="#5-总结">5. 总结</a></li>
+    <li><a href="#6-参考文献">6. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/leveldb/ch06/">Ch06-LevelDB 之 Manifest</a>
+  </h1>
+  
+  <h5>May 18, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">leveldb</a>
+  </div>
+  
+
+
+
+<p>要想说明 Manifest 就不得不提出另一个重要的概念——Version。</p>
+<p>众所周知当 MemTable 达到指定阈值之后会触发 Minor Compaction 操作，它会将原始数据保存到 SSTable，同时记录本次原始数据的元数据信息到 FileMetaData。如果触发多次 Minor Compaction 操作，便会生成多个 FileMetaData，LevelDB 会将这些 FileMetaData 组织到一个 array 中，此时 array 所在类便是 Version。</p>
+<p>我们想像一个场景，如果一个线程 thread1 要查找指定数据，根据目前的设计必然需要遍历 array，在遍历的过程中，发生了一次 Major Compaction 删除掉了该 FileMetaData，于是 thread1 就可能会无法引用到该 FileMetaData 而报错。为了解决这个问题，最常见的莫过于两种手段，一种是加锁，另一种是 MVCC。加锁会导致数据库读写性能明显下滑，所以 LevelDB 选用了 MVCC 的方式。</p>
+<p>为了能够有效的实现 MVCC，LevelDB 将之前的所有 FileMetaData 和当前 Minor Compaction 中的 FileMetaData 封装成一个 Version，这样多次 Minor Compaction 操作就会形成多个 Version，LevelDB 使用 <strong>循环双向链表</strong> 对其进行管理起。我们再回顾上述的场景，thread1 在 version1 中查找，而 Major Compaction 则在 version2 中删除，它们两个互不影响。</p>
+<p>每次 version 新增时都会将先前 version 中所有的 FileMetaData 复制到自己的 array 中，那么很显然先前的 version 完全没有必要一直保留下来，所以 version 内部维护了一个 refs_ 的变量来记录当前 version 被引用的数量，当 refs_ 变为零时，调用 <code>delete this</code> 将自身析构。LevelDB 在多处对 refs_ 进行了校验，比如 Get/Minor Compaction/Major Compaction 等。</p>
+<p>为了能够在系统下次启动的时候读取到最新的 Version，将 Version 保存到文件便是不二之选，这个文件便是 Manifest。</p>
+<p>不过 Manifest 的构建有一丢丢的小技巧，我们已经注意到 <code>当前 Version = 上次 Version + 本次 FileMetaData</code>，如果有多个 Version，然后生成多个 Manifest 文件并不是个最佳选择。用动态的视角来看，那为什么不每次保存 <code>本次 FileMetaData</code> 呢？version1 向 Manifest 追加当次 FileMetaData，version2 向 Manifest 追加当次 FileMetaData，随着 Minor Compaction 的不断进行，Manifest 永远保存的都是最新且全量的 Version。</p>
+<p>LevelDB 为了方便代码编写，将 FileMetaData 又封装了一层，称为 VersionEdit。Manifest 的每行记录便是 VersionEdit。</p>
+<!-- raw HTML omitted -->
+<h1 id="1-组织形式">
+  1. 组织形式
+  <a class="anchor" href="#1-%e7%bb%84%e7%bb%87%e5%bd%a2%e5%bc%8f">#</a>
+</h1>
+<h2 id="11-versionset-与-version">
+  1.1 VersionSet 与 Version
+  <a class="anchor" href="#11-versionset-%e4%b8%8e-version">#</a>
+</h2>
+<p>VersionSet 包含多个 Version，这些 Version 采用<strong>循环双向链表</strong>组织，头结点是 <code>dummy_versions_</code>，尾节点是 <code>current_</code>。如果新插入一个 Version，<code>current_</code> 指向该 Version，并然后用尾插法插入到该链表的尾部。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// db/version_set.h
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VersionSet</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 将 version 追加到双向链表中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">void</span> VersionSet<span style="color:#f92672">::</span>AppendVersion(Version<span style="color:#f92672">*</span> v);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  Version<span style="color:#f92672">*</span> current_;
+</span></span><span style="display:flex;"><span>  Version dummy_versions_;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Version</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  Version<span style="color:#f92672">*</span> next_;
+</span></span><span style="display:flex;"><span>  Version<span style="color:#f92672">*</span> prev_;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="versionset.jpg" alt="versionset" /></p>
+<h2 id="12-version-与-versionedit">
+  1.2 Version 与 VersionEdit
+  <a class="anchor" href="#12-version-%e4%b8%8e-versionedit">#</a>
+</h2>
+<p>Version 保存了 SkipList 所有 level 的元数据（数据量小的情况下可能只有 level0）。</p>
+<p><img src="version-edit.png" alt="version-edit" /></p>
+<h1 id="2-versionedit">
+  2. VersionEdit
+  <a class="anchor" href="#2-versionedit">#</a>
+</h1>
+<p>一次 Minor Compaction 会将 MemTable 中的数据 Flush 到磁盘形成一个文件（后缀名为 <code>ldb</code>），该文件被称为 SSTable，它的元数据信息一般使用 FileMetaData 描述。VersionEdit 则是用于帮助完成 Minor Compaction 的工具类，临时保存了 SSTable 的元数据信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">FileMetaData</span> {
+</span></span><span style="display:flex;"><span>  FileMetaData() <span style="color:#f92672">:</span> refs(<span style="color:#ae81ff">0</span>), allowed_seeks(<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">30</span>), file_size(<span style="color:#ae81ff">0</span>) {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> refs;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> allowed_seeks;     <span style="color:#75715e">// Seeks allowed until compaction
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64_t</span> number;       <span style="color:#75715e">// VersionSet 分配的下一个 ldb 文件编号
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64_t</span> file_size;    <span style="color:#75715e">// SSTable 文件大小
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  InternalKey smallest;  <span style="color:#75715e">// SkipList 中第一个元素的 Key 值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  InternalKey largest;   <span style="color:#75715e">// SkipList 中最后一个元素的 key 值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VersionEdit</span> {
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  DeletedFileSet deleted_files_;                         <span style="color:#75715e">// 可以删除的 SSTable
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>pair<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, FileMetaData<span style="color:#f92672">&gt;&gt;</span> new_files_;  <span style="color:#75715e">// 新增的 SSTable，&lt;level, SSTableMeta&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h1 id="3-version">
+  3. Version
+  <a class="anchor" href="#3-version">#</a>
+</h1>
+<p>每次 Compaction 完成之后，当前 Version 和 VersionEdit 合并后会形成新的 Version。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Version</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> refs_;
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>FileMetaData<span style="color:#f92672">*&gt;</span> files_[config<span style="color:#f92672">::</span>kNumLevels];
+</span></span><span style="display:flex;"><span>  FileMetaData<span style="color:#f92672">*</span> file_to_compact_;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> file_to_compact_level_;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="version.jpg" alt="version" /></p>
+<p>files_ 是非常重要的属性，每次 VersionEdit 都会将本次的 FileMetaData 追加在后面，后续用于 Compaction 中的 file 都是从该属性中取值。</p>
+<h1 id="4-versionset">
+  4. VersionSet
+  <a class="anchor" href="#4-versionset">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// db/version_set.cc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VersionSet</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 将 VersionEdit 应用到到 Version 中，即将其中属性取出来然后赋值到 Version 中。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  Status VersionSet<span style="color:#f92672">::</span>LogAndApply(VersionEdit<span style="color:#f92672">*</span> edit, port<span style="color:#f92672">::</span>Mutex<span style="color:#f92672">*</span> mu);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>正常情况下，一次 Compaction 或者 MemTable 写入后，会产生一个 VersionEdit，将这个 VersionEdit 应用到当前 Version 上生成一个新的 Version，这个过程由 <code>VersionSet::LogAndApply()</code> 完成。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>Status VersionSet<span style="color:#f92672">::</span>LogAndApply(VersionEdit<span style="color:#f92672">*</span> edit, port<span style="color:#f92672">::</span>Mutex<span style="color:#f92672">*</span> mu) {
+</span></span><span style="display:flex;"><span>  Version<span style="color:#f92672">*</span> v <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Version(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * Builder 有两个作用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 1. Compaction 完成后将 VersionEdit 和 Version 合并形成新的 Version
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 2. LevelDB 启动起来的时候，将多个 VersionEdit 和 Version 合并形成新的 Version
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    Builder <span style="color:#a6e22e">builder</span>(<span style="color:#66d9ef">this</span>, current_);
+</span></span><span style="display:flex;"><span>    builder.Apply(edit);
+</span></span><span style="display:flex;"><span>    builder.SaveTo(v);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  Finalize(v);  <span style="color:#75715e">// 计算下一次要进行 major compaction 的 level
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>上述代码的完成的功能示意图如下所示，其中红色线条描述了 FileMetaData 是被怎么保存到 Version 中的。</p>
+<p><img src="versionedit.jpg" alt="versionedit" /></p>
+<ol>
+<li>Compaction 触发之后，会先创建一个 FileMetaData 对象 meta，等到 SSTable 全部写入成功后（此时 FileMetaData 所有属性都会被成功初始化），将其移动制到 VersionEdit 中的 new_files 属性中；</li>
+<li><code>VersionSet::Builder::Apply()</code> 接着会将 VersionEdit 中的 new_files 复制到 VersionSet 中的 add_files 属性中</li>
+<li><code>VersionSet::Builder::SaveTo()</code> 又会将 VersionSet 中的 add_files 复制到 Version 中的 files 属性中。</li>
+</ol>
+<h1 id="5-总结">
+  5. 总结
+  <a class="anchor" href="#5-%e6%80%bb%e7%bb%93">#</a>
+</h1>
+<p>每发生一次 Minor Compaction 就会生成一个 VersionEdit，等到 Minor Compaction 完成后会结合当前 Version 和 VersionEdit 生成一个新的 Version，这些 Version 又会以双向链表的形式组织在 VersionSet 中。</p>
+<h1 id="6-参考文献">
+  6. 参考文献
+  <a class="anchor" href="#6-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/51858206">LevelDB 设计与实现 - MVCC 等</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-组织形式">1. 组织形式</a>
+      <ul>
+        <li><a href="#11-versionset-与-version">1.1 VersionSet 与 Version</a></li>
+        <li><a href="#12-version-与-versionedit">1.2 Version 与 VersionEdit</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-versionedit">2. VersionEdit</a></li>
+    <li><a href="#3-version">3. Version</a></li>
+    <li><a href="#4-versionset">4. VersionSet</a></li>
+    <li><a href="#5-总结">5. 总结</a></li>
+    <li><a href="#6-参考文献">6. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
