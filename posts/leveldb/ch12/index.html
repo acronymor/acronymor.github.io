@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.1b9188c77b5430d8b2a218a16db846a56b2564cc4aaee78852ab29945ed22d83.js" integrity="sha256-G5GIx3tUMNiyohihbbhGpWslZMxKrueIUqsplF7SLYM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -144,6 +144,7 @@ var _hmt = _hmt || [];
     <li><a href="#1-整体介绍">1. 整体介绍</a></li>
     <li><a href="#2-准备工作">2. 准备工作</a></li>
     <li><a href="#3-选择-compaction-初始文件">3. 选择 Compaction 初始文件</a></li>
+    <li><a href="#4-选择-compaction-文件">4. 选择 Compaction 文件</a></li>
     <li><a href="#5-执行-compaction-操作">5. 执行 Compaction 操作</a></li>
     <li><a href="#6-删除不用的文件">6. 删除不用的文件</a></li>
     <li><a href="#7-其他事项">7. 其他事项</a>
@@ -341,44 +342,56 @@ var _hmt = _hmt || [];
 </ul>
 <p>有个小细节，无论是 size_compaction 还是 seek_compaction 都会确定接下来 Compaction 的 level。</p>
 <blockquote>
-<p>通过判断 level==0 层文件数目和 level !=0 层数据总 size 来确定是否 compaction 是比较容易理解的，但是为什么还需要一个不通过 size 来判断的 compaction type 呢？我们来假设这么一种极端场景，每个 level 都达到了 compaction 的条件，那么一旦触发 compaction 就会产生类似雪崩的现象，为了避免这种现象的产生，让 compaction 提前进行就是个不错的优化项。基于此 LevelDB 引入了 seek 次数这个优化项，leveldb 将读放大和 compaction 这部分数据需要归并的数据量转成 seek 次数，一旦超过 allowed_seeks 定义的值就进行 compaction。</p>
+<p>通过判断 level==0 层文件数目和 level !=0 层数据总 size 来确定是否 compaction 是比较容易理解的，但是为什么还需要一个不通过 size 来判断的 compaction type 呢？我们来假设这么一种极端场景，每个 level 都达到了 compaction 的条件，那么一旦触发 compaction 就会产生类似雪崩的现象，为了避免这种现象的产生，让 compaction 提前进行就是个不错的优化项。基于此 LevelDB 引入了 seek 次数这个优化项。LevelDB 认为若干次读放大现象所耗费的时间可能会比做一次 Compaction 更加耗时，那么当对某些文件读取的次数超过 allowed_seeks（经验值）时，就触发 Compaction，这个 Compaction 名称就是 Seek Compaction。</p>
 </blockquote>
-<pre tabindex="0"><code>
-# 4. 选择 Compaction 文件
-
-具体函数见 `VersionSet::PickCompaction()`
-
-| **类型** | **说明** |
-|---|---|
-| level == 0 | 所有存在交集的 SSTable |
-| level &gt;= 1 | 根据 SSTable 的交集部分不断扩大参与合并的文件范围，直到 SSTable 不再有交集为止 |
-
-```c++
-Compaction* VersionSet::PickCompaction() {
-    Compaction* c;
-
-    if (level == 0) {
-        // 获取 level == 0 中 compaction 中 files_ 的最小值和最大值
-        GetRange(c-&gt;inputs_[0], &amp;smallest, &amp;largest);
-        // 从 Version 的 level == 0 中获取所有满足条件的 FileMetaData
-        current_-&gt;GetOverlappingInputs(0, &amp;smallest, &amp;largest, &amp;c-&gt;inputs_[0]);
-    }
-
-    SetupOtherInputs(c);
-
-    return c;
-}
-
-void VersionSet::SetupOtherInputs(Compaction* c) {
-    // ...
-    AddBoundaryInputs(icmp_, current_-&gt;files_[level], &amp;c-&gt;inputs_[0]);
-    // 获取 level == i 中 compaction 中 files_ 的最小值和最大值
-    GetRange(c-&gt;inputs_[0], &amp;smallest, &amp;largest);
-    // 给定一个 key 的范围，选择 level == i 中所有和该范围有重叠的 sstable 文件加入集合
-    current_-&gt;GetOverlappingInputs(level + 1, &amp;smallest, &amp;largest, &amp;c-&gt;inputs_[1]);
-    // ...
-}
-</code></pre><p>步骤如下</p>
+<h1 id="4-选择-compaction-文件">
+  4. 选择 Compaction 文件
+  <a class="anchor" href="#4-%e9%80%89%e6%8b%a9-compaction-%e6%96%87%e4%bb%b6">#</a>
+</h1>
+<p>具体函数见 <code>VersionSet::PickCompaction()</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>level == 0</td>
+<td>所有存在交集的 SSTable</td>
+</tr>
+<tr>
+<td>level &gt;= 1</td>
+<td>根据 SSTable 的交集部分不断扩大参与合并的文件范围，直到 SSTable 不再有交集为止</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>Compaction<span style="color:#f92672">*</span> VersionSet<span style="color:#f92672">::</span>PickCompaction() {
+</span></span><span style="display:flex;"><span>    Compaction<span style="color:#f92672">*</span> c;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (level <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 获取 level == 0 中 compaction 中 files_ 的最小值和最大值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        GetRange(c<span style="color:#f92672">-&gt;</span>inputs_[<span style="color:#ae81ff">0</span>], <span style="color:#f92672">&amp;</span>smallest, <span style="color:#f92672">&amp;</span>largest);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 从 Version 的 level == 0 中获取所有满足条件的 FileMetaData
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        current_<span style="color:#f92672">-&gt;</span>GetOverlappingInputs(<span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>smallest, <span style="color:#f92672">&amp;</span>largest, <span style="color:#f92672">&amp;</span>c<span style="color:#f92672">-&gt;</span>inputs_[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    SetupOtherInputs(c);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> c;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> VersionSet<span style="color:#f92672">::</span>SetupOtherInputs(Compaction<span style="color:#f92672">*</span> c) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    AddBoundaryInputs(icmp_, current_<span style="color:#f92672">-&gt;</span>files_[level], <span style="color:#f92672">&amp;</span>c<span style="color:#f92672">-&gt;</span>inputs_[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取 level == i 中 compaction 中 files_ 的最小值和最大值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    GetRange(c<span style="color:#f92672">-&gt;</span>inputs_[<span style="color:#ae81ff">0</span>], <span style="color:#f92672">&amp;</span>smallest, <span style="color:#f92672">&amp;</span>largest);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 给定一个 key 的范围，选择 level == i 中所有和该范围有重叠的 sstable 文件加入集合
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    current_<span style="color:#f92672">-&gt;</span>GetOverlappingInputs(level <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>smallest, <span style="color:#f92672">&amp;</span>largest, <span style="color:#f92672">&amp;</span>c<span style="color:#f92672">-&gt;</span>inputs_[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>步骤如下</p>
 <ul>
 <li>对于 level == 0
 <ul>
@@ -536,6 +549,7 @@ void VersionSet::SetupOtherInputs(Compaction* c) {
     <li><a href="#1-整体介绍">1. 整体介绍</a></li>
     <li><a href="#2-准备工作">2. 准备工作</a></li>
     <li><a href="#3-选择-compaction-初始文件">3. 选择 Compaction 初始文件</a></li>
+    <li><a href="#4-选择-compaction-文件">4. 选择 Compaction 文件</a></li>
     <li><a href="#5-执行-compaction-操作">5. 执行 Compaction 操作</a></li>
     <li><a href="#6-删除不用的文件">6. 删除不用的文件</a></li>
     <li><a href="#7-其他事项">7. 其他事项</a>

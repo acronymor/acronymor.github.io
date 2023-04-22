@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch05-数据库理论 之 B&#43; Tree VS LSM" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://acronymor.com/posts/database/ch05/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-03T00:00:00+08:00" />
+<meta property="article:modified_time" content="2022-11-03T00:00:00+08:00" />
+<title>Ch05-数据库理论 之 B&#43; Tree VS LSM | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch05-数据库理论 之 B&#43; Tree VS LSM</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-b-tree">1. B+ Tree</a></li>
+    <li><a href="#2-lsm-tree">2. LSM Tree</a></li>
+    <li><a href="#3-lsm-tree-compaction">3. LSM Tree Compaction</a>
+      <ul>
+        <li><a href="#31-amplification">3.1 Amplification</a></li>
+        <li><a href="#32-compaction-strategy">3.2 Compaction Strategy</a></li>
+        <li><a href="#33-墓碑问题">3.3 墓碑问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/database/ch05/">Ch05-数据库理论 之 B&#43; Tree VS LSM</a>
+  </h1>
+  
+  <h5>November 3, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Database/">Database</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/database/">database</a>
+  </div>
+  
+
+
+
+<h1 id="1-b-tree">
+  1. B+ Tree
+  <a class="anchor" href="#1-b-tree">#</a>
+</h1>
+<p><img src="b&#43;tree.png" alt="b&#43;tree" /></p>
+<p>B+ Tree 是平衡搜索树的一种，是为了磁盘搜索而生的。它一般将磁盘块大小作为叶子节点的大小，方便数据读取，插入，原地更新等。B+ Tree 的查询/插入/删除 的时间复杂度都是 O(LogN)</p>
+<h1 id="2-lsm-tree">
+  2. LSM Tree
+  <a class="anchor" href="#2-lsm-tree">#</a>
+</h1>
+<p><img src="lsm-tree.png" alt="lsm-tree" /></p>
+<p>LSM Tree 的核心思想是将离散的随机读写请求转换成批量的顺序读写请求。它采用的是 Append Only 方式对数据插入，更新（无法原地更新）。查询顺序为如下步骤。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Memtable -&gt; Frozen Memtable -&gt; L0 -&gt; L1 -&gt; ··· -&gt; LN
+</span></span></code></pre></div><h1 id="3-lsm-tree-compaction">
+  3. LSM Tree Compaction
+  <a class="anchor" href="#3-lsm-tree-compaction">#</a>
+</h1>
+<p>Compaction 实际是数据的重新整合，实质是多路归并排序，主要作用是减少 SSTable 的数量，提升查询性能。但是它资源耗费比较高（IO：需要大量的读取与写入操作；CPU：涉及 checksum 计算，rowkey 比较；性能抖动）</p>
+<h2 id="31-amplification">
+  3.1 Amplification
+  <a class="anchor" href="#31-amplification">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th><strong>名词</strong></th>
+<th><strong>英文</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读放大</td>
+<td>Read Amplification</td>
+<td>本次扫描的数据量/实际返回的数据量</td>
+</tr>
+<tr>
+<td>写放大</td>
+<td>Write Amplification</td>
+<td>磁盘写入的数据量/实际的数据量</td>
+</tr>
+<tr>
+<td>空间放大</td>
+<td>Space Amplification</td>
+<td>存储的数据量/实际的数据量</td>
+</tr>
+</tbody>
+</table>
+<h2 id="32-compaction-strategy">
+  3.2 Compaction Strategy
+  <a class="anchor" href="#32-compaction-strategy">#</a>
+</h2>
+<p>不同的 Compaction 策略是对写放大、空间放大、读放大的一个权衡。</p>
+<table>
+<thead>
+<tr>
+<th>*</th>
+<th>SSTable 设计</th>
+<th>Compaction</th>
+<th>权衡</th>
+<th>代表数据库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Class-Leveled</strong></td>
+<td>每个 Level 包含一个 SSTable</td>
+<td>L(n) + L(n+1) = new L(n+1) ，将 L(n) 的 SSTable 与已有的 L(n+1) 融合</td>
+<td>写放大较为严重</td>
+<td>Level DB 的 Major Compaction</td>
+</tr>
+<tr>
+<td><strong>Size-Tiered</strong></td>
+<td>每个 Level 包含包含多个 SSTable，相同 Level 的 SSTable 的 rowkey range 存在交集</td>
+<td>several L(n) = new L(n+1) 将 L(n) 的 SSTable 融合后移动到 L(n+1)</td>
+<td>读放大较为严重</td>
+<td>Cassandra 的 Size Tiered Compaction，RocksDB 的 Universal Compaction</td>
+</tr>
+<tr>
+<td><strong>Tiered &amp; Leveled</strong></td>
+<td>层级较小的使用 Size-Tiered；层级较高的使用 Class-Leveled</td>
+<td></td>
+<td></td>
+<td>RocksDB 的 Leveled Compaction，OceanBase</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>FIFO Compaction: LSM-Tree 只有一个 Level，SSTable 以时间序排列，每次淘汰生成时间最早的 SSTable。适合时序数据库这类有时间属性和时间效用的数据。不过这种 Compaction 可能会丢失数据</p>
+</blockquote>
+<p><img src="leveling-tiering.png" alt="leveling-tiering" /></p>
+<h2 id="33-墓碑问题">
+  3.3 墓碑问题
+  <a class="anchor" href="#33-%e5%a2%93%e7%a2%91%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<p>随着 Compaction 的执行，相同 RowKey 所有行会从新往旧的 Compact，以此减少空间放大。</p>
+<table>
+<thead>
+<tr>
+<th><strong>现象</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INSERT + UPDATE -&gt; INSERT</td>
+<td>假如 L1 存在 <code>INSERT &lt;k, v1&gt;</code>，L0 存在 <code>UPDATE &lt;k,v2&gt;</code>，那么 Compaction 完成后可能会形成 <code>INSERT&lt;k, v2&gt;</code></td>
+</tr>
+<tr>
+<td>INSERT/UPDATE + DELETE -&gt; DELETE</td>
+<td>每一层都存在对某个 Key 的 INSERT/UPDATE 操作，当出现一个 DELETE 操作的时候，必须要每一层都完成 Compaction 操作才能将该 Key 彻底从数据库删除</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-参考文献">
+  4. 参考文献
+  <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://open.oceanbase.com/activities/4921877">基于 LSM-Tree 的 OceanBase 存储引擎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/141186118">深入探讨 LSM Compaction 机制</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-b-tree">1. B+ Tree</a></li>
+    <li><a href="#2-lsm-tree">2. LSM Tree</a></li>
+    <li><a href="#3-lsm-tree-compaction">3. LSM Tree Compaction</a>
+      <ul>
+        <li><a href="#31-amplification">3.1 Amplification</a></li>
+        <li><a href="#32-compaction-strategy">3.2 Compaction Strategy</a></li>
+        <li><a href="#33-墓碑问题">3.3 墓碑问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-参考文献">4. 参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.1b9188c77b5430d8b2a218a16db846a56b2564cc4aaee78852ab29945ed22d83.js" integrity="sha256-G5GIx3tUMNiyohihbbhGpWslZMxKrueIUqsplF7SLYM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -144,6 +144,7 @@ var _hmt = _hmt || [];
     <li><a href="#1-迭代模型火山模型iterator-model">1. 迭代模型/火山模型（Iterator Model）</a></li>
     <li><a href="#2-物化模型materialization-model">2. 物化模型（Materialization Model）</a></li>
     <li><a href="#3-向量化批处理模型vectorized--batch-model">3. 向量化/批处理模型（Vectorized / Batch Model）</a></li>
+    <li><a href="#4-pull-based-vs-push-based">4. Pull Based VS Push Based</a></li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>
   </ul>
 </nav>
@@ -186,7 +187,7 @@ var _hmt = _hmt || [];
   1. 迭代模型/火山模型（Iterator Model）
   <a class="anchor" href="#1-%e8%bf%ad%e4%bb%a3%e6%a8%a1%e5%9e%8b%e7%81%ab%e5%b1%b1%e6%a8%a1%e5%9e%8biterator-model">#</a>
 </h1>
-<p>又称 Volcano Model 或者 Pipeline Model。该计算模型将关系代数中每一种操作抽象为一个 Operator，将整个 SQL 构建成一个 Operator 树，查询树自顶向下的调用 next() 接口，数据则自底向上的被拉取处理。这种处理方式也称为拉取执行模型 (Pull Based)。</p>
+<p>又称 Volcano Model 或者 Pipeline Model。该计算模型将关系代数中每一种操作抽象为一个 Operator，将整个 SQL 构建成一个 Operator 树，查询树自顶向下的调用 next() 接口，一般只返回一条数据 (tuple)。数据则自底向上的被拉取处理。这种处理方式也称为拉取执行模型 (Pull Based)。</p>
 <p><img src="volcano.png" alt="volcano" /></p>
 <h1 id="2-物化模型materialization-model">
   2. 物化模型（Materialization Model）
@@ -198,8 +199,13 @@ var _hmt = _hmt || [];
   3. 向量化/批处理模型（Vectorized / Batch Model）
   <a class="anchor" href="#3-%e5%90%91%e9%87%8f%e5%8c%96%e6%89%b9%e5%a4%84%e7%90%86%e6%a8%a1%e5%9e%8bvectorized--batch-model">#</a>
 </h1>
-<p>向量化模型 和 火山模型 类似，每个 operator 需要实现一个 next() 函数，但是每次调用 next() 函数会返回一批的元组（tuples），而不是一个元组，所以向量化模型也可称为批处理模型。向量化模型是火山模型和物化模型的折衷。</p>
-<p>向量化模型比较适合 OLAP 查询，因为其大大减少了每个 operator 的调用次数，也就简单减少了虚函数的调用。</p>
+<p>向量化模型 和 火山模型 类似，每个 operator 需要实现一个 next() 函数，但是每次调用 next() 函数会返回一批的元组（tuples），而不是一个元组，所以向量化模型也可称为批处理模型。这种处理方式也称为推送执行模型 (Push Based)。</p>
+<h1 id="4-pull-based-vs-push-based">
+  4. Pull Based VS Push Based
+  <a class="anchor" href="#4-pull-based-vs-push-based">#</a>
+</h1>
+<p><img src="push-pull-model.png" alt="push-pull-model" /></p>
+<p>比如上述图中的例子，pull based model 由 aggr 驱动，但是 push-based model 则由 scan 驱动。</p>
 <h1 id="4-参考文献">
   4. 参考文献
   <a class="anchor" href="#4-%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
@@ -251,6 +257,7 @@ var _hmt = _hmt || [];
     <li><a href="#1-迭代模型火山模型iterator-model">1. 迭代模型/火山模型（Iterator Model）</a></li>
     <li><a href="#2-物化模型materialization-model">2. 物化模型（Materialization Model）</a></li>
     <li><a href="#3-向量化批处理模型vectorized--batch-model">3. 向量化/批处理模型（Vectorized / Batch Model）</a></li>
+    <li><a href="#4-pull-based-vs-push-based">4. Pull Based VS Push Based</a></li>
     <li><a href="#4-参考文献">4. 参考文献</a></li>
   </ul>
 </nav>
