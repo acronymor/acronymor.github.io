@@ -5,6 +5,7 @@
     <link>https://acronymor.com/about/</link>
     <description>Recent content in About Me on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://acronymor.com/about/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <atom:link href="https://acronymor.com/about/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

@@ -6,1712 +6,1323 @@
     <description>Recent content in Introduction on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Feb 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Apr 2023 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ch10-C&#43;&#43; 之 memory_order</title>
+      <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch10/</link>
+      <pubDate>Thu, 20 Apr 2023 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch10/</guid>
+      <description>&lt;p&gt;&lt;code&gt;std::memory_order&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Ch03-缓存与数据库一致性</title>
       <link>https://acronymor.com/posts/cache/ch03/</link>
       <pubDate>Wed, 08 Feb 2023 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/cache/ch03/</guid>
       <description>&lt;p&gt;缓存和数据库之间的一致性是指缓存中的数据和数据库中的数据保持一致。当缓存中的数据和数据库中的数据不一致时，就会出现数据不一致的情况，可能会导致应用程序出现错误。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-CPU 缓存一致性</title>
       <link>https://acronymor.com/posts/cache/ch02/</link>
       <pubDate>Sat, 04 Feb 2023 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/cache/ch02/</guid>
       <description>&lt;p&gt;CPU 缓存一致性&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-缓存雪崩、缓存击穿、缓存穿透</title>
       <link>https://acronymor.com/posts/cache/ch01/</link>
       <pubDate>Wed, 01 Feb 2023 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/cache/ch01/</guid>
       <description>&lt;p&gt;通常情况下可以采用限流降级等技术，限制请求的访问频率，避免数据库压力过大，保证应用程序的可用性，这样也可以解决伤处问题。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-AmDB 之 Executor</title>
       <link>https://acronymor.com/posts/amdb/ch06/</link>
       <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch06/</guid>
-      <description></description>
+      <description>1. 接口定义 # class IExecutor { public: virtual Status Open(); virtual Status Close(); virtual State Prepare() = 0; virtual Status Work() = 0; InputPort&amp;amp; CreateInputPort(); OutputPort&amp;amp; CreateOutputPort(); protected: std::vector&amp;lt;InputPort&amp;gt; inputs_; std::vector&amp;lt;OutputPort&amp;gt; outputs_; } 2. 实现原理 # executor 对数据的处理都是以 chunk 为单位进行处理的。&#xA;依次遍历所有的 executor，使用 Connect 将 Port 连接到一起； 依次遍历所有的 executor，调用每个 executor 的 Open() 将 executor 打开（根据 executor 特性决定，大部分什么操作都不做）； 依次遍历所有的 executor，调用每个 executor 的 Prepare() 将 executor 初始化（比如将 chunk 推到 Cache 中） 依次遍历所有的 executor，调用每个 executor 的 Work() 执行 executor（比如插入数据/读取数据等） 依次遍历所有的 executor，调用每个 executor 的 Close() 将 executor 关闭（大部分什么操作都不做） 当然上述的步骤只是为了方便说明而这么写的，实际上每个 executor 会被多次封装成 task 放入到队列中，由 scheduler 调度执行。</description>
     </item>
-    
     <item>
       <title>Ch05-AmDB 之 Index</title>
       <link>https://acronymor.com/posts/amdb/ch05/</link>
       <pubDate>Mon, 05 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch05/</guid>
-      <description></description>
+      <description>AmDB 的 Index 实现的是聚簇索引，主要是为了避免最后加载进来的 B+ Tree 占用内存过高。而且 B+ Tree 底层基于 KV 存储实现，从 B+ Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。&#xA;1. 接口定义 # class Index { public: Status Save(); Status GetRecords(std::vector&amp;lt;std::string&amp;gt;&amp;amp; keys, std::vector&amp;lt;std::string&amp;gt;* values); Status Insert(chunk::Chunk* chunk); Status Delete(chunk::Chunk* chunk); private: Bptree* bptree_; TreeCtx* tree_ctx_; } Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。&#xA;2. BpTree # 2.1 接口定义 # class Bptree { public: explicit Bptree(TreeCtx* tree_ctx, BptNode* root); ~Bptree() { root_ = nullptr; }; [[nodiscard]] Status Insert(std::string&amp;amp;&amp;amp; key, std::string&amp;amp;&amp;amp; value); [[nodiscard]] Status Delete(const std::string&amp;amp; key); [[nodiscard]] Status GetItem(const std::string&amp;amp; key, std::string* output) const; private: BptNode* root_{nullptr}; TreeCtx* tree_ctx_{nullptr}; }; 2.</description>
     </item>
-    
     <item>
       <title>Ch04-AmDB 之 Chunk</title>
       <link>https://acronymor.com/posts/amdb/ch04/</link>
       <pubDate>Sun, 04 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch04/</guid>
       <description>&lt;p&gt;Chunk 由多个 Row 组成&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-AmDB 之 ID 生成器</title>
       <link>https://acronymor.com/posts/amdb/ch03/</link>
       <pubDate>Sat, 03 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch03/</guid>
-      <description></description>
+      <description>1. 接口 # Status AllocateID(IDType type, const std::string&amp;amp; key, uint64_t* id); Status BatchAllocateID(IDType type, const std::string&amp;amp; key, size_t batch_size, std::vector&amp;lt;uint64_t&amp;gt;* id_list); 2. ID 生成器分类 # 分类 说明 IDType::Database 生成 Database 级别的 ID IDType::Table 生成 Table 级别的 ID IDType::Column 生成 Column 级别的 ID 3. ID 生成器原理 # 3.1 基本原理 # 这里以 IDType::Column 类型的生成器为例，cur_id 表示当前已经分配的 id，max_id 表示当前能分配的最大 id，left_num 表示能分配的 id 个数。 假如需要分配 n 个 id 的时候，首先将传进来的 key 取 hash 计算出具体的 bucket，然后判断 left_num 是否大于 n？</description>
     </item>
-    
     <item>
       <title>Ch02-AmDB 之编码</title>
       <link>https://acronymor.com/posts/amdb/ch02/</link>
       <pubDate>Fri, 02 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch02/</guid>
-      <description></description>
+      <description> 1. 基本类型编码 # 编码相关函数位置，amdb/sql/codec/codec.h。&#xA;1.1 string # 编码时字符串前面追加字符长度，解码时先取出字符长度然后从后面截取出需要的字符串。&#xA;1.2 uint32/int32/uint64/int64 # 采用小端模式编码，即数字的低位存储在内存地址的低位。&#xA;注意&#xA;这里有个与大部分习惯相悖的地方。&#xA;对于内存，大家习惯性的将低地址画在左边，高地址画在右边。 对于数字，大家习惯性的将高字节写在左边，将低字节写在右边。 纸面表达的时候，大家会习惯性的从左往右画，导致内存和数字在最终呈现形式上并不一致。&#xA;2. 复杂类型编码 # 2.1 Row (table) # 对于表里面的每行数据，都会采用下述的方式进行编码。将该行的主键编码到 key 中，将该行其他列的数据编码到 value 中。&#xA;2.2 Row (index) # 对于表里面的每行中的每列数据会按照下述方式进行编码，将该行的类型、数值、主键一同编码到 key 中，value 中不存储任何数据。所以如果一张表有多个列，这里便会生成多个 &amp;lt;key,value&amp;gt;。&#xA;与 Row (table) 不同的地方是，这里的 &amp;lt;key, value&amp;gt; 最终不会被直接存储到 leveldb 中，而是多行数据一起被编码成 BptLeafNodeRefProto 然后存储到 leveldb 中。&#xA;2.3 BptNode # B+ 树每个节点采用 Protobuf 进行编码，对于非叶子节点按照 BptNodeProto 编码，对于叶子节点按照 BptLeafNodeRefProto 编码（其 keys 存储的是若干个 Row (index)）。&#xA;message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; message BptLeafNodeRefProto { uint64 id = 1; bytes keys = 2; bytes values = 3; }; </description>
     </item>
-    
     <item>
       <title>Ch01-AmDB 介绍</title>
       <link>https://acronymor.com/posts/amdb/ch01/</link>
       <pubDate>Thu, 01 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch01/</guid>
       <description>&lt;p&gt;AmDB 为本人独立研发的一款单机版关系型数据库管理系统，旨在更加深入的学习数据库的相关知识，所涉及到的功能点会逐渐向 MySQL 对齐，后续应该会考虑完全兼容 MySQL 相关协议。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-数据库理论 之 B&#43; Tree VS LSM</title>
       <link>https://acronymor.com/posts/database/ch05/</link>
       <pubDate>Thu, 03 Nov 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch05/</guid>
-      <description></description>
+      <description>1. B+ Tree # B+ Tree 是平衡搜索树的一种，是为了磁盘搜索而生的。它一般将磁盘块大小作为叶子节点的大小，方便数据读取，插入，原地更新等。B+ Tree 的查询/插入/删除 的时间复杂度都是 O(LogN)&#xA;2. LSM Tree # LSM Tree 的核心思想是将离散的随机读写请求转换成批量的顺序读写请求。它采用的是 Append Only 方式对数据插入，更新（无法原地更新）。查询顺序为如下步骤。&#xA;Memtable -&amp;gt; Frozen Memtable -&amp;gt; L0 -&amp;gt; L1 -&amp;gt; ··· -&amp;gt; LN 3. LSM Tree Compaction # Compaction 实际是数据的重新整合，实质是多路归并排序，主要作用是减少 SSTable 的数量，提升查询性能。但是它资源耗费比较高（IO：需要大量的读取与写入操作；CPU：涉及 checksum 计算，rowkey 比较；性能抖动）&#xA;3.1 Amplification # 名词 英文 说明 读放大 Read Amplification 本次扫描的数据量/实际返回的数据量 写放大 Write Amplification 磁盘写入的数据量/实际的数据量 空间放大 Space Amplification 存储的数据量/实际的数据量 3.2 Compaction Strategy # 不同的 Compaction 策略是对写放大、空间放大、读放大的一个权衡。</description>
     </item>
-    
     <item>
       <title>Ch13-LevelDB 之 事务</title>
       <link>https://acronymor.com/posts/leveldb/ch13/</link>
       <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch13/</guid>
       <description>&lt;p&gt;LevelDB 事务&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-LevelDB 之 Major Compaction</title>
       <link>https://acronymor.com/posts/leveldb/ch12/</link>
       <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch12/</guid>
       <description>&lt;p&gt;在 Minor Compaction 完成的时候，会对新生成的 version 计算一次 compaction_level_ 和 compaction_score_。这两个参数决定了当前 version 的 是否需要做 Major Compaction。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-LevelDB 之 Minor Compaction</title>
       <link>https://acronymor.com/posts/leveldb/ch11/</link>
       <pubDate>Thu, 30 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch11/</guid>
       <description>&lt;p&gt;Minor Compaction 流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-MySQL 之 锁</title>
       <link>https://acronymor.com/posts/mysql/ch08/</link>
       <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch08/</guid>
-      <description></description>
+      <description>1. latch # 是内存结构中的一种轻量级的锁，在 MySQL 数据库中，latch 是用于保护内存中 List Page 完整性的锁结构，latch 可以分为有 mutex、SX rw-lock（spin lock），SX rw-lock 是 MySQL 5.7 的新特性，针对 Page 粒度加的内存锁，有助于提升索引访问效率（针对索引更新的模式）。&#xA;2. Lock # Gap Lock（间隙锁）锁住的区间均为开区间，间隙锁之间是兼容的，即两个事务可以同时持有包含共同间隙范围的间隙锁，并不存在互斥关系 Next-Key Lock（临键锁）锁住的区间除了 supremum 伪记录‍‍‍‍‍‍‍‍‍‍‍‍‍所在区间是开区间外，其余区间均为左开右闭区间；如果一个事务获取了 X 行的 next-key lock，那么另外一个事务在获取相同范围的 X 行的 next-key lock 时，是会被阻塞的 2.1 锁与事务隔离级别 # Isolation/Lock Lock Mode + Lock Type Rec Lock Type Read uncommitted Read commited LOCK_IX + TABLE_LOCK LOCK_X + ROW_LOCK LOCK_REC_NOT_GAP Repeatable read LOCK_IX + TABLE_LOCK LOCK_X + ROW_LOCK LOCK_REC_NOT_GAP or LOCK_GAP or LOCK_ORDINARY Serializable 3.</description>
     </item>
-    
     <item>
       <title>Ch03-C&#43;&#43; STL 之 Container</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</link>
       <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</guid>
-      <description></description>
+      <description> 容器 底层数据结构 时间复杂度 有无序 可否重复 其他 array 数组 随机读改 O(1) 无序 可重复 支持随机访问 vector 数组 随机读改、尾部插入、尾部删除 O(1)；头部插入、头部删除 O(n) 无序 可重复 支持随机访问 deque 双端队列 头尾插入、头尾删除 O(1) 无序 可重复 一个中央控制器 + 多个缓冲区，支持首尾快速增删，支持随机访问 forward_list 单向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 list 双向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 stack deque / list 顶部插入、顶部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 queue deque / list 尾部插入、头部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 priority_queue vector + max-heap 插入、删除 O(log2n) 有序 可重复 vector 容器+heap 处理规则 set 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multiset 红黑树 插入、删除、查找 O(log2n) 有序 可重复 map 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multimap 红黑树 插入、删除、查找 O(log2n) 有序 可重复 unordered_set 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multiset 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 unordered_map 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multimap 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 </description>
     </item>
-    
     <item>
       <title>Ch02-C&#43;&#43; 之 trait</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</link>
       <pubDate>Tue, 21 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</guid>
       <description>&lt;p&gt;trait 并不是 C++ 的关键字之类的，属于 C++ 的一种“机制”，或者说 C++ 特有的一种编程小技巧。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-C&#43;&#43; 之 STL</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</link>
       <pubDate>Mon, 20 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</guid>
       <description>&lt;p&gt;STL 是 1979 年诞生，1998 年加入 cpp 标准库。C11 出来之前 boost 库是常见的智能指针库，c11 有自己的智能指针。且有多个 STL 版本，如 &lt;code&gt;SGI STL&lt;/code&gt;，&lt;code&gt;GNU STL&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-LevelDB 之 Open</title>
       <link>https://acronymor.com/posts/leveldb/ch09/</link>
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch09/</guid>
       <description>&lt;p&gt;Open 流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-LevelDB 之 编码</title>
       <link>https://acronymor.com/posts/leveldb/ch08/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch08/</guid>
-      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Endian-neutral encoding:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Fixed-length numbers are encoded with least-significant byte first
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* In addition we support variable length &amp;#34;varint&amp;#34; encoding
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Strings are encoded prefixed by their length in varint format
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- util/coding.h
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Endian-neutral encoding:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Fixed-length numbers are encoded with least-significant byte first&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* In addition we support variable length &amp;#34;varint&amp;#34; encoding&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Strings are encoded prefixed by their length in varint format&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- util/coding.h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-LevelDB 之 WAL</title>
       <link>https://acronymor.com/posts/leveldb/ch07/</link>
       <pubDate>Wed, 25 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch07/</guid>
       <description>&lt;p&gt;WAL 一般用于故障恢复，其内容就是内存里 MemTable 内容的持久化，当一个 MemTable 写满后，开启一个新的 MemTable 时，也同时会开启一个新的 WAL，当 MemTable 被 Dump 到磁盘后，相应的 WAL 可以被删除。所以说控制每次 WAL 写入磁盘的方式，便可以控制最多可能丢失的数据量。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-LevelDB 之 Manifest</title>
       <link>https://acronymor.com/posts/leveldb/ch06/</link>
       <pubDate>Wed, 18 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch06/</guid>
       <description>&lt;p&gt;要想说明 Manifest 就不得不提出另一个重要的概念——Version。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-LevelDB 之 SSTable</title>
       <link>https://acronymor.com/posts/leveldb/ch05/</link>
       <pubDate>Mon, 16 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch05/</guid>
       <description>&lt;p&gt;SSTable&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-LevelDB 之 MemTable</title>
       <link>https://acronymor.com/posts/leveldb/ch04/</link>
       <pubDate>Thu, 12 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch04/</guid>
       <description>&lt;p&gt;MemTable&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-LevelDB 之 Arena 内存管理</title>
       <link>https://acronymor.com/posts/leveldb/ch03/</link>
       <pubDate>Tue, 10 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch03/</guid>
       <description>&lt;p&gt;Arena 内存管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-LevelDB 架构</title>
       <link>https://acronymor.com/posts/leveldb/ch02/</link>
       <pubDate>Thu, 05 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch02/</guid>
       <description>&lt;p&gt;LevelDB 架构&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-LevelDB 初识</title>
       <link>https://acronymor.com/posts/leveldb/ch01/</link>
       <pubDate>Sun, 01 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch01/</guid>
       <description>&lt;p&gt;leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-C&#43;&#43; 之 point</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch09/</link>
       <pubDate>Thu, 28 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch09/</guid>
       <description>&lt;p&gt;&lt;code&gt;std::unique_ptr&lt;/code&gt;，&lt;code&gt;std::shared_ptr&lt;/code&gt;，&lt;code&gt;std::weak_ptr&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-C&#43;&#43; 之 reference</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</link>
       <pubDate>Wed, 27 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</guid>
       <description>&lt;p&gt;&lt;code&gt;lvalue reference&lt;/code&gt;，&lt;code&gt;lvalue reference&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</link>
       <pubDate>Mon, 25 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</guid>
       <description>&lt;p&gt;&lt;code&gt;virtual&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</link>
       <pubDate>Sun, 24 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</guid>
       <description>&lt;p&gt;&lt;code&gt;static_cast&lt;/code&gt;，&lt;code&gt;dynamic_cast&lt;/code&gt;，&lt;code&gt;const_cast&lt;/code&gt;，&lt;code&gt;reinterpret_cast&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</link>
       <pubDate>Sat, 23 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</guid>
       <description>&lt;p&gt;&lt;code&gt;new&lt;/code&gt;，&lt;code&gt;delete&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</link>
       <pubDate>Fri, 22 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</guid>
       <description>&lt;p&gt;&lt;code&gt;define&lt;/code&gt;，&lt;code&gt;typedef&lt;/code&gt;，&lt;code&gt;using&lt;/code&gt;，&lt;code&gt;inline&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-C&#43;&#43; 之 keyword</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</link>
       <pubDate>Thu, 21 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</guid>
       <description>&lt;p&gt;&lt;code&gt;static&lt;/code&gt;，&lt;code&gt;const&lt;/code&gt;，&lt;code&gt;constexpr&lt;/code&gt;，&lt;code&gt;volatile&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-C&#43;&#43; 之 基础</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</link>
       <pubDate>Wed, 20 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</guid>
-      <description></description>
+      <description>1.数据类型 # 基本类型 所占大小 (bit) 最小范围 最大范围 void 0 bool 8 char 8 -128 127 unsigned char 8 0 255 short (signed short) 16 -32768 32767 unsigned short 16 0 65535 int (signed int) 32 -2147483648 2147483647 unsigned (unsigned int) 32 0 4294967295 long (signed long) 32 -2147483648 2147483647 unsigned long 32 0 4294967295 float 32 -3.4×10^38 3.4*10^38 double 64 -1.7×10^308 1.7×10^308 long double 64 -1.7×10^308 1.7×10^308 long long 64 -9223372036854775808 9223372036854775807 2.</description>
     </item>
-    
     <item>
       <title>Ch02-C&#43;&#43; 之 内存模型</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</link>
       <pubDate>Wed, 20 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</guid>
       <description>&lt;p&gt;内存模型就是一种语言它独特的管理者一套程序的机制，每种语言都有自己的一套程序机制。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-MySQL 之 复制技术</title>
       <link>https://acronymor.com/posts/mysql/ch06/</link>
       <pubDate>Sun, 10 Apr 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch06/</guid>
       <description>&lt;p&gt;我们习惯把 MySQL 复制中的角色叫做 Master/Slave，MySQL 8.0 后，术语和命令上都会统一到 Source/Replica。MySQL 采用 log shipping 的复制技术，在 source 节点上生成 binlog，通过 dump 线程把 binlog 推到 replica 节点上，replica 节点首先把 binlog 存储到 relay log 中，然后通过 MTS(Multi-Threaded Slave) 技术 replay 到 replica 节点上的表空间。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-数据库理论 之 执行模型</title>
       <link>https://acronymor.com/posts/database/ch04/</link>
       <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch04/</guid>
-      <description></description>
+      <description> 1. 迭代模型/火山模型（Iterator Model） # 又称 Volcano Model 或者 Pipeline Model。该计算模型将关系代数中每一种操作抽象为一个 Operator，将整个 SQL 构建成一个 Operator 树，查询树自顶向下的调用 next() 接口，一般只返回一条数据 (tuple)。数据则自底向上的被拉取处理。这种处理方式也称为拉取执行模型 (Pull Based)。&#xA;2. 物化模型（Materialization Model） # 物化模型的处理方式是每个 operator 一次处理所有的输入，处理完之后将所有结果一次性输出。物化模型更适合 OLTP 负载，这些查询每次只访问小规模的数据，只需要少量的函数调用。&#xA;3. 向量化/批处理模型（Vectorized / Batch Model） # 向量化模型 和 火山模型 类似，每个 operator 需要实现一个 next() 函数，但是每次调用 next() 函数会返回一批的元组（tuples），而不是一个元组，所以向量化模型也可称为批处理模型。这种处理方式也称为推送执行模型 (Push Based)。&#xA;4. Pull Based VS Push Based # 比如上述图中的例子，pull based model 由 aggr 驱动，但是 push-based model 则由 scan 驱动。&#xA;4. 参考文献 # 三种常见的数据库查询引擎执行模型 SQL 查询优化原理与 Volcano Optimizer 介绍 </description>
     </item>
-    
     <item>
       <title>Ch03-数据库理论 之 CBO</title>
       <link>https://acronymor.com/posts/database/ch03/</link>
       <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch03/</guid>
-      <description></description>
+      <description>基数 Cardinality，某列唯一键的数量，称为基数，即某列非重复值的数量。 选择性 Selectivity，某列基数与总行数的比值再乘以 100%，则称为某列选择性。可选择率的取值范围显然是 0～1，它的值越小，就表明可选择性越好。当可选择率为 1 时的可选择性是最差的。&#xA;Cost-Based Optimization 基于代价的优化器&#xA;Volcano Optimizer # The Volcano Optimizer Generator : Extensibility and Efficient Search&#xA;Cascades Optimizer # The Cascades Framework for Query Optimization&#xA;参考文献 # 优化器技术论文学习 优化器论文列表 数据库内核杂谈（九）：开源优化器 ORCA </description>
     </item>
-    
     <item>
       <title>Ch04-MySQL 之 存储结构</title>
       <link>https://acronymor.com/posts/mysql/ch04/</link>
       <pubDate>Sun, 31 Oct 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch04/</guid>
-      <description></description>
+      <description>&#xA;Page # 索引页&#xA;组成 说明 File Header 表示页的一些通用信息，占固定的 38 字节。 Page Header 表示数据页专有的一些信息，占固定的 56 个字节。 Infimum + Supremum 两个虚拟的伪记录，分别表示页中的最小和最大记录，占固定的 26 个字节。 User Records 真实存储我们插入的记录的部分，大小不固定。 Free Space 页中尚未使用的部分，大小不确定。 Page Directory 页中的某些记录相对位置，也就是各个槽在页面中的地址偏移量，大小不固定，插入的记录越多，这个部分占用的空间越多。 File Trailer 用于检验页是否完整的部分，占用固定的 8 个字节。 Row # 格式 说明 compact redundant dynamic 与 compact 行格式挺像，但它不会在记录的真实数据处存储字段真实数据的前 768 个字节，而是把所有的字节都存储到其他页面中，只在记录的真实数据处存储其他页面的地址 compressed 会采用压缩算法对页面进行压缩，以节省空间 参考文献 # MySQL 之数据页结构 MySQL 之 InnoDB 表空间 MySQL 之 InnoDB 存储结构总结 附件 # </description>
     </item>
-    
     <item>
       <title>Ch03-MySQL 之 内存结构</title>
       <link>https://acronymor.com/posts/mysql/ch03/</link>
       <pubDate>Sat, 30 Oct 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch03/</guid>
       <description>&lt;p&gt;Buffer Pool&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-数据库理论 之 RBO</title>
       <link>https://acronymor.com/posts/database/ch02/</link>
       <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch02/</guid>
-      <description></description>
+      <description>Rule-Based Optimization 基于规则的优化器&#xA;RBO 规则 说明 谓词重写 LIKE 规则，BETWEEN-AND 规则，IN 转 OR 规则，IN 转 ANY 规则，OR 转 ANY 规则，ALL/ANY 转聚合，NOT 规则，OR 转 UNION 规则 谓词预处理 1 &amp;lt; a =&amp;gt; a &amp;gt; 1 , 10 != id =&amp;gt; id != 10 谓词下推 t1.id = 1 t1 left join t2 on t1.id = t2.id =&amp;gt; t1 left join t2 on t1.id = t2.id and t1.id = 1 列裁剪优化 常量传递 表达式计算 参考文献 # 数据库查询优化器，RBO 优化规则介绍及示例 </description>
     </item>
-    
     <item>
       <title>Ch10-Elasticsearch 之 选举</title>
       <link>https://acronymor.com/posts/elasticsearch/ch10/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch10/</guid>
       <description>&lt;p&gt;Elasticsearch 之 选举&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Elasticsearch 之 threadpool</title>
       <link>https://acronymor.com/posts/elasticsearch/ch09/</link>
       <pubDate>Mon, 30 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch09/</guid>
       <description>&lt;p&gt;Elasticsearch 之线程池。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Elasticsearch 之 Http</title>
       <link>https://acronymor.com/posts/elasticsearch/ch08/</link>
       <pubDate>Wed, 25 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch08/</guid>
       <description>&lt;p&gt;Elasticsearch 之 Http&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Elasticsearch 之 Update</title>
       <link>https://acronymor.com/posts/elasticsearch/ch06/</link>
       <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch06/</guid>
       <description>&lt;p&gt;更新操作也是写操作。Elasticsearch 在创建新文档时，Elasticsearch 将为该文档分配一个版本号。对文档的每次更改都会产生一个新的版本号。当执行更新时，旧版本在.del 文件中被标记为已删除，并且新版本在新的分段中编入索引。旧版本可能仍然与搜索查询匹配，但是从结果中将其过滤掉。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Elasticsearch 之 Segment Merge</title>
       <link>https://acronymor.com/posts/elasticsearch/ch07/</link>
       <pubDate>Sat, 21 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch07/</guid>
       <description>&lt;p&gt;在 Elasticsearch 中，为了让插入的让数据更快的被检索使用。用一句话来概括就是”开新文件”。但是从另一个方面看，开新文件也会给服务器带来负载压力。因为默认每 1 秒，都会有一个新文件产生，每个文件都需要有文件句柄，内存，CPU 使用等各种资源。一天有 86400 秒，设想一下，每次请求要扫描一遍 86400 个文件，这个响应性能绝对好不了。为了解决这个问题，Elasticsearch 引入了 Merge 操作。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Elasticsearch 之 Delete</title>
       <link>https://acronymor.com/posts/elasticsearch/ch05/</link>
       <pubDate>Fri, 20 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch05/</guid>
       <description>&lt;p&gt;删除操作是也是写操作。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Elasticsearch 之 Search</title>
       <link>https://acronymor.com/posts/elasticsearch/ch04/</link>
       <pubDate>Sun, 15 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch04/</guid>
       <description>&lt;p&gt;Elasticsearch 的 Search 操作包含两个阶段，一个是 QueryPhase，另一个是 FetchPhase。QueryPhase 在初始查询阶段，查询会广播到索引中每一个分片副本 (主分片或副分片)。每个分片在本地执行搜索并构建一个匹配文档的优先队列（优先队列是一个存有 topN 匹配文档的有序列表，即 doc id。优先队列大小为分页参数 from + size），注意该队列中并没有取具体的数据。FetchPhase 会根据获取到的 doc id 向对应的节点依次发送 GET 请求，获取结果，然后合并，聚合，排序最终返回结果。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Elasticsearch 之 Put</title>
       <link>https://acronymor.com/posts/elasticsearch/ch03/</link>
       <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch03/</guid>
       <description>&lt;p&gt;Elasticsearch 之 Put，不过与其说是 Elasticsearch 的操作流程，倒不如说是单个 Lucene 索引操作流程。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-TCP 之 可靠性机制</title>
       <link>https://acronymor.com/posts/network/ch07/</link>
       <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch07/</guid>
-      <description></description>
+      <description> 机制 说明 校验和 保证数据未被篡改 序列号 保证数据的按序到达；去重重复数据 连接管理 三次握手，四次挥手 确认应答 ACK 保证报文成功交付 超时重传 发送数据包在一定的时间周期内没有收到相应的 ACK，便认为这个数据包丢失，就会重新发送 流量控制 控制发送方发送窗口的大小来实现流量控制 拥塞控制 控制传输中的流量 </description>
     </item>
-    
     <item>
       <title>Ch06-TCP 之 流量控制</title>
       <link>https://acronymor.com/posts/network/ch06/</link>
       <pubDate>Fri, 06 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch06/</guid>
-      <description>&lt;p&gt;流量控制是一个点对点通信的控制，通过滑动窗口实现。借助流量控制也可以实现上层应用的反压机制。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;拥塞控制是一个全局的过程，其 cwnd 由发送端控制，会随着网络拥塞程度动态变化。&lt;/li&gt;
-&lt;li&gt;流量控制是一个点到点通信量的控制；通过滑动窗口实现，其 windows/rwnd 由接收端控制，根据接收方的缓冲区大小动态变化。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;所以每次发送端能发送的报文数量是 &lt;code&gt;swnd=min(cwnd, rwnd)&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</description>
+      <description>&lt;p&gt;流量控制是一个点对点通信的控制，通过滑动窗口实现。借助流量控制也可以实现上层应用的反压机制。&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;拥塞控制是一个全局的过程，其 cwnd 由发送端控制，会随着网络拥塞程度动态变化。&lt;/li&gt;&#xA;&lt;li&gt;流量控制是一个点到点通信量的控制；通过滑动窗口实现，其 windows/rwnd 由接收端控制，根据接收方的缓冲区大小动态变化。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;所以每次发送端能发送的报文数量是 &lt;code&gt;swnd=min(cwnd, rwnd)&lt;/code&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-TCP 之 拥塞控制</title>
       <link>https://acronymor.com/posts/network/ch05/</link>
       <pubDate>Thu, 05 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch05/</guid>
-      <description>&lt;p&gt;在某段时间，若对网络中某一资源的需求超过了该资源所能提供的可用部分，网络性能就要变坏，这种情况就叫做网络拥塞。在计算机网络中数位链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。若出现拥塞而不进行控制，整个网络的吞吐量将随输入负荷的增大而下降。&lt;/p&gt;
-&lt;p&gt;当输入的负载到达一定程度吞吐量不会增加，即一部分网络资源会丢失掉，网络的吞吐量维持在其所能控制的最大值，转发节点的缓存不够大这造成分组的丢失是拥塞的征兆。&lt;/p&gt;</description>
+      <description>&lt;p&gt;在某段时间，若对网络中某一资源的需求超过了该资源所能提供的可用部分，网络性能就要变坏，这种情况就叫做网络拥塞。在计算机网络中数位链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。若出现拥塞而不进行控制，整个网络的吞吐量将随输入负荷的增大而下降。&lt;/p&gt;&#xA;&lt;p&gt;当输入的负载到达一定程度吞吐量不会增加，即一部分网络资源会丢失掉，网络的吞吐量维持在其所能控制的最大值，转发节点的缓存不够大这造成分组的丢失是拥塞的征兆。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-TCP 之 四次挥手</title>
       <link>https://acronymor.com/posts/network/ch04/</link>
       <pubDate>Wed, 04 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch04/</guid>
-      <description></description>
+      <description>1. 基本原理 # 2. 为什么 TCP 协议终止链接要四次？ # 关闭连接时，客户端向服务端发送 FIN 时，仅仅表示客户端不再发送数据了但是还能接收数据。 服务端收到客户端的 FIN 报文时，先回一个 ACK 应答报文，而服务端可能还有数据需要处理和发送，等服务端不再发送数据时，才发送 FIN 报文给客户端来表示同意现在关闭连接。 从上面过程可知，服务端通常需要等待完成数据的发送和处理，所以服务端的 ACK 和 FIN 一般都会分开发送，因此是需要四次挥手。&#xA;3. 为什么需要 TIME_WAIT 状态？ # 主动发起关闭连接的一方，才会有 TIME-WAIT 状态。需要 TIME-WAIT 状态，主要是两个原因：&#xA;防止历史连接中的数据，被后面相同四元组的连接错误的接收； 保证「被动关闭连接」的一方，能被正确的关闭； 4. 为什么等待 2MSL，从 TIME_WAIT 到 CLOSE？ # MSL（Maximum Segment Lifetime），TCP 允许不同的实现可以设置不同的 MSL 值。所谓的 2MSL 是两倍的 MSL(Maximum Segment Lifetime)。MSL 指一个片段在网络中最大的存活时间，2MSL 就是一个发送和一个回复所需的最大时间。如果直到 2MSL，Client 都没有再次收到 FIN，那么 Client 推断 ACK 已经被成功接收，则结束 TCP 连接。&#xA;保证客户端发送的最后一个 ACK 报文能够到达服务器。因为这个 ACK 报文可能丢失，站在服务器的角度看来，已经发送了 FIN+ACK 报文请求断开了，客户端还没有给回应，应该是发送的请求断开报文它没有收到，于是服务器又会重新发送一次，而客户端就能在这个 2MSL 时间段内收到这个重传的报文，接着给出回应报文，并且会重启 2MSL 计时器。</description>
     </item>
-    
     <item>
       <title>Ch02-Elasticsearch 之 Shard</title>
       <link>https://acronymor.com/posts/elasticsearch/ch02/</link>
       <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch02/</guid>
       <description>&lt;p&gt;Shard 即分片，它是 ES 分布式存储的基石，是底层的基本读写单元。ES 集群的核心就是对所有分片的分布、索引、负载、路由等进行各种操作。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-TCP 之 三次握手</title>
       <link>https://acronymor.com/posts/network/ch03/</link>
       <pubDate>Tue, 03 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch03/</guid>
-      <description></description>
+      <description> 1. 基本原理 # 2. 为什么是三次握手 # 用于保证可靠性和流量控制维护的某些状态信息，这些信息的组合（包括 Socket、序列号和窗口大小）称为连接。&#xA;三次握手才可以阻止重复历史连接的初始化（主要原因）&#xA;在 client 第二次与 server 握手开始之前，会判断 isn 是否符合预期；如果符合预期，那么会向 server 发送 ack 建立连接；如果不符合预期，那么向 server 发送 rst 终止连接。&#xA;三次握手才可以同步双方的初始序列号&#xA;在 client 第一次与 server 握手的时候，会将 client_isn 同步给 server；在 server 第一次回复 client 的时候，会将 server_isn 同步给 client。&#xA;三次握手才可以避免资源浪费&#xA;不使用「两次握手」和「四次握手」的原因：&#xA;两次握手：无法防止历史连接的建立，会造成双方资源的浪费，也无法可靠的同步双方序列号； 四次握手：三次握手就已经理论上最少可靠连接建立，所以不需要使用更多的通信次数。 3. 参考文献 # 为什么是三次握手？不是两次、四次？ </description>
     </item>
-    
     <item>
       <title>Ch02-TCP 之 网络模型</title>
       <link>https://acronymor.com/posts/network/ch02/</link>
       <pubDate>Mon, 02 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch02/</guid>
-      <description></description>
+      <description>1. OSI 七层模型 VS TCP/IP 四层模型 # 2. TCP/IP 四层模型报文封装/解封装 # 网络接口层的传输单位是帧（frame） IP 层的传输单位是包（packet） TCP 层的传输单位是段（segment） HTTP 的传输单位则是消息或报文（message） 但这些名词并没有什么本质的区分，可以统称为数据包。&#xA;3. TCP/IP 报文拆分 # 如果 TCP 报文大小超过 MSS（握手阶段协商，大概为 1460 字节） ，就会对报文进行分片，得到一个即将传递到网络层的 TCP 报文。（如果途中一个分片丢失，只需要单独发送该分片就行，该分片也被称为 TCP Segment）。 如果 IP 报文大小超过 MTU（以太网中一般为 1500 字节）就会再次进行分片，得到一个即将发送到网络的 IP 报文。 4. TCP VS UDP # TCP UDP 连接 面向连接，传输数据前先要建立连接 不需要连接，即刻传输数据 服务对象 仅支持一对一的两点服务 一对一、一对多、多对多的交互通信 可靠性 可靠交付数据的，数据可以无差错、不丢失、不重复、按序到达 尽最大努力交付，不保证可靠交付数据 拥塞控制 有 无 流量控制 有 无 首部开销 首部长度较长，会有一定的开销 首部只有 8 个字节，并且是固定不变的，开销较小 传输方式 流式传输，没有边界，但保证顺序和可靠 一个包一个包的发送，是有边界的，但可能会丢包和乱序 分片不同 数据大小如果大于 MSS 大小会进行分片 不会分片，依赖网络层 MTU 大小及分片 5.</description>
     </item>
-    
     <item>
       <title>Ch01-Elasticsearch 介绍</title>
       <link>https://acronymor.com/posts/elasticsearch/ch01/</link>
       <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/elasticsearch/ch01/</guid>
       <description>&lt;p&gt;Elasticsearch 是一个基于 Lucene 的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于 RESTful web 接口。Elasticsearch 是用 Java 开发的，并作为 Apache 许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Select/Poll/Epoll</title>
       <link>https://acronymor.com/posts/network/ch01/</link>
       <pubDate>Sun, 01 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/network/ch01/</guid>
       <description>&lt;p&gt;&lt;code&gt;Select&lt;/code&gt; &lt;code&gt;Poll&lt;/code&gt; &lt;code&gt;Epoll&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java 之 AIO</title>
       <link>https://acronymor.com/posts/java-io/ch04/</link>
       <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch04/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.nio.channels.AsynchronousServerSocketChannel java.nio.channels.AsynchronousSocketChannel JAVA AIO 框架在 windows 下使用 windows IOCP 技术，在 Linux 下使用 epoll 多路复用 IO 技术模拟异步 IO，这个从 JAVA AIO 框架的部分类设计上就可以看出来。&#xA;2. AsynchronousServerSocketChannel # 不同的 AsynchronousServerSocketChannel 实现对应了不同的 SocketChannel，由具体的 AsynchronousServerSocketChannel（根据不同的 OS 确定）实现进行创建。&#xA;3. 参考文献 # Java AIO - 异步 IO 详解 </description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 NIO</title>
       <link>https://acronymor.com/posts/java-io/ch03/</link>
       <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch03/</guid>
-      <description></description>
+      <description>操作系统层面的多路复用 IO 实现主要包括四种：select、poll、epoll、kqueue。&#xA;1. 常见类 # java.nio.ByteBuffer java.nio.channels.Selector java.nio.channels.SelectableChannel java.nio.channels.ServerSocketChannel 2. 网络模型 # 2.1 Reactor 模型 # Reactor 是非阻塞同步网络模型，Java 可以借用 NIO 接口实现各种 Reactor 模型，比如 单Reactor单线程、单Reactor多线程、主从Reactor多线程&#xA;2.2 Proactor 模型 # Proactor 是异步网络模型，需要 OS 的支持才能实现，所以 Java 借用 NIO 接口不一定能实现。&#xA;3. Selector # 不同的 SelectorProvider 实现对应了不同的 Selector，由具体的 SelectorProvider（根据不同的 OS 确定）实现进行创建。&#xA;4. 零拷贝 # 条目 说明 MappedByteBuffer 基于内存映射（mmap） DirectByteBuffer JVM 可以对 DirectByteBuffer 的对象进行 JVM 堆外内存分配和回收管理 FileChannel 用于文件读写、映射和操作的通道；定义了 transferFrom() 和 transferTo() 两个抽象方法，它通过在通道和通道之间建立连接实现数据传输 5. 参考文献 # Java NIO - IO 多路复用详解 </description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 BIO</title>
       <link>https://acronymor.com/posts/java-io/ch02/</link>
       <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch02/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.net.ServerSocket; java.net.Socket; 2. BIO 模型 # 一个服务端可以连接多个客户端，但是接入一个客户端，服务端都需要用一个线程维持着客户端与服务端的连接。如果客户端数量很多，那么服务端也需要对应的线程数量与之连接。&#xA;3. 参考文献 # Java IO - BIO 详解 </description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 IO</title>
       <link>https://acronymor.com/posts/java-io/ch01/</link>
       <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch01/</guid>
-      <description></description>
+      <description> 1. Java IO 概览 # 2. 阻塞/非阻塞 VS 同步/非同步 # 2.1 阻塞 IO 和 非阻塞 IO # 这两个概念是程序级别的。主要描述的是程序请求操作系统 IO 操作后，如果 IO 资源没有准备好，那么程序该如何处理的问题：前者等待；后者继续执行 (并且使用线程一直轮询，直到有 IO 资源准备好了)&#xA;2.2 同步 IO 和 非同步 IO # 这两个概念是操作系统级别的。主要描述的是操作系统在收到程序请求 IO 操作后，如果 IO 资源没有准备好，该如何响应程序的问题：前者不响应，直到 IO 资源准备好以后；后者返回一个标记 (好让程序和自己知道以后的数据往哪里通知)，当 IO 资源准备好以后，再用事件机制返回给程序。&#xA;3. OS IO 多路复用 # IO 模型 相对性能 关键思路 操作系统 JAVA 支持情况 select 较高 Reactor windows/Linux 支持 poll 较高 Reactor Linux 支持 epoll 高 Reactor/Proactor Linux 支持 kqueue 高 Proactor Linux 不支持 </description>
     </item>
-    
     <item>
       <title>Ch08-Kylin 之 部分细节</title>
       <link>https://acronymor.com/posts/apache-kylin/ch08/</link>
       <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch08/</guid>
       <description>&lt;p&gt;Kylin 部分细节&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Kylin 之 DISTINCT COUNT</title>
       <link>https://acronymor.com/posts/apache-kylin/ch07/</link>
       <pubDate>Sun, 04 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch07/</guid>
       <description>&lt;p&gt;distinct count&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Kylin 之 剪枝优化</title>
       <link>https://acronymor.com/posts/apache-kylin/ch06/</link>
       <pubDate>Tue, 29 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch06/</guid>
       <description>&lt;p&gt;Kylin 剪枝优化&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Kylin 之 Cube 构建算法</title>
       <link>https://acronymor.com/posts/apache-kylin/ch05/</link>
       <pubDate>Sat, 19 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch05/</guid>
       <description>&lt;p&gt;Kylin Cube 构建算法&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Kylin 之 Cube 构建流程</title>
       <link>https://acronymor.com/posts/apache-kylin/ch04/</link>
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch04/</guid>
       <description>&lt;p&gt;Kylin Cube 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Kylin 之 Query</title>
       <link>https://acronymor.com/posts/apache-kylin/ch03/</link>
       <pubDate>Sat, 12 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch03/</guid>
-      <description></description>
+      <description>query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：&#xA;完整的处理逻辑如下图所示：&#xA;query 和 update 的逻辑如下所示：&#xA;1. Query # 在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在implement方法中完成 RelNode 到 Cube 处理逻辑的转换。&#xA;1.1 Cube 选取流程 # 整个过程封装在 RealizationChooser#selectRealization 中，大体上可以分为两步，第一部分是makeOrderedModelMap()，这一步会选出所有满足的 cuboid，第二步是selectRealization()，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲&#xA;1.1.1 对 model 及对应的 realizations 进行过滤及排序 # 获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName 对 realizations 执行过滤，得到 filteredRealizations NOT READY cube 会被过滤 黑名单中的 cube 会被过滤 cube.allColumns 必须与 OLAPContext.</description>
     </item>
-    
     <item>
       <title>Ch02-Calcite 执行流程</title>
       <link>https://acronymor.com/posts/apache-calcite/ch02/</link>
       <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-calcite/ch02/</guid>
       <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Calcite 介绍</title>
       <link>https://acronymor.com/posts/apache-calcite/ch01/</link>
       <pubDate>Tue, 01 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-calcite/ch01/</guid>
       <description>&lt;p&gt;Apache Calcite 是一种提供了标准的 SQL 语言、多种查询优化和连接各种数据源基础框架，可以让用户轻松的接入各种数据，并实现使用 SQL 查询。此外，Calcite 还提供了 OLAP 和流处理的查询引擎。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Kylin 之 Cube</title>
       <link>https://acronymor.com/posts/apache-kylin/ch02/</link>
       <pubDate>Fri, 21 May 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch02/</guid>
       <description>&lt;p&gt;Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Kylin 介绍</title>
       <link>https://acronymor.com/posts/apache-kylin/ch01/</link>
       <pubDate>Thu, 20 May 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch01/</guid>
       <description>&lt;p&gt;Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch16-HBase 之 Scan</title>
       <link>https://acronymor.com/posts/apache-hbase/ch16/</link>
       <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch16/</guid>
       <description>&lt;p&gt;HBase Scan&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch15-HBase 之 Put</title>
       <link>https://acronymor.com/posts/apache-hbase/ch15/</link>
       <pubDate>Thu, 15 Apr 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch15/</guid>
       <description>&lt;p&gt;HBase Put&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch14-HBase 之 CreateTable</title>
       <link>https://acronymor.com/posts/apache-hbase/ch14/</link>
       <pubDate>Fri, 09 Apr 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch14/</guid>
       <description>&lt;p&gt;HBase CreateTable&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch13-HBase 之 RPC</title>
       <link>https://acronymor.com/posts/apache-hbase/ch13/</link>
       <pubDate>Wed, 31 Mar 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch13/</guid>
       <description>&lt;p&gt;HBase RPC&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-HBase 之 Region Split</title>
       <link>https://acronymor.com/posts/apache-hbase/ch12/</link>
       <pubDate>Wed, 24 Mar 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch12/</guid>
       <description>&lt;p&gt;HBase Region Split 整个过程可以分为如下几步，&lt;code&gt;触发 Region Split&lt;/code&gt;，&lt;code&gt;寻找 SplitPoint&lt;/code&gt;，&lt;code&gt;拆分 Region&lt;/code&gt;，&lt;code&gt;等待 major compaction 删除旧的 Region&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-HBase 之 Region Compaction</title>
       <link>https://acronymor.com/posts/apache-hbase/ch11/</link>
       <pubDate>Sun, 21 Mar 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch11/</guid>
       <description>&lt;p&gt;HBase Region Compaction&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-HBase 之 Procedure v2</title>
       <link>https://acronymor.com/posts/apache-hbase/ch10/</link>
       <pubDate>Wed, 17 Mar 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch10/</guid>
       <description>&lt;p&gt;HBase Procedure V2&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-HBase 之 Procedure v2</title>
       <link>https://acronymor.com/posts/apache-hbase/ch09/</link>
       <pubDate>Sun, 07 Mar 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch09/</guid>
       <description>&lt;p&gt;HBase Procedure V2 其主要目标是提供多步执行的事务能力，跨多节点的通知机制，长时间 Procedure 运行的协同机制。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch14-Flink 之 Exactly-Once 语义</title>
       <link>https://acronymor.com/posts/apache-flink/ch14/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch14/</guid>
-      <description></description>
+      <description>Flink 需要搭配特定 Source 和 Sink 才能实现精确一次处理语义。&#xA;在 Flink 中需要端到端精准一次处理的位置有三个&#xA;Source 端：通过保存消费数据的偏移量来保证一致性，所以 source 必须具有可以重置读位置的能力才行。 Flink 内部端：利用 Checkpoint 机制，把状态存盘，发生故障的时候可以恢复，保证内部的状态一致性。 Sink 端在 Flink 1.4 版本引入了两阶段提交 Sink 来解决精确一次处理语义，sink 必须具有幂等性写入和事务性写入的特性。 参考文献 # 硬核！八张图搞懂 Flink 端到端精准一次处理语义 Exactly-once（深入原理，建议收藏） </description>
     </item>
-    
     <item>
       <title>Ch13-Flink 之 细粒度资源管理</title>
       <link>https://acronymor.com/posts/apache-flink/ch13/</link>
       <pubDate>Sun, 24 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch13/</guid>
       <description>&lt;p&gt;Flink 之 细粒度资源管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-Flink 之 Window</title>
       <link>https://acronymor.com/posts/apache-flink/ch12/</link>
       <pubDate>Fri, 15 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch12/</guid>
       <description>&lt;p&gt;Flink 之 Window&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-Flink 之 Watermark</title>
       <link>https://acronymor.com/posts/apache-flink/ch11/</link>
       <pubDate>Sat, 09 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch11/</guid>
       <description>&lt;p&gt;Flink 之 watermark&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Flink 之 BackPressure</title>
       <link>https://acronymor.com/posts/apache-flink/ch10/</link>
       <pubDate>Sun, 03 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch10/</guid>
-      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;tcp_flow.png&#34; alt=&#34;tcp flow&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;简单来说，如果反压机制实现在 Socket 层，那便是 TCP-Based 反压机制；如果实现在 Netty 层，那便是 Credit-Based 反压机制。&lt;/p&gt;</description>
+      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;tcp_flow.png&#34; alt=&#34;tcp flow&#34; /&gt;&lt;/p&gt;&#xA;&lt;p&gt;简单来说，如果反压机制实现在 Socket 层，那便是 TCP-Based 反压机制；如果实现在 Netty 层，那便是 Credit-Based 反压机制。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Flink 之 Savepoint</title>
       <link>https://acronymor.com/posts/apache-flink/ch09/</link>
       <pubDate>Thu, 31 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch09/</guid>
       <description>&lt;p&gt;Savepoint 跟 Checkpoint 的差别在于 Checkpoint 是 Flink 对于一个有状态应用在运行中利用分布式快照持续周期性的产生 Checkpoint，而 Savepoint 则是手动产生的 Checkpoint，Savepoint 记录着流式应用中所有运算元的状态。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Flink 之 Checkpoint</title>
       <link>https://acronymor.com/posts/apache-flink/ch08/</link>
       <pubDate>Fri, 25 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch08/</guid>
       <description>&lt;p&gt;Checkpoint 属于一种机制，&lt;code&gt;State + ABS(Asynchronouse Barrier Snapshot)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Flink 之 State</title>
       <link>https://acronymor.com/posts/apache-flink/ch07/</link>
       <pubDate>Sun, 20 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch07/</guid>
       <description>&lt;p&gt;State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Flink 之 容错机制</title>
       <link>https://acronymor.com/posts/apache-flink/ch06/</link>
       <pubDate>Sun, 13 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch06/</guid>
       <description>&lt;p&gt;Flink 容错机制&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Flink 之 内存管理</title>
       <link>https://acronymor.com/posts/apache-flink/ch05/</link>
       <pubDate>Sat, 05 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch05/</guid>
       <description>&lt;p&gt;Flink 内存管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Flink 之 图</title>
       <link>https://acronymor.com/posts/apache-flink/ch04/</link>
       <pubDate>Tue, 01 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch04/</guid>
       <description>&lt;p&gt;Flink 图的转换概述&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-HBase 之 事务</title>
       <link>https://acronymor.com/posts/apache-hbase/ch08/</link>
       <pubDate>Thu, 19 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch08/</guid>
       <description>&lt;p&gt;HBase 事务&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-HBase 之 Cache</title>
       <link>https://acronymor.com/posts/apache-hbase/ch07/</link>
       <pubDate>Sun, 15 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch07/</guid>
       <description>&lt;p&gt;HBase 相关的 Cache&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-HBase 之 StoreFile</title>
       <link>https://acronymor.com/posts/apache-hbase/ch06/</link>
       <pubDate>Tue, 10 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch06/</guid>
       <description>&lt;p&gt;HFile 是 HBase 存储数据的文件组织形式，参考 BigTable 的 SSTable 和 Hadoop 的 TFile 实现。从 HBase 开始到现在，HFile 经历了三个版本，其中 V2 在 0.92 引入，V3 在 0.98 引入。HFileV1 版本的在实际使用过程中发现它占用内存多，HFile V2 版本针对此进行了优化，HFile V3 版本基本和 V2 版本相同，只是在 cell 层面添加了 Tag 数组的支持。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Flink 之 Job 执行流程</title>
       <link>https://acronymor.com/posts/apache-flink/ch03/</link>
       <pubDate>Wed, 04 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch03/</guid>
       <description>&lt;p&gt;Flink Job 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Flink 之 应用执行模式</title>
       <link>https://acronymor.com/posts/apache-flink/ch02/</link>
       <pubDate>Tue, 03 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch02/</guid>
       <description>&lt;p&gt;Flink 应用程序 是从其 main() 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（LocalEnvironment）中进行，或具有多台机器的集群的远程设置（RemoteEnvironment）中进行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Flink 之 介绍</title>
       <link>https://acronymor.com/posts/apache-flink/ch01/</link>
       <pubDate>Sun, 01 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch01/</guid>
       <description>&lt;p&gt;Apache Flink 是 Apache 基金会旗下的一个开源大数据处理框架。应用于分布式、高性能、高可用的数据流应用程序。可以处理有限数据流和无限数据流，即能够处理有边界和无边界的数据流。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-HBase 之 MemStore</title>
       <link>https://acronymor.com/posts/apache-hbase/ch05/</link>
       <pubDate>Fri, 30 Oct 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch05/</guid>
       <description>&lt;p&gt;HBase memstore 也被称为写缓存，优化大概可以分为三个阶段，其中每一种都是在上一次的基础上进行不断优化得到。memstore 最底层的数据结构都是 &lt;code&gt;skiplist&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch18-Java Atomic 之 Atomic*</title>
       <link>https://acronymor.com/posts/java-juc/ch18/</link>
       <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch18/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch17-Java Executors 之 ThreadPoolExecutor</title>
       <link>https://acronymor.com/posts/java-juc/ch17/</link>
       <pubDate>Fri, 10 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch17/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ThreadPoolExecutor&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch16-Java tools 之 CyclicBarrier</title>
       <link>https://acronymor.com/posts/java-juc/ch16/</link>
       <pubDate>Wed, 01 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch16/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CyclicBarrier&lt;/code&gt; 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch15-Java tools 之 Semaphore</title>
       <link>https://acronymor.com/posts/java-juc/ch15/</link>
       <pubDate>Tue, 24 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch15/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.Semaphore&lt;/code&gt; 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch14-Java tools 之 CountDownLatch</title>
       <link>https://acronymor.com/posts/java-juc/ch14/</link>
       <pubDate>Wed, 18 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch14/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CountDownLatch&lt;/code&gt; 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch13-Java Collections 之 CopyOnWriteArrayList</title>
       <link>https://acronymor.com/posts/java-juc/ch13/</link>
       <pubDate>Sat, 14 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch13/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CopyOnWriteArrayList&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-Java Collections 之 DelayQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch12/</link>
       <pubDate>Tue, 10 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch12/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-Java Collections 之 PriorityBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch11/</link>
       <pubDate>Mon, 02 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch11/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.PriorityBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Java Collections 之 LinkedBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch10/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch10/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.LinkedBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch9-Java Collections 之 ArrayBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch09/</link>
       <pubDate>Fri, 31 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch09/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ArrayBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch8-Java Lock 之 ReentrantReadWriteLock</title>
       <link>https://acronymor.com/posts/java-juc/ch08/</link>
       <pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch08/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantReadWriteLock&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch7-Java Lock 之 ReentrantLock</title>
       <link>https://acronymor.com/posts/java-juc/ch07/</link>
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch07/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch6-Java Lock 之 LockSupport</title>
       <link>https://acronymor.com/posts/java-juc/ch06/</link>
       <pubDate>Thu, 09 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch06/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch5-Java Lock 之 AQS</title>
       <link>https://acronymor.com/posts/java-juc/ch05/</link>
       <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch05/</guid>
       <description>&lt;p&gt;AQS 即 &lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Antlr V4 介绍</title>
       <link>https://acronymor.com/posts/antlr4/ch01/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/antlr4/ch01/</guid>
       <description>&lt;p&gt;ANTLR（ANother Tool for Language Recognition）是一个强大的解析器生成器，用于读取、处理、执行或翻译结构化文本或二进制文件。它被广泛用于构建语言、工具和框架。ANTLR 根据语法定义生成解析器，解析器可以构建和遍历解析树。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Spark 之内存管理</title>
       <link>https://acronymor.com/posts/apache-spark/ch10/</link>
       <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch10/</guid>
       <description>&lt;p&gt;Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Spark 之 BlockMananger</title>
       <link>https://acronymor.com/posts/apache-spark/ch09/</link>
       <pubDate>Sat, 15 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch09/</guid>
       <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Spark 之 Checkpoint</title>
       <link>https://acronymor.com/posts/apache-spark/ch08/</link>
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch08/</guid>
       <description>&lt;p&gt;checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Spark 之缓存</title>
       <link>https://acronymor.com/posts/apache-spark/ch07/</link>
       <pubDate>Fri, 31 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch07/</guid>
       <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Spark 之容错机制</title>
       <link>https://acronymor.com/posts/apache-spark/ch06/</link>
       <pubDate>Thu, 30 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch06/</guid>
       <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Spark 之数据抽象</title>
       <link>https://acronymor.com/posts/apache-spark/ch05/</link>
       <pubDate>Mon, 20 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch05/</guid>
       <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Spark 之 Shuffle</title>
       <link>https://acronymor.com/posts/apache-spark/ch04/</link>
       <pubDate>Wed, 15 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch04/</guid>
       <description>&lt;p&gt;Spark Shuffle 经过了若干次优化。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Spark 之 Job 执行流程</title>
       <link>https://acronymor.com/posts/apache-spark/ch03/</link>
       <pubDate>Sun, 12 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch03/</guid>
       <description>&lt;p&gt;Spark Job 执行流程。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-Kafka 为什么这么快</title>
       <link>https://acronymor.com/posts/apache-kafka/ch12/</link>
       <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch12/</guid>
       <description>&lt;p&gt;Apache Kafka 以牺牲延迟和抖动为代价优化了吞吐量，但并没有牺牲，比如持久性、严格的记录有序性和至少一次的分发语义。当有人说“Kafka 速度很快”，并假设他们至少有一定的能力时，你可以认为他们指的是 Kafka 在短时间内分发大量记录的能力。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-HBase 之 HLog</title>
       <link>https://acronymor.com/posts/apache-hbase/ch04/</link>
       <pubDate>Tue, 23 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch04/</guid>
       <description>&lt;p&gt;Write-ahead logs (WALs)，HBase 2.0 之前，WAL 接口的实现是 HLog，所以先前大家也会将 WAL 称为 HLog。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-Kafka 之 Quota</title>
       <link>https://acronymor.com/posts/apache-kafka/ch11/</link>
       <pubDate>Mon, 22 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch11/</guid>
       <description>&lt;p&gt;kafka Quota&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-HBase 之 CatalogTables</title>
       <link>https://acronymor.com/posts/apache-hbase/ch03/</link>
       <pubDate>Sat, 20 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch03/</guid>
       <description>&lt;p&gt;HBase Catalog Table&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Kafka 之事务</title>
       <link>https://acronymor.com/posts/apache-kafka/ch10/</link>
       <pubDate>Thu, 18 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch10/</guid>
       <description>&lt;p&gt;kafka Transaction.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-HBase 之数据模型</title>
       <link>https://acronymor.com/posts/apache-hbase/ch02/</link>
       <pubDate>Mon, 15 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch02/</guid>
       <description>&lt;p&gt;逻辑上，HBase 的数据模型同关系型数据库很类似，数据存储在一张表中，有行有列。但从 HBase 的底层物理存储结构 (K-V) 来看，HBase 更像是一个 &lt;code&gt;multi-dimensional map&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-HBase 介绍</title>
       <link>https://acronymor.com/posts/apache-hbase/ch01/</link>
       <pubDate>Sat, 13 Apr 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hbase/ch01/</guid>
       <description>&lt;p&gt;HBase 是一种分布式、可扩展、支持海量数据存储的 NoSQL 数据库。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Kafka 之高可用</title>
       <link>https://acronymor.com/posts/apache-kafka/ch09/</link>
       <pubDate>Wed, 20 Mar 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch09/</guid>
       <description>&lt;p&gt;kafka HA&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Kafka 之选举</title>
       <link>https://acronymor.com/posts/apache-kafka/ch08/</link>
       <pubDate>Tue, 12 Mar 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch08/</guid>
       <description>&lt;p&gt;Kafka 选举主要体现在两个地方，一个是 Broker 的选举，另一个是 Partition 的选举。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Kafka 之数据可靠性</title>
       <link>https://acronymor.com/posts/apache-kafka/ch07/</link>
       <pubDate>Sun, 03 Mar 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch07/</guid>
       <description>&lt;p&gt;数据可靠性值指数据不会轻易丢失，数据一定会被可靠存储。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Kafka 之数据一致性</title>
       <link>https://acronymor.com/posts/apache-kafka/ch06/</link>
       <pubDate>Fri, 01 Mar 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch06/</guid>
       <description>&lt;p&gt;数据一致性主要是说不论是老的 Leader 还是新选举的 Leader，Consumer 都能读到一样的数据。那么 Kafka 是如何实现的呢？&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Spark 应用执行模式</title>
       <link>https://acronymor.com/posts/apache-spark/ch02/</link>
       <pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch02/</guid>
       <description>&lt;p&gt;Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Kafka 之 Partition</title>
       <link>https://acronymor.com/posts/apache-kafka/ch05/</link>
       <pubDate>Mon, 02 Jul 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch05/</guid>
       <description>&lt;p&gt;Kafka Partition 相关的机制是比较复杂的，它自身保留了一个 leader 来对外提供消息操作的能力，若干 follower 通过 leader 同步消息保证数据可靠性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Spark 介绍</title>
       <link>https://acronymor.com/posts/apache-spark/ch01/</link>
       <pubDate>Sun, 01 Jul 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch01/</guid>
       <description>&lt;p&gt;Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Kafka 之 ZeroCopy</title>
       <link>https://acronymor.com/posts/apache-kafka/ch04/</link>
       <pubDate>Fri, 29 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch04/</guid>
       <description>&lt;p&gt;Kafka 中存在大量的网络数据持久化到磁盘（Producer 到 Broker）和磁盘文件通过网络发送（Broker 到 Consumer）的过程。这一过程的性能直接影响 Kafka 的整体吞吐量，于是 Kafka 便引入了 ZeroCopy 技术来提升性能。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Kafka 之消息存储</title>
       <link>https://acronymor.com/posts/apache-kafka/ch03/</link>
       <pubDate>Mon, 25 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch03/</guid>
       <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Kafka 生产消费流程</title>
       <link>https://acronymor.com/posts/apache-kafka/ch02/</link>
       <pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch02/</guid>
       <description>&lt;p&gt;Kafka 生产者和消费者工作流程比较复杂，需要各个组件参与才能完成。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Kafka 介绍</title>
       <link>https://acronymor.com/posts/apache-kafka/ch01/</link>
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kafka/ch01/</guid>
       <description>&lt;p&gt;Kafka 是一款开源的、轻量级的、分布式、可分区和具有复制备份的 (Replicated)、基于 ZooKeeper 协调管理的分布式流平台的功能强大的消息系统。与传统的消息系统相比，Kafka 能够很好地处理活跃的流数据，使得数据在各个子系统中高性能、低延迟地不停流转。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Hive 之底层数据存储</title>
       <link>https://acronymor.com/posts/apache-hive/ch03/</link>
       <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch03/</guid>
       <description>&lt;p&gt;Hive 底层数据存储格式&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Hive 之 SQL 执行</title>
       <link>https://acronymor.com/posts/apache-hive/ch02/</link>
       <pubDate>Thu, 14 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch02/</guid>
       <description>&lt;p&gt;hive sql 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Hive 介绍</title>
       <link>https://acronymor.com/posts/apache-hive/ch01/</link>
       <pubDate>Sun, 10 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch01/</guid>
       <description>&lt;p&gt;Apache Hive 是基于 Hadoop 的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的 SQL 查询功能，其基本原理是将 SQL 语句转换为 MapReduce 任务进行数据处理功能。所以从代码层面来看，整个 Hive 就是将 SQL 语句转换成 MapReduce 代码的一款软件。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-BASE</title>
       <link>https://acronymor.com/posts/distributed-system/ch02/</link>
       <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/distributed-system/ch02/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Ch01-CAP</title>
       <link>https://acronymor.com/posts/distributed-system/ch01/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/distributed-system/ch01/</guid>
-      <description>&lt;p&gt;CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。&lt;/p&gt;</description>
+      <description>&lt;p&gt;CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Zookeeper 之 ZAB 协议</title>
       <link>https://acronymor.com/posts/apache-zookeeper/ch02/</link>
       <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-zookeeper/ch02/</guid>
       <description>&lt;p&gt;Zab 协议的全称是 Zookeeper Atomic Broadcast（Zookeeper 原子广播），Zab 是特别为 Zookeeper 设计的支持崩溃恢的原子广播协议，在 Zookeeper 中主要依赖 Zab 协议实现数据一致性，基于该协议，Zookeeper 实现了主备模型（Leader 与 Follower）的系统架构保证集群中各个副本之间的数据一致性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Zookeeper 介绍</title>
       <link>https://acronymor.com/posts/apache-zookeeper/ch01/</link>
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-zookeeper/ch01/</guid>
       <description>&lt;p&gt;Apache ZooKeeper 是由 Apache Hadoop 的子项目发展而来，于 2010 年 11 月正式成为了 Apache 的顶级项目。ZooKeeper 是一个正式源代码的分布式协调服务，由知名互联网公司雅虎创建，是 Google Chubby 的开源实现。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-MySQL 之 事务</title>
       <link>https://acronymor.com/posts/mysql/ch07/</link>
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch07/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-MySQL 之 索引</title>
       <link>https://acronymor.com/posts/mysql/ch05/</link>
       <pubDate>Sat, 31 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch05/</guid>
       <description>&lt;p&gt;InnoDB 索引选择&lt;strong&gt;B+树&lt;/strong&gt;作为其内存数据结构，选择&lt;strong&gt;聚簇索引&lt;/strong&gt;作为数据存储方式。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Hadoop 之 MapReduce</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch05/</link>
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch05/</guid>
       <description>&lt;p&gt;Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Hadoop 之 Yarn</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch04/</link>
       <pubDate>Wed, 21 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch04/</guid>
       <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Hadoop 之 HDFS 读写流程</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch03/</link>
       <pubDate>Mon, 19 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch03/</guid>
       <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Hadoop 之 HDFS 架构</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch02/</link>
       <pubDate>Sat, 17 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch02/</guid>
       <description>&lt;p&gt;HDFS 分布式部署场景下最常见的为两种架构，一种是基本的分布式架构，另一种是 HA 架构。在生产环境中一般都会部署 HA 架构。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Hadoop 介绍</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch01/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch01/</guid>
       <description>&lt;p&gt;2012 年社区发布了 Hadoop 2.0-alpha，自此 Hadoop 开启了 2.0 时代，相比较与 1.0 引入了 Yarn，NameNode HA 等重要组件和功能。随后数年 Hadoop 1.0 也慢慢的退出了历史舞台，所以这里也仅仅讲述 Hadoop 2.0 相关。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-MySQL 之 InnoDB 内存结构和存储结构</title>
       <link>https://acronymor.com/posts/mysql/ch02/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch02/</guid>
       <description>&lt;p&gt;InnoDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-MySQL 介绍</title>
       <link>https://acronymor.com/posts/mysql/ch01/</link>
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/mysql/ch01/</guid>
       <description>&lt;p&gt;MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-数据库理论 之 事务</title>
       <link>https://acronymor.com/posts/database/ch01/</link>
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch01/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Java 之 垃圾回收器</title>
       <link>https://acronymor.com/posts/jdk/ch08/</link>
       <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch08/</guid>
       <description>&lt;p&gt;垃圾回收器经过了很长时间的发展，很多垃圾回收器也慢慢的埋入到了历史场合中。这里简单的做个划分，已经淘汰的垃圾回收器归到&lt;strong&gt;古典 GC&lt;/strong&gt;的范畴，目前还在使用以及正在开发的归到&lt;strong&gt;现代 GC&lt;/strong&gt;的范畴。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Java 之 内存分配与回收策略</title>
       <link>https://acronymor.com/posts/jdk/ch07/</link>
       <pubDate>Tue, 05 Sep 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch07/</guid>
       <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Java 之 垃圾收集算法</title>
       <link>https://acronymor.com/posts/jdk/ch06/</link>
       <pubDate>Wed, 30 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch06/</guid>
       <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Java 之 引用类型</title>
       <link>https://acronymor.com/posts/jdk/ch05/</link>
       <pubDate>Sat, 19 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch05/</guid>
       <description>&lt;p&gt;无论是通过引用计算算法判断对象的引用数量，还是通过可达性分析算法判断对象是否可达，判定对象是否可被回收都与引用有关。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java 之 类的整个生命周期</title>
       <link>https://acronymor.com/posts/jdk/ch04/</link>
       <pubDate>Tue, 15 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch04/</guid>
       <description>&lt;p&gt;其中类加载的过程包括了&lt;code&gt;加载&lt;/code&gt;、&lt;code&gt;验证&lt;/code&gt;、&lt;code&gt;准备&lt;/code&gt;、&lt;code&gt;解析&lt;/code&gt;、&lt;code&gt;初始化&lt;/code&gt;五个阶段。在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持 Java 语言的运行时绑定 (也成为动态绑定或晚期绑定)。另外注意这里的几个阶段是按顺序开始，而不是按顺序进行或完成，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 Java 对象结构</title>
       <link>https://acronymor.com/posts/jdk/ch03/</link>
       <pubDate>Thu, 10 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch03/</guid>
       <description>&lt;p&gt;在 HotSpot 虚拟机中，对象在内存中存储的布局可以分为三块区域：&lt;strong&gt;对象头 (Header)&lt;/strong&gt;、 &lt;strong&gt;实例数据 (Instance Data)&lt;/strong&gt;、&lt;strong&gt;对齐填充 (Padding)&lt;/strong&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 JVM 内存结构 (JVM)</title>
       <link>https://acronymor.com/posts/jdk/ch02/</link>
       <pubDate>Sun, 06 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch02/</guid>
-      <description>&lt;p&gt;Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;线程私有：程序计数器、虚拟机栈、本地方法区&lt;/li&gt;
-&lt;li&gt;线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）&lt;/li&gt;
-&lt;/ul&gt;</description>
+      <description>&lt;p&gt;Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;线程私有：程序计数器、虚拟机栈、本地方法区&lt;/li&gt;&#xA;&lt;li&gt;线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 Java 内存模型 (JMM)</title>
       <link>https://acronymor.com/posts/jdk/ch01/</link>
       <pubDate>Tue, 01 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch01/</guid>
       <description>&lt;p&gt;JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch4-Java 之 JUC</title>
       <link>https://acronymor.com/posts/java-juc/ch04/</link>
       <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch04/</guid>
       <description>&lt;p&gt;JUC 即 &lt;code&gt;java.util.concurrent&lt;/code&gt;，是 Java 并发编程中很常用的实用工具类。它包含了 &lt;code&gt;Lock 框架&lt;/code&gt;，&lt;code&gt;Collections 并发集合&lt;/code&gt;，&lt;code&gt;Executors 线程池&lt;/code&gt;，&lt;code&gt;Atomic 原子类&lt;/code&gt;，&lt;code&gt;Tools&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch3-Java 之 ThreadLocal</title>
       <link>https://acronymor.com/posts/java-juc/ch03/</link>
       <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch03/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.lang.ThreadLocal&lt;/code&gt;是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java JUC 之 线程基础</title>
       <link>https://acronymor.com/posts/java-juc/ch02/</link>
       <pubDate>Thu, 06 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch02/</guid>
-      <description></description>
+      <description> 1. 线程状态 # state 状态 说明 New 新建 新创建了一个线程对象，还未调用线程的 start() 方法 Runnable 就绪 线程对象创建后，其他线程调用了该对象的 start() 方法，该状态的线程位于可运行线程池中，变得可运行，等待获取 CPU 的使用权 Running 运行 就绪状态的线程获取了 CPU，执行程序代码的状态，还有种可能就是这个线程正在等待其他的系统资源（IO 资源等），这种状态也称为 Running 状态 Blocked 阻塞 一个线程因为等待监视锁而被阻塞的状态，也称之为阻塞状态。阻塞的线程不会被分配 CPU 资源 WAITING 等待 一个正在等待的线程的状态，也称之为等待状态 TIMED_WAITING 超时等待 一个在限定时间内等待的线程的状态。也称之为限时等待状态 Dead 死亡 线程执行完了或者因异常退出了 run() 方法，该线程结束生命周期 (当时如果线程被持久持有，可能不会被回收) 注意：&#xA;WAITING: 造成线程等待的原因有三种，分别是调用 Object.wait()、join() 以及 LockSupport.park() 方法。处于等待状态的线程，正在等待其他线程去执行一个特定的操作。例如：因为 wait() 而等待的线程正在等待另一个线程去调用 notify() 或 notifyAll()；一个因为 join() 而等待的线程正在等待另一个线程结束。处于等待状态的线程不会被分配 CPU 资源。 TIMED_WAITING: 造成线程限时等待状态的原因有五种，分别是调用 Thread.sleep(long)、Object.wait(long)、join(long)、LockSupport.parkNanos(obj,long) 和 LockSupport.parkUntil(obj,long)。 2. 线程状态转换 # </description>
     </item>
-    
     <item>
       <title>Ch01-Java JUC 之 理论基础</title>
       <link>https://acronymor.com/posts/java-juc/ch01/</link>
       <pubDate>Tue, 04 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch01/</guid>
-      <description></description>
+      <description> Happens-Before 规则 # 规则 说明 单一线程原则 在一个线程内，在程序前面的操作先行发生于后面的操作 管程锁定规则 一个 unlock 操作先行发生于后面对同一个锁的 lock 操作 volatile 变量规则 对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作 线程启动规则 Thread 对象的 start() 方法调用先行发生于此线程的每一个动作 线程加入规则 Thread 对象的结束先行发生于 join() 方法返回 线程中断规则 对线程 interrupt() 方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过 interrupted() 方法检测到是否有中断发生 对象终结规则 一个对象的初始化完成 (构造函数执行结束) 先行发生于它的 finalize() 方法的开始 传递性 如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那么操作 A 先行发生于操作 C 参考文献 # Java 并发 - 理论基础 </description>
     </item>
-    
     <item>
       <title>Ch05-锁</title>
       <link>https://acronymor.com/posts/software-engineering/ch05/</link>
       <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch05/</guid>
       <description>&lt;p&gt;锁概念&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-并发问题</title>
       <link>https://acronymor.com/posts/software-engineering/ch04/</link>
       <pubDate>Mon, 13 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch04/</guid>
       <description>&lt;p&gt;并发问题&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java Map 之 WeakHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch04/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch04/</guid>
       <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Map 之 TreeMap</title>
       <link>https://acronymor.com/posts/java-map/ch03/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch03/</guid>
       <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Map 之 LinkedHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch02/</link>
       <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch02/</guid>
       <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java Map 之 HashMap</title>
       <link>https://acronymor.com/posts/java-map/ch01/</link>
       <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch01/</guid>
-      <description></description>
+      <description> 1. 底层数据结构 # Java 1.7 中使用数组+链表这样的数据结构，自 Java 1.8 开始使用数组+链表+红黑树这样的数据结构。&#xA;2. 数组扩容 # resize() 方法用于初始化数组或数组扩容，每次扩容后，容量为原来的 2 倍，并进行数据迁移。&#xA;3.线程不安全 # HashMap 的线程不安全主要体现在下面两个方面：&#xA;在 Java 1.7 中，当并发执行扩容操作时会造成环形链。&#xA;这里主要的原因是线程1上线文中保存的指针指向的数据（newtable，临界资源）被线程2做了修改，当线程1重新恢复上线文后，在已经被修改的数据（newtable，临界资源）上继续未完成的操作，最终导致结果不符合预期。&#xA;在 Java 1.8 中，在并发执行 put 操作时会发生数据覆盖的情况。&#xA;4. 参考文献 # HashMap为什么在多线程操作下不安全（jdk1.7和jdk1.8原因不同） </description>
     </item>
-    
     <item>
       <title>Ch05-Java Collection 之 PriorityQueue</title>
       <link>https://acronymor.com/posts/java-collection/ch05/</link>
       <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch05/</guid>
       <description>&lt;p&gt;优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java Collection 之 ArrayDeque</title>
       <link>https://acronymor.com/posts/java-collection/ch04/</link>
       <pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch04/</guid>
       <description>&lt;p&gt;Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Collection 之 LinkedList</title>
       <link>https://acronymor.com/posts/java-collection/ch03/</link>
       <pubDate>Mon, 23 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch03/</guid>
       <description>&lt;p&gt;LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Collection 之 ArrayList</title>
       <link>https://acronymor.com/posts/java-collection/ch02/</link>
       <pubDate>Fri, 20 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch02/</guid>
       <description>&lt;p&gt;ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 Collection 和 Map</title>
       <link>https://acronymor.com/posts/java-collection/ch01/</link>
       <pubDate>Sun, 15 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch01/</guid>
-      <description></description>
+      <description>&#xA;集合类 说明 TreeSet 基于红黑树实现，支持有序性操作，例如根据一个范围查找元素的操作。但是查找效率不如 HashSet，HashSet 查找的时间复杂度为 O(1)，TreeSet 则为 O(logN)。 HashSet 基于哈希表实现，支持快速查找，但不支持有序性操作。并且失去了元素的插入顺序信息，也就是说使用 Iterator 遍历 HashSet 得到的结果是不确定的。 LinkedHashSet 具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。 ArrayList 基于动态数组实现，支持随机访问。 Vector 和 ArrayList 类似，但它是线程安全的。 LinkedList 基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素。不仅如此，LinkedList 还可以用作栈、队列和双向队列。 PriorityQueue 基于堆结构实现，可以用它来实现优先队列。 TreeMap 基于红黑树实现。 HashMap 基于哈希表实现。 HashTable 和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。 LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用 (LRU) 顺序。 </description>
     </item>
-    
     <item>
       <title>Ch04-Java 之 synchronized</title>
       <link>https://acronymor.com/posts/java-basic/ch04/</link>
       <pubDate>Fri, 13 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch04/</guid>
       <description>&lt;p&gt;synchronized 是 Java 中的一个关键字，主要用于解决 Java 中常见的并发问题（原子性，可见性，有序性）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 各种机制</title>
       <link>https://acronymor.com/posts/java-basic/ch03/</link>
       <pubDate>Tue, 10 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch03/</guid>
-      <description></description>
+      <description>1. 泛型机制 # 泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。&#xA;2. 注解机制 # 注解是 JDK1.5 版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它主要的作用有以下四方面：&#xA;生成文档，通过代码里标识的元数据生成 javadoc 文档。 编译检查，通过代码里标识的元数据让编译器在编译期间进行检查验证。 编译时动态处理，编译时通过代码里标识的元数据动态处理，例如动态生成代码。 运行时动态处理，运行时通过代码里标识的元数据动态处理，例如使用反射注入实例。 3. 异常机制 # 4. 反射机制 # RTTI（Run-Time Type Identification）运行时类型识别。利用反射技术可以对一个类进行解剖，把每个组成部分映射成一个个对象（比如成员变量，方法，构造方法等都可以映射成对象）。&#xA;5. SPI 机制 # SPI（Service Provider Interface），是 JDK 内置的一种 服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用。Java 中 SPI 机制主要思想是将装配的控制权移到程序之外，在模块化设计中这个机制尤其重要，其核心思想就是解耦。</description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 Q/A</title>
       <link>https://acronymor.com/posts/java-basic/ch02/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch02/</guid>
-      <description></description>
+      <description>1. a==b和a.equals(b)有什么区别？ # 如果 a 和 b 都是对象，则 a==b 是比较两个对象的引用，只有当 a 和 b 指向的是堆中的同一个对象才会返回 true，而 a.equals(b) 是进行逻辑比较，所以通常需要重写该方法来提供逻辑一致性的比较。例如，String 类重写 equals() 方法，所以可以用于两个不同对象，但是包含的字母相同的比较。&#xA;2. a.hashCode() 有什么用？与 a.equals(b) 有什么关系？ # hashCode() 方法是相应对象整型的 hash 值，根据 Java 规范，两个使用 equals() 方法来判断相等的对象，其 hash code 必须相等。&#xA;3. final、finalize 和 finally 的不同之处？ # 条目 说明 final 是一个修饰符，可以修饰变量、方法和类。如果 final 修饰变量，意味着该变量的值在初始化后不能被改变。 finalize 允许使用 finalize() 方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。 finally 是一个关键字，与 try 和 catch 一起用于异常的处理。finally 块一定会被执行，无论在 try 块中是否有发生异常。 4. String、StringBuffer 与 StringBuilder 的区别 # 可变和适用范围。String 对象是不可变的，而 StringBuffer 和 StringBuilder 是可变字符序列。每次对 String 的操作相当于生成一个新的 String 对象，而对 StringBuffer 和 StringBuilder 的操作是对对象本身的操作，而不会生成新的对象，所以对于频繁改变内容的字符串避免使用 String，因为频繁的生成对象将会对系统性能产生影响。 线程安全。String 由于有 final 修饰，是 immutable 的，安全性是简单而纯粹的。StringBuilder 和 StringBuffer 的区别在于 StringBuilder 不保证同步，也就是说如果需要线程安全需要使用 StringBuffer，不需要同步的 StringBuilder 效率更高。 5.</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 基础</title>
       <link>https://acronymor.com/posts/java-basic/ch01/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch01/</guid>
-      <description></description>
+      <description> 1.数据类型 # 基本类型 所占大小 (bit) 最小范围 最大范围 包装类型 boolean 1 Boolean byte 8 -128 127 Byte char 16 0 65535 Char short 16 -32768 32767 Short int 32 -2147483648 2147483647 Integer float 32 3.402823e+38 1.401298e-45 Float long 64 -9223372036854774808 9223372036854774807 Long double 64 1.797693e+308 4.9000000e-324 Double 基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。&#xA;2. 缓存池 # new Integer(123) 与 Integer.valueOf(123) 的区别在于：&#xA;new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。 3. 访问权限修饰符 # Java 的访问控制是停留在编译层的，也就是它不会在 .class 文件中留下任何的痕迹，只在编译的时候进行访问控制的检查。其实，通过反射的手段，是可以访问任何包下任何类中的成员。&#xA;修饰符 同一个类 同一个包 子类 任何地方 public yes yes yes yes protected yes yes yes default yes yes private yes </description>
     </item>
-    
     <item>
       <title>Ch03-equals</title>
       <link>https://acronymor.com/posts/software-engineering/ch03/</link>
       <pubDate>Sat, 15 Oct 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch03/</guid>
       <description>&lt;p&gt;equals() 或者 ==&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-重写与重载</title>
       <link>https://acronymor.com/posts/software-engineering/ch02/</link>
       <pubDate>Sun, 25 Sep 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch02/</guid>
       <description>&lt;p&gt;重写与重载&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-面向对象</title>
       <link>https://acronymor.com/posts/software-engineering/ch01/</link>
       <pubDate>Wed, 21 Sep 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch01/</guid>
       <description>&lt;p&gt;面向对象有三大特性，&lt;code&gt;封装&lt;/code&gt;、&lt;code&gt;继承&lt;/code&gt;、&lt;code&gt;多态&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Contact</title>
       <link>https://acronymor.com/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://acronymor.com/contact/</guid>
       <description>Follow me, @acronymor</description>
     </item>
-    
   </channel>
 </rss>

@@ -1,326 +1,257 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>java on acronymor&#39;s blog</title>
+    <title>Java on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/java/</link>
-    <description>Recent content in java on acronymor&#39;s blog</description>
+    <description>Recent content in Java on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch04-Java 之 AIO</title>
       <link>https://acronymor.com/posts/java-io/ch04/</link>
       <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch04/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.nio.channels.AsynchronousServerSocketChannel java.nio.channels.AsynchronousSocketChannel JAVA AIO 框架在 windows 下使用 windows IOCP 技术，在 Linux 下使用 epoll 多路复用 IO 技术模拟异步 IO，这个从 JAVA AIO 框架的部分类设计上就可以看出来。&#xA;2. AsynchronousServerSocketChannel # 不同的 AsynchronousServerSocketChannel 实现对应了不同的 SocketChannel，由具体的 AsynchronousServerSocketChannel（根据不同的 OS 确定）实现进行创建。&#xA;3. 参考文献 # Java AIO - 异步 IO 详解 </description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 NIO</title>
       <link>https://acronymor.com/posts/java-io/ch03/</link>
       <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch03/</guid>
-      <description></description>
+      <description>操作系统层面的多路复用 IO 实现主要包括四种：select、poll、epoll、kqueue。&#xA;1. 常见类 # java.nio.ByteBuffer java.nio.channels.Selector java.nio.channels.SelectableChannel java.nio.channels.ServerSocketChannel 2. 网络模型 # 2.1 Reactor 模型 # Reactor 是非阻塞同步网络模型，Java 可以借用 NIO 接口实现各种 Reactor 模型，比如 单Reactor单线程、单Reactor多线程、主从Reactor多线程&#xA;2.2 Proactor 模型 # Proactor 是异步网络模型，需要 OS 的支持才能实现，所以 Java 借用 NIO 接口不一定能实现。&#xA;3. Selector # 不同的 SelectorProvider 实现对应了不同的 Selector，由具体的 SelectorProvider（根据不同的 OS 确定）实现进行创建。&#xA;4. 零拷贝 # 条目 说明 MappedByteBuffer 基于内存映射（mmap） DirectByteBuffer JVM 可以对 DirectByteBuffer 的对象进行 JVM 堆外内存分配和回收管理 FileChannel 用于文件读写、映射和操作的通道；定义了 transferFrom() 和 transferTo() 两个抽象方法，它通过在通道和通道之间建立连接实现数据传输 5. 参考文献 # Java NIO - IO 多路复用详解 </description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 BIO</title>
       <link>https://acronymor.com/posts/java-io/ch02/</link>
       <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch02/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.net.ServerSocket; java.net.Socket; 2. BIO 模型 # 一个服务端可以连接多个客户端，但是接入一个客户端，服务端都需要用一个线程维持着客户端与服务端的连接。如果客户端数量很多，那么服务端也需要对应的线程数量与之连接。&#xA;3. 参考文献 # Java IO - BIO 详解 </description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 IO</title>
       <link>https://acronymor.com/posts/java-io/ch01/</link>
       <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch01/</guid>
-      <description></description>
+      <description> 1. Java IO 概览 # 2. 阻塞/非阻塞 VS 同步/非同步 # 2.1 阻塞 IO 和 非阻塞 IO # 这两个概念是程序级别的。主要描述的是程序请求操作系统 IO 操作后，如果 IO 资源没有准备好，那么程序该如何处理的问题：前者等待；后者继续执行 (并且使用线程一直轮询，直到有 IO 资源准备好了)&#xA;2.2 同步 IO 和 非同步 IO # 这两个概念是操作系统级别的。主要描述的是操作系统在收到程序请求 IO 操作后，如果 IO 资源没有准备好，该如何响应程序的问题：前者不响应，直到 IO 资源准备好以后；后者返回一个标记 (好让程序和自己知道以后的数据往哪里通知)，当 IO 资源准备好以后，再用事件机制返回给程序。&#xA;3. OS IO 多路复用 # IO 模型 相对性能 关键思路 操作系统 JAVA 支持情况 select 较高 Reactor windows/Linux 支持 poll 较高 Reactor Linux 支持 epoll 高 Reactor/Proactor Linux 支持 kqueue 高 Proactor Linux 不支持 </description>
     </item>
-    
     <item>
       <title>Ch18-Java Atomic 之 Atomic*</title>
       <link>https://acronymor.com/posts/java-juc/ch18/</link>
       <pubDate>Mon, 20 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch18/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.atomic&lt;/code&gt;，Atmoic 的整个家族实现方式大同小异，简单来说，借助 volatile 保证可见性和有序性，借助 CAS 保证 原子性。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch17-Java Executors 之 ThreadPoolExecutor</title>
       <link>https://acronymor.com/posts/java-juc/ch17/</link>
       <pubDate>Fri, 10 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch17/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ThreadPoolExecutor&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch16-Java tools 之 CyclicBarrier</title>
       <link>https://acronymor.com/posts/java-juc/ch16/</link>
       <pubDate>Wed, 01 Apr 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch16/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CyclicBarrier&lt;/code&gt; 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch15-Java tools 之 Semaphore</title>
       <link>https://acronymor.com/posts/java-juc/ch15/</link>
       <pubDate>Tue, 24 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch15/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.Semaphore&lt;/code&gt; 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch14-Java tools 之 CountDownLatch</title>
       <link>https://acronymor.com/posts/java-juc/ch14/</link>
       <pubDate>Wed, 18 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch14/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CountDownLatch&lt;/code&gt; 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch13-Java Collections 之 CopyOnWriteArrayList</title>
       <link>https://acronymor.com/posts/java-juc/ch13/</link>
       <pubDate>Sat, 14 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch13/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.CopyOnWriteArrayList&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-Java Collections 之 DelayQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch12/</link>
       <pubDate>Tue, 10 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch12/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-Java Collections 之 PriorityBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch11/</link>
       <pubDate>Mon, 02 Mar 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch11/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.PriorityBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Java Collections 之 LinkedBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch10/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch10/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.LinkedBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch9-Java Collections 之 ArrayBlockingQueue</title>
       <link>https://acronymor.com/posts/java-juc/ch09/</link>
       <pubDate>Fri, 31 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch09/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.ArrayBlockingQueue&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch8-Java Lock 之 ReentrantReadWriteLock</title>
       <link>https://acronymor.com/posts/java-juc/ch08/</link>
       <pubDate>Tue, 21 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch08/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantReadWriteLock&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch7-Java Lock 之 ReentrantLock</title>
       <link>https://acronymor.com/posts/java-juc/ch07/</link>
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch07/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.ReentrantLock&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch6-Java Lock 之 LockSupport</title>
       <link>https://acronymor.com/posts/java-juc/ch06/</link>
       <pubDate>Thu, 09 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch06/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.util.concurrent.locks.LockSupport&lt;/code&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch5-Java Lock 之 AQS</title>
       <link>https://acronymor.com/posts/java-juc/ch05/</link>
       <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch05/</guid>
       <description>&lt;p&gt;AQS 即 &lt;code&gt;java.util.concurrent.locks.AbstractQueuedSynchronizer&lt;/code&gt;，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch4-Java 之 JUC</title>
       <link>https://acronymor.com/posts/java-juc/ch04/</link>
       <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch04/</guid>
       <description>&lt;p&gt;JUC 即 &lt;code&gt;java.util.concurrent&lt;/code&gt;，是 Java 并发编程中很常用的实用工具类。它包含了 &lt;code&gt;Lock 框架&lt;/code&gt;，&lt;code&gt;Collections 并发集合&lt;/code&gt;，&lt;code&gt;Executors 线程池&lt;/code&gt;，&lt;code&gt;Atomic 原子类&lt;/code&gt;，&lt;code&gt;Tools&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch3-Java 之 ThreadLocal</title>
       <link>https://acronymor.com/posts/java-juc/ch03/</link>
       <pubDate>Sun, 09 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch03/</guid>
       <description>&lt;p&gt;&lt;code&gt;java.lang.ThreadLocal&lt;/code&gt;是一个将在多线程中为每一个线程创建单独的变量副本的类; 当使用 ThreadLocal 来维护变量时，ThreadLocal 会为每个线程创建单独的变量副本，避免因多线程操作共享变量而导致的数据不一致的情况。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java JUC 之 线程基础</title>
       <link>https://acronymor.com/posts/java-juc/ch02/</link>
       <pubDate>Thu, 06 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch02/</guid>
-      <description></description>
+      <description> 1. 线程状态 # state 状态 说明 New 新建 新创建了一个线程对象，还未调用线程的 start() 方法 Runnable 就绪 线程对象创建后，其他线程调用了该对象的 start() 方法，该状态的线程位于可运行线程池中，变得可运行，等待获取 CPU 的使用权 Running 运行 就绪状态的线程获取了 CPU，执行程序代码的状态，还有种可能就是这个线程正在等待其他的系统资源（IO 资源等），这种状态也称为 Running 状态 Blocked 阻塞 一个线程因为等待监视锁而被阻塞的状态，也称之为阻塞状态。阻塞的线程不会被分配 CPU 资源 WAITING 等待 一个正在等待的线程的状态，也称之为等待状态 TIMED_WAITING 超时等待 一个在限定时间内等待的线程的状态。也称之为限时等待状态 Dead 死亡 线程执行完了或者因异常退出了 run() 方法，该线程结束生命周期 (当时如果线程被持久持有，可能不会被回收) 注意：&#xA;WAITING: 造成线程等待的原因有三种，分别是调用 Object.wait()、join() 以及 LockSupport.park() 方法。处于等待状态的线程，正在等待其他线程去执行一个特定的操作。例如：因为 wait() 而等待的线程正在等待另一个线程去调用 notify() 或 notifyAll()；一个因为 join() 而等待的线程正在等待另一个线程结束。处于等待状态的线程不会被分配 CPU 资源。 TIMED_WAITING: 造成线程限时等待状态的原因有五种，分别是调用 Thread.sleep(long)、Object.wait(long)、join(long)、LockSupport.parkNanos(obj,long) 和 LockSupport.parkUntil(obj,long)。 2. 线程状态转换 # </description>
     </item>
-    
     <item>
       <title>Ch01-Java JUC 之 理论基础</title>
       <link>https://acronymor.com/posts/java-juc/ch01/</link>
       <pubDate>Tue, 04 Apr 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-juc/ch01/</guid>
-      <description></description>
+      <description> Happens-Before 规则 # 规则 说明 单一线程原则 在一个线程内，在程序前面的操作先行发生于后面的操作 管程锁定规则 一个 unlock 操作先行发生于后面对同一个锁的 lock 操作 volatile 变量规则 对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作 线程启动规则 Thread 对象的 start() 方法调用先行发生于此线程的每一个动作 线程加入规则 Thread 对象的结束先行发生于 join() 方法返回 线程中断规则 对线程 interrupt() 方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过 interrupted() 方法检测到是否有中断发生 对象终结规则 一个对象的初始化完成 (构造函数执行结束) 先行发生于它的 finalize() 方法的开始 传递性 如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那么操作 A 先行发生于操作 C 参考文献 # Java 并发 - 理论基础 </description>
     </item>
-    
     <item>
       <title>Ch04-Java Map 之 WeakHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch04/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch04/</guid>
       <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Map 之 TreeMap</title>
       <link>https://acronymor.com/posts/java-map/ch03/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch03/</guid>
       <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Map 之 LinkedHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch02/</link>
       <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch02/</guid>
       <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java Map 之 HashMap</title>
       <link>https://acronymor.com/posts/java-map/ch01/</link>
       <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch01/</guid>
-      <description></description>
+      <description> 1. 底层数据结构 # Java 1.7 中使用数组+链表这样的数据结构，自 Java 1.8 开始使用数组+链表+红黑树这样的数据结构。&#xA;2. 数组扩容 # resize() 方法用于初始化数组或数组扩容，每次扩容后，容量为原来的 2 倍，并进行数据迁移。&#xA;3.线程不安全 # HashMap 的线程不安全主要体现在下面两个方面：&#xA;在 Java 1.7 中，当并发执行扩容操作时会造成环形链。&#xA;这里主要的原因是线程1上线文中保存的指针指向的数据（newtable，临界资源）被线程2做了修改，当线程1重新恢复上线文后，在已经被修改的数据（newtable，临界资源）上继续未完成的操作，最终导致结果不符合预期。&#xA;在 Java 1.8 中，在并发执行 put 操作时会发生数据覆盖的情况。&#xA;4. 参考文献 # HashMap为什么在多线程操作下不安全（jdk1.7和jdk1.8原因不同） </description>
     </item>
-    
     <item>
       <title>Ch05-Java Collection 之 PriorityQueue</title>
       <link>https://acronymor.com/posts/java-collection/ch05/</link>
       <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch05/</guid>
       <description>&lt;p&gt;优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java Collection 之 ArrayDeque</title>
       <link>https://acronymor.com/posts/java-collection/ch04/</link>
       <pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch04/</guid>
       <description>&lt;p&gt;Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Collection 之 LinkedList</title>
       <link>https://acronymor.com/posts/java-collection/ch03/</link>
       <pubDate>Mon, 23 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch03/</guid>
       <description>&lt;p&gt;LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Collection 之 ArrayList</title>
       <link>https://acronymor.com/posts/java-collection/ch02/</link>
       <pubDate>Fri, 20 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch02/</guid>
       <description>&lt;p&gt;ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 Collection 和 Map</title>
       <link>https://acronymor.com/posts/java-collection/ch01/</link>
       <pubDate>Sun, 15 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch01/</guid>
-      <description></description>
+      <description>&#xA;集合类 说明 TreeSet 基于红黑树实现，支持有序性操作，例如根据一个范围查找元素的操作。但是查找效率不如 HashSet，HashSet 查找的时间复杂度为 O(1)，TreeSet 则为 O(logN)。 HashSet 基于哈希表实现，支持快速查找，但不支持有序性操作。并且失去了元素的插入顺序信息，也就是说使用 Iterator 遍历 HashSet 得到的结果是不确定的。 LinkedHashSet 具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。 ArrayList 基于动态数组实现，支持随机访问。 Vector 和 ArrayList 类似，但它是线程安全的。 LinkedList 基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素。不仅如此，LinkedList 还可以用作栈、队列和双向队列。 PriorityQueue 基于堆结构实现，可以用它来实现优先队列。 TreeMap 基于红黑树实现。 HashMap 基于哈希表实现。 HashTable 和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。 LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用 (LRU) 顺序。 </description>
     </item>
-    
     <item>
       <title>Ch04-Java 之 synchronized</title>
       <link>https://acronymor.com/posts/java-basic/ch04/</link>
       <pubDate>Fri, 13 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch04/</guid>
       <description>&lt;p&gt;synchronized 是 Java 中的一个关键字，主要用于解决 Java 中常见的并发问题（原子性，可见性，有序性）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 各种机制</title>
       <link>https://acronymor.com/posts/java-basic/ch03/</link>
       <pubDate>Tue, 10 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch03/</guid>
-      <description></description>
+      <description>1. 泛型机制 # 泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。&#xA;2. 注解机制 # 注解是 JDK1.5 版本开始引入的一个特性，用于对代码进行说明，可以对包、类、接口、字段、方法参数、局部变量等进行注解。它主要的作用有以下四方面：&#xA;生成文档，通过代码里标识的元数据生成 javadoc 文档。 编译检查，通过代码里标识的元数据让编译器在编译期间进行检查验证。 编译时动态处理，编译时通过代码里标识的元数据动态处理，例如动态生成代码。 运行时动态处理，运行时通过代码里标识的元数据动态处理，例如使用反射注入实例。 3. 异常机制 # 4. 反射机制 # RTTI（Run-Time Type Identification）运行时类型识别。利用反射技术可以对一个类进行解剖，把每个组成部分映射成一个个对象（比如成员变量，方法，构造方法等都可以映射成对象）。&#xA;5. SPI 机制 # SPI（Service Provider Interface），是 JDK 内置的一种 服务提供发现机制，可以用来启用框架扩展和替换组件，主要是被框架的开发人员使用。Java 中 SPI 机制主要思想是将装配的控制权移到程序之外，在模块化设计中这个机制尤其重要，其核心思想就是解耦。</description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 Q/A</title>
       <link>https://acronymor.com/posts/java-basic/ch02/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch02/</guid>
-      <description></description>
+      <description>1. a==b和a.equals(b)有什么区别？ # 如果 a 和 b 都是对象，则 a==b 是比较两个对象的引用，只有当 a 和 b 指向的是堆中的同一个对象才会返回 true，而 a.equals(b) 是进行逻辑比较，所以通常需要重写该方法来提供逻辑一致性的比较。例如，String 类重写 equals() 方法，所以可以用于两个不同对象，但是包含的字母相同的比较。&#xA;2. a.hashCode() 有什么用？与 a.equals(b) 有什么关系？ # hashCode() 方法是相应对象整型的 hash 值，根据 Java 规范，两个使用 equals() 方法来判断相等的对象，其 hash code 必须相等。&#xA;3. final、finalize 和 finally 的不同之处？ # 条目 说明 final 是一个修饰符，可以修饰变量、方法和类。如果 final 修饰变量，意味着该变量的值在初始化后不能被改变。 finalize 允许使用 finalize() 方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。 finally 是一个关键字，与 try 和 catch 一起用于异常的处理。finally 块一定会被执行，无论在 try 块中是否有发生异常。 4. String、StringBuffer 与 StringBuilder 的区别 # 可变和适用范围。String 对象是不可变的，而 StringBuffer 和 StringBuilder 是可变字符序列。每次对 String 的操作相当于生成一个新的 String 对象，而对 StringBuffer 和 StringBuilder 的操作是对对象本身的操作，而不会生成新的对象，所以对于频繁改变内容的字符串避免使用 String，因为频繁的生成对象将会对系统性能产生影响。 线程安全。String 由于有 final 修饰，是 immutable 的，安全性是简单而纯粹的。StringBuilder 和 StringBuffer 的区别在于 StringBuilder 不保证同步，也就是说如果需要线程安全需要使用 StringBuffer，不需要同步的 StringBuilder 效率更高。 5.</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 基础</title>
       <link>https://acronymor.com/posts/java-basic/ch01/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-basic/ch01/</guid>
-      <description></description>
+      <description> 1.数据类型 # 基本类型 所占大小 (bit) 最小范围 最大范围 包装类型 boolean 1 Boolean byte 8 -128 127 Byte char 16 0 65535 Char short 16 -32768 32767 Short int 32 -2147483648 2147483647 Integer float 32 3.402823e+38 1.401298e-45 Float long 64 -9223372036854774808 9223372036854774807 Long double 64 1.797693e+308 4.9000000e-324 Double 基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。&#xA;2. 缓存池 # new Integer(123) 与 Integer.valueOf(123) 的区别在于：&#xA;new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。 3. 访问权限修饰符 # Java 的访问控制是停留在编译层的，也就是它不会在 .class 文件中留下任何的痕迹，只在编译的时候进行访问控制的检查。其实，通过反射的手段，是可以访问任何包下任何类中的成员。&#xA;修饰符 同一个类 同一个包 子类 任何地方 public yes yes yes yes protected yes yes yes default yes yes private yes </description>
     </item>
-    
   </channel>
 </rss>

@@ -6,33 +6,28 @@
     <description>Recent content in C&#43;&#43; | STL on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/C++-STL/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 24 Jun 2022 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/C++-STL/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch03-C&#43;&#43; STL 之 Container</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</link>
       <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</guid>
-      <description></description>
+      <description> 容器 底层数据结构 时间复杂度 有无序 可否重复 其他 array 数组 随机读改 O(1) 无序 可重复 支持随机访问 vector 数组 随机读改、尾部插入、尾部删除 O(1)；头部插入、头部删除 O(n) 无序 可重复 支持随机访问 deque 双端队列 头尾插入、头尾删除 O(1) 无序 可重复 一个中央控制器 + 多个缓冲区，支持首尾快速增删，支持随机访问 forward_list 单向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 list 双向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 stack deque / list 顶部插入、顶部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 queue deque / list 尾部插入、头部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 priority_queue vector + max-heap 插入、删除 O(log2n) 有序 可重复 vector 容器+heap 处理规则 set 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multiset 红黑树 插入、删除、查找 O(log2n) 有序 可重复 map 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multimap 红黑树 插入、删除、查找 O(log2n) 有序 可重复 unordered_set 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multiset 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 unordered_map 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multimap 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 </description>
     </item>
-    
     <item>
       <title>Ch02-C&#43;&#43; 之 trait</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</link>
       <pubDate>Tue, 21 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</guid>
       <description>&lt;p&gt;trait 并不是 C++ 的关键字之类的，属于 C++ 的一种“机制”，或者说 C++ 特有的一种编程小技巧。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-C&#43;&#43; 之 STL</title>
       <link>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</link>
       <pubDate>Mon, 20 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</guid>
       <description>&lt;p&gt;STL 是 1979 年诞生，1998 年加入 cpp 标准库。C11 出来之前 boost 库是常见的智能指针库，c11 有自己的智能指针。且有多个 STL 版本，如 &lt;code&gt;SGI STL&lt;/code&gt;，&lt;code&gt;GNU STL&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -3,20 +3,31 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：
+完整的处理逻辑如下图所示：
+query 和 update 的逻辑如下所示：
+1. Query # 在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在implement方法中完成 RelNode 到 Cube 处理逻辑的转换。
+1.1 Cube 选取流程 # 整个过程封装在 RealizationChooser#selectRealization 中，大体上可以分为两步，第一部分是makeOrderedModelMap()，这一步会选出所有满足的 cuboid，第二步是selectRealization()，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲
+1.1.1 对 model 及对应的 realizations 进行过滤及排序 # 获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName 对 realizations 执行过滤，得到 filteredRealizations NOT READY cube 会被过滤 黑名单中的 cube 会被过滤 cube.allColumns 必须与 OLAPContext.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-Kylin 之 Query" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：
+完整的处理逻辑如下图所示：
+query 和 update 的逻辑如下所示：
+1. Query # 在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在implement方法中完成 RelNode 到 Cube 处理逻辑的转换。
+1.1 Cube 选取流程 # 整个过程封装在 RealizationChooser#selectRealization 中，大体上可以分为两步，第一部分是makeOrderedModelMap()，这一步会选出所有满足的 cuboid，第二步是selectRealization()，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲
+1.1.1 对 model 及对应的 realizations 进行过滤及排序 # 获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName 对 realizations 执行过滤，得到 filteredRealizations NOT READY cube 会被过滤 黑名单中的 cube 会被过滤 cube.allColumns 必须与 OLAPContext." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch03/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-06-12T00:00:00+08:00" />
 <meta property="article:modified_time" content="2021-06-12T00:00:00+08:00" />
+
 <title>Ch03-Kylin 之 Query | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -193,7 +204,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/kylin/">kylin</a>
+      <a href="/tags/kylin/">Kylin</a>
   </div>
   
 
@@ -237,25 +248,25 @@ var _hmt = _hmt || [];
   1.1.2 从 modelMap 中选择最终的 realization
   <a class="anchor" href="#112-%e4%bb%8e-modelmap-%e4%b8%ad%e9%80%89%e6%8b%a9%e6%9c%80%e7%bb%88%e7%9a%84-realization">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RealizationChooser</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">attemptSelectRealization</span><span style="color:#f92672">(</span>OLAPContext context<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        Map<span style="color:#f92672">&lt;</span>DataModelDesc<span style="color:#f92672">,</span> Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> modelMap <span style="color:#f92672">=</span> makeOrderedModelMap<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RealizationChooser</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">attemptSelectRealization</span>(OLAPContext context) {
+</span></span><span style="display:flex;"><span>        Map<span style="color:#f92672">&lt;</span>DataModelDesc, Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> modelMap <span style="color:#f92672">=</span> makeOrderedModelMap(context);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>DataModelDesc<span style="color:#f92672">,</span> Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> entry <span style="color:#f92672">:</span> modelMap<span style="color:#f92672">.</span><span style="color:#a6e22e">entrySet</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>            IRealization realization <span style="color:#f92672">=</span> QueryRouter<span style="color:#f92672">.</span><span style="color:#a6e22e">selectRealization</span><span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> entry<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>realization <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                logger<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Give up on model {} because no suitable realization is found&#34;</span><span style="color:#f92672">,</span> model<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>                context<span style="color:#f92672">.</span><span style="color:#a6e22e">unfixModel</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>            context<span style="color:#f92672">.</span><span style="color:#a6e22e">realization</span> <span style="color:#f92672">=</span> realization<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (Map.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>DataModelDesc, Set<span style="color:#f92672">&lt;</span>IRealization<span style="color:#f92672">&gt;&gt;</span> entry : modelMap.<span style="color:#a6e22e">entrySet</span>()) {
+</span></span><span style="display:flex;"><span>            ...
+</span></span><span style="display:flex;"><span>            IRealization realization <span style="color:#f92672">=</span> QueryRouter.<span style="color:#a6e22e">selectRealization</span>(context, entry.<span style="color:#a6e22e">getValue</span>());
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (realization <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                logger.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Give up on model {} because no suitable realization is found&#34;</span>, model);
+</span></span><span style="display:flex;"><span>                context.<span style="color:#a6e22e">unfixModel</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            context.<span style="color:#a6e22e">realization</span> <span style="color:#f92672">=</span> realization;
 </span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NoRealizationFoundException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No realization found for &#34;</span> <span style="color:#f92672">+</span> toErrorMsg<span style="color:#f92672">(</span>context<span style="color:#f92672">));</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NoRealizationFoundException(<span style="color:#e6db74">&#34;No realization found for &#34;</span> <span style="color:#f92672">+</span> toErrorMsg(context));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="1121-modelmap-遍历逻辑">
   1.1.2.1 modelMap 遍历逻辑
   <a class="anchor" href="#1121-modelmap-%e9%81%8d%e5%8e%86%e9%80%bb%e8%be%91">#</a>

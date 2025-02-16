@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hive on acronymor&#39;s blog</title>
+    <title>Hive on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/hive/</link>
-    <description>Recent content in hive on acronymor&#39;s blog</description>
+    <description>Recent content in Hive on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 16 Jun 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/hive/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 16 Jun 2018 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/hive/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch03-Hive 之底层数据存储</title>
       <link>https://acronymor.com/posts/apache-hive/ch03/</link>
       <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch03/</guid>
       <description>&lt;p&gt;Hive 底层数据存储格式&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Hive 之 SQL 执行</title>
       <link>https://acronymor.com/posts/apache-hive/ch02/</link>
       <pubDate>Thu, 14 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch02/</guid>
       <description>&lt;p&gt;hive sql 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Hive 介绍</title>
       <link>https://acronymor.com/posts/apache-hive/ch01/</link>
       <pubDate>Sun, 10 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hive/ch01/</guid>
       <description>&lt;p&gt;Apache Hive 是基于 Hadoop 的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的 SQL 查询功能，其基本原理是将 SQL 语句转换为 MapReduce 任务进行数据处理功能。所以从代码层面来看，整个 Hive 就是将 SQL 语句转换成 MapReduce 代码的一款软件。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

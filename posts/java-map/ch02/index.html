@@ -11,12 +11,13 @@
 <meta property="og:url" content="https://acronymor.com/posts/java-map/ch02/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2017-02-13T00:00:00+08:00" />
 <meta property="article:modified_time" content="2017-02-13T00:00:00+08:00" />
+
 <title>Ch02-Java Map 之 LinkedHashMap | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,7 +175,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/java/">java</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 
@@ -192,23 +193,23 @@ var _hmt = _hmt || [];
   <a class="anchor" href="#2-fifo-cache">#</a>
 </h1>
 <p>LinkedHashMap 除了可以保证迭代顺序外，还有一个非常有用的用法：可以轻松实现一个采用了 <code>LRU/FIFO</code> 替换策略的缓存。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FIFOCache</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">extends</span> LinkedHashMap<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> cacheSize<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">FIFOCache</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> cacheSize<span style="color:#f92672">){</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FIFOCache</span><span style="color:#f92672">&lt;</span>K, V<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">extends</span> LinkedHashMap<span style="color:#f92672">&lt;</span>K, V<span style="color:#f92672">&gt;</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> cacheSize;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">FIFOCache</span>(<span style="color:#66d9ef">int</span> cacheSize){
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">/*
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * 第三个参数设置为 true，代表按访问顺序排序，可作为 LRU 缓存
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * 第三个参数设置为 false，代表按插入顺序排序，可作为 FIFO 缓存
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">         */</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>cacheSize<span style="color:#f92672">,</span> <span style="color:#ae81ff">0.75f</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cacheSize</span> <span style="color:#f92672">=</span> cacheSize<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span>(cacheSize, 0.<span style="color:#a6e22e">75f</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">cacheSize</span> <span style="color:#f92672">=</span> cacheSize;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 当 Entry 个数超过 cacheSize 时，删除最老的 Entry
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Override</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">removeEldestEntry</span><span style="color:#f92672">(</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;</span> eldest<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> size<span style="color:#f92672">()</span> <span style="color:#f92672">&gt;</span> cacheSize<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 当 Entry 个数超过 cacheSize 时，删除最老的 Entry</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">removeEldestEntry</span>(Map.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K,V<span style="color:#f92672">&gt;</span> eldest) {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> size() <span style="color:#f92672">&gt;</span> cacheSize;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div></article>
  
       

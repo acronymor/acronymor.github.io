@@ -6,42 +6,35 @@
     <description>Recent content in Java | IO on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-IO/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Jul 2021 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Java-IO/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch04-Java 之 AIO</title>
       <link>https://acronymor.com/posts/java-io/ch04/</link>
       <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch04/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.nio.channels.AsynchronousServerSocketChannel java.nio.channels.AsynchronousSocketChannel JAVA AIO 框架在 windows 下使用 windows IOCP 技术，在 Linux 下使用 epoll 多路复用 IO 技术模拟异步 IO，这个从 JAVA AIO 框架的部分类设计上就可以看出来。&#xA;2. AsynchronousServerSocketChannel # 不同的 AsynchronousServerSocketChannel 实现对应了不同的 SocketChannel，由具体的 AsynchronousServerSocketChannel（根据不同的 OS 确定）实现进行创建。&#xA;3. 参考文献 # Java AIO - 异步 IO 详解 </description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 NIO</title>
       <link>https://acronymor.com/posts/java-io/ch03/</link>
       <pubDate>Sun, 25 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch03/</guid>
-      <description></description>
+      <description>操作系统层面的多路复用 IO 实现主要包括四种：select、poll、epoll、kqueue。&#xA;1. 常见类 # java.nio.ByteBuffer java.nio.channels.Selector java.nio.channels.SelectableChannel java.nio.channels.ServerSocketChannel 2. 网络模型 # 2.1 Reactor 模型 # Reactor 是非阻塞同步网络模型，Java 可以借用 NIO 接口实现各种 Reactor 模型，比如 单Reactor单线程、单Reactor多线程、主从Reactor多线程&#xA;2.2 Proactor 模型 # Proactor 是异步网络模型，需要 OS 的支持才能实现，所以 Java 借用 NIO 接口不一定能实现。&#xA;3. Selector # 不同的 SelectorProvider 实现对应了不同的 Selector，由具体的 SelectorProvider（根据不同的 OS 确定）实现进行创建。&#xA;4. 零拷贝 # 条目 说明 MappedByteBuffer 基于内存映射（mmap） DirectByteBuffer JVM 可以对 DirectByteBuffer 的对象进行 JVM 堆外内存分配和回收管理 FileChannel 用于文件读写、映射和操作的通道；定义了 transferFrom() 和 transferTo() 两个抽象方法，它通过在通道和通道之间建立连接实现数据传输 5. 参考文献 # Java NIO - IO 多路复用详解 </description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 BIO</title>
       <link>https://acronymor.com/posts/java-io/ch02/</link>
       <pubDate>Tue, 20 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch02/</guid>
-      <description></description>
+      <description> 1. 常见类 # java.net.ServerSocket; java.net.Socket; 2. BIO 模型 # 一个服务端可以连接多个客户端，但是接入一个客户端，服务端都需要用一个线程维持着客户端与服务端的连接。如果客户端数量很多，那么服务端也需要对应的线程数量与之连接。&#xA;3. 参考文献 # Java IO - BIO 详解 </description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 IO</title>
       <link>https://acronymor.com/posts/java-io/ch01/</link>
       <pubDate>Thu, 15 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-io/ch01/</guid>
-      <description></description>
+      <description> 1. Java IO 概览 # 2. 阻塞/非阻塞 VS 同步/非同步 # 2.1 阻塞 IO 和 非阻塞 IO # 这两个概念是程序级别的。主要描述的是程序请求操作系统 IO 操作后，如果 IO 资源没有准备好，那么程序该如何处理的问题：前者等待；后者继续执行 (并且使用线程一直轮询，直到有 IO 资源准备好了)&#xA;2.2 同步 IO 和 非同步 IO # 这两个概念是操作系统级别的。主要描述的是操作系统在收到程序请求 IO 操作后，如果 IO 资源没有准备好，该如何响应程序的问题：前者不响应，直到 IO 资源准备好以后；后者返回一个标记 (好让程序和自己知道以后的数据往哪里通知)，当 IO 资源准备好以后，再用事件机制返回给程序。&#xA;3. OS IO 多路复用 # IO 模型 相对性能 关键思路 操作系统 JAVA 支持情况 select 较高 Reactor windows/Linux 支持 poll 较高 Reactor Linux 支持 epoll 高 Reactor/Proactor Linux 支持 kqueue 高 Proactor Linux 不支持 </description>
     </item>
-    
   </channel>
 </rss>

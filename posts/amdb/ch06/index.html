@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="1. 接口定义 # class IExecutor { public: virtual Status Open(); virtual Status Close(); virtual State Prepare() = 0; virtual Status Work() = 0; InputPort&amp; CreateInputPort(); OutputPort&amp; CreateOutputPort(); protected: std::vector&lt;InputPort&gt; inputs_; std::vector&lt;OutputPort&gt; outputs_; } 2. 实现原理 # executor 对数据的处理都是以 chunk 为单位进行处理的。
+依次遍历所有的 executor，使用 Connect 将 Port 连接到一起； 依次遍历所有的 executor，调用每个 executor 的 Open() 将 executor 打开（根据 executor 特性决定，大部分什么操作都不做）； 依次遍历所有的 executor，调用每个 executor 的 Prepare() 将 executor 初始化（比如将 chunk 推到 Cache 中） 依次遍历所有的 executor，调用每个 executor 的 Work() 执行 executor（比如插入数据/读取数据等） 依次遍历所有的 executor，调用每个 executor 的 Close() 将 executor 关闭（大部分什么操作都不做） 当然上述的步骤只是为了方便说明而这么写的，实际上每个 executor 会被多次封装成 task 放入到队列中，由 scheduler 调度执行。">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-AmDB 之 Executor" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="1. 接口定义 # class IExecutor { public: virtual Status Open(); virtual Status Close(); virtual State Prepare() = 0; virtual Status Work() = 0; InputPort&amp; CreateInputPort(); OutputPort&amp; CreateOutputPort(); protected: std::vector&lt;InputPort&gt; inputs_; std::vector&lt;OutputPort&gt; outputs_; } 2. 实现原理 # executor 对数据的处理都是以 chunk 为单位进行处理的。
+依次遍历所有的 executor，使用 Connect 将 Port 连接到一起； 依次遍历所有的 executor，调用每个 executor 的 Open() 将 executor 打开（根据 executor 特性决定，大部分什么操作都不做）； 依次遍历所有的 executor，调用每个 executor 的 Prepare() 将 executor 初始化（比如将 chunk 推到 Cache 中） 依次遍历所有的 executor，调用每个 executor 的 Work() 执行 executor（比如插入数据/读取数据等） 依次遍历所有的 executor，调用每个 executor 的 Close() 将 executor 关闭（大部分什么操作都不做） 当然上述的步骤只是为了方便说明而这么写的，实际上每个 executor 会被多次封装成 task 放入到队列中，由 scheduler 调度执行。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/amdb/ch06/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-12-06T00:00:00+08:00" />
 <meta property="article:modified_time" content="2022-12-06T00:00:00+08:00" />
+
 <title>Ch06-AmDB 之 Executor | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,7 +177,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/amdb/">amdb</a>
+      <a href="/tags/amdb/">Amdb</a>
   </div>
   
 

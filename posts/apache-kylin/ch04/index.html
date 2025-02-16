@@ -11,12 +11,13 @@
 <meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch04/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-06-17T00:00:00+08:00" />
 <meta property="article:modified_time" content="2021-06-17T00:00:00+08:00" />
+
 <title>Ch04-Kylin 之 Cube 构建流程 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -211,7 +212,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/kylin/">kylin</a>
+      <a href="/tags/kylin/">Kylin</a>
   </div>
   
 
@@ -334,33 +335,33 @@ var _hmt = _hmt || [];
 </h3>
 <p>在生成 cuboidId 之前会先生成聚合组的 mask，其中用到了大量的移位和位或运算去生成 Mask。
 AggregationGroup 在初始化时会生成所有包含维度、必须维度、联合维度、层级维度的 Mask</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AggregationGroup</span> <span style="color:#66d9ef">implements</span> Serializable <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span><span style="color:#f92672">(</span>CubeDesc cubeDesc<span style="color:#f92672">,</span> RowKeyDesc rowKeyDesc<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cubeDesc</span> <span style="color:#f92672">=</span> cubeDesc<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isMandatoryOnlyValid</span> <span style="color:#f92672">=</span> cubeDesc<span style="color:#f92672">.</span><span style="color:#a6e22e">getConfig</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getCubeAggrGroupIsMandatoryOnlyValid</span><span style="color:#f92672">();</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AggregationGroup</span> <span style="color:#66d9ef">implements</span> Serializable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span>(CubeDesc cubeDesc, RowKeyDesc rowKeyDesc) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">cubeDesc</span> <span style="color:#f92672">=</span> cubeDesc;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">isMandatoryOnlyValid</span> <span style="color:#f92672">=</span> cubeDesc.<span style="color:#a6e22e">getConfig</span>().<span style="color:#a6e22e">getCubeAggrGroupIsMandatoryOnlyValid</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">includes</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">includes</span><span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">selectRule</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;AggregationGroup incomplete&#34;</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">includes</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">includes</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> 0 <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">selectRule</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException(<span style="color:#e6db74">&#34;AggregationGroup incomplete&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        normalizeColumnNames<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>        normalizeColumnNames();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有包含维度的 fullMask
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildPartialCubeFullMask<span style="color:#f92672">(</span>rowKeyDesc<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 强制维度
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildMandatoryColumnMask<span style="color:#f92672">(</span>rowKeyDesc<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 生成每组联合维度的 mask
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildJointColumnMask<span style="color:#f92672">(</span>rowKeyDesc<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有联合维度的 fullMask
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildJointDimsMask<span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 每组层级维度的 mask
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildHierarchyMasks<span style="color:#f92672">(</span>rowKeyDesc<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有层级维度的 fullMask
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildHierarchyDimsMask<span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 普通维度的掩码，不在强制、联合、层级维度中
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        buildNormalDimsMask<span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有包含维度的 fullMask</span>
+</span></span><span style="display:flex;"><span>        buildPartialCubeFullMask(rowKeyDesc);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 强制维度</span>
+</span></span><span style="display:flex;"><span>        buildMandatoryColumnMask(rowKeyDesc);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 生成每组联合维度的 mask</span>
+</span></span><span style="display:flex;"><span>        buildJointColumnMask(rowKeyDesc);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有联合维度的 fullMask</span>
+</span></span><span style="display:flex;"><span>        buildJointDimsMask();
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 每组层级维度的 mask</span>
+</span></span><span style="display:flex;"><span>        buildHierarchyMasks(rowKeyDesc);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 所有层级维度的 fullMask</span>
+</span></span><span style="display:flex;"><span>        buildHierarchyDimsMask();
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 普通维度的掩码，不在强制、联合、层级维度中</span>
+</span></span><span style="display:flex;"><span>        buildNormalDimsMask();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="33-segmentinfo-构建流程">
   3.3 SegmentInfo 构建流程
   <a class="anchor" href="#33-segmentinfo-%e6%9e%84%e5%bb%ba%e6%b5%81%e7%a8%8b">#</a>
@@ -488,28 +489,28 @@ AggregationGroup 在初始化时会生成所有包含维度、必须维度、联
 </h2>
 <p>在 SegmentInfo 中的会生成 toBuildLayouts，但是这些 layoutEntities 是无序的，但是在 Cube 中这些 layout 是具有父子级关系的，例如 ABCD-&gt;ABC-&gt;AB，那么就需要有一个数据结构来生成并保存这种顺序。
 在 ForestSpanningTree 中会先将传入的 layoutEntities 进行排序，排序的优先级为<code>维度数-&gt;度量数-&gt;cuboidId</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String segId <span style="color:#f92672">:</span> segmentIds<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>        seg <span style="color:#f92672">=</span> ManagerHub<span style="color:#f92672">.</span><span style="color:#a6e22e">getSegmentInfo</span><span style="color:#f92672">(</span>config<span style="color:#f92672">,</span> cubeName<span style="color:#f92672">,</span> segId<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        spanningTree <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ForestSpanningTree<span style="color:#f92672">(</span>JavaConversions<span style="color:#f92672">.</span><span style="color:#a6e22e">asJavaCollection</span><span style="color:#f92672">(</span>seg<span style="color:#f92672">.</span><span style="color:#a6e22e">toBuildLayouts</span><span style="color:#f92672">()));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (String segId : segmentIds) {
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>        seg <span style="color:#f92672">=</span> ManagerHub.<span style="color:#a6e22e">getSegmentInfo</span>(config, cubeName, segId);
+</span></span><span style="display:flex;"><span>        spanningTree <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ForestSpanningTree(JavaConversions.<span style="color:#a6e22e">asJavaCollection</span>(seg.<span style="color:#a6e22e">toBuildLayouts</span>()));
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>    }
 </span></span></code></pre></div><h2 id="35-parentsourcechooser">
   3.5 ParentSourceChooser
   <a class="anchor" href="#35-parentsourcechooser">#</a>
 </h2>
 <p><code>ParentSourceChooser</code>是整个构建 cube 的逻辑中最复杂的一部分，这里依次完成了大宽表，SnapShot 等的构建。</p>
 <p><img src="decide-sources.png" alt="decide-sources" /></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String segId <span style="color:#f92672">:</span> segmentIds<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>        sourceChooser <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ParentSourceChooser<span style="color:#f92672">(</span>spanningTree<span style="color:#f92672">,</span> seg<span style="color:#f92672">,</span> jobId<span style="color:#f92672">,</span> ss<span style="color:#f92672">,</span> config<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        sourceChooser<span style="color:#f92672">.</span><span style="color:#a6e22e">decideSources</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        NBuildSourceInfo buildFromFlatTable <span style="color:#f92672">=</span> sourceChooser<span style="color:#f92672">.</span><span style="color:#a6e22e">flatTableSource</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        Map<span style="color:#f92672">&lt;</span>Long<span style="color:#f92672">,</span> NBuildSourceInfo<span style="color:#f92672">&gt;</span> buildFromLayouts <span style="color:#f92672">=</span> sourceChooser<span style="color:#f92672">.</span><span style="color:#a6e22e">reuseSources</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// String flatTablePath = sourceChooser.persistFlatTableIfNecessary();
-</span></span></span></code></pre></div><h2 id="36-build">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (String segId : segmentIds) {
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>        sourceChooser <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ParentSourceChooser(spanningTree, seg, jobId, ss, config, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>        sourceChooser.<span style="color:#a6e22e">decideSources</span>();
+</span></span><span style="display:flex;"><span>        NBuildSourceInfo buildFromFlatTable <span style="color:#f92672">=</span> sourceChooser.<span style="color:#a6e22e">flatTableSource</span>();
+</span></span><span style="display:flex;"><span>        Map<span style="color:#f92672">&lt;</span>Long, NBuildSourceInfo<span style="color:#f92672">&gt;</span> buildFromLayouts <span style="color:#f92672">=</span> sourceChooser.<span style="color:#a6e22e">reuseSources</span>();
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// String flatTablePath = sourceChooser.persistFlatTableIfNecessary();</span>
+</span></span></code></pre></div><h2 id="36-build">
   3.6 build
   <a class="anchor" href="#36-build">#</a>
 </h2>
@@ -518,30 +519,30 @@ AggregationGroup 在初始化时会生成所有包含维度、必须维度、联
   3.6.1 buildCuboid
   <a class="anchor" href="#361-buildcuboid">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#75715e">// 按照 rowkeys(维度) 的顺序进行分区排序
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    Dataset<span style="color:#f92672">&lt;</span>Row<span style="color:#f92672">&gt;</span> afterSort <span style="color:#f92672">=</span> afterAgg
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">(</span>NSparkCubingUtil<span style="color:#f92672">.</span><span style="color:#a6e22e">getColumns</span><span style="color:#f92672">(</span>rowKeys<span style="color:#f92672">,</span> layoutEntity<span style="color:#f92672">.</span><span style="color:#a6e22e">getOrderedMeasures</span><span style="color:#f92672">().</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">()))</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">.</span><span style="color:#a6e22e">sortWithinPartitions</span><span style="color:#f92672">(</span>NSparkCubingUtil<span style="color:#f92672">.</span><span style="color:#a6e22e">getColumns</span><span style="color:#f92672">(</span>rowKeys<span style="color:#f92672">));</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#75715e">// 按照 rowkeys(维度) 的顺序进行分区排序</span>
+</span></span><span style="display:flex;"><span>    Dataset<span style="color:#f92672">&lt;</span>Row<span style="color:#f92672">&gt;</span> afterSort <span style="color:#f92672">=</span> afterAgg
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">select</span>(NSparkCubingUtil.<span style="color:#a6e22e">getColumns</span>(rowKeys, layoutEntity.<span style="color:#a6e22e">getOrderedMeasures</span>().<span style="color:#a6e22e">keySet</span>()))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">sortWithinPartitions</span>(NSparkCubingUtil.<span style="color:#a6e22e">getColumns</span>(rowKeys));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    saveAndUpdateLayout<span style="color:#f92672">(</span>afterSort<span style="color:#f92672">,</span> seg<span style="color:#f92672">,</span> layoutEntity<span style="color:#f92672">,</span> parentId<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    saveAndUpdateLayout(afterSort, seg, layoutEntity, parentId);
 </span></span></code></pre></div><h3 id="362-saveandupdatelayout">
   3.6.2 saveAndUpdateLayout
   <a class="anchor" href="#362-saveandupdatelayout">#</a>
 </h3>
 <p>将结果保存到 temp 目录</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    String tempPath <span style="color:#f92672">=</span> path <span style="color:#f92672">+</span> TEMP_DIR_SUFFIX<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// save to temp path
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    logger<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Cuboids are saved to temp path : &#34;</span> <span style="color:#f92672">+</span> tempPath<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    storage<span style="color:#f92672">.</span><span style="color:#a6e22e">saveTo</span><span style="color:#f92672">(</span>tempPath<span style="color:#f92672">,</span> dataset<span style="color:#f92672">,</span> ss<span style="color:#f92672">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    String tempPath <span style="color:#f92672">=</span> path <span style="color:#f92672">+</span> TEMP_DIR_SUFFIX;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// save to temp path</span>
+</span></span><span style="display:flex;"><span>    logger.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Cuboids are saved to temp path : &#34;</span> <span style="color:#f92672">+</span> tempPath);
+</span></span><span style="display:flex;"><span>    storage.<span style="color:#a6e22e">saveTo</span>(tempPath, dataset, ss);
 </span></span></code></pre></div><p>将结果重分区，然后写入到最终的 path 下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#75715e">// 进行重分区，默认会按文件大小 (128M)，行数 (2500000，如果存在 count distinct 则是 1000000), 将结果重分区写到 path 路径下
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> shardNum <span style="color:#f92672">=</span> BuildUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">repartitionIfNeed</span><span style="color:#f92672">(</span>layout<span style="color:#f92672">,</span> storage<span style="color:#f92672">,</span> path<span style="color:#f92672">,</span> tempPath<span style="color:#f92672">,</span> cubeInstance<span style="color:#f92672">.</span><span style="color:#a6e22e">getConfig</span><span style="color:#f92672">(),</span> ss<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    layout<span style="color:#f92672">.</span><span style="color:#a6e22e">setShardNum</span><span style="color:#f92672">(</span>shardNum<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    cuboidShardNum<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>layoutId<span style="color:#f92672">,</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">short</span><span style="color:#f92672">)</span> shardNum<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    ss<span style="color:#f92672">.</span><span style="color:#a6e22e">sparkContext</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setLocalProperty</span><span style="color:#f92672">(</span>QueryExecutionCache<span style="color:#f92672">.</span><span style="color:#a6e22e">N_EXECUTION_ID_KEY</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    QueryExecutionCache<span style="color:#f92672">.</span><span style="color:#a6e22e">removeQueryExecution</span><span style="color:#f92672">(</span>queryExecutionId<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 记录文件数量，文件大小
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    BuildUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">fillCuboidInfo</span><span style="color:#f92672">(</span>layout<span style="color:#f92672">,</span> path<span style="color:#f92672">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#75715e">// 进行重分区，默认会按文件大小 (128M)，行数 (2500000，如果存在 count distinct 则是 1000000), 将结果重分区写到 path 路径下</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> shardNum <span style="color:#f92672">=</span> BuildUtils.<span style="color:#a6e22e">repartitionIfNeed</span>(layout, storage, path, tempPath, cubeInstance.<span style="color:#a6e22e">getConfig</span>(), ss);
+</span></span><span style="display:flex;"><span>    layout.<span style="color:#a6e22e">setShardNum</span>(shardNum);
+</span></span><span style="display:flex;"><span>    cuboidShardNum.<span style="color:#a6e22e">put</span>(layoutId, (<span style="color:#66d9ef">short</span>) shardNum);
+</span></span><span style="display:flex;"><span>    ss.<span style="color:#a6e22e">sparkContext</span>().<span style="color:#a6e22e">setLocalProperty</span>(QueryExecutionCache.<span style="color:#a6e22e">N_EXECUTION_ID_KEY</span>(), <span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>    QueryExecutionCache.<span style="color:#a6e22e">removeQueryExecution</span>(queryExecutionId);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 记录文件数量，文件大小</span>
+</span></span><span style="display:flex;"><span>    BuildUtils.<span style="color:#a6e22e">fillCuboidInfo</span>(layout, path);
 </span></span></code></pre></div><h2 id="37-spark-命令">
   3.7 Spark 命令
   <a class="anchor" href="#37-spark-%e5%91%bd%e4%bb%a4">#</a>

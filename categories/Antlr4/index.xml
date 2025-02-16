@@ -6,15 +6,14 @@
     <description>Recent content in Antlr4 on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Antlr4/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Antlr4/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch01-Antlr V4 介绍</title>
       <link>https://acronymor.com/posts/antlr4/ch01/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/antlr4/ch01/</guid>
       <description>&lt;p&gt;ANTLR（ANother Tool for Language Recognition）是一个强大的解析器生成器，用于读取、处理、执行或翻译结构化文本或二进制文件。它被广泛用于构建语言、工具和框架。ANTLR 根据语法定义生成解析器，解析器可以构建和遍历解析树。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

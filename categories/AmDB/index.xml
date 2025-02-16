@@ -6,60 +6,49 @@
     <description>Recent content in AmDB on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/AmDB/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Dec 2022 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/AmDB/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch06-AmDB 之 Executor</title>
       <link>https://acronymor.com/posts/amdb/ch06/</link>
       <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch06/</guid>
-      <description></description>
+      <description>1. 接口定义 # class IExecutor { public: virtual Status Open(); virtual Status Close(); virtual State Prepare() = 0; virtual Status Work() = 0; InputPort&amp;amp; CreateInputPort(); OutputPort&amp;amp; CreateOutputPort(); protected: std::vector&amp;lt;InputPort&amp;gt; inputs_; std::vector&amp;lt;OutputPort&amp;gt; outputs_; } 2. 实现原理 # executor 对数据的处理都是以 chunk 为单位进行处理的。&#xA;依次遍历所有的 executor，使用 Connect 将 Port 连接到一起； 依次遍历所有的 executor，调用每个 executor 的 Open() 将 executor 打开（根据 executor 特性决定，大部分什么操作都不做）； 依次遍历所有的 executor，调用每个 executor 的 Prepare() 将 executor 初始化（比如将 chunk 推到 Cache 中） 依次遍历所有的 executor，调用每个 executor 的 Work() 执行 executor（比如插入数据/读取数据等） 依次遍历所有的 executor，调用每个 executor 的 Close() 将 executor 关闭（大部分什么操作都不做） 当然上述的步骤只是为了方便说明而这么写的，实际上每个 executor 会被多次封装成 task 放入到队列中，由 scheduler 调度执行。</description>
     </item>
-    
     <item>
       <title>Ch05-AmDB 之 Index</title>
       <link>https://acronymor.com/posts/amdb/ch05/</link>
       <pubDate>Mon, 05 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch05/</guid>
-      <description></description>
+      <description>AmDB 的 Index 实现的是聚簇索引，主要是为了避免最后加载进来的 B+ Tree 占用内存过高。而且 B+ Tree 底层基于 KV 存储实现，从 B+ Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。&#xA;1. 接口定义 # class Index { public: Status Save(); Status GetRecords(std::vector&amp;lt;std::string&amp;gt;&amp;amp; keys, std::vector&amp;lt;std::string&amp;gt;* values); Status Insert(chunk::Chunk* chunk); Status Delete(chunk::Chunk* chunk); private: Bptree* bptree_; TreeCtx* tree_ctx_; } Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。&#xA;2. BpTree # 2.1 接口定义 # class Bptree { public: explicit Bptree(TreeCtx* tree_ctx, BptNode* root); ~Bptree() { root_ = nullptr; }; [[nodiscard]] Status Insert(std::string&amp;amp;&amp;amp; key, std::string&amp;amp;&amp;amp; value); [[nodiscard]] Status Delete(const std::string&amp;amp; key); [[nodiscard]] Status GetItem(const std::string&amp;amp; key, std::string* output) const; private: BptNode* root_{nullptr}; TreeCtx* tree_ctx_{nullptr}; }; 2.</description>
     </item>
-    
     <item>
       <title>Ch04-AmDB 之 Chunk</title>
       <link>https://acronymor.com/posts/amdb/ch04/</link>
       <pubDate>Sun, 04 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch04/</guid>
       <description>&lt;p&gt;Chunk 由多个 Row 组成&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-AmDB 之 ID 生成器</title>
       <link>https://acronymor.com/posts/amdb/ch03/</link>
       <pubDate>Sat, 03 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch03/</guid>
-      <description></description>
+      <description>1. 接口 # Status AllocateID(IDType type, const std::string&amp;amp; key, uint64_t* id); Status BatchAllocateID(IDType type, const std::string&amp;amp; key, size_t batch_size, std::vector&amp;lt;uint64_t&amp;gt;* id_list); 2. ID 生成器分类 # 分类 说明 IDType::Database 生成 Database 级别的 ID IDType::Table 生成 Table 级别的 ID IDType::Column 生成 Column 级别的 ID 3. ID 生成器原理 # 3.1 基本原理 # 这里以 IDType::Column 类型的生成器为例，cur_id 表示当前已经分配的 id，max_id 表示当前能分配的最大 id，left_num 表示能分配的 id 个数。 假如需要分配 n 个 id 的时候，首先将传进来的 key 取 hash 计算出具体的 bucket，然后判断 left_num 是否大于 n？</description>
     </item>
-    
     <item>
       <title>Ch02-AmDB 之编码</title>
       <link>https://acronymor.com/posts/amdb/ch02/</link>
       <pubDate>Fri, 02 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch02/</guid>
-      <description></description>
+      <description> 1. 基本类型编码 # 编码相关函数位置，amdb/sql/codec/codec.h。&#xA;1.1 string # 编码时字符串前面追加字符长度，解码时先取出字符长度然后从后面截取出需要的字符串。&#xA;1.2 uint32/int32/uint64/int64 # 采用小端模式编码，即数字的低位存储在内存地址的低位。&#xA;注意&#xA;这里有个与大部分习惯相悖的地方。&#xA;对于内存，大家习惯性的将低地址画在左边，高地址画在右边。 对于数字，大家习惯性的将高字节写在左边，将低字节写在右边。 纸面表达的时候，大家会习惯性的从左往右画，导致内存和数字在最终呈现形式上并不一致。&#xA;2. 复杂类型编码 # 2.1 Row (table) # 对于表里面的每行数据，都会采用下述的方式进行编码。将该行的主键编码到 key 中，将该行其他列的数据编码到 value 中。&#xA;2.2 Row (index) # 对于表里面的每行中的每列数据会按照下述方式进行编码，将该行的类型、数值、主键一同编码到 key 中，value 中不存储任何数据。所以如果一张表有多个列，这里便会生成多个 &amp;lt;key,value&amp;gt;。&#xA;与 Row (table) 不同的地方是，这里的 &amp;lt;key, value&amp;gt; 最终不会被直接存储到 leveldb 中，而是多行数据一起被编码成 BptLeafNodeRefProto 然后存储到 leveldb 中。&#xA;2.3 BptNode # B+ 树每个节点采用 Protobuf 进行编码，对于非叶子节点按照 BptNodeProto 编码，对于叶子节点按照 BptLeafNodeRefProto 编码（其 keys 存储的是若干个 Row (index)）。&#xA;message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; message BptLeafNodeRefProto { uint64 id = 1; bytes keys = 2; bytes values = 3; }; </description>
     </item>
-    
     <item>
       <title>Ch01-AmDB 介绍</title>
       <link>https://acronymor.com/posts/amdb/ch01/</link>
       <pubDate>Thu, 01 Dec 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/amdb/ch01/</guid>
       <description>&lt;p&gt;AmDB 为本人独立研发的一款单机版关系型数据库管理系统，旨在更加深入的学习数据库的相关知识，所涉及到的功能点会逐渐向 MySQL 对齐，后续应该会考虑完全兼容 MySQL 相关协议。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

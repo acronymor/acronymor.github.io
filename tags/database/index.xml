@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>database on acronymor&#39;s blog</title>
+    <title>Database on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/database/</link>
-    <description>Recent content in database on acronymor&#39;s blog</description>
+    <description>Recent content in Database on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Nov 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Nov 2022 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/database/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch05-数据库理论 之 B&#43; Tree VS LSM</title>
       <link>https://acronymor.com/posts/database/ch05/</link>
       <pubDate>Thu, 03 Nov 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch05/</guid>
-      <description></description>
+      <description>1. B+ Tree # B+ Tree 是平衡搜索树的一种，是为了磁盘搜索而生的。它一般将磁盘块大小作为叶子节点的大小，方便数据读取，插入，原地更新等。B+ Tree 的查询/插入/删除 的时间复杂度都是 O(LogN)&#xA;2. LSM Tree # LSM Tree 的核心思想是将离散的随机读写请求转换成批量的顺序读写请求。它采用的是 Append Only 方式对数据插入，更新（无法原地更新）。查询顺序为如下步骤。&#xA;Memtable -&amp;gt; Frozen Memtable -&amp;gt; L0 -&amp;gt; L1 -&amp;gt; ··· -&amp;gt; LN 3. LSM Tree Compaction # Compaction 实际是数据的重新整合，实质是多路归并排序，主要作用是减少 SSTable 的数量，提升查询性能。但是它资源耗费比较高（IO：需要大量的读取与写入操作；CPU：涉及 checksum 计算，rowkey 比较；性能抖动）&#xA;3.1 Amplification # 名词 英文 说明 读放大 Read Amplification 本次扫描的数据量/实际返回的数据量 写放大 Write Amplification 磁盘写入的数据量/实际的数据量 空间放大 Space Amplification 存储的数据量/实际的数据量 3.2 Compaction Strategy # 不同的 Compaction 策略是对写放大、空间放大、读放大的一个权衡。</description>
     </item>
-    
     <item>
       <title>Ch04-数据库理论 之 执行模型</title>
       <link>https://acronymor.com/posts/database/ch04/</link>
       <pubDate>Mon, 03 Jan 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch04/</guid>
-      <description></description>
+      <description> 1. 迭代模型/火山模型（Iterator Model） # 又称 Volcano Model 或者 Pipeline Model。该计算模型将关系代数中每一种操作抽象为一个 Operator，将整个 SQL 构建成一个 Operator 树，查询树自顶向下的调用 next() 接口，一般只返回一条数据 (tuple)。数据则自底向上的被拉取处理。这种处理方式也称为拉取执行模型 (Pull Based)。&#xA;2. 物化模型（Materialization Model） # 物化模型的处理方式是每个 operator 一次处理所有的输入，处理完之后将所有结果一次性输出。物化模型更适合 OLTP 负载，这些查询每次只访问小规模的数据，只需要少量的函数调用。&#xA;3. 向量化/批处理模型（Vectorized / Batch Model） # 向量化模型 和 火山模型 类似，每个 operator 需要实现一个 next() 函数，但是每次调用 next() 函数会返回一批的元组（tuples），而不是一个元组，所以向量化模型也可称为批处理模型。这种处理方式也称为推送执行模型 (Push Based)。&#xA;4. Pull Based VS Push Based # 比如上述图中的例子，pull based model 由 aggr 驱动，但是 push-based model 则由 scan 驱动。&#xA;4. 参考文献 # 三种常见的数据库查询引擎执行模型 SQL 查询优化原理与 Volcano Optimizer 介绍 </description>
     </item>
-    
     <item>
       <title>Ch03-数据库理论 之 CBO</title>
       <link>https://acronymor.com/posts/database/ch03/</link>
       <pubDate>Wed, 01 Dec 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch03/</guid>
-      <description></description>
+      <description>基数 Cardinality，某列唯一键的数量，称为基数，即某列非重复值的数量。 选择性 Selectivity，某列基数与总行数的比值再乘以 100%，则称为某列选择性。可选择率的取值范围显然是 0～1，它的值越小，就表明可选择性越好。当可选择率为 1 时的可选择性是最差的。&#xA;Cost-Based Optimization 基于代价的优化器&#xA;Volcano Optimizer # The Volcano Optimizer Generator : Extensibility and Efficient Search&#xA;Cascades Optimizer # The Cascades Framework for Query Optimization&#xA;参考文献 # 优化器技术论文学习 优化器论文列表 数据库内核杂谈（九）：开源优化器 ORCA </description>
     </item>
-    
     <item>
       <title>Ch02-数据库理论 之 RBO</title>
       <link>https://acronymor.com/posts/database/ch02/</link>
       <pubDate>Sun, 10 Oct 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch02/</guid>
-      <description></description>
+      <description>Rule-Based Optimization 基于规则的优化器&#xA;RBO 规则 说明 谓词重写 LIKE 规则，BETWEEN-AND 规则，IN 转 OR 规则，IN 转 ANY 规则，OR 转 ANY 规则，ALL/ANY 转聚合，NOT 规则，OR 转 UNION 规则 谓词预处理 1 &amp;lt; a =&amp;gt; a &amp;gt; 1 , 10 != id =&amp;gt; id != 10 谓词下推 t1.id = 1 t1 left join t2 on t1.id = t2.id =&amp;gt; t1 left join t2 on t1.id = t2.id and t1.id = 1 列裁剪优化 常量传递 表达式计算 参考文献 # 数据库查询优化器，RBO 优化规则介绍及示例 </description>
     </item>
-    
     <item>
       <title>Ch01-数据库理论 之 事务</title>
       <link>https://acronymor.com/posts/database/ch01/</link>
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/database/ch01/</guid>
       <description>&lt;p&gt;数据库事务 (Database Transaction)，是指作为单个逻辑工作单元执行的一系列操作，要么完全执行，要么完全地不执行。要么完全地不执行。一般来说，事务是必须满足 4 个条件 (ACID)：&lt;code&gt;原子性 (Atomicity)&lt;/code&gt;、&lt;code&gt;一致性 (Consistency)&lt;/code&gt;、&lt;code&gt;隔离性 (Isolation)&lt;/code&gt;、&lt;code&gt;持久性 (Durability)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

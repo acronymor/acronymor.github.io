@@ -1,87 +1,68 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jvm on acronymor&#39;s blog</title>
+    <title>Jvm on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/jvm/</link>
-    <description>Recent content in jvm on acronymor&#39;s blog</description>
+    <description>Recent content in Jvm on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Sep 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/jvm/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Sep 2017 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/jvm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch08-Java 之 垃圾回收器</title>
       <link>https://acronymor.com/posts/jdk/ch08/</link>
       <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch08/</guid>
       <description>&lt;p&gt;垃圾回收器经过了很长时间的发展，很多垃圾回收器也慢慢的埋入到了历史场合中。这里简单的做个划分，已经淘汰的垃圾回收器归到&lt;strong&gt;古典 GC&lt;/strong&gt;的范畴，目前还在使用以及正在开发的归到&lt;strong&gt;现代 GC&lt;/strong&gt;的范畴。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Java 之 内存分配与回收策略</title>
       <link>https://acronymor.com/posts/jdk/ch07/</link>
       <pubDate>Tue, 05 Sep 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch07/</guid>
       <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Java 之 垃圾收集算法</title>
       <link>https://acronymor.com/posts/jdk/ch06/</link>
       <pubDate>Wed, 30 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch06/</guid>
       <description>&lt;p&gt;在确定了哪些垃圾可以被回收后，垃圾收集器要做的事情就是开始进行垃圾回收，但是这里面涉及到一个问题是：如何高效地进行垃圾回收。由于 Java 虚拟机规范并没有对如何实现垃圾收集器做出明确的规定，因此各个厂商的虚拟机可以采用不同的方式来实现垃圾收集器，所以在此只讨论几种常见的垃圾收集算法的核心思想。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Java 之 引用类型</title>
       <link>https://acronymor.com/posts/jdk/ch05/</link>
       <pubDate>Sat, 19 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch05/</guid>
       <description>&lt;p&gt;无论是通过引用计算算法判断对象的引用数量，还是通过可达性分析算法判断对象是否可达，判定对象是否可被回收都与引用有关。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java 之 类的整个生命周期</title>
       <link>https://acronymor.com/posts/jdk/ch04/</link>
       <pubDate>Tue, 15 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch04/</guid>
       <description>&lt;p&gt;其中类加载的过程包括了&lt;code&gt;加载&lt;/code&gt;、&lt;code&gt;验证&lt;/code&gt;、&lt;code&gt;准备&lt;/code&gt;、&lt;code&gt;解析&lt;/code&gt;、&lt;code&gt;初始化&lt;/code&gt;五个阶段。在这五个阶段中，加载、验证、准备和初始化这四个阶段发生的顺序是确定的，而解析阶段则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持 Java 语言的运行时绑定 (也成为动态绑定或晚期绑定)。另外注意这里的几个阶段是按顺序开始，而不是按顺序进行或完成，因为这些阶段通常都是互相交叉地混合进行的，通常在一个阶段执行的过程中调用或激活另一个阶段。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java 之 Java 对象结构</title>
       <link>https://acronymor.com/posts/jdk/ch03/</link>
       <pubDate>Thu, 10 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch03/</guid>
       <description>&lt;p&gt;在 HotSpot 虚拟机中，对象在内存中存储的布局可以分为三块区域：&lt;strong&gt;对象头 (Header)&lt;/strong&gt;、 &lt;strong&gt;实例数据 (Instance Data)&lt;/strong&gt;、&lt;strong&gt;对齐填充 (Padding)&lt;/strong&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java 之 JVM 内存结构 (JVM)</title>
       <link>https://acronymor.com/posts/jdk/ch02/</link>
       <pubDate>Sun, 06 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch02/</guid>
-      <description>&lt;p&gt;Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;线程私有：程序计数器、虚拟机栈、本地方法区&lt;/li&gt;
-&lt;li&gt;线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）&lt;/li&gt;
-&lt;/ul&gt;</description>
+      <description>&lt;p&gt;Java 虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁。另外一些则是与线程一一对应的，这些与线程一一对应的数据区域会随着线程开始和结束而创建和销毁。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;线程私有：程序计数器、虚拟机栈、本地方法区&lt;/li&gt;&#xA;&lt;li&gt;线程共享：堆、方法区，堆外内存（Java7 的永久代或 JDK8 的元空间、代码缓存）&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 Java 内存模型 (JMM)</title>
       <link>https://acronymor.com/posts/jdk/ch01/</link>
       <pubDate>Tue, 01 Aug 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/jdk/ch01/</guid>
       <description>&lt;p&gt;JMM 定义了 Java 虚拟机 (JVM) 在计算机内存 (RAM) 中的工作方式，JVM 是 java 整个计算虚拟模型。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -1,139 +1,110 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>flink on acronymor&#39;s blog</title>
+    <title>Flink on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/flink/</link>
-    <description>Recent content in flink on acronymor&#39;s blog</description>
+    <description>Recent content in Flink on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/flink/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/flink/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch14-Flink 之 Exactly-Once 语义</title>
       <link>https://acronymor.com/posts/apache-flink/ch14/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch14/</guid>
-      <description></description>
+      <description>Flink 需要搭配特定 Source 和 Sink 才能实现精确一次处理语义。&#xA;在 Flink 中需要端到端精准一次处理的位置有三个&#xA;Source 端：通过保存消费数据的偏移量来保证一致性，所以 source 必须具有可以重置读位置的能力才行。 Flink 内部端：利用 Checkpoint 机制，把状态存盘，发生故障的时候可以恢复，保证内部的状态一致性。 Sink 端在 Flink 1.4 版本引入了两阶段提交 Sink 来解决精确一次处理语义，sink 必须具有幂等性写入和事务性写入的特性。 参考文献 # 硬核！八张图搞懂 Flink 端到端精准一次处理语义 Exactly-once（深入原理，建议收藏） </description>
     </item>
-    
     <item>
       <title>Ch13-Flink 之 细粒度资源管理</title>
       <link>https://acronymor.com/posts/apache-flink/ch13/</link>
       <pubDate>Sun, 24 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch13/</guid>
       <description>&lt;p&gt;Flink 之 细粒度资源管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-Flink 之 Window</title>
       <link>https://acronymor.com/posts/apache-flink/ch12/</link>
       <pubDate>Fri, 15 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch12/</guid>
       <description>&lt;p&gt;Flink 之 Window&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-Flink 之 Watermark</title>
       <link>https://acronymor.com/posts/apache-flink/ch11/</link>
       <pubDate>Sat, 09 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch11/</guid>
       <description>&lt;p&gt;Flink 之 watermark&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch10-Flink 之 BackPressure</title>
       <link>https://acronymor.com/posts/apache-flink/ch10/</link>
       <pubDate>Sun, 03 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch10/</guid>
-      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;tcp_flow.png&#34; alt=&#34;tcp flow&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;简单来说，如果反压机制实现在 Socket 层，那便是 TCP-Based 反压机制；如果实现在 Netty 层，那便是 Credit-Based 反压机制。&lt;/p&gt;</description>
+      <description>&lt;p&gt;Flink 1.5 之前使用的是 TCP-Based 反压机制，自 Flink 1.5(包含) 使用的是 Credit-Based 反压机制。&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;tcp_flow.png&#34; alt=&#34;tcp flow&#34; /&gt;&lt;/p&gt;&#xA;&lt;p&gt;简单来说，如果反压机制实现在 Socket 层，那便是 TCP-Based 反压机制；如果实现在 Netty 层，那便是 Credit-Based 反压机制。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Flink 之 Savepoint</title>
       <link>https://acronymor.com/posts/apache-flink/ch09/</link>
       <pubDate>Thu, 31 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch09/</guid>
       <description>&lt;p&gt;Savepoint 跟 Checkpoint 的差别在于 Checkpoint 是 Flink 对于一个有状态应用在运行中利用分布式快照持续周期性的产生 Checkpoint，而 Savepoint 则是手动产生的 Checkpoint，Savepoint 记录着流式应用中所有运算元的状态。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Flink 之 Checkpoint</title>
       <link>https://acronymor.com/posts/apache-flink/ch08/</link>
       <pubDate>Fri, 25 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch08/</guid>
       <description>&lt;p&gt;Checkpoint 属于一种机制，&lt;code&gt;State + ABS(Asynchronouse Barrier Snapshot)&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Flink 之 State</title>
       <link>https://acronymor.com/posts/apache-flink/ch07/</link>
       <pubDate>Sun, 20 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch07/</guid>
       <description>&lt;p&gt;State 指一个具体的 task/operator 的状态，State Backends 指具体状态的存储介质&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Flink 之 容错机制</title>
       <link>https://acronymor.com/posts/apache-flink/ch06/</link>
       <pubDate>Sun, 13 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch06/</guid>
       <description>&lt;p&gt;Flink 容错机制&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Flink 之 内存管理</title>
       <link>https://acronymor.com/posts/apache-flink/ch05/</link>
       <pubDate>Sat, 05 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch05/</guid>
       <description>&lt;p&gt;Flink 内存管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Flink 之 图</title>
       <link>https://acronymor.com/posts/apache-flink/ch04/</link>
       <pubDate>Tue, 01 Dec 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch04/</guid>
       <description>&lt;p&gt;Flink 图的转换概述&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Flink 之 Job 执行流程</title>
       <link>https://acronymor.com/posts/apache-flink/ch03/</link>
       <pubDate>Wed, 04 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch03/</guid>
       <description>&lt;p&gt;Flink Job 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Flink 之 应用执行模式</title>
       <link>https://acronymor.com/posts/apache-flink/ch02/</link>
       <pubDate>Tue, 03 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch02/</guid>
       <description>&lt;p&gt;Flink 应用程序 是从其 main() 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（LocalEnvironment）中进行，或具有多台机器的集群的远程设置（RemoteEnvironment）中进行。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Flink 之 介绍</title>
       <link>https://acronymor.com/posts/apache-flink/ch01/</link>
       <pubDate>Sun, 01 Nov 2020 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-flink/ch01/</guid>
       <description>&lt;p&gt;Apache Flink 是 Apache 基金会旗下的一个开源大数据处理框架。应用于分布式、高性能、高可用的数据流应用程序。可以处理有限数据流和无限数据流，即能够处理有边界和无边界的数据流。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

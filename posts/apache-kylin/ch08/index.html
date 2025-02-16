@@ -11,12 +11,13 @@
 <meta property="og:url" content="https://acronymor.com/posts/apache-kylin/ch08/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-07-10T00:00:00+08:00" />
 <meta property="article:modified_time" content="2021-07-10T00:00:00+08:00" />
+
 <title>Ch08-Kylin 之 部分细节 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -175,7 +176,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/kylin/">kylin</a>
+      <a href="/tags/kylin/">Kylin</a>
   </div>
   
 
@@ -188,69 +189,69 @@ var _hmt = _hmt || [];
 </h1>
 <p>KylinConfig 除过承载<code>kylin.properties</code>和<code>kylin-defaults.properties</code>中的所有配置项之外，还保留了一个<code>transient Map&lt;Class, Object&gt; managersCache = new ConcurrentHashMap&lt;&gt;();</code>，这个 CHM 采用懒加载的方式，将 Kylin 所有的 manager 加载进来，这样当某个逻辑需要指定的 Manager 时，就可以直接通过这个 map 获取到（如果获取不到的话，会将对应的 manager 构建起来，然后放到这个 map 里面，同时返回）。</p>
 <p>目前整个 Kylin-4.0.0 中总共有 23 种 manager：<code>BadQueryHistoryManager</code>, <code>Broadcaster</code>, <code>CubeDescManager</code>, <code>CubeManager</code>, <code>CuboidManager</code>, <code>DataModelManager</code>, <code>DictionaryManager</code>, <code>DistributedScheduler</code>, <code>DraftManager</code>, <code>ExecutableDao</code>, <code>ExecutableManager</code>, <code>HybridManager</code>, <code>KafkaConfigManager</code>, <code>KylinUserManager</code>, <code>ProjectManager</code>, <code>RealizationRegistry</code>, <code>SnapshotManager</code>, <code>SourceManager</code>, <code>StreamingManager</code>, <code>StreamingSourceConfigManager</code>, <code>TableACLManager</code>, <code>TableMetadataManager</code>, <code>TempStatementManager</code>。这些 manager 全部通过 KylinConfig 中的 getManager 方法初始化并获取。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">getManager</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clz<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        KylinConfig base <span style="color:#f92672">=</span> base<span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>base <span style="color:#f92672">!=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> base<span style="color:#f92672">.</span><span style="color:#a6e22e">getManager</span><span style="color:#f92672">(</span>clz<span style="color:#f92672">);</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">getManager</span>(Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> clz) {
+</span></span><span style="display:flex;"><span>        KylinConfig base <span style="color:#f92672">=</span> base();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (base <span style="color:#f92672">!=</span> <span style="color:#66d9ef">this</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> base.<span style="color:#a6e22e">getManager</span>(clz);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>managersCache <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            managersCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ConcurrentHashMap<span style="color:#f92672">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (managersCache <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            managersCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ConcurrentHashMap<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        Object mgr <span style="color:#f92672">=</span> managersCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>clz<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mgr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> mgr<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        Object mgr <span style="color:#f92672">=</span> managersCache.<span style="color:#a6e22e">get</span>(clz);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (mgr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> (T) mgr;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>clz<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            mgr <span style="color:#f92672">=</span> managersCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>clz<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mgr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> mgr<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">synchronized</span> (clz) {
+</span></span><span style="display:flex;"><span>            mgr <span style="color:#f92672">=</span> managersCache.<span style="color:#a6e22e">get</span>(clz);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (mgr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> (T) mgr;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                logger<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Creating new manager instance of {}&#34;</span><span style="color:#f92672">,</span> clz<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                logger.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Creating new manager instance of {}&#34;</span>, clz);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// new manager via static Manager.newInstance()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                Method method <span style="color:#f92672">=</span> clz<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeclaredMethod</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;newInstance&#34;</span><span style="color:#f92672">,</span> KylinConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>                method<span style="color:#f92672">.</span><span style="color:#a6e22e">setAccessible</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span> <span style="color:#75715e">// override accessibility
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                mgr <span style="color:#f92672">=</span> method<span style="color:#f92672">.</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException<span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>            managersCache<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>clz<span style="color:#f92672">,</span> mgr<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> mgr<span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// new manager via static Manager.newInstance()</span>
+</span></span><span style="display:flex;"><span>                Method method <span style="color:#f92672">=</span> clz.<span style="color:#a6e22e">getDeclaredMethod</span>(<span style="color:#e6db74">&#34;newInstance&#34;</span>, KylinConfig.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>                method.<span style="color:#a6e22e">setAccessible</span>(<span style="color:#66d9ef">true</span>); <span style="color:#75715e">// override accessibility</span>
+</span></span><span style="display:flex;"><span>                mgr <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">invoke</span>(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException(e);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            managersCache.<span style="color:#a6e22e">put</span>(clz, mgr);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (T) mgr;
+</span></span><span style="display:flex;"><span>    }
 </span></span></code></pre></div><h1 id="2-olap_modeljson-是每次查询都会生成吗">
   2. olap_model.json 是每次查询都会生成吗？
   <a class="anchor" href="#2-olap_modeljson-%e6%98%af%e6%af%8f%e6%ac%a1%e6%9f%a5%e8%af%a2%e9%83%bd%e4%bc%9a%e7%94%9f%e6%88%90%e5%90%97">#</a>
 </h1>
 <p>这个 json 文件出现在每次查询，调用 calcite 的时候，传入 schema 信息时用到。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QueryConnection</span> <span style="color:#f92672">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QueryConnection</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Boolean isRegister <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Boolean isRegister <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Connection <span style="color:#a6e22e">getConnection</span><span style="color:#f92672">(</span>String project<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> SQLException <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>isRegister<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                Class<span style="color:#f92672">&lt;?&gt;</span> aClass <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getContextClassLoader</span><span style="color:#f92672">()</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">.</span><span style="color:#a6e22e">loadClass</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;org.apache.calcite.jdbc.Driver&#34;</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>                Driver o <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Driver<span style="color:#f92672">)</span> aClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeclaredConstructor</span><span style="color:#f92672">().</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>                DriverManager<span style="color:#f92672">.</span><span style="color:#a6e22e">registerDriver</span><span style="color:#f92672">(</span>o<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ClassNotFoundException <span style="color:#f92672">|</span> InstantiationException <span style="color:#f92672">|</span> IllegalAccessException <span style="color:#f92672">|</span> NoSuchMethodException <span style="color:#f92672">|</span> InvocationTargetException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>                e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>            isRegister <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>        File olapTmp <span style="color:#f92672">=</span> OLAPSchemaFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">createTempOLAPJson</span><span style="color:#f92672">(</span>project<span style="color:#f92672">,</span> KylinConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">getInstanceFromEnv</span><span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>        Properties info <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties<span style="color:#f92672">();</span>
-</span></span><span style="display:flex;"><span>        info<span style="color:#f92672">.</span><span style="color:#a6e22e">putAll</span><span style="color:#f92672">(</span>KylinConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">getInstanceFromEnv</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getCalciteExtrasProperties</span><span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Import calcite props from jdbc client(override the kylin.properties)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        info<span style="color:#f92672">.</span><span style="color:#a6e22e">putAll</span><span style="color:#f92672">(</span>BackdoorToggles<span style="color:#f92672">.</span><span style="color:#a6e22e">getJdbcDriverClientCalciteProps</span><span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>        info<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;model&#34;</span><span style="color:#f92672">,</span> olapTmp<span style="color:#f92672">.</span><span style="color:#a6e22e">getAbsolutePath</span><span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>        info<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;typeSystem&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;org.apache.kylin.query.calcite.KylinRelDataTypeSystem&#34;</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> DriverManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getConnection</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;jdbc:calcite:&#34;</span><span style="color:#f92672">,</span> info<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Connection <span style="color:#a6e22e">getConnection</span>(String project) <span style="color:#66d9ef">throws</span> SQLException {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>isRegister) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                Class<span style="color:#f92672">&lt;?&gt;</span> aClass <span style="color:#f92672">=</span> Thread.<span style="color:#a6e22e">currentThread</span>().<span style="color:#a6e22e">getContextClassLoader</span>()
+</span></span><span style="display:flex;"><span>                        .<span style="color:#a6e22e">loadClass</span>(<span style="color:#e6db74">&#34;org.apache.calcite.jdbc.Driver&#34;</span>);
+</span></span><span style="display:flex;"><span>                Driver o <span style="color:#f92672">=</span> (Driver) aClass.<span style="color:#a6e22e">getDeclaredConstructor</span>().<span style="color:#a6e22e">newInstance</span>();
+</span></span><span style="display:flex;"><span>                DriverManager.<span style="color:#a6e22e">registerDriver</span>(o);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (ClassNotFoundException <span style="color:#f92672">|</span> InstantiationException <span style="color:#f92672">|</span> IllegalAccessException <span style="color:#f92672">|</span> NoSuchMethodException <span style="color:#f92672">|</span> InvocationTargetException e) {
+</span></span><span style="display:flex;"><span>                e.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            isRegister <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        File olapTmp <span style="color:#f92672">=</span> OLAPSchemaFactory.<span style="color:#a6e22e">createTempOLAPJson</span>(project, KylinConfig.<span style="color:#a6e22e">getInstanceFromEnv</span>());
+</span></span><span style="display:flex;"><span>        Properties info <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
+</span></span><span style="display:flex;"><span>        info.<span style="color:#a6e22e">putAll</span>(KylinConfig.<span style="color:#a6e22e">getInstanceFromEnv</span>().<span style="color:#a6e22e">getCalciteExtrasProperties</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Import calcite props from jdbc client(override the kylin.properties)</span>
+</span></span><span style="display:flex;"><span>        info.<span style="color:#a6e22e">putAll</span>(BackdoorToggles.<span style="color:#a6e22e">getJdbcDriverClientCalciteProps</span>());
+</span></span><span style="display:flex;"><span>        info.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;model&#34;</span>, olapTmp.<span style="color:#a6e22e">getAbsolutePath</span>());
+</span></span><span style="display:flex;"><span>        info.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;typeSystem&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kylin.query.calcite.KylinRelDataTypeSystem&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> DriverManager.<span style="color:#a6e22e">getConnection</span>(<span style="color:#e6db74">&#34;jdbc:calcite:&#34;</span>, info);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>可以看到 <code>QueryConnection</code> 不是单例的实现，所以 Kylin Web 界面每发起一次查询时，这里都会借助 Calcite 建立一次链接。因此 info 中的<code>model.json</code>的内容在每次查询时都会生成，但是最终写入磁盘的文件只会在第一次查询的时候生成。在<code>OLAPSchemaFactory</code>内部有一个缓存<code>Map&lt;String, File&gt; cachedJsons = Maps.newConcurrentMap()</code>，这个 key 值是 json 的内容，value 是 json 的路径。因此只有这个 map 还存在，那么这个文件是不会再生成的（注意，这里没有检测文件是否存在，所以在 kylin 启动起来后，删掉这个文件，那查询就只能报错了）。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&#34;caseSensitive&#34; -&gt; &#34;true&#34;
 </span></span><span style="display:flex;"><span>&#34;unquotedCasing&#34; -&gt; &#34;TO_UPPER&#34;

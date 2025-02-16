@@ -6,42 +6,35 @@
     <description>Recent content in Java | Map on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Mar 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-Map/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Mar 2017 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Java-Map/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch04-Java Map 之 WeakHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch04/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch04/</guid>
       <description>&lt;p&gt;WeakHashMap 的特殊之处在于 WeakHashMap 里的 entry 可能会被 GC 自动删除，即使程序员没有调用 remove() 或者 clear() 方法。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Map 之 TreeMap</title>
       <link>https://acronymor.com/posts/java-map/ch03/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch03/</guid>
       <description>&lt;p&gt;TreeMap 实现了 SortedMap 接口，也就是说会按照 key 的大小顺序对 Map 中的元素进行排序，key 大小的评判可以通过其本身的自然顺序 (natural ordering)，也可以通过构造时传入的比较器 (Comparator)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Map 之 LinkedHashMap</title>
       <link>https://acronymor.com/posts/java-map/ch02/</link>
       <pubDate>Mon, 13 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch02/</guid>
       <description>&lt;p&gt;LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java Map 之 HashMap</title>
       <link>https://acronymor.com/posts/java-map/ch01/</link>
       <pubDate>Fri, 10 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-map/ch01/</guid>
-      <description></description>
+      <description> 1. 底层数据结构 # Java 1.7 中使用数组+链表这样的数据结构，自 Java 1.8 开始使用数组+链表+红黑树这样的数据结构。&#xA;2. 数组扩容 # resize() 方法用于初始化数组或数组扩容，每次扩容后，容量为原来的 2 倍，并进行数据迁移。&#xA;3.线程不安全 # HashMap 的线程不安全主要体现在下面两个方面：&#xA;在 Java 1.7 中，当并发执行扩容操作时会造成环形链。&#xA;这里主要的原因是线程1上线文中保存的指针指向的数据（newtable，临界资源）被线程2做了修改，当线程1重新恢复上线文后，在已经被修改的数据（newtable，临界资源）上继续未完成的操作，最终导致结果不符合预期。&#xA;在 Java 1.8 中，在并发执行 put 操作时会发生数据覆盖的情况。&#xA;4. 参考文献 # HashMap为什么在多线程操作下不安全（jdk1.7和jdk1.8原因不同） </description>
     </item>
-    
   </channel>
 </rss>

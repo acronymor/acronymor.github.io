@@ -6,51 +6,42 @@
     <description>Recent content in Software Engineering on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Mar 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Software-Engineering/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 Mar 2017 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Software-Engineering/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch05-锁</title>
       <link>https://acronymor.com/posts/software-engineering/ch05/</link>
       <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch05/</guid>
       <description>&lt;p&gt;锁概念&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-并发问题</title>
       <link>https://acronymor.com/posts/software-engineering/ch04/</link>
       <pubDate>Mon, 13 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch04/</guid>
       <description>&lt;p&gt;并发问题&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-equals</title>
       <link>https://acronymor.com/posts/software-engineering/ch03/</link>
       <pubDate>Sat, 15 Oct 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch03/</guid>
       <description>&lt;p&gt;equals() 或者 ==&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-重写与重载</title>
       <link>https://acronymor.com/posts/software-engineering/ch02/</link>
       <pubDate>Sun, 25 Sep 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch02/</guid>
       <description>&lt;p&gt;重写与重载&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-面向对象</title>
       <link>https://acronymor.com/posts/software-engineering/ch01/</link>
       <pubDate>Wed, 21 Sep 2016 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/software-engineering/ch01/</guid>
       <description>&lt;p&gt;面向对象有三大特性，&lt;code&gt;封装&lt;/code&gt;、&lt;code&gt;继承&lt;/code&gt;、&lt;code&gt;多态&lt;/code&gt;。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

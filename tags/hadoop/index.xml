@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hadoop on acronymor&#39;s blog</title>
+    <title>Hadoop on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/hadoop/</link>
-    <description>Recent content in hadoop on acronymor&#39;s blog</description>
+    <description>Recent content in Hadoop on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Mar 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 23 Mar 2018 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/hadoop/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch05-Hadoop 之 MapReduce</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch05/</link>
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch05/</guid>
       <description>&lt;p&gt;Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架；Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个 hadoop 集群上&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Hadoop 之 Yarn</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch04/</link>
       <pubDate>Wed, 21 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch04/</guid>
       <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Hadoop 之 HDFS 读写流程</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch03/</link>
       <pubDate>Mon, 19 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch03/</guid>
       <description>&lt;p&gt;HDFS 读写过程需要 NameNode，DataNode，Client 等组件共同参与才能完成，所以 HDFS 的读写流程还是比较复杂的。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Hadoop 之 HDFS 架构</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch02/</link>
       <pubDate>Sat, 17 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch02/</guid>
       <description>&lt;p&gt;HDFS 分布式部署场景下最常见的为两种架构，一种是基本的分布式架构，另一种是 HA 架构。在生产环境中一般都会部署 HA 架构。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Hadoop 介绍</title>
       <link>https://acronymor.com/posts/apache-hadoop/ch01/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-hadoop/ch01/</guid>
       <description>&lt;p&gt;2012 年社区发布了 Hadoop 2.0-alpha，自此 Hadoop 开启了 2.0 时代，相比较与 1.0 引入了 Yarn，NameNode HA 等重要组件和功能。随后数年 Hadoop 1.0 也慢慢的退出了历史舞台，所以这里也仅仅讲述 Hadoop 2.0 相关。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

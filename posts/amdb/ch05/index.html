@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="AmDB 的 Index 实现的是聚簇索引，主要是为了避免最后加载进来的 B&#43; Tree 占用内存过高。而且 B&#43; Tree 底层基于 KV 存储实现，从 B&#43; Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。
+1. 接口定义 # class Index { public: Status Save(); Status GetRecords(std::vector&lt;std::string&gt;&amp; keys, std::vector&lt;std::string&gt;* values); Status Insert(chunk::Chunk* chunk); Status Delete(chunk::Chunk* chunk); private: Bptree* bptree_; TreeCtx* tree_ctx_; } Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。
+2. BpTree # 2.1 接口定义 # class Bptree { public: explicit Bptree(TreeCtx* tree_ctx, BptNode* root); ~Bptree() { root_ = nullptr; }; [[nodiscard]] Status Insert(std::string&amp;&amp; key, std::string&amp;&amp; value); [[nodiscard]] Status Delete(const std::string&amp; key); [[nodiscard]] Status GetItem(const std::string&amp; key, std::string* output) const; private: BptNode* root_{nullptr}; TreeCtx* tree_ctx_{nullptr}; }; 2.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch05-AmDB 之 Index" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="AmDB 的 Index 实现的是聚簇索引，主要是为了避免最后加载进来的 B&#43; Tree 占用内存过高。而且 B&#43; Tree 底层基于 KV 存储实现，从 B&#43; Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。
+1. 接口定义 # class Index { public: Status Save(); Status GetRecords(std::vector&lt;std::string&gt;&amp; keys, std::vector&lt;std::string&gt;* values); Status Insert(chunk::Chunk* chunk); Status Delete(chunk::Chunk* chunk); private: Bptree* bptree_; TreeCtx* tree_ctx_; } Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。
+2. BpTree # 2.1 接口定义 # class Bptree { public: explicit Bptree(TreeCtx* tree_ctx, BptNode* root); ~Bptree() { root_ = nullptr; }; [[nodiscard]] Status Insert(std::string&amp;&amp; key, std::string&amp;&amp; value); [[nodiscard]] Status Delete(const std::string&amp; key); [[nodiscard]] Status GetItem(const std::string&amp; key, std::string* output) const; private: BptNode* root_{nullptr}; TreeCtx* tree_ctx_{nullptr}; }; 2." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/amdb/ch05/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-12-05T00:00:00+08:00" />
 <meta property="article:modified_time" content="2022-12-05T00:00:00+08:00" />
+
 <title>Ch05-AmDB 之 Index | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -185,7 +190,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/amdb/">amdb</a>
+      <a href="/tags/amdb/">Amdb</a>
   </div>
   
 

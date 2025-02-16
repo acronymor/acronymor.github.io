@@ -6,28 +6,21 @@
     <description>Recent content in Distributed-System on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 May 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Distributed-System/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 May 2018 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Distributed-System/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch02-BASE</title>
       <link>https://acronymor.com/posts/distributed-system/ch02/</link>
       <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/distributed-system/ch02/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Ch01-CAP</title>
       <link>https://acronymor.com/posts/distributed-system/ch01/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/distributed-system/ch01/</guid>
-      <description>&lt;p&gt;CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。&lt;/p&gt;</description>
+      <description>&lt;p&gt;CAP 理论是加州理工大学伯克利分校的 Eric Brewer 教授在 2000 年 7 月的 ACM PODC 会议上首次提出的，它是 Eric Brewer 在 Inktomi 期间研发搜索引擎、分布式 Web 缓存时得出的关于数据一致性（C：Consistency）、服务可用性（A：Availability）、分区容错性（P：Partition-tolerance）的一个著名猜想：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;It is impossible for a web service to provide the three following guarantees : Consistency, Availability and Partition-tolerance.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;在这个猜想提出的 2 年以后，来自麻省理工学院的 Seth Gilbert 和 Nancy Lynch 从理论上证明了 Eric Brewer 教授的 CAP 猜想是成立的，从此，CAP 理论在学术上正式成为了分布式领域公认的定理，并深刻影响着分布式系统的发展。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

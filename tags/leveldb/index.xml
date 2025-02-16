@@ -1,124 +1,96 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>leveldb on acronymor&#39;s blog</title>
+    <title>Leveldb on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/leveldb/</link>
-    <description>Recent content in leveldb on acronymor&#39;s blog</description>
+    <description>Recent content in Leveldb on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/leveldb/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Jul 2022 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/leveldb/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch13-LevelDB 之 事务</title>
       <link>https://acronymor.com/posts/leveldb/ch13/</link>
       <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch13/</guid>
       <description>&lt;p&gt;LevelDB 事务&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch12-LevelDB 之 Major Compaction</title>
       <link>https://acronymor.com/posts/leveldb/ch12/</link>
       <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch12/</guid>
       <description>&lt;p&gt;在 Minor Compaction 完成的时候，会对新生成的 version 计算一次 compaction_level_ 和 compaction_score_。这两个参数决定了当前 version 的 是否需要做 Major Compaction。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch11-LevelDB 之 Minor Compaction</title>
       <link>https://acronymor.com/posts/leveldb/ch11/</link>
       <pubDate>Thu, 30 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch11/</guid>
       <description>&lt;p&gt;Minor Compaction 流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-LevelDB 之 Open</title>
       <link>https://acronymor.com/posts/leveldb/ch09/</link>
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch09/</guid>
       <description>&lt;p&gt;Open 流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-LevelDB 之 编码</title>
       <link>https://acronymor.com/posts/leveldb/ch08/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch08/</guid>
-      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Endian-neutral encoding:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Fixed-length numbers are encoded with least-significant byte first
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* In addition we support variable length &amp;#34;varint&amp;#34; encoding
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Strings are encoded prefixed by their length in varint format
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- util/coding.h
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Endian-neutral encoding:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Fixed-length numbers are encoded with least-significant byte first&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* In addition we support variable length &amp;#34;varint&amp;#34; encoding&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;* Strings are encoded prefixed by their length in varint format&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- util/coding.h&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-LevelDB 之 WAL</title>
       <link>https://acronymor.com/posts/leveldb/ch07/</link>
       <pubDate>Wed, 25 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch07/</guid>
       <description>&lt;p&gt;WAL 一般用于故障恢复，其内容就是内存里 MemTable 内容的持久化，当一个 MemTable 写满后，开启一个新的 MemTable 时，也同时会开启一个新的 WAL，当 MemTable 被 Dump 到磁盘后，相应的 WAL 可以被删除。所以说控制每次 WAL 写入磁盘的方式，便可以控制最多可能丢失的数据量。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-LevelDB 之 Manifest</title>
       <link>https://acronymor.com/posts/leveldb/ch06/</link>
       <pubDate>Wed, 18 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch06/</guid>
       <description>&lt;p&gt;要想说明 Manifest 就不得不提出另一个重要的概念——Version。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-LevelDB 之 SSTable</title>
       <link>https://acronymor.com/posts/leveldb/ch05/</link>
       <pubDate>Mon, 16 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch05/</guid>
       <description>&lt;p&gt;SSTable&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-LevelDB 之 MemTable</title>
       <link>https://acronymor.com/posts/leveldb/ch04/</link>
       <pubDate>Thu, 12 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch04/</guid>
       <description>&lt;p&gt;MemTable&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-LevelDB 之 Arena 内存管理</title>
       <link>https://acronymor.com/posts/leveldb/ch03/</link>
       <pubDate>Tue, 10 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch03/</guid>
       <description>&lt;p&gt;Arena 内存管理&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-LevelDB 架构</title>
       <link>https://acronymor.com/posts/leveldb/ch02/</link>
       <pubDate>Thu, 05 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch02/</guid>
       <description>&lt;p&gt;LevelDB 架构&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-LevelDB 初识</title>
       <link>https://acronymor.com/posts/leveldb/ch01/</link>
       <pubDate>Sun, 01 May 2022 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/leveldb/ch01/</guid>
       <description>&lt;p&gt;leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

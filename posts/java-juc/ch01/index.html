@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content=" Happens-Before 规则 # 规则 说明 单一线程原则 在一个线程内，在程序前面的操作先行发生于后面的操作 管程锁定规则 一个 unlock 操作先行发生于后面对同一个锁的 lock 操作 volatile 变量规则 对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作 线程启动规则 Thread 对象的 start() 方法调用先行发生于此线程的每一个动作 线程加入规则 Thread 对象的结束先行发生于 join() 方法返回 线程中断规则 对线程 interrupt() 方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过 interrupted() 方法检测到是否有中断发生 对象终结规则 一个对象的初始化完成 (构造函数执行结束) 先行发生于它的 finalize() 方法的开始 传递性 如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那么操作 A 先行发生于操作 C 参考文献 # Java 并发 - 理论基础 ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch01-Java JUC 之 理论基础" />
-<meta property="og:description" content="" />
+<meta property="og:description" content=" Happens-Before 规则 # 规则 说明 单一线程原则 在一个线程内，在程序前面的操作先行发生于后面的操作 管程锁定规则 一个 unlock 操作先行发生于后面对同一个锁的 lock 操作 volatile 变量规则 对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作 线程启动规则 Thread 对象的 start() 方法调用先行发生于此线程的每一个动作 线程加入规则 Thread 对象的结束先行发生于 join() 方法返回 线程中断规则 对线程 interrupt() 方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过 interrupted() 方法检测到是否有中断发生 对象终结规则 一个对象的初始化完成 (构造函数执行结束) 先行发生于它的 finalize() 方法的开始 传递性 如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那么操作 A 先行发生于操作 C 参考文献 # Java 并发 - 理论基础 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/java-juc/ch01/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2017-04-04T00:00:00+08:00" />
 <meta property="article:modified_time" content="2017-04-04T00:00:00+08:00" />
+
 <title>Ch01-Java JUC 之 理论基础 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,7 +175,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/java/">java</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 

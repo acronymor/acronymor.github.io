@@ -1,101 +1,82 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>spark on acronymor&#39;s blog</title>
+    <title>Spark on acronymor&#39;s blog</title>
     <link>https://acronymor.com/tags/spark/</link>
-    <description>Recent content in spark on acronymor&#39;s blog</description>
+    <description>Recent content in Spark on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/spark/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/spark/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch10-Spark 之内存管理</title>
       <link>https://acronymor.com/posts/apache-spark/ch10/</link>
       <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch10/</guid>
       <description>&lt;p&gt;Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch09-Spark 之 BlockMananger</title>
       <link>https://acronymor.com/posts/apache-spark/ch09/</link>
       <pubDate>Sat, 15 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch09/</guid>
       <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch08-Spark 之 Checkpoint</title>
       <link>https://acronymor.com/posts/apache-spark/ch08/</link>
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch08/</guid>
       <description>&lt;p&gt;checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Spark 之缓存</title>
       <link>https://acronymor.com/posts/apache-spark/ch07/</link>
       <pubDate>Fri, 31 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch07/</guid>
       <description>&lt;p&gt;Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 &lt;code&gt;persist()&lt;/code&gt; 和 &lt;code&gt;cache()&lt;/code&gt; 函数来缓存 RDD）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Spark 之容错机制</title>
       <link>https://acronymor.com/posts/apache-spark/ch06/</link>
       <pubDate>Thu, 30 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch06/</guid>
       <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Spark 之数据抽象</title>
       <link>https://acronymor.com/posts/apache-spark/ch05/</link>
       <pubDate>Mon, 20 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch05/</guid>
       <description>&lt;p&gt;Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Spark 之 Shuffle</title>
       <link>https://acronymor.com/posts/apache-spark/ch04/</link>
       <pubDate>Wed, 15 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch04/</guid>
       <description>&lt;p&gt;Spark Shuffle 经过了若干次优化。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Spark 之 Job 执行流程</title>
       <link>https://acronymor.com/posts/apache-spark/ch03/</link>
       <pubDate>Sun, 12 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch03/</guid>
       <description>&lt;p&gt;Spark Job 执行流程。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Spark 应用执行模式</title>
       <link>https://acronymor.com/posts/apache-spark/ch02/</link>
       <pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch02/</guid>
       <description>&lt;p&gt;Spark 应用执行模式的不同主要体现在 Cluster Manager 使用的是哪个。如果是单独的进程，那么就是 Standalone 模式；如果是 Hadoop Yarn，那就是 Hadoop Yarn 模式。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Spark 介绍</title>
       <link>https://acronymor.com/posts/apache-spark/ch01/</link>
       <pubDate>Sun, 01 Jul 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-spark/ch01/</guid>
       <description>&lt;p&gt;Apache Spark 是用于大规模数据处理的统一分析引擎，基于内存计算，提高了在大数据环境下数据处理的实时性，同时保证了高容错性和高可伸缩性，允许用户将 Spark 部署在大量硬件之上，形成集群。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -3,20 +3,35 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content=" 1. 基本原理 # 2. 为什么是三次握手 # 用于保证可靠性和流量控制维护的某些状态信息，这些信息的组合（包括 Socket、序列号和窗口大小）称为连接。
+三次握手才可以阻止重复历史连接的初始化（主要原因）
+在 client 第二次与 server 握手开始之前，会判断 isn 是否符合预期；如果符合预期，那么会向 server 发送 ack 建立连接；如果不符合预期，那么向 server 发送 rst 终止连接。
+三次握手才可以同步双方的初始序列号
+在 client 第一次与 server 握手的时候，会将 client_isn 同步给 server；在 server 第一次回复 client 的时候，会将 server_isn 同步给 client。
+三次握手才可以避免资源浪费
+不使用「两次握手」和「四次握手」的原因：
+两次握手：无法防止历史连接的建立，会造成双方资源的浪费，也无法可靠的同步双方序列号； 四次握手：三次握手就已经理论上最少可靠连接建立，所以不需要使用更多的通信次数。 3. 参考文献 # 为什么是三次握手？不是两次、四次？ ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch03-TCP 之 三次握手" />
-<meta property="og:description" content="" />
+<meta property="og:description" content=" 1. 基本原理 # 2. 为什么是三次握手 # 用于保证可靠性和流量控制维护的某些状态信息，这些信息的组合（包括 Socket、序列号和窗口大小）称为连接。
+三次握手才可以阻止重复历史连接的初始化（主要原因）
+在 client 第二次与 server 握手开始之前，会判断 isn 是否符合预期；如果符合预期，那么会向 server 发送 ack 建立连接；如果不符合预期，那么向 server 发送 rst 终止连接。
+三次握手才可以同步双方的初始序列号
+在 client 第一次与 server 握手的时候，会将 client_isn 同步给 server；在 server 第一次回复 client 的时候，会将 server_isn 同步给 client。
+三次握手才可以避免资源浪费
+不使用「两次握手」和「四次握手」的原因：
+两次握手：无法防止历史连接的建立，会造成双方资源的浪费，也无法可靠的同步双方序列号； 四次握手：三次握手就已经理论上最少可靠连接建立，所以不需要使用更多的通信次数。 3. 参考文献 # 为什么是三次握手？不是两次、四次？ " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/network/ch03/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-08-03T00:00:00+08:00" />
 <meta property="article:modified_time" content="2021-08-03T00:00:00+08:00" />
+
 <title>Ch03-TCP 之 三次握手 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -175,7 +190,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/network/">network</a>
+      <a href="/tags/network/">Network</a>
   </div>
   
 

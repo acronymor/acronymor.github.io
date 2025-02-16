@@ -11,12 +11,13 @@
 <meta property="og:url" content="https://acronymor.com/posts/apache-hbase/ch14/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-04-09T00:00:00+08:00" />
 <meta property="article:modified_time" content="2021-04-09T00:00:00+08:00" />
+
 <title>Ch14-HBase 之 CreateTable | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -185,7 +186,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/hbase/">hbase</a>
+      <a href="/tags/hbase/">Hbase</a>
   </div>
   
 
@@ -232,14 +233,14 @@ var _hmt = _hmt || [];
   2. 创建表的流程介绍
   <a class="anchor" href="#2-%e5%88%9b%e5%bb%ba%e8%a1%a8%e7%9a%84%e6%b5%81%e7%a8%8b%e4%bb%8b%e7%bb%8d">#</a>
 </h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>TableDescriptor table<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> <span style="color:#f92672">(</span>Admin admin <span style="color:#f92672">=</span> connection<span style="color:#f92672">.</span><span style="color:#a6e22e">getAdmin</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        admin<span style="color:#f92672">.</span><span style="color:#a6e22e">createTable</span><span style="color:#f92672">(</span>table<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">create</span>(TableDescriptor table) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> (Admin admin <span style="color:#f92672">=</span> connection.<span style="color:#a6e22e">getAdmin</span>()) {
+</span></span><span style="display:flex;"><span>        admin.<span style="color:#a6e22e">createTable</span>(table);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (IOException e) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>整个建表的代码段大概如上所示，看起来比较简单，但是实际整个流程异常的繁琐。</p>
 <p><img src="create-table-outline.png" alt="create table outline" /></p>
 <h2 id="21-hbase-client-的流程">
@@ -259,48 +260,48 @@ HMaster 接收到该请求后会执行后续逻辑，同时会返回一个 proc 
 <p>HBase Master 的流程较为繁琐，主要负责执行 Procedure。具体 Procedure 的工作原理，本节不再赘述，可以参考《HBase Procedure v2 原理说明》一节。这里直接开始讲述 Procedure 如何执行。</p>
 <p>Procedure 从 MasterProcedureScheduler 维护的 tableRunQueue 队列中取出 CreateTableProcedure 开始调用执行其中的 executeFromState() 方法。这部分代码即整个建表的核心逻辑。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">protected</span> Flow <span style="color:#a6e22e">executeFromState</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> MasterProcedureEnv env<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> CreateTableState state<span style="color:#f92672">)</span>       <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;{} execute state={}&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> state<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">switch</span> <span style="color:#f92672">(</span>state<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_PRE_OPERATION<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>          preCreate<span style="color:#f92672">(</span>env<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_WRITE_FS_LAYOUT</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_WRITE_FS_LAYOUT<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>          env<span style="color:#f92672">.</span><span style="color:#a6e22e">getMasterServices</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTableDescriptors</span><span style="color:#f92672">().</span><span style="color:#a6e22e">update</span><span style="color:#f92672">(</span>tableDescriptor<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_ADD_TO_META</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ADD_TO_META<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          newRegions <span style="color:#f92672">=</span> addTableToMeta<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> tableDescriptor<span style="color:#f92672">,</span> newRegions<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_ASSIGN_REGIONS</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ASSIGN_REGIONS<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          setEnablingState<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> getTableName<span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>          addChildProcedure<span style="color:#f92672">(</span>env<span style="color:#f92672">.</span><span style="color:#a6e22e">getAssignmentManager</span><span style="color:#f92672">().</span><span style="color:#a6e22e">createRoundRobinAssignProcedures</span><span style="color:#f92672">(</span>newRegions<span style="color:#f92672">));</span>
-</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_UPDATE_DESC_CACHE</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_UPDATE_DESC_CACHE<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          setEnabledState<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span> getTableName<span style="color:#f92672">());</span>
-</span></span><span style="display:flex;"><span>          setNextState<span style="color:#f92672">(</span>CreateTableState<span style="color:#f92672">.</span><span style="color:#a6e22e">CREATE_TABLE_POST_OPERATION</span><span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_POST_OPERATION<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          postCreate<span style="color:#f92672">(</span>env<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span> Flow<span style="color:#f92672">.</span><span style="color:#a6e22e">NO_MORE_STATE</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> UnsupportedOperationException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unhandled state=&#34;</span> <span style="color:#f92672">+</span> state<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>isRollbackSupported<span style="color:#f92672">(</span>state<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        setFailure<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;master-create-table&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Retriable error trying to create table=&#34;</span> <span style="color:#f92672">+</span> getTableName<span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; state=&#34;</span> <span style="color:#f92672">+</span> state<span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Flow<span style="color:#f92672">.</span><span style="color:#a6e22e">HAS_MORE_STATE</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">protected</span> Flow <span style="color:#a6e22e">executeFromState</span>(<span style="color:#66d9ef">final</span> MasterProcedureEnv env, <span style="color:#66d9ef">final</span> CreateTableState state)       <span style="color:#66d9ef">throws</span> InterruptedException {
+</span></span><span style="display:flex;"><span>    LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;{} execute state={}&#34;</span>, <span style="color:#66d9ef">this</span>, state);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">switch</span> (state) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_PRE_OPERATION:
+</span></span><span style="display:flex;"><span>          ...
+</span></span><span style="display:flex;"><span>          preCreate(env);
+</span></span><span style="display:flex;"><span>          setNextState(CreateTableState.<span style="color:#a6e22e">CREATE_TABLE_WRITE_FS_LAYOUT</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_WRITE_FS_LAYOUT:
+</span></span><span style="display:flex;"><span>          ...
+</span></span><span style="display:flex;"><span>          env.<span style="color:#a6e22e">getMasterServices</span>().<span style="color:#a6e22e">getTableDescriptors</span>().<span style="color:#a6e22e">update</span>(tableDescriptor, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>          setNextState(CreateTableState.<span style="color:#a6e22e">CREATE_TABLE_ADD_TO_META</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ADD_TO_META:
+</span></span><span style="display:flex;"><span>          newRegions <span style="color:#f92672">=</span> addTableToMeta(env, tableDescriptor, newRegions);
+</span></span><span style="display:flex;"><span>          setNextState(CreateTableState.<span style="color:#a6e22e">CREATE_TABLE_ASSIGN_REGIONS</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_ASSIGN_REGIONS:
+</span></span><span style="display:flex;"><span>          setEnablingState(env, getTableName());
+</span></span><span style="display:flex;"><span>          addChildProcedure(env.<span style="color:#a6e22e">getAssignmentManager</span>().<span style="color:#a6e22e">createRoundRobinAssignProcedures</span>(newRegions));
+</span></span><span style="display:flex;"><span>          setNextState(CreateTableState.<span style="color:#a6e22e">CREATE_TABLE_UPDATE_DESC_CACHE</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_UPDATE_DESC_CACHE:
+</span></span><span style="display:flex;"><span>          setEnabledState(env, getTableName());
+</span></span><span style="display:flex;"><span>          setNextState(CreateTableState.<span style="color:#a6e22e">CREATE_TABLE_POST_OPERATION</span>);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> CREATE_TABLE_POST_OPERATION:
+</span></span><span style="display:flex;"><span>          postCreate(env);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span> Flow.<span style="color:#a6e22e">NO_MORE_STATE</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> UnsupportedOperationException(<span style="color:#e6db74">&#34;unhandled state=&#34;</span> <span style="color:#f92672">+</span> state);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (IOException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (isRollbackSupported(state)) {
+</span></span><span style="display:flex;"><span>        setFailure(<span style="color:#e6db74">&#34;master-create-table&#34;</span>, e);
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        LOG.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;Retriable error trying to create table=&#34;</span> <span style="color:#f92672">+</span> getTableName() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; state=&#34;</span> <span style="color:#f92672">+</span> state, e);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Flow.<span style="color:#a6e22e">HAS_MORE_STATE</span>;
+</span></span><span style="display:flex;"><span>  }
 </span></span></code></pre></div><p>上述代码转换成流程图如下所示，可以看到因为 Procedure v2 的存在，整个建表流程被拆的非常琐碎，如果途中出现了异常，那么会在 Failure 中将本次 Procedure 的状态设置为 FAILED，后续尝试回滚截至该步骤的所有操作所产生的行为。</p>
 <p><img src="create-table-process.png" alt="create table process" /></p>
 <h2 id="22-hbase-regionserver-的流程">

@@ -6,78 +6,63 @@
     <description>Recent content in Apache Kylin on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Jul 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Apache-Kylin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 10 Jul 2021 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Apache-Kylin/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch08-Kylin 之 部分细节</title>
       <link>https://acronymor.com/posts/apache-kylin/ch08/</link>
       <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch08/</guid>
       <description>&lt;p&gt;Kylin 部分细节&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch07-Kylin 之 DISTINCT COUNT</title>
       <link>https://acronymor.com/posts/apache-kylin/ch07/</link>
       <pubDate>Sun, 04 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch07/</guid>
       <description>&lt;p&gt;distinct count&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch06-Kylin 之 剪枝优化</title>
       <link>https://acronymor.com/posts/apache-kylin/ch06/</link>
       <pubDate>Tue, 29 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch06/</guid>
       <description>&lt;p&gt;Kylin 剪枝优化&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch05-Kylin 之 Cube 构建算法</title>
       <link>https://acronymor.com/posts/apache-kylin/ch05/</link>
       <pubDate>Sat, 19 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch05/</guid>
       <description>&lt;p&gt;Kylin Cube 构建算法&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Kylin 之 Cube 构建流程</title>
       <link>https://acronymor.com/posts/apache-kylin/ch04/</link>
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch04/</guid>
       <description>&lt;p&gt;Kylin Cube 执行流程&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Kylin 之 Query</title>
       <link>https://acronymor.com/posts/apache-kylin/ch03/</link>
       <pubDate>Sat, 12 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch03/</guid>
-      <description></description>
+      <description>query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：&#xA;完整的处理逻辑如下图所示：&#xA;query 和 update 的逻辑如下所示：&#xA;1. Query # 在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在implement方法中完成 RelNode 到 Cube 处理逻辑的转换。&#xA;1.1 Cube 选取流程 # 整个过程封装在 RealizationChooser#selectRealization 中，大体上可以分为两步，第一部分是makeOrderedModelMap()，这一步会选出所有满足的 cuboid，第二步是selectRealization()，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲&#xA;1.1.1 对 model 及对应的 realizations 进行过滤及排序 # 获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName 对 realizations 执行过滤，得到 filteredRealizations NOT READY cube 会被过滤 黑名单中的 cube 会被过滤 cube.allColumns 必须与 OLAPContext.</description>
     </item>
-    
     <item>
       <title>Ch02-Kylin 之 Cube</title>
       <link>https://acronymor.com/posts/apache-kylin/ch02/</link>
       <pubDate>Fri, 21 May 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch02/</guid>
       <description>&lt;p&gt;Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Kylin 介绍</title>
       <link>https://acronymor.com/posts/apache-kylin/ch01/</link>
       <pubDate>Thu, 20 May 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/apache-kylin/ch01/</guid>
       <description>&lt;p&gt;Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

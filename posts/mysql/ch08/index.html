@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="1. latch # 是内存结构中的一种轻量级的锁，在 MySQL 数据库中，latch 是用于保护内存中 List Page 完整性的锁结构，latch 可以分为有 mutex、SX rw-lock（spin lock），SX rw-lock 是 MySQL 5.7 的新特性，针对 Page 粒度加的内存锁，有助于提升索引访问效率（针对索引更新的模式）。
+2. Lock # Gap Lock（间隙锁）锁住的区间均为开区间，间隙锁之间是兼容的，即两个事务可以同时持有包含共同间隙范围的间隙锁，并不存在互斥关系 Next-Key Lock（临键锁）锁住的区间除了 supremum 伪记录‍‍‍‍‍‍‍‍‍‍‍‍‍所在区间是开区间外，其余区间均为左开右闭区间；如果一个事务获取了 X 行的 next-key lock，那么另外一个事务在获取相同范围的 X 行的 next-key lock 时，是会被阻塞的 2.1 锁与事务隔离级别 # Isolation/Lock Lock Mode &#43; Lock Type Rec Lock Type Read uncommitted Read commited LOCK_IX &#43; TABLE_LOCK LOCK_X &#43; ROW_LOCK LOCK_REC_NOT_GAP Repeatable read LOCK_IX &#43; TABLE_LOCK LOCK_X &#43; ROW_LOCK LOCK_REC_NOT_GAP or LOCK_GAP or LOCK_ORDINARY Serializable 3.">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch08-MySQL 之 锁" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="1. latch # 是内存结构中的一种轻量级的锁，在 MySQL 数据库中，latch 是用于保护内存中 List Page 完整性的锁结构，latch 可以分为有 mutex、SX rw-lock（spin lock），SX rw-lock 是 MySQL 5.7 的新特性，针对 Page 粒度加的内存锁，有助于提升索引访问效率（针对索引更新的模式）。
+2. Lock # Gap Lock（间隙锁）锁住的区间均为开区间，间隙锁之间是兼容的，即两个事务可以同时持有包含共同间隙范围的间隙锁，并不存在互斥关系 Next-Key Lock（临键锁）锁住的区间除了 supremum 伪记录‍‍‍‍‍‍‍‍‍‍‍‍‍所在区间是开区间外，其余区间均为左开右闭区间；如果一个事务获取了 X 行的 next-key lock，那么另外一个事务在获取相同范围的 X 行的 next-key lock 时，是会被阻塞的 2.1 锁与事务隔离级别 # Isolation/Lock Lock Mode &#43; Lock Type Rec Lock Type Read uncommitted Read commited LOCK_IX &#43; TABLE_LOCK LOCK_X &#43; ROW_LOCK LOCK_REC_NOT_GAP Repeatable read LOCK_IX &#43; TABLE_LOCK LOCK_X &#43; ROW_LOCK LOCK_REC_NOT_GAP or LOCK_GAP or LOCK_ORDINARY Serializable 3." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://acronymor.com/posts/mysql/ch08/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-06-29T00:00:00+08:00" />
 <meta property="article:modified_time" content="2022-06-29T00:00:00+08:00" />
+
 <title>Ch08-MySQL 之 锁 | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.979b4bfbafdb93a7d80a904b1cfd05f346df3e8033ebc19527311bd2c65207ef.js" integrity="sha256-l5tL&#43;6/bk6fYCpBLHP0F80bfPoAz68GVJzEb0sZSB&#43;8=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.cefc60a5a923c581f23ff6c4d8ad19eb90dc2beb11085ab7b4078ce23b741e3a.js" integrity="sha256-zvxgpakjxYHyP/bE2K0Z65DcK&#43;sRCFq3tAeM4jt0Hjo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -179,7 +182,7 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/mysql/">mysql</a>
+      <a href="/tags/mysql/">Mysql</a>
   </div>
   
 

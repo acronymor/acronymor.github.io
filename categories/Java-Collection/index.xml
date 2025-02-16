@@ -6,51 +6,42 @@
     <description>Recent content in Java | Collection on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Feb 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/categories/Java-Collection/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Feb 2017 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/categories/Java-Collection/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ch05-Java Collection 之 PriorityQueue</title>
       <link>https://acronymor.com/posts/java-collection/ch05/</link>
       <pubDate>Sun, 05 Feb 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch05/</guid>
       <description>&lt;p&gt;优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch04-Java Collection 之 ArrayDeque</title>
       <link>https://acronymor.com/posts/java-collection/ch04/</link>
       <pubDate>Tue, 31 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch04/</guid>
       <description>&lt;p&gt;Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch03-Java Collection 之 LinkedList</title>
       <link>https://acronymor.com/posts/java-collection/ch03/</link>
       <pubDate>Mon, 23 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch03/</guid>
       <description>&lt;p&gt;LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch02-Java Collection 之 ArrayList</title>
       <link>https://acronymor.com/posts/java-collection/ch02/</link>
       <pubDate>Fri, 20 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch02/</guid>
       <description>&lt;p&gt;ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Ch01-Java 之 Collection 和 Map</title>
       <link>https://acronymor.com/posts/java-collection/ch01/</link>
       <pubDate>Sun, 15 Jan 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/posts/java-collection/ch01/</guid>
-      <description></description>
+      <description>&#xA;集合类 说明 TreeSet 基于红黑树实现，支持有序性操作，例如根据一个范围查找元素的操作。但是查找效率不如 HashSet，HashSet 查找的时间复杂度为 O(1)，TreeSet 则为 O(logN)。 HashSet 基于哈希表实现，支持快速查找，但不支持有序性操作。并且失去了元素的插入顺序信息，也就是说使用 Iterator 遍历 HashSet 得到的结果是不确定的。 LinkedHashSet 具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。 ArrayList 基于动态数组实现，支持随机访问。 Vector 和 ArrayList 类似，但它是线程安全的。 LinkedList 基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素。不仅如此，LinkedList 还可以用作栈、队列和双向队列。 PriorityQueue 基于堆结构实现，可以用它来实现优先队列。 TreeMap 基于红黑树实现。 HashMap 基于哈希表实现。 HashTable 和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。 LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用 (LRU) 顺序。 </description>
     </item>
-    
   </channel>
 </rss>

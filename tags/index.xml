@@ -6,204 +6,161 @@
     <description>Recent content in Tags on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Feb 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Apr 2023 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>cache</title>
-      <link>https://acronymor.com/tags/cache/</link>
-      <pubDate>Wed, 08 Feb 2023 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/cache/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>amdb</title>
-      <link>https://acronymor.com/tags/amdb/</link>
-      <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/amdb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>database</title>
-      <link>https://acronymor.com/tags/database/</link>
-      <pubDate>Thu, 03 Nov 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/database/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>leveldb</title>
-      <link>https://acronymor.com/tags/leveldb/</link>
-      <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/leveldb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>mysql</title>
-      <link>https://acronymor.com/tags/mysql/</link>
-      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
-      
-      <guid>https://acronymor.com/tags/mysql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>c&#43;&#43;</title>
+      <title>C&#43;&#43;</title>
       <link>https://acronymor.com/tags/c&#43;&#43;/</link>
-      <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
-      
+      <pubDate>Thu, 20 Apr 2023 00:00:00 +0800</pubDate>
       <guid>https://acronymor.com/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>elasticsearch</title>
+      <title>Cache</title>
+      <link>https://acronymor.com/tags/cache/</link>
+      <pubDate>Wed, 08 Feb 2023 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/cache/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Amdb</title>
+      <link>https://acronymor.com/tags/amdb/</link>
+      <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/amdb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Database</title>
+      <link>https://acronymor.com/tags/database/</link>
+      <pubDate>Thu, 03 Nov 2022 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/database/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Leveldb</title>
+      <link>https://acronymor.com/tags/leveldb/</link>
+      <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/leveldb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mysql</title>
+      <link>https://acronymor.com/tags/mysql/</link>
+      <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/mysql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Elasticsearch</title>
       <link>https://acronymor.com/tags/elasticsearch/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/elasticsearch/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>network</title>
+      <title>Network</title>
       <link>https://acronymor.com/tags/network/</link>
       <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/network/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>java</title>
+      <title>Java</title>
       <link>https://acronymor.com/tags/java/</link>
       <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/java/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>kylin</title>
+      <title>Kylin</title>
       <link>https://acronymor.com/tags/kylin/</link>
       <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/kylin/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>calcite</title>
+      <title>Calcite</title>
       <link>https://acronymor.com/tags/calcite/</link>
       <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/calcite/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hbase</title>
+      <title>Hbase</title>
       <link>https://acronymor.com/tags/hbase/</link>
       <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/hbase/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>flink</title>
+      <title>Flink</title>
       <link>https://acronymor.com/tags/flink/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/flink/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>antlr4</title>
+      <title>Antlr4</title>
       <link>https://acronymor.com/tags/antlr4/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/antlr4/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>spark</title>
+      <title>Spark</title>
       <link>https://acronymor.com/tags/spark/</link>
       <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/spark/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>kafka</title>
+      <title>Kafka</title>
       <link>https://acronymor.com/tags/kafka/</link>
       <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/kafka/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hive</title>
+      <title>Hive</title>
       <link>https://acronymor.com/tags/hive/</link>
       <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/hive/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>distributed-system</title>
+      <title>Distributed-System</title>
       <link>https://acronymor.com/tags/distributed-system/</link>
       <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/distributed-system/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>zookeeper</title>
+      <title>Zookeeper</title>
       <link>https://acronymor.com/tags/zookeeper/</link>
       <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/zookeeper/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>hadoop</title>
+      <title>Hadoop</title>
       <link>https://acronymor.com/tags/hadoop/</link>
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/hadoop/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>jvm</title>
+      <title>Jvm</title>
       <link>https://acronymor.com/tags/jvm/</link>
       <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/jvm/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>software</title>
+      <title>Software</title>
       <link>https://acronymor.com/tags/software/</link>
       <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
-      
       <guid>https://acronymor.com/tags/software/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>
