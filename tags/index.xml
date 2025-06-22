@@ -6,8 +6,15 @@
     <description>Recent content in Tags on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Apr 2023 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 01 Sep 2024 00:00:00 +0800</lastBuildDate>
     <atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Golang</title>
+      <link>https://acronymor.com/tags/golang/</link>
+      <pubDate>Sun, 01 Sep 2024 00:00:00 +0800</pubDate>
+      <guid>https://acronymor.com/tags/golang/</guid>
+      <description></description>
+    </item>
     <item>
       <title>C&#43;&#43;</title>
       <link>https://acronymor.com/tags/c&#43;&#43;/</link>
