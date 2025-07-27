@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Blog" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/posts/" />
+<meta property="og:url" content="http://localhost:44473/posts/" />
 
 <title>Blog | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -425,6 +425,199 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-map/ch02/">Ch02-Java Map 之 LinkedHashMap</a>
+    </h2>
+    
+  <h5>February 13, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Map/">Java | Map</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p><p>LinkedHashMap 是 HashMap 的直接子类，二者唯一的区别是 LinkedHashMap 在 HashMap 的基础上，采用双向链表 (doubly-linked list) 的形式将所有 entry 连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。</p>
+        <a href="/posts/java-map/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-map/ch01/">Ch01-Java Map 之 HashMap</a>
+    </h2>
+    
+  <h5>February 10, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Map/">Java | Map</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p> 1. 底层数据结构 # Java 1.7 中使用数组+链表这样的数据结构，自 Java 1.8 开始使用数组+链表+红黑树这样的数据结构。
+2. 数组扩容 # resize() 方法用于初始化数组或数组扩容，每次扩容后，容量为原来的 2 倍，并进行数据迁移。
+3.线程不安全 # HashMap 的线程不安全主要体现在下面两个方面：
+在 Java 1.7 中，当并发执行扩容操作时会造成环形链。 这里主要的原因是线程1上线文中保存的指针指向的数据（newtable，临界资源）被线程2做了修改，当线程1重新恢复上线文后，在已经被修改的数据（newtable，临界资源）上继续未完成的操作，最终导致结果不符合预期。 在 Java 1.8 中，在并发执行 put 操作时会发生数据覆盖的情况。 4. 参考文献 # HashMap为什么在多线程操作下不安全（jdk1.7和jdk1.8原因不同） 
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-collection/ch05/">Ch05-Java Collection 之 PriorityQueue</a>
+    </h2>
+    
+  <h5>February 5, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Collection/">Java | Collection</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p><p>优先队列的作用是能保证每次取出的元素都是队列中权值最小的，这里牵涉到了大小关系，元素大小的评判可以通过元素本身的自然顺序，也可以通过构造时传入的比较器 Comparator。</p>
+        <a href="/posts/java-collection/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-collection/ch04/">Ch04-Java Collection 之 ArrayDeque</a>
+    </h2>
+    
+  <h5>January 31, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Collection/">Java | Collection</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p><p>Java 里有一个叫做 Stack 的类，却没有叫做 Queue 的类 (它是个接口名字)。当需要使用栈时，Java 已不推荐使用 Stack，而是推荐使用更高效的 ArrayDeque；既然 Queue 只是一个接口，当需要使用队列时也就首选 ArrayDeque 了 (次选是 LinkedList)。</p>
+        <a href="/posts/java-collection/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-collection/ch03/">Ch03-Java Collection 之 LinkedList</a>
+    </h2>
+    
+  <h5>January 23, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Collection/">Java | Collection</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p><p>LinkedList 同时实现了 List 接口和 Deque 接口，也就是说它既可以看作一个顺序容器，又可以看作一个队列 (Queue)，同时又可以看作一个栈 (Stack)。所以当需要使用栈或者队列时，可以考虑使用 LinkedList。</p>
+        <a href="/posts/java-collection/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-collection/ch02/">Ch02-Java Collection 之 ArrayList</a>
+    </h2>
+    
+  <h5>January 20, 2017</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-Collection/">Java | Collection</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p><p>ArrayList 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。除该类未实现同步外，其余跟 Vector 大致相同。</p>
+        <a href="/posts/java-collection/ch02/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -556,135 +749,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/java-basic/ch01/">Ch01-Java 之 基础</a>
-    </h2>
-    
-  <h5>January 1, 2017</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Java-Basic/">Java | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/java/">Java</a>
-  </div>
-  
-
-
-
-
-    <p> 1.数据类型 # 基本类型 所占大小 (bit) 最小范围 最大范围 包装类型 boolean 1 Boolean byte 8 -128 127 Byte char 16 0 65535 Char short 16 -32768 32767 Short int 32 -2147483648 2147483647 Integer float 32 3.402823e+38 1.401298e-45 Float long 64 -9223372036854774808 9223372036854774807 Long double 64 1.797693e+308 4.9000000e-324 Double 基本类型都有对应的包装类型，基本类型与其对应的包装类型之间的赋值使用自动装箱与拆箱完成。
-2. 缓存池 # new Integer(123) 与 Integer.valueOf(123) 的区别在于：
-new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。 3. 访问权限修饰符 # Java 的访问控制是停留在编译层的，也就是它不会在 .class 文件中留下任何的痕迹，只在编译的时候进行访问控制的检查。其实，通过反射的手段，是可以访问任何包下任何类中的成员。
-修饰符 同一个类 同一个包 子类 任何地方 public yes yes yes yes protected yes yes yes default yes yes private yes 
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/software-engineering/ch03/">Ch03-equals</a>
-    </h2>
-    
-  <h5>October 15, 2016</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Software-Engineering/">Software Engineering</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/software/">Software</a>
-  </div>
-  
-
-
-
-
-    <p><p>equals() 或者 ==</p>
-        <a href="/posts/software-engineering/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/software-engineering/ch02/">Ch02-重写与重载</a>
-    </h2>
-    
-  <h5>September 25, 2016</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Software-Engineering/">Software Engineering</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/software/">Software</a>
-  </div>
-  
-
-
-
-
-    <p><p>重写与重载</p>
-        <a href="/posts/software-engineering/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/software-engineering/ch01/">Ch01-面向对象</a>
-    </h2>
-    
-  <h5>September 21, 2016</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Software-Engineering/">Software Engineering</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/software/">Software</a>
-  </div>
-  
-
-
-
-
-    <p><p>面向对象有三大特性，<code>封装</code>、<code>继承</code>、<code>多态</code>。</p>
-        <a href="/posts/software-engineering/ch01/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -693,9 +757,6 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       </li>
       <li class="page-item">
         <a href="/posts/page/18/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="/posts/page/15/" aria-label="Page 15" class="page-link" role="button">15</a>
       </li>
       <li class="page-item">
         <a href="/posts/page/16/" aria-label="Page 16" class="page-link" role="button">16</a>
@@ -709,11 +770,14 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       <li class="page-item active">
         <a aria-current="page" aria-label="Page 19" class="page-link" role="button">19</a>
       </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
+      <li class="page-item">
+        <a href="/posts/page/20/" aria-label="Page 20" class="page-link" role="button">20</a>
       </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      <li class="page-item">
+        <a href="/posts/page/20/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/page/20/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -759,7 +823,7 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -784,7 +848,7 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -907,8 +971,8 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -933,7 +997,7 @@ new Integer(123) 每次都会新建一个对象 Integer.valueOf(123) 会使用�
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

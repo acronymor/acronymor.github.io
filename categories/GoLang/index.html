@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="GoLang " />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/categories/GoLang/" />
+<meta property="og:url" content="http://localhost:44473/categories/GoLang/" />
 
 <title>GoLang  | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/categories/GoLang/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/categories/GoLang/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -428,7 +428,170 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/golang/ch01/">Ch01-GoLang 之 内存管理</a>
+      <a href="/posts/golang/ch06/">Ch06-GoLang 之 内存分配</a>
+    </h2>
+    
+  <h5>October 30, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>在栈上分配和回收内存的开销很低，只需要 2 个 CPU 指令：PUSH 和 POP，一个是将数据 push 到栈空间以完成分配，pop 则是释放空间，也就是说在栈上分配内存，消耗的仅是将数据拷贝到内存的时间，而内存的 I/O 通常能够达到 30GB/s，因此在栈上分配内存效率是非常高的。</p>
+<p>在堆上分配内存，一个很大的额外开销则是垃圾回收。Go 语言使用的是标记清除算法，并且在此基础上使用了三色标记法和写屏障技术，提高了效率。</p>
+        <a href="/posts/golang/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch05/">Ch05-GoLang 之 GMP</a>
+    </h2>
+    
+  <h5>October 18, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>在Go中，线程是运行goroutine的实体，调度器的功能是把可运行的goroutine分配到工作线程上。</p>
+        <a href="/posts/golang/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch04/">Ch04-GoLang 之 lock</a>
+    </h2>
+    
+  <h5>October 7, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>GoLang 之 lock</p>
+        <a href="/posts/golang/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch03/">Ch03-GoLang 之 panic 和 recover</a>
+    </h2>
+    
+  <h5>October 1, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>panic 能够改变程序的控制流，调用 panic 后会立刻停止执行当前函数的剩余代码，并在当前 Goroutine 中递归执行调用方的 defer；
+recover 可以中止 panic 造成的程序崩溃。它是一个只能在 defer 中发挥作用的函数，在其他作用域中调用不会发挥作用；</p>
+        <a href="/posts/golang/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch02/">Ch02-GoLang 之 defer</a>
+    </h2>
+    
+  <h5>September 28, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>Go 语言的 defer 会在当前函数返回前执行传入的函数，它会经常被用于关闭文件描述符、关闭数据库连接以及解锁资源。</p>
+<p>Go 在 1.13 版本 与 1.14 版本对 defer 进行了两次优化，使得 defer 的性能开销在大部分场景下都得到大幅降低。</p>
+        <a href="/posts/golang/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch01/">Ch01-GoLang 之 slice 和 map</a>
     </h2>
     
   <h5>September 1, 2024</h5>
@@ -445,14 +608,16 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/golang/">Golang</a>
+      <a href="/tags/GoLang/">GoLang</a>
   </div>
   
 
 
 
 
-    <p>
+    <p><p>slice，map</p>
+        <a href="/posts/golang/ch01/">...</a>
+      
     </p>
   </article>
   
@@ -501,7 +666,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -526,7 +691,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -649,8 +814,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -675,7 +840,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

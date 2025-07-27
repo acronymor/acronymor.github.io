@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Blog" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/posts/" />
+<meta property="og:url" content="http://localhost:44473/posts/" />
 
 <title>Blog | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -428,7 +428,170 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/golang/ch01/">Ch01-GoLang 之 内存管理</a>
+      <a href="/posts/golang/ch06/">Ch06-GoLang 之 内存分配</a>
+    </h2>
+    
+  <h5>October 30, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>在栈上分配和回收内存的开销很低，只需要 2 个 CPU 指令：PUSH 和 POP，一个是将数据 push 到栈空间以完成分配，pop 则是释放空间，也就是说在栈上分配内存，消耗的仅是将数据拷贝到内存的时间，而内存的 I/O 通常能够达到 30GB/s，因此在栈上分配内存效率是非常高的。</p>
+<p>在堆上分配内存，一个很大的额外开销则是垃圾回收。Go 语言使用的是标记清除算法，并且在此基础上使用了三色标记法和写屏障技术，提高了效率。</p>
+        <a href="/posts/golang/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch05/">Ch05-GoLang 之 GMP</a>
+    </h2>
+    
+  <h5>October 18, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>在Go中，线程是运行goroutine的实体，调度器的功能是把可运行的goroutine分配到工作线程上。</p>
+        <a href="/posts/golang/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch04/">Ch04-GoLang 之 lock</a>
+    </h2>
+    
+  <h5>October 7, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>GoLang 之 lock</p>
+        <a href="/posts/golang/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch03/">Ch03-GoLang 之 panic 和 recover</a>
+    </h2>
+    
+  <h5>October 1, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>panic 能够改变程序的控制流，调用 panic 后会立刻停止执行当前函数的剩余代码，并在当前 Goroutine 中递归执行调用方的 defer；
+recover 可以中止 panic 造成的程序崩溃。它是一个只能在 defer 中发挥作用的函数，在其他作用域中调用不会发挥作用；</p>
+        <a href="/posts/golang/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch02/">Ch02-GoLang 之 defer</a>
+    </h2>
+    
+  <h5>September 28, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+
+    <p><p>Go 语言的 defer 会在当前函数返回前执行传入的函数，它会经常被用于关闭文件描述符、关闭数据库连接以及解锁资源。</p>
+<p>Go 在 1.13 版本 与 1.14 版本对 defer 进行了两次优化，使得 defer 的性能开销在大部分场景下都得到大幅降低。</p>
+        <a href="/posts/golang/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/golang/ch01/">Ch01-GoLang 之 slice 和 map</a>
     </h2>
     
   <h5>September 1, 2024</h5>
@@ -445,14 +608,16 @@ var _hmt = _hmt || [];
   
   <div>
     
-      <a href="/tags/golang/">Golang</a>
+      <a href="/tags/GoLang/">GoLang</a>
   </div>
   
 
 
 
 
-    <p>
+    <p><p>slice，map</p>
+        <a href="/posts/golang/ch01/">...</a>
+      
     </p>
   </article>
   
@@ -584,175 +749,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/amdb/ch06/">Ch06-AmDB 之 Executor</a>
-    </h2>
-    
-  <h5>December 6, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/AmDB/">AmDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/amdb/">Amdb</a>
-  </div>
-  
-
-
-
-
-    <p>1. 接口定义 # class IExecutor { public: virtual Status Open(); virtual Status Close(); virtual State Prepare() = 0; virtual Status Work() = 0; InputPort&amp; CreateInputPort(); OutputPort&amp; CreateOutputPort(); protected: std::vector&lt;InputPort&gt; inputs_; std::vector&lt;OutputPort&gt; outputs_; } 2. 实现原理 # executor 对数据的处理都是以 chunk 为单位进行处理的。
-依次遍历所有的 executor，使用 Connect 将 Port 连接到一起； 依次遍历所有的 executor，调用每个 executor 的 Open() 将 executor 打开（根据 executor 特性决定，大部分什么操作都不做）； 依次遍历所有的 executor，调用每个 executor 的 Prepare() 将 executor 初始化（比如将 chunk 推到 Cache 中） 依次遍历所有的 executor，调用每个 executor 的 Work() 执行 executor（比如插入数据/读取数据等） 依次遍历所有的 executor，调用每个 executor 的 Close() 将 executor 关闭（大部分什么操作都不做） 当然上述的步骤只是为了方便说明而这么写的，实际上每个 executor 会被多次封装成 task 放入到队列中，由 scheduler 调度执行。
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/amdb/ch05/">Ch05-AmDB 之 Index</a>
-    </h2>
-    
-  <h5>December 5, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/AmDB/">AmDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/amdb/">Amdb</a>
-  </div>
-  
-
-
-
-
-    <p>AmDB 的 Index 实现的是聚簇索引，主要是为了避免最后加载进来的 B+ Tree 占用内存过高。而且 B+ Tree 底层基于 KV 存储实现，从 B+ Tree 中获取到 Key 再获取 Value 也并不是什么太难的事情。
-1. 接口定义 # class Index { public: Status Save(); Status GetRecords(std::vector&lt;std::string&gt;&amp; keys, std::vector&lt;std::string&gt;* values); Status Insert(chunk::Chunk* chunk); Status Delete(chunk::Chunk* chunk); private: Bptree* bptree_; TreeCtx* tree_ctx_; } Index 本质上还是对 BpTree 的封装，一个 Index 操作一个 BpTree。
-2. BpTree # 2.1 接口定义 # class Bptree { public: explicit Bptree(TreeCtx* tree_ctx, BptNode* root); ~Bptree() { root_ = nullptr; }; [[nodiscard]] Status Insert(std::string&amp;&amp; key, std::string&amp;&amp; value); [[nodiscard]] Status Delete(const std::string&amp; key); [[nodiscard]] Status GetItem(const std::string&amp; key, std::string* output) const; private: BptNode* root_{nullptr}; TreeCtx* tree_ctx_{nullptr}; }; 2.
-        <a href="/posts/amdb/ch05/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/amdb/ch04/">Ch04-AmDB 之 Chunk</a>
-    </h2>
-    
-  <h5>December 4, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/AmDB/">AmDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/amdb/">Amdb</a>
-  </div>
-  
-
-
-
-
-    <p><p>Chunk 由多个 Row 组成</p>
-        <a href="/posts/amdb/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/amdb/ch03/">Ch03-AmDB 之 ID 生成器</a>
-    </h2>
-    
-  <h5>December 3, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/AmDB/">AmDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/amdb/">Amdb</a>
-  </div>
-  
-
-
-
-
-    <p>1. 接口 # Status AllocateID(IDType type, const std::string&amp; key, uint64_t* id); Status BatchAllocateID(IDType type, const std::string&amp; key, size_t batch_size, std::vector&lt;uint64_t&gt;* id_list); 2. ID 生成器分类 # 分类 说明 IDType::Database 生成 Database 级别的 ID IDType::Table 生成 Table 级别的 ID IDType::Column 生成 Column 级别的 ID 3. ID 生成器原理 # 3.1 基本原理 # 这里以 IDType::Column 类型的生成器为例，cur_id 表示当前已经分配的 id，max_id 表示当前能分配的最大 id，left_num 表示能分配的 id 个数。 假如需要分配 n 个 id 的时候，首先将传进来的 key 取 hash 计算出具体的 bucket，然后判断 left_num 是否大于 n？
-        <a href="/posts/amdb/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/amdb/ch02/">Ch02-AmDB 之编码</a>
-    </h2>
-    
-  <h5>December 2, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/AmDB/">AmDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/amdb/">Amdb</a>
-  </div>
-  
-
-
-
-
-    <p> 1. 基本类型编码 # 编码相关函数位置，amdb/sql/codec/codec.h。
-1.1 string # 编码时字符串前面追加字符长度，解码时先取出字符长度然后从后面截取出需要的字符串。
-1.2 uint32/int32/uint64/int64 # 采用小端模式编码，即数字的低位存储在内存地址的低位。
-注意
-这里有个与大部分习惯相悖的地方。
-对于内存，大家习惯性的将低地址画在左边，高地址画在右边。 对于数字，大家习惯性的将高字节写在左边，将低字节写在右边。 纸面表达的时候，大家会习惯性的从左往右画，导致内存和数字在最终呈现形式上并不一致。
-2. 复杂类型编码 # 2.1 Row (table) # 对于表里面的每行数据，都会采用下述的方式进行编码。将该行的主键编码到 key 中，将该行其他列的数据编码到 value 中。
-2.2 Row (index) # 对于表里面的每行中的每列数据会按照下述方式进行编码，将该行的类型、数值、主键一同编码到 key 中，value 中不存储任何数据。所以如果一张表有多个列，这里便会生成多个 &lt;key,value&gt;。
-与 Row (table) 不同的地方是，这里的 &lt;key, value&gt; 最终不会被直接存储到 leveldb 中，而是多行数据一起被编码成 BptLeafNodeRefProto 然后存储到 leveldb 中。
-2.3 BptNode # B+ 树每个节点采用 Protobuf 进行编码，对于非叶子节点按照 BptNodeProto 编码，对于叶子节点按照 BptLeafNodeRefProto 编码（其 keys 存储的是若干个 Row (index)）。
-message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; message BptLeafNodeRefProto { uint64 id = 1; bytes keys = 2; bytes values = 3; }; 
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -781,7 +777,7 @@ message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; 
         <a href="/posts/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/20/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -827,7 +823,7 @@ message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; 
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -852,7 +848,7 @@ message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; 
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -975,8 +971,8 @@ message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; 
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -1001,7 +997,7 @@ message BptNodeProto { uint64 id = 1; repeated BptNodeRefProto children = 2; }; 
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

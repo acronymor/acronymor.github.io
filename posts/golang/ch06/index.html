@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="在栈上分配和回收内存的开销很低，只需要 2 个 CPU 指令：PUSH 和 POP，一个是将数据 push 到栈空间以完成分配，pop 则是释放空间，也就是说在栈上分配内存，消耗的仅是将数据拷贝到内存的时间，而内存的 I/O 通常能够达到 30GB/s，因此在栈上分配内存效率是非常高的。
+在堆上分配内存，一个很大的额外开销则是垃圾回收。Go 语言使用的是标记清除算法，并且在此基础上使用了三色标记法和写屏障技术，提高了效率。">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Ch06-GoLang 之 内存分配" />
+<meta property="og:description" content="在栈上分配和回收内存的开销很低，只需要 2 个 CPU 指令：PUSH 和 POP，一个是将数据 push 到栈空间以完成分配，pop 则是释放空间，也就是说在栈上分配内存，消耗的仅是将数据拷贝到内存的时间，而内存的 I/O 通常能够达到 30GB/s，因此在栈上分配内存效率是非常高的。
+在堆上分配内存，一个很大的额外开销则是垃圾回收。Go 语言使用的是标记清除算法，并且在此基础上使用了三色标记法和写屏障技术，提高了效率。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:44473/posts/golang/ch06/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-10-30T00:00:00+08:00" />
+<meta property="article:modified_time" content="2024-10-30T00:00:00+08:00" />
+
+<title>Ch06-GoLang 之 内存分配 | acronymor&#39;s blog</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b8574e530940d019bc6fe14b11b86ab9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>acronymor&#39;s blog</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="/about/"  >
+        About Me
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/acronymor"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Ch06-GoLang 之 内存分配</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#stack-和-heap">Stack 和 Heap</a>
+      <ul>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#heap">Heap</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存逃逸">内存逃逸</a>
+      <ul>
+        <li><a href="#常见原因">常见原因</a></li>
+      </ul>
+    </li>
+    <li><a href="#影响">影响</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1>
+    <a href="/posts/golang/ch06/">Ch06-GoLang 之 内存分配</a>
+  </h1>
+  
+  <h5>October 30, 2024</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/GoLang/">GoLang </a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/GoLang/">GoLang</a>
+  </div>
+  
+
+
+
+<p>在栈上分配和回收内存的开销很低，只需要 2 个 CPU 指令：PUSH 和 POP，一个是将数据 push 到栈空间以完成分配，pop 则是释放空间，也就是说在栈上分配内存，消耗的仅是将数据拷贝到内存的时间，而内存的 I/O 通常能够达到 30GB/s，因此在栈上分配内存效率是非常高的。</p>
+<p>在堆上分配内存，一个很大的额外开销则是垃圾回收。Go 语言使用的是标记清除算法，并且在此基础上使用了三色标记法和写屏障技术，提高了效率。</p>
+<h1 id="stack-和-heap">
+  Stack 和 Heap
+  <a class="anchor" href="#stack-%e5%92%8c-heap">#</a>
+</h1>
+<h2 id="stack">
+  Stack
+  <a class="anchor" href="#stack">#</a>
+</h2>
+<p><img src="stack.png" alt="stack" /></p>
+<h2 id="heap">
+  Heap
+  <a class="anchor" href="#heap">#</a>
+</h2>
+<p><img src="heap.png" alt="heap" /></p>
+<ul>
+<li>mspan 是内存管理的基本单元</li>
+<li>mcache 负责线程本地内存的快速分配</li>
+<li>mcentral 全局协调 mspan 的分配与回收</li>
+<li>mheap 掌握整个堆内存，并于操作系统交互</li>
+</ul>
+<h1 id="内存逃逸">
+  内存逃逸
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e9%80%83%e9%80%b8">#</a>
+</h1>
+<p>在Go语言中，内存逃逸是指在编译时，由于某些原因，编译器决定将本应在栈上分配的变量分配到堆上，这种现象就叫做内存逃逸。</p>
+<h2 id="常见原因">
+  常见原因
+  <a class="anchor" href="#%e5%b8%b8%e8%a7%81%e5%8e%9f%e5%9b%a0">#</a>
+</h2>
+<p><strong>指针逃逸</strong></p>
+<p>当函数返回一个指向局部变量的指针时，该局部变量就会发生内存逃逸。因为栈空间的生命周期与函数调用紧密相关，函数返回后栈空间会被释放。如果返回指向局部变量的指针，该变量必须在堆上分配，以确保在函数返回后依然能够被正确访问。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">run</span>() <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">num</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># go build -gcflags &#34;-m -l&#34; main.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command-line-arguments</span>
+</span></span><span style="display:flex;"><span>./main.go:6:2: moved to heap: num                   // num 作为局部变量，却被以指针的形式返回了。这样，外部变量使用的时候就相当于使用了一个指向局部变量的指针
+</span></span><span style="display:flex;"><span>./main.go:12:13: ... argument does not escape
+</span></span></code></pre></div><p><strong>动态类型</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">num</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># command-line-arguments</span>
+</span></span><span style="display:flex;"><span>./main.go:7:13: ... argument does not escape
+</span></span><span style="display:flex;"><span>./main.go:7:14: num escapes to heap                 // 编译阶段无法确定其具体的参数类型，所以内存分配到堆上
+</span></span></code></pre></div><p><strong>闭包引用</strong></p>
+<p>当闭包引用了外部的局部变量时，这些局部变量会发生内存逃逸。因为闭包可能在其外部函数返回后仍然存在并被调用，为了保证闭包能正确访问这些变量，这些变量必须在堆上分配。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">closure</span>() <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">num</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">num</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">num</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># command-line-arguments</span>
+</span></span><span style="display:flex;"><span>./main.go:4:6: moved to heap: num                   // 闭包函数引用了外部变量 num，导致变量 num 被分配到了堆上
+</span></span><span style="display:flex;"><span>./main.go:5:9: func literal escapes to heap
+</span></span></code></pre></div><p><strong>栈空间不足</strong></p>
+<p>如果局部变量占用的空间过大，超过了栈空间的限制，编译器会将其分配到堆上。Go 语言的栈空间大小是有限的，不同平台可能有所不同。对于较大的结构体、数组或切片，如果它们的大小超过了栈空间的限制，就会发生内存逃逸。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arr</span> []<span style="color:#66d9ef">int</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">1000000</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">arr</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go build -gcflags <span style="color:#e6db74">&#34;-m -l&#34;</span> main.go
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># command-line-arguments</span>
+</span></span><span style="display:flex;"><span>./main.go:6:22: make<span style="color:#f92672">([]</span>int, 1000000<span style="color:#f92672">)</span> escapes to heap   // 分配了 
+</span></span><span style="display:flex;"><span>./main.go:7:13: ... argument does not escape
+</span></span><span style="display:flex;"><span>./main.go:7:14: arr escapes to heap
+</span></span></code></pre></div><h1 id="影响">
+  影响
+  <a class="anchor" href="#%e5%bd%b1%e5%93%8d">#</a>
+</h1>
+<ul>
+<li>性能影响：堆内存的分配和回收由 Go 语言的垃圾回收器（GC）管理，相比栈内存的分配和释放（栈空间随着函数调用结束自动释放），堆内存操作的开销更大。频繁的内存逃逸会增加垃圾回收的压力，降低程序的性能。</li>
+<li>资源消耗：堆内存的使用会占用更多的系统资源，尤其是在处理大量数据或高并发场景下，过多的内存逃逸可能导致内存占用过高，甚至引发内存溢出错误。</li>
+</ul>
+<h1 id="参考文献">
+  参考文献
+  <a class="anchor" href="#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae">#</a>
+</h1>
+<ul>
+<li><a href="https://geektutu.com/post/hpg-escape-analysis.html">Go 逃逸分析</a></li>
+<li><a href="https://draven.co/golang/docs/part3-runtime/ch07-memory/golang-stack-management">栈空间管理</a></li>
+</ul></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#stack-和-heap">Stack 和 Heap</a>
+      <ul>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#heap">Heap</a></li>
+      </ul>
+    </li>
+    <li><a href="#内存逃逸">内存逃逸</a>
+      <ul>
+        <li><a href="#常见原因">常见原因</a></li>
+      </ul>
+    </li>
+    <li><a href="#影响">影响</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

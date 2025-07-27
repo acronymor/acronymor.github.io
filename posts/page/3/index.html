@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Blog" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/posts/" />
+<meta property="og:url" content="http://localhost:44473/posts/" />
 
 <title>Blog | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -425,6 +425,196 @@ var _hmt = _hmt || [];
 
       
       
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/mysql/ch08/">Ch08-MySQL 之 锁</a>
+    </h2>
+    
+  <h5>June 29, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/MySQL/">MySQL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/mysql/">Mysql</a>
+  </div>
+  
+
+
+
+
+    <p><p>MySQL 锁机制</p>
+        <a href="/posts/mysql/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/c&#43;&#43;-stl/ch03/">Ch03-C&#43;&#43; STL 之 Container</a>
+    </h2>
+    
+  <h5>June 24, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+  </div>
+  
+
+
+
+
+    <p> 容器 底层数据结构 时间复杂度 有无序 可否重复 其他 array 数组 随机读改 O(1) 无序 可重复 支持随机访问 vector 数组 随机读改、尾部插入、尾部删除 O(1)；头部插入、头部删除 O(n) 无序 可重复 支持随机访问 deque 双端队列 头尾插入、头尾删除 O(1) 无序 可重复 一个中央控制器 + 多个缓冲区，支持首尾快速增删，支持随机访问 forward_list 单向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 list 双向链表 插入、删除 O(1) 无序 可重复 不支持随机访问 stack deque / list 顶部插入、顶部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 queue deque / list 尾部插入、头部删除 O(1) 无序 可重复 deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时 priority_queue vector + max-heap 插入、删除 O(log2n) 有序 可重复 vector 容器+heap 处理规则 set 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multiset 红黑树 插入、删除、查找 O(log2n) 有序 可重复 map 红黑树 插入、删除、查找 O(log2n) 有序 不可重复 multimap 红黑树 插入、删除、查找 O(log2n) 有序 可重复 unordered_set 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multiset 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 unordered_map 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 不可重复 unordered_multimap 哈希表 插入、删除、查找 O(1) 最差 O(n) 无序 可重复 
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/c&#43;&#43;-stl/ch02/">Ch02-C&#43;&#43; 之 trait</a>
+    </h2>
+    
+  <h5>June 21, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+  </div>
+  
+
+
+
+
+    <p><p>trait 并不是 C++ 的关键字之类的，属于 C++ 的一种“机制”，或者说 C++ 特有的一种编程小技巧。</p>
+        <a href="/posts/c&#43;&#43;-stl/ch02/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/c&#43;&#43;-stl/ch01/">Ch01-C&#43;&#43; 之 STL</a>
+    </h2>
+    
+  <h5>June 20, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/C&#43;&#43;-STL/">C&#43;&#43; | STL</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+  </div>
+  
+
+
+
+
+    <p><p>STL 是 1979 年诞生，1998 年加入 cpp 标准库。C11 出来之前 boost 库是常见的智能指针库，c11 有自己的智能指针。且有多个 STL 版本，如 <code>SGI STL</code>，<code>GNU STL</code>。</p>
+        <a href="/posts/c&#43;&#43;-stl/ch01/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch10/">Ch10-LevelDB 之 Put</a>
+    </h2>
+    
+  <h5>June 20, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">Leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>Put 流程</p>
+        <a href="/posts/leveldb/ch10/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/leveldb/ch09/">Ch09-LevelDB 之 Open</a>
+    </h2>
+    
+  <h5>June 10, 2022</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/LevelDB/">LevelDB</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/leveldb/">Leveldb</a>
+  </div>
+  
+
+
+
+
+    <p><p>Open 流程</p>
+        <a href="/posts/leveldb/ch09/">...</a>
+      
+    </p>
+  </article>
   
   <article class="markdown book-post">
     <h2>
@@ -559,198 +749,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch04/">Ch04-LevelDB 之 MemTable</a>
-    </h2>
-    
-  <h5>May 12, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">Leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>MemTable</p>
-        <a href="/posts/leveldb/ch04/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch03/">Ch03-LevelDB 之 Arena 内存管理</a>
-    </h2>
-    
-  <h5>May 10, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">Leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>Arena 内存管理</p>
-        <a href="/posts/leveldb/ch03/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch02/">Ch02-LevelDB 架构</a>
-    </h2>
-    
-  <h5>May 5, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">Leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>LevelDB 架构</p>
-        <a href="/posts/leveldb/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/leveldb/ch01/">Ch01-LevelDB 初识</a>
-    </h2>
-    
-  <h5>May 1, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/LevelDB/">LevelDB</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/leveldb/">Leveldb</a>
-  </div>
-  
-
-
-
-
-    <p><p>leveldb是一个key/value型的单机存储引擎，由google开发，并宣布在BSD许可下开放源代码。它是leveling+分区实现的LSM典型代表。</p>
-        <a href="/posts/leveldb/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch09/">Ch09-C&#43;&#43; 之 point</a>
-    </h2>
-    
-  <h5>April 28, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>std::unique_ptr</code>，<code>std::shared_ptr</code>，<code>std::weak_ptr</code>。</p>
-        <a href="/posts/c&#43;&#43;-basic/ch09/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/c&#43;&#43;-basic/ch08/">Ch08-C&#43;&#43; 之 reference</a>
-    </h2>
-    
-  <h5>April 27, 2022</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/C&#43;&#43;-Basic/">C&#43;&#43; | Basic</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
-  </div>
-  
-
-
-
-
-    <p><p><code>lvalue reference</code>，<code>lvalue reference</code>。</p>
-        <a href="/posts/c&#43;&#43;-basic/ch08/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -779,7 +777,7 @@ var _hmt = _hmt || [];
         <a href="/posts/page/4/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/20/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -825,7 +823,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -850,7 +848,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -973,8 +971,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -999,7 +997,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

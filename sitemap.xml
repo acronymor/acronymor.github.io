@@ -2,737 +2,755 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://acronymor.com/posts/</loc>
+    <loc>http://localhost:44473/posts/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/categories/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch06/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/tags/GoLang/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/categories/GoLang/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/tags/</loc>
+    <lastmod>2024-10-30T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch05/</loc>
+    <lastmod>2024-10-18T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch04/</loc>
+    <lastmod>2024-10-07T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch03/</loc>
+    <lastmod>2024-10-01T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch02/</loc>
+    <lastmod>2024-09-28T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/golang/ch01/</loc>
     <lastmod>2024-09-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/golang/ch01/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/tags/golang/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/categories/GoLang/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/tags/</loc>
-    <lastmod>2024-09-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/tags/c&#43;&#43;/</loc>
+    <loc>http://localhost:44473/tags/c&#43;&#43;/</loc>
     <lastmod>2023-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/C&#43;&#43;-Basic/</loc>
+    <loc>http://localhost:44473/categories/C&#43;&#43;-Basic/</loc>
     <lastmod>2023-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch10/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch10/</loc>
     <lastmod>2023-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/cache/</loc>
+    <loc>http://localhost:44473/tags/cache/</loc>
     <lastmod>2023-02-08T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Cache/</loc>
+    <loc>http://localhost:44473/categories/Cache/</loc>
     <lastmod>2023-02-08T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/cache/ch03/</loc>
+    <loc>http://localhost:44473/posts/cache/ch03/</loc>
     <lastmod>2023-02-08T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/cache/ch02/</loc>
+    <loc>http://localhost:44473/posts/cache/ch02/</loc>
     <lastmod>2023-02-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/cache/ch01/</loc>
+    <loc>http://localhost:44473/posts/cache/ch01/</loc>
     <lastmod>2023-02-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/amdb/</loc>
+    <loc>http://localhost:44473/tags/amdb/</loc>
     <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/AmDB/</loc>
+    <loc>http://localhost:44473/categories/AmDB/</loc>
     <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch06/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch06/</loc>
     <lastmod>2022-12-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch05/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch05/</loc>
     <lastmod>2022-12-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch04/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch04/</loc>
     <lastmod>2022-12-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch03/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch03/</loc>
     <lastmod>2022-12-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch02/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch02/</loc>
     <lastmod>2022-12-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/amdb/ch01/</loc>
+    <loc>http://localhost:44473/posts/amdb/ch01/</loc>
     <lastmod>2022-12-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/database/ch05/</loc>
+    <loc>http://localhost:44473/posts/database/ch05/</loc>
     <lastmod>2022-11-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/database/</loc>
+    <loc>http://localhost:44473/tags/database/</loc>
     <lastmod>2022-11-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Database/</loc>
+    <loc>http://localhost:44473/categories/Database/</loc>
     <lastmod>2022-11-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch13/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch13/</loc>
     <lastmod>2022-07-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/leveldb/</loc>
+    <loc>http://localhost:44473/tags/leveldb/</loc>
     <lastmod>2022-07-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/LevelDB/</loc>
+    <loc>http://localhost:44473/categories/LevelDB/</loc>
     <lastmod>2022-07-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch12/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch12/</loc>
     <lastmod>2022-07-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch11/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch11/</loc>
     <lastmod>2022-06-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch08/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch08/</loc>
     <lastmod>2022-06-29T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/mysql/</loc>
+    <loc>http://localhost:44473/tags/mysql/</loc>
     <lastmod>2022-06-29T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/MySQL/</loc>
+    <loc>http://localhost:44473/categories/MySQL/</loc>
     <lastmod>2022-06-29T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/C&#43;&#43;-STL/</loc>
+    <loc>http://localhost:44473/categories/C&#43;&#43;-STL/</loc>
     <lastmod>2022-06-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch03/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-stl/ch03/</loc>
     <lastmod>2022-06-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch02/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-stl/ch02/</loc>
     <lastmod>2022-06-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-stl/ch01/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-stl/ch01/</loc>
     <lastmod>2022-06-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch09/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch10/</loc>
+    <lastmod>2022-06-20T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/leveldb/ch09/</loc>
     <lastmod>2022-06-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch08/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch08/</loc>
     <lastmod>2022-05-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch07/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch07/</loc>
     <lastmod>2022-05-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch06/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch06/</loc>
     <lastmod>2022-05-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch05/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch05/</loc>
     <lastmod>2022-05-16T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch04/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch04/</loc>
     <lastmod>2022-05-12T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch03/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch03/</loc>
     <lastmod>2022-05-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch02/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch02/</loc>
     <lastmod>2022-05-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/leveldb/ch01/</loc>
+    <loc>http://localhost:44473/posts/leveldb/ch01/</loc>
     <lastmod>2022-05-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch09/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch09/</loc>
     <lastmod>2022-04-28T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch08/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch08/</loc>
     <lastmod>2022-04-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch07/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch07/</loc>
     <lastmod>2022-04-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch06/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch06/</loc>
     <lastmod>2022-04-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch05/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch05/</loc>
     <lastmod>2022-04-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch04/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch04/</loc>
     <lastmod>2022-04-22T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch03/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch03/</loc>
     <lastmod>2022-04-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch01/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch01/</loc>
     <lastmod>2022-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/c&#43;&#43;-basic/ch02/</loc>
+    <loc>http://localhost:44473/posts/c&#43;&#43;-basic/ch02/</loc>
     <lastmod>2022-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch06/</loc>
-    <lastmod>2022-04-10T00:00:00+08:00</lastmod>
+    <loc>http://localhost:44473/posts/mysql/ch07/</loc>
+    <lastmod>2022-04-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/database/ch04/</loc>
+    <loc>http://localhost:44473/posts/database/ch04/</loc>
     <lastmod>2022-01-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/database/ch03/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch06/</loc>
+    <lastmod>2021-12-10T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/database/ch03/</loc>
     <lastmod>2021-12-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch04/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch05/</loc>
+    <lastmod>2021-11-01T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/mysql/ch04/</loc>
     <lastmod>2021-10-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch03/</loc>
-    <lastmod>2021-10-30T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/database/ch02/</loc>
+    <loc>http://localhost:44473/posts/database/ch02/</loc>
     <lastmod>2021-10-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch10/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch03/</loc>
+    <lastmod>2021-10-07T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/elasticsearch/ch10/</loc>
     <lastmod>2021-09-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/elasticsearch/</loc>
+    <loc>http://localhost:44473/tags/elasticsearch/</loc>
     <lastmod>2021-09-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Elasticsearch/</loc>
+    <loc>http://localhost:44473/categories/Elasticsearch/</loc>
     <lastmod>2021-09-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch09/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch09/</loc>
     <lastmod>2021-08-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch08/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch08/</loc>
     <lastmod>2021-08-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch06/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch07/</loc>
+    <lastmod>2021-08-22T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/elasticsearch/ch06/</loc>
     <lastmod>2021-08-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch07/</loc>
-    <lastmod>2021-08-21T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch05/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch05/</loc>
     <lastmod>2021-08-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch04/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch04/</loc>
     <lastmod>2021-08-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch03/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch03/</loc>
     <lastmod>2021-08-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch07/</loc>
+    <loc>http://localhost:44473/posts/network/ch07/</loc>
     <lastmod>2021-08-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/network/</loc>
+    <loc>http://localhost:44473/tags/network/</loc>
     <lastmod>2021-08-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Network/</loc>
+    <loc>http://localhost:44473/categories/Network/</loc>
     <lastmod>2021-08-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch06/</loc>
+    <loc>http://localhost:44473/posts/network/ch06/</loc>
     <lastmod>2021-08-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch05/</loc>
+    <loc>http://localhost:44473/posts/network/ch05/</loc>
     <lastmod>2021-08-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch04/</loc>
+    <loc>http://localhost:44473/posts/network/ch04/</loc>
     <lastmod>2021-08-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch02/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch02/</loc>
     <lastmod>2021-08-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch03/</loc>
+    <loc>http://localhost:44473/posts/network/ch03/</loc>
     <lastmod>2021-08-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch02/</loc>
+    <loc>http://localhost:44473/posts/network/ch02/</loc>
     <lastmod>2021-08-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/elasticsearch/ch01/</loc>
+    <loc>http://localhost:44473/posts/elasticsearch/ch01/</loc>
     <lastmod>2021-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/network/ch01/</loc>
+    <loc>http://localhost:44473/posts/network/ch01/</loc>
     <lastmod>2021-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-io/ch04/</loc>
+    <loc>http://localhost:44473/posts/java-io/ch04/</loc>
     <lastmod>2021-07-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/java/</loc>
+    <loc>http://localhost:44473/tags/java/</loc>
     <lastmod>2021-07-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Java-IO/</loc>
+    <loc>http://localhost:44473/categories/Java-IO/</loc>
     <lastmod>2021-07-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-io/ch03/</loc>
+    <loc>http://localhost:44473/posts/java-io/ch03/</loc>
     <lastmod>2021-07-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-io/ch02/</loc>
+    <loc>http://localhost:44473/posts/java-io/ch02/</loc>
     <lastmod>2021-07-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-io/ch01/</loc>
+    <loc>http://localhost:44473/posts/java-io/ch01/</loc>
     <lastmod>2021-07-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Kylin/</loc>
+    <loc>http://localhost:44473/categories/Apache-Kylin/</loc>
     <lastmod>2021-07-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch08/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch08/</loc>
     <lastmod>2021-07-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/kylin/</loc>
+    <loc>http://localhost:44473/tags/kylin/</loc>
     <lastmod>2021-07-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch07/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch07/</loc>
     <lastmod>2021-07-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch06/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch06/</loc>
     <lastmod>2021-06-29T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch05/</loc>
     <lastmod>2021-06-19T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch04/</loc>
     <lastmod>2021-06-17T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch03/</loc>
     <lastmod>2021-06-12T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Calcite/</loc>
+    <loc>http://localhost:44473/categories/Apache-Calcite/</loc>
     <lastmod>2021-06-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/calcite/</loc>
+    <loc>http://localhost:44473/tags/calcite/</loc>
     <lastmod>2021-06-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-calcite/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-calcite/ch02/</loc>
     <lastmod>2021-06-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-calcite/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-calcite/ch01/</loc>
     <lastmod>2021-06-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch02/</loc>
     <lastmod>2021-05-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kylin/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-kylin/ch01/</loc>
     <lastmod>2021-05-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-HBase/</loc>
+    <loc>http://localhost:44473/categories/Apache-HBase/</loc>
     <lastmod>2021-04-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch16/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch16/</loc>
     <lastmod>2021-04-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/hbase/</loc>
+    <loc>http://localhost:44473/tags/hbase/</loc>
     <lastmod>2021-04-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch15/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch15/</loc>
     <lastmod>2021-04-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch14/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch14/</loc>
     <lastmod>2021-04-09T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch13/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch13/</loc>
     <lastmod>2021-03-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch12/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch12/</loc>
     <lastmod>2021-03-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch11/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch11/</loc>
     <lastmod>2021-03-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch10/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch10/</loc>
     <lastmod>2021-03-17T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch09/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch09/</loc>
     <lastmod>2021-03-07T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Flink/</loc>
+    <loc>http://localhost:44473/categories/Apache-Flink/</loc>
     <lastmod>2021-01-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch14/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch14/</loc>
     <lastmod>2021-01-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/flink/</loc>
+    <loc>http://localhost:44473/tags/flink/</loc>
     <lastmod>2021-01-27T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch13/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch13/</loc>
     <lastmod>2021-01-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch12/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch12/</loc>
     <lastmod>2021-01-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch11/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch11/</loc>
     <lastmod>2021-01-09T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch10/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch10/</loc>
     <lastmod>2021-01-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch09/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch09/</loc>
     <lastmod>2020-12-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch08/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch08/</loc>
     <lastmod>2020-12-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch07/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch07/</loc>
     <lastmod>2020-12-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch06/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch06/</loc>
     <lastmod>2020-12-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch05/</loc>
     <lastmod>2020-12-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch04/</loc>
     <lastmod>2020-12-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch08/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch08/</loc>
     <lastmod>2020-11-19T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch07/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch07/</loc>
     <lastmod>2020-11-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch06/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch06/</loc>
     <lastmod>2020-11-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch03/</loc>
     <lastmod>2020-11-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch02/</loc>
     <lastmod>2020-11-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-flink/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-flink/ch01/</loc>
     <lastmod>2020-11-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch05/</loc>
     <lastmod>2020-10-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch18/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch18/</loc>
     <lastmod>2020-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Java-JUC/</loc>
+    <loc>http://localhost:44473/categories/Java-JUC/</loc>
     <lastmod>2020-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch17/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch17/</loc>
     <lastmod>2020-04-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch16/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch16/</loc>
     <lastmod>2020-04-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch15/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch15/</loc>
     <lastmod>2020-03-24T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch14/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch14/</loc>
     <lastmod>2020-03-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch13/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch13/</loc>
     <lastmod>2020-03-14T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch12/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch12/</loc>
     <lastmod>2020-03-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch11/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch02/</loc>
+    <lastmod>2020-03-05T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/java-juc/ch11/</loc>
     <lastmod>2020-03-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch10/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch10/</loc>
     <lastmod>2020-02-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch09/</loc>
+    <loc>http://localhost:44473/posts/mysql/ch01/</loc>
+    <lastmod>2020-02-01T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:44473/posts/java-juc/ch09/</loc>
     <lastmod>2020-01-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch08/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch08/</loc>
     <lastmod>2020-01-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch07/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch07/</loc>
     <lastmod>2020-01-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch06/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch06/</loc>
     <lastmod>2020-01-09T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch05/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch05/</loc>
     <lastmod>2020-01-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/antlr4/</loc>
+    <loc>http://localhost:44473/tags/antlr4/</loc>
     <lastmod>2019-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Antlr4/</loc>
+    <loc>http://localhost:44473/categories/Antlr4/</loc>
     <lastmod>2019-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/antlr4/ch01/</loc>
+    <loc>http://localhost:44473/posts/antlr4/ch01/</loc>
     <lastmod>2019-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Spark/</loc>
+    <loc>http://localhost:44473/categories/Apache-Spark/</loc>
     <lastmod>2019-06-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch10/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch10/</loc>
     <lastmod>2019-06-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/spark/</loc>
+    <loc>http://localhost:44473/tags/spark/</loc>
     <lastmod>2019-06-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch09/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch09/</loc>
     <lastmod>2019-06-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch08/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch08/</loc>
     <lastmod>2019-06-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch07/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch07/</loc>
     <lastmod>2019-05-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch06/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch06/</loc>
     <lastmod>2019-05-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch05/</loc>
     <lastmod>2019-05-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch04/</loc>
     <lastmod>2019-05-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch03/</loc>
     <lastmod>2019-05-12T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Kafka/</loc>
+    <loc>http://localhost:44473/categories/Apache-Kafka/</loc>
     <lastmod>2019-05-11T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch12/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch12/</loc>
     <lastmod>2019-05-11T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/kafka/</loc>
+    <loc>http://localhost:44473/tags/kafka/</loc>
     <lastmod>2019-05-11T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch04/</loc>
     <lastmod>2019-04-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch11/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch11/</loc>
     <lastmod>2019-04-22T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch03/</loc>
     <lastmod>2019-04-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch10/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch10/</loc>
     <lastmod>2019-04-18T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch02/</loc>
     <lastmod>2019-04-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hbase/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-hbase/ch01/</loc>
     <lastmod>2019-04-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch09/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch09/</loc>
     <lastmod>2019-03-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch08/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch08/</loc>
     <lastmod>2019-03-12T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch07/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch07/</loc>
     <lastmod>2019-03-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch06/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch06/</loc>
     <lastmod>2019-03-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch02/</loc>
     <lastmod>2018-07-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch05/</loc>
     <lastmod>2018-07-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-spark/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-spark/ch01/</loc>
     <lastmod>2018-07-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch04/</loc>
     <lastmod>2018-06-29T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch03/</loc>
     <lastmod>2018-06-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch02/</loc>
     <lastmod>2018-06-22T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-kafka/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-kafka/ch01/</loc>
     <lastmod>2018-06-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Hive/</loc>
+    <loc>http://localhost:44473/categories/Apache-Hive/</loc>
     <lastmod>2018-06-16T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hive/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-hive/ch03/</loc>
     <lastmod>2018-06-16T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/hive/</loc>
+    <loc>http://localhost:44473/tags/hive/</loc>
     <lastmod>2018-06-16T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hive/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-hive/ch02/</loc>
     <lastmod>2018-06-14T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hive/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-hive/ch01/</loc>
     <lastmod>2018-06-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/distributed-system/ch02/</loc>
+    <loc>http://localhost:44473/posts/distributed-system/ch02/</loc>
     <lastmod>2018-05-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/distributed-system/</loc>
+    <loc>http://localhost:44473/tags/distributed-system/</loc>
     <lastmod>2018-05-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Distributed-System/</loc>
+    <loc>http://localhost:44473/categories/Distributed-System/</loc>
     <lastmod>2018-05-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/distributed-system/ch01/</loc>
+    <loc>http://localhost:44473/posts/distributed-system/ch01/</loc>
     <lastmod>2018-05-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Apache-Zookeeper/</loc>
+    <loc>http://localhost:44473/categories/Apache-Zookeeper/</loc>
     <lastmod>2018-04-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-zookeeper/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-zookeeper/ch02/</loc>
     <lastmod>2018-04-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/zookeeper/</loc>
+    <loc>http://localhost:44473/tags/zookeeper/</loc>
     <lastmod>2018-04-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-zookeeper/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-zookeeper/ch01/</loc>
     <lastmod>2018-04-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch07/</loc>
-    <lastmod>2018-04-01T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch05/</loc>
-    <lastmod>2018-03-31T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/categories/Apache-Hadoop/</loc>
+    <loc>http://localhost:44473/categories/Apache-Hadoop/</loc>
     <lastmod>2018-03-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hadoop/ch05/</loc>
+    <loc>http://localhost:44473/posts/apache-hadoop/ch05/</loc>
     <lastmod>2018-03-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/hadoop/</loc>
+    <loc>http://localhost:44473/tags/hadoop/</loc>
     <lastmod>2018-03-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hadoop/ch04/</loc>
+    <loc>http://localhost:44473/posts/apache-hadoop/ch04/</loc>
     <lastmod>2018-03-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hadoop/ch03/</loc>
+    <loc>http://localhost:44473/posts/apache-hadoop/ch03/</loc>
     <lastmod>2018-03-19T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hadoop/ch02/</loc>
+    <loc>http://localhost:44473/posts/apache-hadoop/ch02/</loc>
     <lastmod>2018-03-17T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/apache-hadoop/ch01/</loc>
+    <loc>http://localhost:44473/posts/apache-hadoop/ch01/</loc>
     <lastmod>2018-03-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch02/</loc>
-    <lastmod>2018-03-15T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/mysql/ch01/</loc>
+    <loc>http://localhost:44473/posts/database/ch01/</loc>
     <lastmod>2018-02-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/database/ch01/</loc>
-    <lastmod>2018-02-25T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch08/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch08/</loc>
     <lastmod>2017-09-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/jvm/</loc>
+    <loc>http://localhost:44473/tags/jvm/</loc>
     <lastmod>2017-09-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/JVM/</loc>
+    <loc>http://localhost:44473/categories/JVM/</loc>
     <lastmod>2017-09-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch07/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch07/</loc>
     <lastmod>2017-09-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch06/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch06/</loc>
     <lastmod>2017-08-30T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch05/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch05/</loc>
     <lastmod>2017-08-19T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch04/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch04/</loc>
     <lastmod>2017-08-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch03/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch03/</loc>
     <lastmod>2017-08-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch02/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch02/</loc>
     <lastmod>2017-08-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/jdk/ch01/</loc>
+    <loc>http://localhost:44473/posts/jdk/ch01/</loc>
     <lastmod>2017-08-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch04/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch04/</loc>
     <lastmod>2017-04-11T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch03/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch03/</loc>
     <lastmod>2017-04-09T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch02/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch02/</loc>
     <lastmod>2017-04-06T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-juc/ch01/</loc>
+    <loc>http://localhost:44473/posts/java-juc/ch01/</loc>
     <lastmod>2017-04-04T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/software-engineering/ch05/</loc>
+    <loc>http://localhost:44473/posts/software-engineering/ch05/</loc>
     <lastmod>2017-03-14T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/tags/software/</loc>
+    <loc>http://localhost:44473/tags/software/</loc>
     <lastmod>2017-03-14T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Software-Engineering/</loc>
+    <loc>http://localhost:44473/categories/Software-Engineering/</loc>
     <lastmod>2017-03-14T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/software-engineering/ch04/</loc>
+    <loc>http://localhost:44473/posts/software-engineering/ch04/</loc>
     <lastmod>2017-03-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-map/ch04/</loc>
+    <loc>http://localhost:44473/posts/java-map/ch04/</loc>
     <lastmod>2017-03-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Java-Map/</loc>
+    <loc>http://localhost:44473/categories/Java-Map/</loc>
     <lastmod>2017-03-03T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-map/ch03/</loc>
+    <loc>http://localhost:44473/posts/java-map/ch03/</loc>
     <lastmod>2017-02-28T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-map/ch02/</loc>
+    <loc>http://localhost:44473/posts/java-map/ch02/</loc>
     <lastmod>2017-02-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-map/ch01/</loc>
+    <loc>http://localhost:44473/posts/java-map/ch01/</loc>
     <lastmod>2017-02-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-collection/ch05/</loc>
+    <loc>http://localhost:44473/posts/java-collection/ch05/</loc>
     <lastmod>2017-02-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Java-Collection/</loc>
+    <loc>http://localhost:44473/categories/Java-Collection/</loc>
     <lastmod>2017-02-05T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-collection/ch04/</loc>
+    <loc>http://localhost:44473/posts/java-collection/ch04/</loc>
     <lastmod>2017-01-31T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-collection/ch03/</loc>
+    <loc>http://localhost:44473/posts/java-collection/ch03/</loc>
     <lastmod>2017-01-23T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-collection/ch02/</loc>
+    <loc>http://localhost:44473/posts/java-collection/ch02/</loc>
     <lastmod>2017-01-20T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-collection/ch01/</loc>
+    <loc>http://localhost:44473/posts/java-collection/ch01/</loc>
     <lastmod>2017-01-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-basic/ch04/</loc>
+    <loc>http://localhost:44473/posts/java-basic/ch04/</loc>
     <lastmod>2017-01-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/categories/Java-Basic/</loc>
+    <loc>http://localhost:44473/categories/Java-Basic/</loc>
     <lastmod>2017-01-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-basic/ch03/</loc>
+    <loc>http://localhost:44473/posts/java-basic/ch03/</loc>
     <lastmod>2017-01-10T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-basic/ch02/</loc>
+    <loc>http://localhost:44473/posts/java-basic/ch02/</loc>
     <lastmod>2017-01-02T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/java-basic/ch01/</loc>
+    <loc>http://localhost:44473/posts/java-basic/ch01/</loc>
     <lastmod>2017-01-01T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/software-engineering/ch03/</loc>
+    <loc>http://localhost:44473/posts/software-engineering/ch03/</loc>
     <lastmod>2016-10-15T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/software-engineering/ch02/</loc>
+    <loc>http://localhost:44473/posts/software-engineering/ch02/</loc>
     <lastmod>2016-09-25T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/posts/software-engineering/ch01/</loc>
+    <loc>http://localhost:44473/posts/software-engineering/ch01/</loc>
     <lastmod>2016-09-21T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://acronymor.com/about/</loc>
+    <loc>http://localhost:44473/about/</loc>
   </url><url>
-    <loc>https://acronymor.com/contact/</loc>
+    <loc>http://localhost:44473/contact/</loc>
   </url>
 </urlset>

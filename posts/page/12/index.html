@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Blog" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/posts/" />
+<meta property="og:url" content="http://localhost:44473/posts/" />
 
 <title>Blog | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -428,10 +428,10 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/java-juc/ch08/">Ch8-Java Lock 之 ReentrantReadWriteLock</a>
+      <a href="/posts/java-juc/ch16/">Ch16-Java tools 之 CyclicBarrier</a>
     </h2>
     
-  <h5>January 21, 2020</h5>
+  <h5>April 1, 2020</h5>
 
 
 
@@ -452,18 +452,18 @@ var _hmt = _hmt || [];
 
 
 
-    <p><p><code>java.util.concurrent.locks.ReentrantReadWriteLock</code></p>
-        <a href="/posts/java-juc/ch08/">...</a>
+    <p><p><code>java.util.concurrent.CyclicBarrier</code> 底层基于 ReentrantLock 和 Condition 实现，如果 count 不为 0，则调用 Condition 的 await 方法让线程等待执行，当 count 为 0 时，调用 Condition 的 singleAll 唤醒全部等待的线程执行。</p>
+        <a href="/posts/java-juc/ch16/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/java-juc/ch07/">Ch7-Java Lock 之 ReentrantLock</a>
+      <a href="/posts/java-juc/ch15/">Ch15-Java tools 之 Semaphore</a>
     </h2>
     
-  <h5>January 15, 2020</h5>
+  <h5>March 24, 2020</h5>
 
 
 
@@ -484,18 +484,18 @@ var _hmt = _hmt || [];
 
 
 
-    <p><p><code>java.util.concurrent.locks.ReentrantLock</code></p>
-        <a href="/posts/java-juc/ch07/">...</a>
+    <p><p><code>java.util.concurrent.Semaphore</code> 类表示信号量。Semaphore 内部主要通过 AQS（AbstractQueuedSynchronizer）实现线程的管理。</p>
+        <a href="/posts/java-juc/ch15/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/java-juc/ch06/">Ch6-Java Lock 之 LockSupport</a>
+      <a href="/posts/java-juc/ch14/">Ch14-Java tools 之 CountDownLatch</a>
     </h2>
     
-  <h5>January 9, 2020</h5>
+  <h5>March 18, 2020</h5>
 
 
 
@@ -516,18 +516,18 @@ var _hmt = _hmt || [];
 
 
 
-    <p><p><code>java.util.concurrent.locks.LockSupport</code></p>
-        <a href="/posts/java-juc/ch06/">...</a>
+    <p><p><code>java.util.concurrent.CountDownLatch</code> 是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程执行完后再执行。</p>
+        <a href="/posts/java-juc/ch14/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/java-juc/ch05/">Ch5-Java Lock 之 AQS</a>
+      <a href="/posts/java-juc/ch13/">Ch13-Java Collections 之 CopyOnWriteArrayList</a>
     </h2>
     
-  <h5>January 2, 2020</h5>
+  <h5>March 14, 2020</h5>
 
 
 
@@ -548,200 +548,200 @@ var _hmt = _hmt || [];
 
 
 
-    <p><p>AQS 即 <code>java.util.concurrent.locks.AbstractQueuedSynchronizer</code>，可以用来构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器。</p>
-        <a href="/posts/java-juc/ch05/">...</a>
+    <p><p><code>java.util.concurrent.CopyOnWriteArrayList</code></p>
+        <a href="/posts/java-juc/ch13/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/antlr4/ch01/">Ch01-Antlr V4 介绍</a>
+      <a href="/posts/java-juc/ch12/">Ch12-Java Collections 之 DelayQueue</a>
     </h2>
     
-  <h5>August 1, 2019</h5>
+  <h5>March 10, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Antlr4/">Antlr4</a>
+      <a href="/categories/Java-JUC/">Java | JUC</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/antlr4/">Antlr4</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 
 
 
 
-    <p><p>ANTLR（ANother Tool for Language Recognition）是一个强大的解析器生成器，用于读取、处理、执行或翻译结构化文本或二进制文件。它被广泛用于构建语言、工具和框架。ANTLR 根据语法定义生成解析器，解析器可以构建和遍历解析树。</p>
-        <a href="/posts/antlr4/ch01/">...</a>
+    <p><p><code>java.util.concurrent.DelayQueue</code></p>
+        <a href="/posts/java-juc/ch12/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/apache-spark/ch10/">Ch10-Spark 之内存管理</a>
+      <a href="/posts/mysql/ch02/">Ch02-MySQL 之 InnoDB 内存结构和存储结构</a>
     </h2>
     
-  <h5>June 20, 2019</h5>
+  <h5>March 5, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
+      <a href="/categories/MySQL/">MySQL</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/spark/">Spark</a>
+      <a href="/tags/mysql/">Mysql</a>
   </div>
   
 
 
 
 
-    <p><p>Spark 作为一个以擅长内存计算为优势的计算引擎，内存管理方案是其非常重要的模块；Spark 的内存可以大体归为两类：execution（运行内存）和 storage（存储内存），前者包括 shuffles、joins、sorts 和 aggregations 所需内存，后者包括 cache 和节点间数据传输所需内存；</p>
-        <a href="/posts/apache-spark/ch10/">...</a>
+    <p><p>InnoDB 的内存结构主要由 Buffer Pool, Change Buffer, Adaptive Hash Index, Log Buffer 这几个部分组成，而存储结构则是由若干种不同的 Tablespace 组成。如下图所示。</p>
+        <a href="/posts/mysql/ch02/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/apache-spark/ch09/">Ch09-Spark 之 BlockMananger</a>
+      <a href="/posts/java-juc/ch11/">Ch11-Java Collections 之 PriorityBlockingQueue</a>
     </h2>
     
-  <h5>June 15, 2019</h5>
+  <h5>March 2, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
+      <a href="/categories/Java-JUC/">Java | JUC</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/spark/">Spark</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 
 
 
 
-    <p><p>Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 <code>persist()</code> 和 <code>cache()</code> 函数来缓存 RDD）。</p>
-        <a href="/posts/apache-spark/ch09/">...</a>
+    <p><p><code>java.util.concurrent.PriorityBlockingQueue</code></p>
+        <a href="/posts/java-juc/ch11/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/apache-spark/ch08/">Ch08-Spark 之 Checkpoint</a>
+      <a href="/posts/java-juc/ch10/">Ch10-Java Collections 之 LinkedBlockingQueue</a>
     </h2>
     
-  <h5>June 3, 2019</h5>
+  <h5>February 5, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
+      <a href="/categories/Java-JUC/">Java | JUC</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/spark/">Spark</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 
 
 
 
-    <p><p>checkpoint 的机制保证了需要访问重复数据的应用 Spark 的 DAG 执行行图可能很庞大，task 中计算链可能会很长，这时如果 task 中途运行出错，那么 task 的整个需要重算非常耗时，因此，有必要将计算代价较大的 RDD checkpoint 一下，当下游 RDD 计算出错时，可以直接从 checkpoint 过的 RDD 那里读取数据继续算。</p>
-        <a href="/posts/apache-spark/ch08/">...</a>
+    <p><p><code>java.util.concurrent.LinkedBlockingQueue</code></p>
+        <a href="/posts/java-juc/ch10/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/apache-spark/ch07/">Ch07-Spark 之缓存</a>
+      <a href="/posts/mysql/ch01/">Ch01-MySQL 介绍</a>
     </h2>
     
-  <h5>May 31, 2019</h5>
+  <h5>February 1, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
+      <a href="/categories/MySQL/">MySQL</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/spark/">Spark</a>
+      <a href="/tags/mysql/">Mysql</a>
   </div>
   
 
 
 
 
-    <p><p>Spark 的一个重要特性是能够把计算结果数据保存到内存或磁盘中，供后面的操作读取，这就是 RDD 的缓存，这个过程也可称为 persist 或 caching（Spark 提供了 <code>persist()</code> 和 <code>cache()</code> 函数来缓存 RDD）。</p>
-        <a href="/posts/apache-spark/ch07/">...</a>
+    <p><p>MySQL 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，属于 Oracle 旗下产品。MySQL 是最流行的关系型数据库管理系统之一，在 WEB 应用方面，MySQL 是最好的 RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。</p>
+        <a href="/posts/mysql/ch01/">...</a>
       
     </p>
   </article>
   
   <article class="markdown book-post">
     <h2>
-      <a href="/posts/apache-spark/ch06/">Ch06-Spark 之容错机制</a>
+      <a href="/posts/java-juc/ch09/">Ch9-Java Collections 之 ArrayBlockingQueue</a>
     </h2>
     
-  <h5>May 30, 2019</h5>
+  <h5>January 31, 2020</h5>
 
 
 
   
   <div>
     
-      <a href="/categories/Apache-Spark/">Apache Spark</a>
+      <a href="/categories/Java-JUC/">Java | JUC</a>
   </div>
   
 
   
   <div>
     
-      <a href="/tags/spark/">Spark</a>
+      <a href="/tags/java/">Java</a>
   </div>
   
 
 
 
 
-    <p><p>Spark 并不直接对数据进行处理，而是将数据抽象成了分布式数据集这种数据结构。目前该数据结构主要经历了三代变迁。</p>
-        <a href="/posts/apache-spark/ch06/">...</a>
+    <p><p><code>java.util.concurrent.ArrayBlockingQueue</code></p>
+        <a href="/posts/java-juc/ch09/">...</a>
       
     </p>
   </article>
@@ -774,7 +774,7 @@ var _hmt = _hmt || [];
         <a href="/posts/page/13/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/20/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -820,7 +820,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -845,7 +845,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -968,8 +968,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -994,7 +994,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

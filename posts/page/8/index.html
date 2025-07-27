@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -8,15 +8,15 @@
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Blog" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://acronymor.com/posts/" />
+<meta property="og:url" content="http://localhost:44473/posts/" />
 
 <title>Blog | acronymor&#39;s blog</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b13ca34d71128a85d85208040fbf58234bbaf5389b79662aedae01d37f46c27c.js" integrity="sha256-sTyjTXESioXYUggED79YI0u69TibeWYq7a4B039Gwnw=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://acronymor.com/posts/index.xml" title="acronymor's blog" />
+  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://localhost:44473/posts/index.xml" title="acronymor's blog" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -148,7 +148,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -173,7 +173,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -296,8 +296,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -322,7 +322,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -428,6 +428,266 @@ var _hmt = _hmt || [];
   
   <article class="markdown book-post">
     <h2>
+      <a href="/posts/java-io/ch02/">Ch02-Java 之 BIO</a>
+    </h2>
+    
+  <h5>July 20, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-IO/">Java | IO</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p> 1. 常见类 # java.net.ServerSocket; java.net.Socket; 2. BIO 模型 # 一个服务端可以连接多个客户端，但是接入一个客户端，服务端都需要用一个线程维持着客户端与服务端的连接。如果客户端数量很多，那么服务端也需要对应的线程数量与之连接。
+3. 参考文献 # Java IO - BIO 详解 
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/java-io/ch01/">Ch01-Java 之 IO</a>
+    </h2>
+    
+  <h5>July 15, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Java-IO/">Java | IO</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/java/">Java</a>
+  </div>
+  
+
+
+
+
+    <p> 1. Java IO 概览 # 2. 阻塞/非阻塞 VS 同步/非同步 # 2.1 阻塞 IO 和 非阻塞 IO # 这两个概念是程序级别的。主要描述的是程序请求操作系统 IO 操作后，如果 IO 资源没有准备好，那么程序该如何处理的问题：前者等待；后者继续执行 (并且使用线程一直轮询，直到有 IO 资源准备好了)
+2.2 同步 IO 和 非同步 IO # 这两个概念是操作系统级别的。主要描述的是操作系统在收到程序请求 IO 操作后，如果 IO 资源没有准备好，该如何响应程序的问题：前者不响应，直到 IO 资源准备好以后；后者返回一个标记 (好让程序和自己知道以后的数据往哪里通知)，当 IO 资源准备好以后，再用事件机制返回给程序。
+3. OS IO 多路复用 # IO 模型 相对性能 关键思路 操作系统 JAVA 支持情况 select 较高 Reactor windows/Linux 支持 poll 较高 Reactor Linux 支持 epoll 高 Reactor/Proactor Linux 支持 kqueue 高 Proactor Linux 不支持 
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch08/">Ch08-Kylin 之 部分细节</a>
+    </h2>
+    
+  <h5>July 10, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p><p>Kylin 部分细节</p>
+        <a href="/posts/apache-kylin/ch08/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch07/">Ch07-Kylin 之 DISTINCT COUNT</a>
+    </h2>
+    
+  <h5>July 4, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p><p>distinct count</p>
+        <a href="/posts/apache-kylin/ch07/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch06/">Ch06-Kylin 之 剪枝优化</a>
+    </h2>
+    
+  <h5>June 29, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p><p>Kylin 剪枝优化</p>
+        <a href="/posts/apache-kylin/ch06/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch05/">Ch05-Kylin 之 Cube 构建算法</a>
+    </h2>
+    
+  <h5>June 19, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p><p>Kylin Cube 构建算法</p>
+        <a href="/posts/apache-kylin/ch05/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch04/">Ch04-Kylin 之 Cube 构建流程</a>
+    </h2>
+    
+  <h5>June 17, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p><p>Kylin Cube 执行流程</p>
+        <a href="/posts/apache-kylin/ch04/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/apache-kylin/ch03/">Ch03-Kylin 之 Query</a>
+    </h2>
+    
+  <h5>June 12, 2021</h5>
+
+
+
+  
+  <div>
+    
+      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
+  </div>
+  
+
+  
+  <div>
+    
+      <a href="/tags/kylin/">Kylin</a>
+  </div>
+  
+
+
+
+
+    <p>query 的整体执行流程如下图所示。可以看到整个 query 的逻辑实际上是由 QueryService 处理的，这里会做重要的路由处理，是执行 cube 的查询，还是下推到其他查询引擎，还是下推到 hive。这个路由逻辑简单来说，如下图所示：
+完整的处理逻辑如下图所示：
+query 和 update 的逻辑如下所示：
+1. Query # 在上图的 query 流程中，其实可以看到所有的处理过程最后会交给 calcite，而 calcite 的实现类 OLAPTableScan 会将 OLAPToEnumerableConverter 注册进来，最终在implement方法中完成 RelNode 到 Cube 处理逻辑的转换。
+1.1 Cube 选取流程 # 整个过程封装在 RealizationChooser#selectRealization 中，大体上可以分为两步，第一部分是makeOrderedModelMap()，这一步会选出所有满足的 cuboid，第二步是selectRealization()，这一步骤会选出唯一一适合的 cuboid(如果所有的都合适的话，就选 set 里面遍历到的第一个)。详细可以分成下述几步来讲
+1.1.1 对 model 及对应的 realizations 进行过滤及排序 # 获取属于该 project 下 factTableName 与查询中事实表相等的所有 realizations，factTableName 即 context.firstTableScan.getTableName 对 realizations 执行过滤，得到 filteredRealizations NOT READY cube 会被过滤 黑名单中的 cube 会被过滤 cube.allColumns 必须与 OLAPContext.
+        <a href="/posts/apache-kylin/ch03/">...</a>
+      
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/posts/apache-calcite/ch02/">Ch02-Calcite 执行流程</a>
     </h2>
     
@@ -490,262 +750,6 @@ var _hmt = _hmt || [];
     </p>
   </article>
   
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kylin/ch02/">Ch02-Kylin 之 Cube</a>
-    </h2>
-    
-  <h5>May 21, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kylin/">Kylin</a>
-  </div>
-  
-
-
-
-
-    <p><p>Kylin 引入了一个非常重要的概念 —— Cube 和 Cuboid，Cube 由若干 Cuboid 组成。</p>
-        <a href="/posts/apache-kylin/ch02/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-kylin/ch01/">Ch01-Kylin 介绍</a>
-    </h2>
-    
-  <h5>May 20, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-Kylin/">Apache Kylin</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/kylin/">Kylin</a>
-  </div>
-  
-
-
-
-
-    <p><p>Apache Kylin™是一个开源的、分布式的分析型数据仓库，提供 Hadoop/Spark 之上的 SQL 查询接口及多维分析（OLAP）能力以支持超大规模数据，最初由 eBay 开发并贡献至开源社区。它能在亚秒内查询巨大的表。</p>
-        <a href="/posts/apache-kylin/ch01/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch16/">Ch16-HBase 之 Scan</a>
-    </h2>
-    
-  <h5>April 27, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase Scan</p>
-        <a href="/posts/apache-hbase/ch16/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch15/">Ch15-HBase 之 Put</a>
-    </h2>
-    
-  <h5>April 15, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase Put</p>
-        <a href="/posts/apache-hbase/ch15/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch14/">Ch14-HBase 之 CreateTable</a>
-    </h2>
-    
-  <h5>April 9, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase CreateTable</p>
-        <a href="/posts/apache-hbase/ch14/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch13/">Ch13-HBase 之 RPC</a>
-    </h2>
-    
-  <h5>March 31, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase RPC</p>
-        <a href="/posts/apache-hbase/ch13/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch12/">Ch12-HBase 之 Region Split</a>
-    </h2>
-    
-  <h5>March 24, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase Region Split 整个过程可以分为如下几步，<code>触发 Region Split</code>，<code>寻找 SplitPoint</code>，<code>拆分 Region</code>，<code>等待 major compaction 删除旧的 Region</code></p>
-        <a href="/posts/apache-hbase/ch12/">...</a>
-      
-    </p>
-  </article>
-  
-  <article class="markdown book-post">
-    <h2>
-      <a href="/posts/apache-hbase/ch11/">Ch11-HBase 之 Region Compaction</a>
-    </h2>
-    
-  <h5>March 21, 2021</h5>
-
-
-
-  
-  <div>
-    
-      <a href="/categories/Apache-HBase/">Apache HBase</a>
-  </div>
-  
-
-  
-  <div>
-    
-      <a href="/tags/hbase/">Hbase</a>
-  </div>
-  
-
-
-
-
-    <p><p>HBase Region Compaction</p>
-        <a href="/posts/apache-hbase/ch11/">...</a>
-      
-    </p>
-  </article>
-  
 
   
     <ul class="pagination pagination-default">
@@ -774,7 +778,7 @@ var _hmt = _hmt || [];
         <a href="/posts/page/9/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/19/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/20/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
  
@@ -820,7 +824,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/GoLang/">GoLang </a>
-          <span>1</span>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -845,7 +849,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/categories/LevelDB/">LevelDB</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">
@@ -968,8 +972,8 @@ var _hmt = _hmt || [];
       <ul>
       
         <li class="flex justify-between">
-          <a href="/tags/golang/">Golang</a>
-          <span>1</span>
+          <a href="/tags/GoLang/">GoLang</a>
+          <span>6</span>
         </li>
       
         <li class="flex justify-between">
@@ -994,7 +998,7 @@ var _hmt = _hmt || [];
       
         <li class="flex justify-between">
           <a href="/tags/leveldb/">Leveldb</a>
-          <span>12</span>
+          <span>13</span>
         </li>
       
         <li class="flex justify-between">

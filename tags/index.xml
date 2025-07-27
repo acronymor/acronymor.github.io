@@ -2,171 +2,171 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on acronymor&#39;s blog</title>
-    <link>https://acronymor.com/tags/</link>
+    <link>http://localhost:44473/tags/</link>
     <description>Recent content in Tags on acronymor&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Sep 2024 00:00:00 +0800</lastBuildDate>
-    <atom:link href="https://acronymor.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Oct 2024 00:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:44473/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Golang</title>
-      <link>https://acronymor.com/tags/golang/</link>
-      <pubDate>Sun, 01 Sep 2024 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/golang/</guid>
+      <title>GoLang</title>
+      <link>http://localhost:44473/tags/GoLang/</link>
+      <pubDate>Wed, 30 Oct 2024 00:00:00 +0800</pubDate>
+      <guid>http://localhost:44473/tags/GoLang/</guid>
       <description></description>
     </item>
     <item>
       <title>C&#43;&#43;</title>
-      <link>https://acronymor.com/tags/c&#43;&#43;/</link>
+      <link>http://localhost:44473/tags/c&#43;&#43;/</link>
       <pubDate>Thu, 20 Apr 2023 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/c&#43;&#43;/</guid>
+      <guid>http://localhost:44473/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
     <item>
       <title>Cache</title>
-      <link>https://acronymor.com/tags/cache/</link>
+      <link>http://localhost:44473/tags/cache/</link>
       <pubDate>Wed, 08 Feb 2023 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/cache/</guid>
+      <guid>http://localhost:44473/tags/cache/</guid>
       <description></description>
     </item>
     <item>
       <title>Amdb</title>
-      <link>https://acronymor.com/tags/amdb/</link>
+      <link>http://localhost:44473/tags/amdb/</link>
       <pubDate>Tue, 06 Dec 2022 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/amdb/</guid>
+      <guid>http://localhost:44473/tags/amdb/</guid>
       <description></description>
     </item>
     <item>
       <title>Database</title>
-      <link>https://acronymor.com/tags/database/</link>
+      <link>http://localhost:44473/tags/database/</link>
       <pubDate>Thu, 03 Nov 2022 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/database/</guid>
+      <guid>http://localhost:44473/tags/database/</guid>
       <description></description>
     </item>
     <item>
       <title>Leveldb</title>
-      <link>https://acronymor.com/tags/leveldb/</link>
+      <link>http://localhost:44473/tags/leveldb/</link>
       <pubDate>Mon, 18 Jul 2022 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/leveldb/</guid>
+      <guid>http://localhost:44473/tags/leveldb/</guid>
       <description></description>
     </item>
     <item>
       <title>Mysql</title>
-      <link>https://acronymor.com/tags/mysql/</link>
+      <link>http://localhost:44473/tags/mysql/</link>
       <pubDate>Wed, 29 Jun 2022 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/mysql/</guid>
+      <guid>http://localhost:44473/tags/mysql/</guid>
       <description></description>
     </item>
     <item>
       <title>Elasticsearch</title>
-      <link>https://acronymor.com/tags/elasticsearch/</link>
+      <link>http://localhost:44473/tags/elasticsearch/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/elasticsearch/</guid>
+      <guid>http://localhost:44473/tags/elasticsearch/</guid>
       <description></description>
     </item>
     <item>
       <title>Network</title>
-      <link>https://acronymor.com/tags/network/</link>
+      <link>http://localhost:44473/tags/network/</link>
       <pubDate>Sat, 07 Aug 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/network/</guid>
+      <guid>http://localhost:44473/tags/network/</guid>
       <description></description>
     </item>
     <item>
       <title>Java</title>
-      <link>https://acronymor.com/tags/java/</link>
+      <link>http://localhost:44473/tags/java/</link>
       <pubDate>Sat, 31 Jul 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/java/</guid>
+      <guid>http://localhost:44473/tags/java/</guid>
       <description></description>
     </item>
     <item>
       <title>Kylin</title>
-      <link>https://acronymor.com/tags/kylin/</link>
+      <link>http://localhost:44473/tags/kylin/</link>
       <pubDate>Sat, 10 Jul 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/kylin/</guid>
+      <guid>http://localhost:44473/tags/kylin/</guid>
       <description></description>
     </item>
     <item>
       <title>Calcite</title>
-      <link>https://acronymor.com/tags/calcite/</link>
+      <link>http://localhost:44473/tags/calcite/</link>
       <pubDate>Mon, 07 Jun 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/calcite/</guid>
+      <guid>http://localhost:44473/tags/calcite/</guid>
       <description></description>
     </item>
     <item>
       <title>Hbase</title>
-      <link>https://acronymor.com/tags/hbase/</link>
+      <link>http://localhost:44473/tags/hbase/</link>
       <pubDate>Tue, 27 Apr 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/hbase/</guid>
+      <guid>http://localhost:44473/tags/hbase/</guid>
       <description></description>
     </item>
     <item>
       <title>Flink</title>
-      <link>https://acronymor.com/tags/flink/</link>
+      <link>http://localhost:44473/tags/flink/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/flink/</guid>
+      <guid>http://localhost:44473/tags/flink/</guid>
       <description></description>
     </item>
     <item>
       <title>Antlr4</title>
-      <link>https://acronymor.com/tags/antlr4/</link>
+      <link>http://localhost:44473/tags/antlr4/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/antlr4/</guid>
+      <guid>http://localhost:44473/tags/antlr4/</guid>
       <description></description>
     </item>
     <item>
       <title>Spark</title>
-      <link>https://acronymor.com/tags/spark/</link>
+      <link>http://localhost:44473/tags/spark/</link>
       <pubDate>Thu, 20 Jun 2019 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/spark/</guid>
+      <guid>http://localhost:44473/tags/spark/</guid>
       <description></description>
     </item>
     <item>
       <title>Kafka</title>
-      <link>https://acronymor.com/tags/kafka/</link>
+      <link>http://localhost:44473/tags/kafka/</link>
       <pubDate>Sat, 11 May 2019 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/kafka/</guid>
+      <guid>http://localhost:44473/tags/kafka/</guid>
       <description></description>
     </item>
     <item>
       <title>Hive</title>
-      <link>https://acronymor.com/tags/hive/</link>
+      <link>http://localhost:44473/tags/hive/</link>
       <pubDate>Sat, 16 Jun 2018 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/hive/</guid>
+      <guid>http://localhost:44473/tags/hive/</guid>
       <description></description>
     </item>
     <item>
       <title>Distributed-System</title>
-      <link>https://acronymor.com/tags/distributed-system/</link>
+      <link>http://localhost:44473/tags/distributed-system/</link>
       <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/distributed-system/</guid>
+      <guid>http://localhost:44473/tags/distributed-system/</guid>
       <description></description>
     </item>
     <item>
       <title>Zookeeper</title>
-      <link>https://acronymor.com/tags/zookeeper/</link>
+      <link>http://localhost:44473/tags/zookeeper/</link>
       <pubDate>Tue, 03 Apr 2018 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/zookeeper/</guid>
+      <guid>http://localhost:44473/tags/zookeeper/</guid>
       <description></description>
     </item>
     <item>
       <title>Hadoop</title>
-      <link>https://acronymor.com/tags/hadoop/</link>
+      <link>http://localhost:44473/tags/hadoop/</link>
       <pubDate>Fri, 23 Mar 2018 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/hadoop/</guid>
+      <guid>http://localhost:44473/tags/hadoop/</guid>
       <description></description>
     </item>
     <item>
       <title>Jvm</title>
-      <link>https://acronymor.com/tags/jvm/</link>
+      <link>http://localhost:44473/tags/jvm/</link>
       <pubDate>Sun, 10 Sep 2017 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/jvm/</guid>
+      <guid>http://localhost:44473/tags/jvm/</guid>
       <description></description>
     </item>
     <item>
       <title>Software</title>
-      <link>https://acronymor.com/tags/software/</link>
+      <link>http://localhost:44473/tags/software/</link>
       <pubDate>Tue, 14 Mar 2017 00:00:00 +0800</pubDate>
-      <guid>https://acronymor.com/tags/software/</guid>
+      <guid>http://localhost:44473/tags/software/</guid>
       <description></description>
     </item>
   </channel>
