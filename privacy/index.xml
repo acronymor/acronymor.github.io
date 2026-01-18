@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Privacies on acronymor&#39;s blog</title>
+    <link>https://acronymor.com/privacy/</link>
+    <description>Recent content in Privacies on acronymor&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://acronymor.com/privacy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://acronymor.com/privacy/damocies/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://acronymor.com/privacy/damocies/</guid>
+      <description>Damocles - 隐私权政策 # 最后更新日期: 2026年01月01日&#xA;1. 前言 # 欢迎使用 Damocles 浏览器扩展（以下简称&amp;quot;本扩展&amp;quot;）。我们非常重视您的隐私权。本隐私权政策旨在向您说明本扩展如何收集、使用、存储和保护您的个人信息。使用本扩展即表示您同意本隐私权政策。&#xA;2. 信息收集 # 本扩展仅收集和使用以下类型的信息：&#xA;2.1 Cookie 信息 # 本扩展需要访问和处理来自以下域名的 Cookie 信息：&#xA;keetapp.com 及其子域名 sankuai.com 及其子域名 Cookie 信息仅用于：开发和调试目的，帮助开发者进行 API 测试、环境配置和数据比较，后端不会做任何存储，更不会将 Cookie 信息发送到任何第三方服务器。&#xA;2.2 本地存储数据 # 本扩展使用浏览器的 storage API 在您的本地设备上存储以下配置信息：&#xA;环境配置设置（如：Shepherd, Lion, RDS 等工具的环境参数） 用户界面偏好设置 2.3 网络请求信息 # 本扩展使用 declarativeNetRequest 和 proxy 权限，主要用于：&#xA;拦截和处理特定的网络请求 在开发环境中代理网络流量 获取 API 响应数据进行比较和分析 3. 信息使用 # 我们收集的信息将用于以下目的：&#xA;信息类型 使用目的 Cookie 信息 身份验证、API 请求授权、调试和测试 本地存储 保存用户配置、提高使用体验、跨会话保持设置 网络请求 API 数据获取、接口响应比较、环境巡检 重要说明：本扩展是 内部开发工具，不涉及商业用途，不会收集任何个人敏感信息（如身份证号、银行账号、密码等）。</description>
+    </item>
+  </channel>
+</rss>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=44473&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="1. B&#43; Tree # B&#43; Tree 是平衡搜索树的一种，是为了磁盘搜索而生的。它一般将磁盘块大小作为叶子节点的大小，方便数据读取，插入，原地更新等。B&#43; Tree 的查询/插入/删除 的时间复杂度都是 O(LogN)
@@ -14,7 +14,7 @@ Memtable -&gt; Frozen Memtable -&gt; L0 -&gt; L1 -&gt; ··· -&gt; LN 3. LSM Tr
 Memtable -&gt; Frozen Memtable -&gt; L0 -&gt; L1 -&gt; ··· -&gt; LN 3. LSM Tree Compaction # Compaction 实际是数据的重新整合，实质是多路归并排序，主要作用是减少 SSTable 的数量，提升查询性能。但是它资源耗费比较高（IO：需要大量的读取与写入操作；CPU：涉及 checksum 计算，rowkey 比较；性能抖动）
 3.1 Amplification # 名词 英文 说明 读放大 Read Amplification 本次扫描的数据量/实际返回的数据量 写放大 Write Amplification 磁盘写入的数据量/实际的数据量 空间放大 Space Amplification 存储的数据量/实际的数据量 3.2 Compaction Strategy # 不同的 Compaction 策略是对写放大、空间放大、读放大的一个权衡。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:44473/posts/database/ch05/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://acronymor.com/posts/database/ch05/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-11-03T00:00:00+08:00" />
 <meta property="article:modified_time" content="2022-11-03T00:00:00+08:00" />
 
@@ -23,7 +23,7 @@ Memtable -&gt; Frozen Memtable -&gt; L0 -&gt; L1 -&gt; ··· -&gt; LN 3. LSM Tr
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.f4ceb7165e33aa32a5f42be374a7b3faa4b7105f8bbff738e6a28cb55402dd28.js" integrity="sha256-9M63Fl4zqjKl9CvjdKez&#43;qS3EF&#43;Lv/c45qKMtVQC3Sg=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.56c06cfc20883b91b06b4cbd04c12f908ec897786fff501f9fbec3d68f51ee8c.js" integrity="sha256-VsBs/CCIO5Gwa0y9BMEvkI7Il3hv/1Afn77D1o9R7ow=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
